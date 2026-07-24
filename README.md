@@ -1,1 +1,1 @@
-# PyKnowledge
+The system architecture is predicated on a pure technology stack of semantic HTML5, CSS3, and Vanilla JavaScript (ES6+), intentionally excluding traditional Relational Database Management Systems (RDBMS) and server-side backends to achieve a "zero-cost sustainability" model. This configuration ensures the institution avoids recurring hosting fees while maintaining page-load metrics ￼￼under 500ms on legacy hardware with a minimum of 2GB of RAM
