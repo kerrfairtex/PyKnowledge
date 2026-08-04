@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+  "quizzes": [
+    {
+      "id": "lesson-1-1",
+      "title": "Quiz: What is Python?",
+      "lessonId": "lesson-1-1",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "What type of programming language is Python?",
+          "options": ["Compiled only", "Interpreted", "Assembly", "Machine code"],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "Python is known for its readable syntax.",
+          "correctAnswer": true
+        },
+        {
+          "id": "q3",
+          "type": "fill-blank",
+          "question": "What function displays output in Python?",
+          "correctAnswer": ["print", "print()"]
+        }
+      ]
+    },
+    {
+      "id": "lesson-1-2",
+      "title": "Quiz: Variables and Data Types",
+      "lessonId": "lesson-1-2",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Which data type would you use for whole numbers?",
+          "options": ["str", "float", "int", "bool"],
+          "correctAnswer": 2
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "In Python, variable names are case-sensitive.",
+          "correctAnswer": true
+        },
+        {
+          "id": "q3",
+          "type": "fill-blank",
+          "question": "What symbol is used to assign a value to a variable?",
+          "correctAnswer": ["=", "equals"]
+        }
+      ]
+    },
+    {
+      "id": "lesson-1-3",
+      "title": "Quiz: Input and Output",
+      "lessonId": "lesson-1-3",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Which function reads user input from the keyboard?",
+          "options": ["read()", "input()", "get()", "scan()"],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "The print() function can display multiple values separated by commas.",
+          "correctAnswer": true
+        }
+      ]
+    },
+    {
+      "id": "lesson-2-1",
+      "title": "Quiz: If-Else Statements",
+      "lessonId": "lesson-2-1",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Which keyword is used for the alternative branch in a conditional?",
+          "options": ["otherwise", "else", "elseif", "or"],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "Python uses indentation to define code blocks.",
+          "correctAnswer": true
+        }
+      ]
+    },
+    {
+      "id": "lesson-2-2",
+      "title": "Quiz: Loops",
+      "lessonId": "lesson-2-2",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Which loop is best for iterating a known number of times?",
+          "options": ["while", "for", "do-while", "repeat"],
+          "correctAnswer": 1
+        },
+        {
+          "id": "q2",
+          "type": "fill-blank",
+          "question": "What function generates a sequence of numbers?",
+          "correctAnswer": ["range", "range()"]
+        }
+      ]
+    }
+  ]
+}

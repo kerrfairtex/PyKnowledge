@@ -1,0 +1,23 @@
+{
+  "name": "pyknowledge",
+  "version": "0.1.0",
+  "description": "Offline Python Learning Platform for TRAC/BARMM/CHED curriculum",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes serve -l 8080",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "npm test -- --watch",
+    "lint": "echo 'No linter configured yet'",
+    "package": "node scripts/package.js"
+  },
+  "keywords": ["offline", "pwa", "python", "education", "ched"],
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "curriculum": "CHED Python Programming",
+  "modules": [
+    {
+      "id": "module-1",
+      "title": "Introduction to Python",
+      "description": "Learn the fundamentals of Python programming including syntax, variables, and basic data types.",
+      "prerequisite": null,
+      "lessons": [
+        {
+          "id": "lesson-1-1",
+          "title": "What is Python?",
+          "duration": "15 min",
+          "video": "content/assets/videos/lesson-1-1.mp4",
+          "content": {
+            "sections": [
+              {
+                "heading": "Overview",
+                "body": "Python is a high-level, interpreted programming language known for its readability and versatility. It is widely used in education, web development, data science, and automation.",
+                "code": "# Your first Python program\nprint('Hello, World!')"
+              },
+              {
+                "heading": "Why Python?",
+                "body": "Python's simple syntax makes it ideal for beginners. It runs on Windows, macOS, and Linux without modification."
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-1-2",
+          "title": "Variables and Data Types",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Variables",
+                "body": "Variables store data values. In Python, you create a variable by assigning a value using the equals sign.",
+                "code": "name = 'Maria'\nage = 20\nis_student = True"
+              },
+              {
+                "heading": "Data Types",
+                "body": "Python has several built-in data types: strings (str), integers (int), floats (float), and booleans (bool)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-1-3",
+          "title": "Input and Output",
+          "duration": "15 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "The print() Function",
+                "body": "Use print() to display output to the console.",
+                "code": "print('Welcome to PyKnowledge!')"
+              },
+              {
+                "heading": "The input() Function",
+                "body": "Use input() to receive text from the user.",
+                "code": "name = input('Enter your name: ')\nprint(f'Hello, {name}!')"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "module-2",
+      "title": "Control Structures",
+      "description": "Master conditional statements and loops to control program flow.",
+      "prerequisite": "module-1",
+      "lessons": [
+        {
+          "id": "lesson-2-1",
+          "title": "If-Else Statements",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Conditional Logic",
+                "body": "If-else statements let your program make decisions based on conditions.",
+                "code": "score = 85\nif score >= 75:\n    print('Passed')\nelse:\n    print('Failed')"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-2-2",
+          "title": "Loops",
+          "duration": "25 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "For Loops",
+                "body": "For loops iterate over sequences like lists and ranges.",
+                "code": "for i in range(5):\n    print(i)"
+              },
+              {
+                "heading": "While Loops",
+                "body": "While loops repeat as long as a condition is true.",
+                "code": "count = 0\nwhile count < 3:\n    print(count)\n    count += 1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
