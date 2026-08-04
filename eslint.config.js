@@ -5,7 +5,7 @@ export default [
   js.configs.recommended,
   {
     files: ['**/*.js'],
-    ignores: ['node_modules/**', 'dist/**', 'coverage/**'],
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'server/prisma/migrations/**'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -21,6 +21,15 @@ export default [
       'prefer-const': 'error',
       'no-var': 'error',
       eqeqeq: ['error', 'always']
+    }
+  },
+  {
+    files: ['server/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest
+      }
     }
   },
   {
