@@ -5,6 +5,16 @@ All notable changes to PyKnowledge are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-08-04
+
+### Added
+- Project front page at `#/` with hero, regional context, design, and development sections
+- TRAC / BARMM / CHED target area showcase with performance stats
+- Design philosophy and development stack documentation on landing page
+- Architecture flow visualization and stakeholder governance section
+- `ui/themes/landing.css` for landing page styles
+- Dashboard moved to `#/dashboard`; navbar updated with Home link
+
 ## [0.3.0] - 2026-08-04
 
 ### Added

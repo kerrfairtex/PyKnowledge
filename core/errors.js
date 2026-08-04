@@ -26,7 +26,7 @@ export function renderError(main, error, options = {}) {
       <p>${escapeHtml(message)}</p>
       <div class="error-actions">
         ${showRetry ? '<button class="btn btn-primary" id="error-retry">Try Again</button>' : ''}
-        <a href="#/" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="#/dashboard" class="btn btn-secondary">Back to Dashboard</a>
       </div>
     </div>`;
 
@@ -42,7 +42,7 @@ export function renderNotFound(main, resource = 'Page') {
     <div class="error-card not-found" role="alert">
       <h2>${escapeHtml(resource)} not found</h2>
       <p>The content you're looking for doesn't exist or has been moved.</p>
-      <a href="#/" class="btn btn-primary">Go to Dashboard</a>
+      <a href="#/dashboard" class="btn btn-primary">Go to Dashboard</a>
     </div>`;
 }
 
