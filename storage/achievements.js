@@ -58,7 +58,7 @@ export function checkAchievements(lessonsData) {
   return newlyUnlocked;
 }
 
-export function getAchievements(lessonsData) {
+export function getAchievements(_lessonsData) {
   const progress = getProgress();
   return ACHIEVEMENTS.map((a) => ({
     ...a,

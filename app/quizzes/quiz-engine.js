@@ -6,6 +6,9 @@ import { validateQuizAnswers } from '../../utils/validator.js';
 import { markLessonComplete } from '../../core/storage.js';
 import { unlockNextModule } from '../../storage/progress.js';
 import { checkAchievements } from '../../storage/achievements.js';
+import { escapeHtml } from '../../utils/sanitize.js';
+import { renderNotFound } from '../../core/errors.js';
+import { showSuccess } from '../../ui/components/toast.js';
 
 export function calculateScore(questions, answers) {
   if (!questions || questions.length === 0) {
@@ -33,7 +36,7 @@ export function calculateScore(questions, answers) {
 export function renderQuiz(main, quizId, quizzesData, lessonsData) {
   const quiz = quizzesData.quizzes.find((q) => q.id === quizId);
   if (!quiz) {
-    main.innerHTML = `<div class="error-card"><h2>Quiz not found</h2><a href="#/">Back</a></div>`;
+    renderNotFound(main, 'Quiz');
     return;
   }
 
@@ -42,15 +45,15 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
       const options = q.options.map((opt, j) => `
         <label class="quiz-option">
           <input type="radio" name="q${i}" value="${j}" required>
-          ${opt}
+          ${escapeHtml(opt)}
         </label>
       `).join('');
-      return `<fieldset class="quiz-question"><legend>${q.question}</legend>${options}</fieldset>`;
+      return `<fieldset class="quiz-question"><legend>${escapeHtml(q.question)}</legend>${options}</fieldset>`;
     }
     if (q.type === 'true-false') {
       return `
         <fieldset class="quiz-question">
-          <legend>${q.question}</legend>
+          <legend>${escapeHtml(q.question)}</legend>
           <label class="quiz-option"><input type="radio" name="q${i}" value="true" required> True</label>
           <label class="quiz-option"><input type="radio" name="q${i}" value="false" required> False</label>
         </fieldset>`;
@@ -58,18 +61,18 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
     if (q.type === 'fill-blank') {
       return `
         <fieldset class="quiz-question">
-          <legend>${q.question}</legend>
-          <input type="text" name="q${i}" class="quiz-input" required placeholder="Your answer">
+          <legend>${escapeHtml(q.question)}</legend>
+          <input type="text" name="q${i}" class="quiz-input" required placeholder="Your answer" autocomplete="off">
         </fieldset>`;
     }
     return '';
   }).join('');
 
   main.innerHTML = `
-    <section class="quiz-container">
-      <h2>${quiz.title}</h2>
+    <section class="quiz-container" aria-labelledby="quiz-title">
+      <h2 id="quiz-title">${escapeHtml(quiz.title)}</h2>
       <p class="quiz-meta">${quiz.questions.length} questions &middot; 70% to pass</p>
-      <form id="quiz-form">
+      <form id="quiz-form" novalidate>
         ${questionsHtml}
         <button type="submit" class="btn btn-primary">Submit Quiz</button>
       </form>
@@ -110,26 +113,35 @@ function handleQuizSubmit(quiz, lessonsData) {
     markLessonComplete(quiz.id, result.score);
     unlockNextModule(quiz.id, lessonsData);
     const newAchievements = checkAchievements(lessonsData);
+
+    if (newAchievements.length > 0) {
+      newAchievements.forEach((a) => showSuccess(`Achievement unlocked: ${a.title}`));
+    }
+
     const achievementHtml = newAchievements.length > 0
-      ? `<div class="achievements">${newAchievements.map((a) => `<p class="achievement">🏆 ${a.title}: ${a.description}</p>`).join('')}</div>`
+      ? `<div class="achievements">${newAchievements.map((a) => `<p class="achievement">🏆 ${escapeHtml(a.title)}: ${escapeHtml(a.description)}</p>`).join('')}</div>`
       : '';
 
     resultsEl.innerHTML = `
-      <div class="quiz-result passed">
+      <div class="quiz-result passed" role="status">
         <h3>Passed!</h3>
         <p>Score: ${result.score}% (${result.correct}/${result.total})</p>
         ${achievementHtml}
-        <a href="#/module/${findModuleForLesson(quiz.id, lessonsData)}" class="btn btn-primary">Continue</a>
+        <a href="#/module/${escapeHtml(findModuleForLesson(quiz.id, lessonsData))}" class="btn btn-primary">Continue</a>
         <a href="#/" class="btn btn-secondary">Dashboard</a>
       </div>`;
   } else {
     resultsEl.innerHTML = `
-      <div class="quiz-result failed">
+      <div class="quiz-result failed" role="alert">
         <h3>Not quite — try again</h3>
         <p>Score: ${result.score}% (${result.correct}/${result.total}). You need 70% to pass.</p>
-        <button onclick="location.reload()" class="btn btn-primary">Retry Quiz</button>
+        <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
         <a href="#/" class="btn btn-secondary">Dashboard</a>
       </div>`;
+
+    document.getElementById('quiz-retry').addEventListener('click', () => {
+      window.location.reload();
+    });
   }
 }
 

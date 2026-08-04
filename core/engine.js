@@ -3,7 +3,7 @@
  * Core functions: loadModule(), calculateScore(), checkPrerequisite(), ServiceWorker
  */
 
-import { loadLessons, loadQuizzes } from './loader.js';
+import { loadAllContent } from './loader.js';
 import { registerRoute, initRouter, navigate } from './router.js';
 import { getProgress } from './storage.js';
 import { checkPrerequisite } from '../storage/progress.js';
@@ -12,14 +12,21 @@ import { renderDashboard } from '../app/dashboard/dashboard.js';
 import { renderLessonViewer } from '../app/lessons/lesson-viewer.js';
 import { renderQuiz } from '../app/quizzes/quiz-engine.js';
 import { renderProgressDashboard } from '../app/progress/progress-dashboard.js';
-import { renderNavbar } from '../ui/components/navbar.js';
+import { renderNavbar, updateNavbarActiveState } from '../ui/components/navbar.js';
+import { initOfflineIndicator } from '../ui/components/offline-indicator.js';
+import { initUpdateNotifier, checkForUpdates } from '../ui/components/update-notifier.js';
+import { renderError, withErrorHandling } from './errors.js';
+import { escapeHtml } from '../utils/sanitize.js';
+import { APP_VERSION } from './version.js';
 
 let lessonsData = null;
 let quizzesData = null;
 
 export async function loadModule(moduleId) {
   if (!lessonsData) {
-    lessonsData = await loadLessons();
+    const content = await loadAllContent();
+    lessonsData = content.lessons;
+    quizzesData = content.quizzes;
   }
 
   const module = lessonsData.modules.find((m) => m.id === moduleId);
@@ -36,45 +43,87 @@ export async function loadModule(moduleId) {
 }
 
 async function initApp() {
+  const main = document.getElementById('main-content');
+  const loading = document.getElementById('loading');
+
   try {
     await registerServiceWorker();
-    lessonsData = await loadLessons();
-    quizzesData = await loadQuizzes();
+    initOfflineIndicator();
+    initUpdateNotifier();
+
+    const content = await loadAllContent();
+    lessonsData = content.lessons;
+    quizzesData = content.quizzes;
+
+    if (loading) loading.remove();
 
     renderNavbar(document.getElementById('main-nav'));
 
-    registerRoute('/', (main, params, route) => renderDashboard(main, params, route, lessonsData));
-    registerRoute('/module', async (main, params) => {
-      const moduleId = params[0];
-      if (!moduleId) {
+    registerRoute('/', (m, p, r) => {
+      renderDashboard(m, p, r, lessonsData);
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/module', async (m, params) => {
+      await withErrorHandling(m, async () => {
+        const moduleId = params[0];
+        if (!moduleId) {
+          navigate('/');
+          return;
+        }
+        const result = await loadModule(moduleId);
+        if (result.error) {
+          m.innerHTML = `
+            <div class="error-card" role="alert">
+              <h2>Module Locked</h2>
+              <p>${escapeHtml(result.error)}</p>
+              <a href="#/" class="btn btn-primary">Back to Dashboard</a>
+            </div>`;
+          return;
+        }
+        renderModuleLessons(m, result.module);
+      });
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/lesson', async (m, params) => {
+      const lessonId = params[0];
+      if (!lessonId) {
         navigate('/');
         return;
       }
-      const result = await loadModule(moduleId);
-      if (result.error) {
-        main.innerHTML = `<div class="error-card"><h2>Locked</h2><p>${result.error}</p><a href="#/">Back to Dashboard</a></div>`;
+      renderLessonViewer(m, lessonId, lessonsData);
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/quiz', async (m, params) => {
+      const quizId = params[0];
+      if (!quizId) {
+        navigate('/');
         return;
       }
-      renderModuleLessons(main, result.module);
+      renderQuiz(m, quizId, quizzesData, lessonsData);
+      updateNavbarActiveState();
     });
-    registerRoute('/lesson', async (main, params) => {
-      const lessonId = params[0];
-      renderLessonViewer(main, lessonId, lessonsData);
-    });
-    registerRoute('/quiz', async (main, params) => {
-      const quizId = params[0];
-      renderQuiz(main, quizId, quizzesData, lessonsData);
-    });
-    registerRoute('/progress', (main) => {
-      renderProgressDashboard(main, lessonsData);
+
+    registerRoute('/progress', (m) => {
+      renderProgressDashboard(m, lessonsData);
+      updateNavbarActiveState();
     });
 
     await initRouter();
-  } catch (err) {
-    const main = document.getElementById('main-content');
-    if (main) {
-      main.innerHTML = `<div class="error-card"><h2>Failed to load</h2><p>${err.message}</p></div>`;
+
+    if (navigator.onLine) {
+      checkForUpdates();
     }
+
+    console.info(`PyKnowledge v${APP_VERSION} initialized`);
+  } catch (err) {
+    if (loading) loading.remove();
+    renderError(main, err, {
+      title: 'Failed to start PyKnowledge',
+      onRetry: () => window.location.reload()
+    });
     console.error('PyKnowledge init error:', err);
   }
 }
@@ -82,20 +131,20 @@ async function initApp() {
 function renderModuleLessons(main, module) {
   const progress = getProgress();
   main.innerHTML = `
-    <section class="module-detail">
-      <h2>${module.title}</h2>
-      <p>${module.description}</p>
-      <ul class="lesson-list">
+    <section class="module-detail" aria-labelledby="module-title">
+      <h2 id="module-title">${escapeHtml(module.title)}</h2>
+      <p>${escapeHtml(module.description)}</p>
+      <ul class="lesson-list" role="list">
         ${module.lessons.map((lesson, i) => {
           const complete = progress.completedLessons.includes(lesson.id);
           const locked = i > 0 && !progress.completedLessons.includes(module.lessons[i - 1].id);
           return `
-            <li class="lesson-item ${complete ? 'complete' : ''} ${locked ? 'locked' : ''}">
+            <li class="lesson-item ${complete ? 'complete' : ''} ${locked ? 'locked' : ''}" role="listitem">
               ${locked
-                ? `<span class="lesson-locked">${lesson.title} (locked)</span>`
-                : `<a href="#/lesson/${lesson.id}">${lesson.title}</a>`
+                ? `<span class="lesson-locked" aria-label="Locked">${escapeHtml(lesson.title)} (locked)</span>`
+                : `<a href="#/lesson/${escapeHtml(lesson.id)}">${escapeHtml(lesson.title)}</a>`
               }
-              ${complete ? '<span class="badge">Done</span>' : ''}
+              ${complete ? '<span class="badge" aria-label="Completed">Done</span>' : ''}
             </li>`;
         }).join('')}
       </ul>
@@ -118,6 +167,6 @@ async function registerServiceWorker() {
   }
 }
 
-export { calculateScore, checkPrerequisite, lessonsData, quizzesData };
+export { calculateScore, checkPrerequisite, lessonsData, quizzesData, APP_VERSION };
 
 document.addEventListener('DOMContentLoaded', initApp);

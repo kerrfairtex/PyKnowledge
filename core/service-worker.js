@@ -3,7 +3,9 @@
  * Cache-first strategy for offline learning after first install.
  */
 
-const CACHE_NAME = 'pyknowledge-v0.1.0';
+const APP_VERSION = '0.2.0';
+const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
+
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -12,6 +14,8 @@ const STATIC_ASSETS = [
   '/core/loader.js',
   '/core/router.js',
   '/core/storage.js',
+  '/core/errors.js',
+  '/core/version.js',
   '/core/service-worker.js',
   '/app/dashboard/dashboard.js',
   '/app/lessons/lesson-viewer.js',
@@ -21,10 +25,16 @@ const STATIC_ASSETS = [
   '/storage/achievements.js',
   '/utils/parser.js',
   '/utils/validator.js',
+  '/utils/sanitize.js',
+  '/utils/schema.js',
   '/ui/themes/default.css',
   '/ui/components/navbar.js',
   '/ui/components/progress-bar.js',
   '/ui/components/video-player.js',
+  '/ui/components/toast.js',
+  '/ui/components/offline-indicator.js',
+  '/ui/components/loading.js',
+  '/ui/components/update-notifier.js',
   '/content/lessons.json',
   '/content/quizzes.json',
   '/ui/assets/icon-192.png',
@@ -33,21 +43,19 @@ const STATIC_ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
@@ -69,8 +77,17 @@ self.addEventListener('fetch', (event) => {
         if (event.request.destination === 'document') {
           return caches.match('/index.html');
         }
-        return new Response('Offline — content not cached', { status: 503 });
+        return new Response('Offline — content not cached', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain' }
+        });
       });
     })
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });

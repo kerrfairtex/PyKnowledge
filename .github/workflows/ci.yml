@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'cursor/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Validate content schemas
+        run: npm run validate:content
+
+      - name: Check version sync
+        run: npm run check:version
+
+      - name: Package release
+        run: npm run package
+
+      - name: Performance smoke test
+        run: npm run test:perf

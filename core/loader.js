@@ -1,6 +1,8 @@
 /**
- * Content loader — fetches JSON assets from cache or network.
+ * Content loader — fetches JSON assets from cache or network with schema validation.
  */
+
+import { validateLessonsSchema, validateQuizzesSchema, validateContentIntegrity } from '../utils/schema.js';
 
 const contentCache = new Map();
 
@@ -19,11 +21,19 @@ export async function loadJSON(path) {
 }
 
 export async function loadLessons() {
-  return loadJSON('content/lessons.json');
+  const data = await loadJSON('content/lessons.json');
+  return validateLessonsSchema(data);
 }
 
 export async function loadQuizzes() {
-  return loadJSON('content/quizzes.json');
+  const data = await loadJSON('content/quizzes.json');
+  return validateQuizzesSchema(data);
+}
+
+export async function loadAllContent() {
+  const [lessons, quizzes] = await Promise.all([loadLessons(), loadQuizzes()]);
+  validateContentIntegrity(lessons, quizzes);
+  return { lessons, quizzes };
 }
 
 export function clearContentCache() {
