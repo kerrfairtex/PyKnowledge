@@ -75,6 +75,7 @@ Open `http://localhost:8080` in a browser. After the first visit, the app works 
 
 - [Authentication](docs/AUTHENTICATION.md) — local profiles, PIN, guest mode
 - [Architecture](docs/ARCHITECTURE.md) — system design and data flow
+- [Content Authoring](docs/CONTENT_AUTHORING.md) — how to add lessons and quizzes
 - [Contributing](CONTRIBUTING.md) — development setup and conventions
 - [Changelog](CHANGELOG.md) — version history
 
