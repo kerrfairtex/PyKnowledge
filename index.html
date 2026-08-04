@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PyKnowledge - Offline Python Learning Platform">
+  <meta name="theme-color" content="#16213e">
+  <title>PyKnowledge</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="ui/themes/default.css">
+  <link rel="icon" href="ui/assets/icon-192.png" type="image/png">
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <h1>PyKnowledge</h1>
+      <p class="tagline">Offline Python Learning Platform</p>
+      <nav id="main-nav" aria-label="Main navigation"></nav>
+    </header>
+    <main id="main-content" role="main">
+      <div id="loading" class="loading" aria-live="polite">Loading...</div>
+    </main>
+    <footer class="app-footer">
+      <p>CHED-aligned curriculum &middot; Works offline after first install</p>
+    </footer>
+  </div>
+  <script type="module" src="core/engine.js"></script>
+</body>
+</html>
