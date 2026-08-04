@@ -4,6 +4,7 @@
 
 import { renderNotFound } from './errors.js';
 import { showSkeleton } from '../ui/components/loading.js';
+import { animatePageEnter } from '../ui/components/animations.js';
 
 const routes = new Map();
 let currentRoute = '/';
@@ -48,6 +49,11 @@ export async function handleRoute() {
   await handler(main, params, route);
   updatePageTitle(base, params);
   focusMainContent();
+
+  const pageContent = main.querySelector('.page-content') || main.firstElementChild;
+  if (pageContent && !pageContent.classList.contains('auth-screen')) {
+    animatePageEnter(pageContent);
+  }
 }
 
 function updatePageTitle(base, _params) {

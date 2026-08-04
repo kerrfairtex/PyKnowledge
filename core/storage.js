@@ -1,9 +1,9 @@
 /**
  * LocalStorage wrapper for PyKnowledge progress persistence.
- * Key: pyknowledge_progress
+ * Progress is scoped per authenticated user; guests use a shared key.
  */
 
-const STORAGE_KEY = 'pyknowledge_progress';
+import { getActiveUser, getProgressKey, touchSession } from '../storage/auth.js';
 
 const DEFAULT_PROGRESS = {
   version: 1,
@@ -14,11 +14,17 @@ const DEFAULT_PROGRESS = {
   unlockedModules: ['module-1']
 };
 
+function getStorageKey() {
+  const user = getActiveUser();
+  return getProgressKey(user?.id);
+}
+
 export function getProgress() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(getStorageKey());
     if (!raw) return { ...DEFAULT_PROGRESS };
     const parsed = JSON.parse(raw);
+    touchSession();
     return { ...DEFAULT_PROGRESS, ...parsed };
   } catch {
     return { ...DEFAULT_PROGRESS };
@@ -30,12 +36,13 @@ export function saveProgress(progress) {
     ...progress,
     lastAccessed: new Date().toISOString()
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  localStorage.setItem(getStorageKey(), JSON.stringify(updated));
+  touchSession();
   return updated;
 }
 
 export function resetProgress() {
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(getStorageKey());
   return { ...DEFAULT_PROGRESS };
 }
 

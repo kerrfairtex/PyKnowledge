@@ -6,6 +6,7 @@ import { getOverallProgress, getModuleProgress } from '../../storage/progress.js
 import { getAchievements } from '../../storage/achievements.js';
 import { renderProgressBar } from '../../ui/components/progress-bar.js';
 import { escapeHtml } from '../../utils/sanitize.js';
+import { animatePageEnter } from '../../ui/components/animations.js';
 
 export function renderProgressDashboard(main, lessonsData) {
   const overall = getOverallProgress(lessonsData);
@@ -31,7 +32,7 @@ export function renderProgressDashboard(main, lessonsData) {
   `).join('');
 
   main.innerHTML = `
-    <section class="progress-dashboard" aria-labelledby="progress-heading">
+    <section class="progress-dashboard page-content" aria-labelledby="progress-heading">
       <h2 id="progress-heading">Your Progress</h2>
       <div class="overall-progress">
         ${renderProgressBar(overall.percent, `${overall.completedLessons} of ${overall.totalLessons} lessons`)}
@@ -42,4 +43,6 @@ export function renderProgressDashboard(main, lessonsData) {
       <div class="achievements-grid" role="list">${achievementsHtml}</div>
       <a href="#/" class="btn btn-secondary">Back to Dashboard</a>
     </section>`;
+
+  animatePageEnter(main.querySelector('.page-content'));
 }

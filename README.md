@@ -42,7 +42,7 @@ PyKnowledge/
 ```bash
 npm install
 npm start              # http://localhost:8080
-npm test               # Run unit tests (23 tests)
+npm test               # Run unit tests (35 tests)
 npm run lint           # ESLint
 npm run validate:content  # Validate JSON schemas
 npm run package        # Create release zip
@@ -50,15 +50,17 @@ npm run package        # Create release zip
 
 Open `http://localhost:8080` in a browser. After the first visit, the app works fully offline.
 
-## Professional Features (v0.2.0)
+## Professional Features (v0.3.0)
 
+- **Local authentication** — student profiles with PIN (PBKDF2 hashed), guest mode
+- **Per-user progress** — isolated learning data on shared school computers
+- **Design system** — gradients, tokens, polished cards and typography
+- **Animations** — page transitions, staggered entrances, achievement celebrations
 - Content JSON schema validation with integrity checks
 - XSS sanitization on all rendered content
 - Offline/online connectivity indicator
-- Toast notifications and achievement alerts
 - Service worker update banner
-- Loading skeleton UI and error recovery
-- Accessibility: skip links, ARIA labels, keyboard navigation
+- Accessibility: skip links, ARIA labels, keyboard navigation, reduced motion
 - CI pipeline: lint, test, validate, package, performance checks
 
 ## Performance Targets
@@ -71,14 +73,14 @@ Open `http://localhost:8080` in a browser. After the first visit, the app works 
 
 ## Documentation
 
+- [Authentication](docs/AUTHENTICATION.md) — local profiles, PIN, guest mode
 - [Architecture](docs/ARCHITECTURE.md) — system design and data flow
-- [Content Authoring](docs/CONTENT_AUTHORING.md) — how to add lessons and quizzes
 - [Contributing](CONTRIBUTING.md) — development setup and conventions
 - [Changelog](CHANGELOG.md) — version history
 
 ## Versioning
 
-Semantic versioning via `package.json`. Current version: **0.2.0**
+Semantic versioning via `package.json`. Current version: **0.3.0**
 
 ## License
 

@@ -9,6 +9,7 @@ import { checkAchievements } from '../../storage/achievements.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';
 import { showSuccess } from '../../ui/components/toast.js';
+import { celebrateAchievement } from '../../ui/components/animations.js';
 
 export function calculateScore(questions, answers) {
   if (!questions || questions.length === 0) {
@@ -115,7 +116,10 @@ function handleQuizSubmit(quiz, lessonsData) {
     const newAchievements = checkAchievements(lessonsData);
 
     if (newAchievements.length > 0) {
-      newAchievements.forEach((a) => showSuccess(`Achievement unlocked: ${a.title}`));
+      newAchievements.forEach((a) => {
+        showSuccess(`Achievement unlocked: ${a.title}`);
+        celebrateAchievement(a.title);
+      });
     }
 
     const achievementHtml = newAchievements.length > 0
@@ -123,7 +127,7 @@ function handleQuizSubmit(quiz, lessonsData) {
       : '';
 
     resultsEl.innerHTML = `
-      <div class="quiz-result passed" role="status">
+      <div class="quiz-result passed animate-item" role="status">
         <h3>Passed!</h3>
         <p>Score: ${result.score}% (${result.correct}/${result.total})</p>
         ${achievementHtml}

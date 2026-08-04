@@ -7,6 +7,7 @@ import { getProgress } from '../../core/storage.js';
 import { renderVideoPlayer } from '../../ui/components/video-player.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';
+import { animatePageEnter } from '../../ui/components/animations.js';
 
 export function renderLessonViewer(main, lessonId, lessonsData) {
   let lesson = null;
@@ -52,7 +53,7 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
   `).join('');
 
   main.innerHTML = `
-    <article class="lesson-viewer">
+    <article class="lesson-viewer page-content">
       <header>
         <h2>${escapeHtml(parsed.title)}</h2>
         ${parsed.duration ? `<span class="duration">${escapeHtml(parsed.duration)}</span>` : ''}
@@ -69,4 +70,6 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
     const container = document.getElementById('video-container');
     renderVideoPlayer(container, parsed.videoSrc, parsed.title);
   }
+
+  animatePageEnter(main.querySelector('.page-content'));
 }
