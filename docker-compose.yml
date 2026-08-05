@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pyknowledge-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pyknowledge
+      POSTGRES_PASSWORD: pyknowledge
+      POSTGRES_DB: pyknowledge
+    ports:
+      - "5432:5432"
+    volumes:
+      - pyknowledge_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pyknowledge -d pyknowledge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pyknowledge_pgdata:

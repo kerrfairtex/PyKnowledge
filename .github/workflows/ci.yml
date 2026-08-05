@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'cursor/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: pyknowledge
+          POSTGRES_PASSWORD: pyknowledge
+          POSTGRES_DB: pyknowledge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pyknowledge -d pyknowledge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://pyknowledge:pyknowledge@localhost:5432/pyknowledge?schema=public
+      JWT_SECRET: ci-test-secret
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Client unit tests
+        run: npm test
+
+      - name: Validate content schemas
+        run: npm run validate:content
+
+      - name: Check version sync
+        run: npm run check:version
+
+      - name: Setup database
+        run: |
+          npm run db:generate
+          npm run db:migrate
+          npm run db:seed
+
+      - name: Server API tests
+        run: npm run test:server
+
+      - name: Package release
+        run: npm run package
+
+      - name: Performance smoke test
+        run: npm run test:perf

@@ -8,41 +8,67 @@ Designed for TRAC / BARMM / CHED curriculum alignment. The entire learning exper
 
 ```
 PyKnowledge/
-├── app/                  # Business modules
-│   ├── dashboard/        # Module selection & overview
-│   ├── lessons/          # Lesson rendering
-│   ├── quizzes/          # Quiz engine & scoring
-│   └── progress/         # Progress dashboard
-├── core/                 # Application kernel
-│   ├── engine.js         # loadModule(), app bootstrap
-│   ├── loader.js         # JSON content loading
-│   ├── router.js         # Client-side routing
-│   ├── storage.js        # LocalStorage wrapper
-│   └── service-worker.js # Offline cache engine
-├── content/              # Static learning assets
-│   ├── lessons.json
-│   ├── quizzes.json
-│   └── assets/
-├── storage/              # Domain persistence
-│   ├── progress.js       # checkPrerequisite(), unlocking
-│   └── achievements.js
-├── ui/                   # Presentation layer
-│   ├── components/
-│   ├── themes/
-│   └── assets/
-├── utils/                # Parsers & validators
-└── tests/                # Unit tests
+├── app/                  # Business modules (dashboard, lessons, quizzes, progress)
+├── core/                 # Application kernel (engine, router, storage, service worker)
+├── server/               # API server (Express + PostgreSQL + Prisma) — v0.4.0+
+├── content/              # Static learning assets (lessons.json, quizzes.json, videos)
+├── storage/              # Domain persistence (progress, achievements, auth)
+├── ui/                   # Components, themes, assets
+├── utils/                # Parsers, validators, sanitizers
+├── tests/                # Client unit tests
+├── scripts/              # Validation, packaging, version sync
+└── docs/                 # Architecture and guides
 ```
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | HTML5, CSS3, Vanilla JavaScript ES6+ |
+| Frontend | HTML5, CSS3, Vanilla JavaScript ES6+ (PWA) |
+| Backend | Node.js, Express, Prisma, PostgreSQL |
 | Offline | Service Worker, Cache API, LocalStorage |
-| Content | JSON |
-| Media | MP4 H.264 720p |
-| Backend | None — runs entirely in browser sandbox |
+| Content | JSON with schema validation (+ API delivery) |
+| Auth | Local PIN (offline) + JWT (server) |
+| Quality | ESLint, Jest, GitHub Actions CI |
+
+## Quick Start — Client Only (Offline)
+
+```bash
+npm install
+npm run start:client     # http://localhost:8080
+npm test                 # Client unit tests
+```
+
+## Quick Start — Full Stack
+
+```bash
+npm install
+cp .env.example .env
+npm run db:up            # Start PostgreSQL (Docker)
+npm run db:generate
+npm run db:migrate
+npm run db:seed
+npm run start:server     # API on http://localhost:3000
+npm run start:client     # PWA on http://localhost:8080
+```
+
+Enable API in the client (`index.html` or browser console):
+```javascript
+window.PYKNOWLEDGE_API_URL = 'http://localhost:3000';
+```
+
+See [docs/FULLSTACK_ARCHITECTURE.md](docs/FULLSTACK_ARCHITECTURE.md) for details.
+
+## API Endpoints (v0.4.0)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/health` | Health check + database status |
+| GET | `/api/content/lessons` | CHED curriculum lessons |
+| GET | `/api/content/quizzes` | Quiz definitions |
+| POST | `/api/auth/register` | Create server account |
+| POST | `/api/auth/login` | Login (returns JWT) |
+| GET | `/api/auth/me` | Current user (JWT required) |
 
 ## Core Engine Functions
 
@@ -51,30 +77,26 @@ PyKnowledge/
 - `checkPrerequisite()` — module unlocking logic
 - Service Worker — cache-first offline strategy
 
-## Quick Start
-
-```bash
-# Serve locally (requires network for first load only)
-npm start
-
-# Run tests
-npm test
-
-# Create release package
-npm run package
-```
-
-Open `http://localhost:8080` in a browser. After the first visit, the app works fully offline.
-
 ## Performance Targets
 
-- Page load: < 500 ms
-- Hardware: Dual-core CPU, 2 GB RAM
-- Storage: ~200–250 MB (with video content)
+| Metric | Target |
+|--------|--------|
+| Page load | < 500 ms |
+| Hardware | Dual-core CPU, 2 GB RAM |
+| Storage | ~200–250 MB (with video content) |
+
+## Documentation
+
+- [Full-Stack Architecture](docs/FULLSTACK_ARCHITECTURE.md) — server setup and API
+- [Authentication](docs/AUTHENTICATION.md) — local PIN + server JWT
+- [Architecture](docs/ARCHITECTURE.md) — system design and data flow
+- [Content Authoring](docs/CONTENT_AUTHORING.md) — lessons and quizzes
+- [Contributing](CONTRIBUTING.md) — development conventions
+- [Changelog](CHANGELOG.md) — version history
 
 ## Versioning
 
-Semantic versioning via `package.json`. Service Worker cache is versioned (`pyknowledge-v0.1.0`) and invalidated on updates.
+Semantic versioning via `package.json`. Current version: **0.4.0**
 
 ## License
 
