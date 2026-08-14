@@ -243,7 +243,7 @@ Use this phase to confirm:
 Use the repository contribution flow, not direct pushes to `main`:
 
 ```bash
-git checkout -b <your-branch-from-main>
+git checkout -b <feature/your-description>
 # make focused changes
 npm run lint
 npm test
