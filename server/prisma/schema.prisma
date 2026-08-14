@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+model Institution {
+  id        String   @id @default(uuid())
+  name      String
+  region    String?
+  type      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  users     User[]
+
+  @@map("institutions")
+}
+
+model User {
+  id             String       @id @default(uuid())
+  institutionId  String?      @map("institution_id")
+  institution    Institution? @relation(fields: [institutionId], references: [id])
+  email          String       @unique
+  passwordHash   String       @map("password_hash")
+  displayName    String       @map("display_name")
+  role           UserRole     @default(STUDENT)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  progress       Progress[]
+
+  @@map("users")
+}
+
+model ContentManifest {
+  id          String   @id @default(uuid())
+  version     String
+  curriculum  String?
+  lessonsData Json     @map("lessons_data")
+  quizzesData Json     @map("quizzes_data")
+  isActive    Boolean  @default(true) @map("is_active")
+  publishedAt DateTime @default(now()) @map("published_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("content_manifests")
+}
+
+model Progress {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String   @map("lesson_id")
+  score       Int?
+  completedAt DateTime @default(now()) @map("completed_at")
+  syncStatus  String   @default("synced") @map("sync_status")
+  deviceId    String?  @map("device_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, lessonId])
+  @@map("progress")
+}
