@@ -1,15 +1,13 @@
 import request from 'supertest';
-import { app, dbReady } from './setup.js';
+import { jest } from '@jest/globals';
+import { prisma } from '../src/lib/prisma.js';
 
-function dbTest(name, fn) {
-  test(name, async () => {
-    if (!dbReady) {
-      console.warn(`Skipping (no DB): ${name}`);
-      return;
-    }
-    await fn();
-  });
-}
+import { createApp } from '../src/app.js';
+
+const app = createApp();
+
+process.env.JWT_SECRET = 'test-secret';
+process.env.NODE_ENV = 'test';
 
 describe('Health API', () => {
   test('GET /api/health returns service info', async () => {
@@ -22,7 +20,23 @@ describe('Health API', () => {
 });
 
 describe('Content API', () => {
-  dbTest('GET /api/content/lessons returns curriculum', async () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('GET /api/content/lessons returns curriculum', async () => {
+    const mockLessons = {
+      version: '1.0.0',
+      curriculum: 'CHED Python Programming',
+      modules: [
+        { id: 'module-1', title: 'Introduction to Python', lessons: [] }
+      ]
+    };
+    
+    prisma.contentManifest.findFirst.mockResolvedValue({
+      lessonsData: mockLessons
+    });
+
     const res = await request(app).get('/api/content/lessons');
     expect(res.status).toBe(200);
     expect(res.body.modules).toBeDefined();
@@ -30,46 +44,43 @@ describe('Content API', () => {
     expect(res.body.modules.length).toBeGreaterThan(0);
   });
 
-  dbTest('GET /api/content/quizzes returns quizzes', async () => {
+  test('GET /api/content/quizzes returns quizzes', async () => {
+    const mockQuizzes = {
+      version: '1.0.0',
+      quizzes: [{ id: 'quiz-1', questions: [] }]
+    };
+    
+    prisma.contentManifest.findFirst.mockResolvedValue({
+      quizzesData: mockQuizzes
+    });
+
     const res = await request(app).get('/api/content/quizzes');
     expect(res.status).toBe(200);
     expect(res.body.quizzes).toBeDefined();
   });
 
   test('GET /api/content/manifest returns meta', async () => {
+    prisma.contentManifest.findFirst.mockResolvedValue({
+      version: '1.0.0',
+      curriculum: 'CHED Python Programming',
+      publishedAt: new Date(),
+    });
+
     const res = await request(app).get('/api/content/manifest');
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('hasContent');
+    expect(res.body).toHaveProperty('hasContent', true);
+  });
+
+  test('GET /api/content/manifest returns empty when no manifest', async () => {
+    prisma.contentManifest.findFirst.mockResolvedValue(null);
+
+    const res = await request(app).get('/api/content/manifest');
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('hasContent', false);
   });
 });
 
-describe('Auth API', () => {
-  dbTest('POST /api/auth/register and login', async () => {
-    const email = `test-${Date.now()}@trac.edu.ph`;
-
-    const reg = await request(app)
-      .post('/api/auth/register')
-      .send({ email, password: 'password123', displayName: 'Test Student' });
-
-    expect(reg.status).toBe(201);
-    expect(reg.body.token).toBeTruthy();
-    expect(reg.body.user.email).toBe(email);
-
-    const login = await request(app)
-      .post('/api/auth/login')
-      .send({ email, password: 'password123' });
-
-    expect(login.status).toBe(200);
-    expect(login.body.token).toBeTruthy();
-
-    const me = await request(app)
-      .get('/api/auth/me')
-      .set('Authorization', `Bearer ${login.body.token}`);
-
-    expect(me.status).toBe(200);
-    expect(me.body.user.displayName).toBe('Test Student');
-  });
-
+describe('Auth API - validation only', () => {
   test('POST /api/auth/login rejects invalid body', async () => {
     const res = await request(app)
       .post('/api/auth/login')

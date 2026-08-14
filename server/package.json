@@ -26,6 +26,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "babel-jest": "^29.7.0",
     "prisma": "^6.2.1",
     "supertest": "^7.0.0"
   }
