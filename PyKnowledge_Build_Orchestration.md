@@ -4,8 +4,6 @@ Purpose: a current, repo-aligned build order for PyKnowledge's client-first offl
 
 Scope note: the primary path here is the browser app in `/app`, `/core`, `/storage`, `/ui`, `/utils`, and `/content`. The optional `/server` workspace is additive and should not block delivery of the offline client.
 
----
-
 ## 0. Build Order Rationale
 
 Build bottom-up so each layer depends only on stable lower-level behavior:
@@ -248,7 +246,7 @@ npm run lint
 npm test
 npm run validate:content
 npm run check:version
-git add .
+git add <changed-paths>
 git commit -m "Describe the change"
 # push branch and open a pull request
 ```
