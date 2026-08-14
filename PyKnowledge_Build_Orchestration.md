@@ -125,6 +125,8 @@ Definition of done:
 - lessons, quizzes, and prerequisites validate cleanly
 - every quiz maps correctly to lesson flow expectations
 - media choices remain appropriate for offline delivery and legacy hardware
+- core code remains under the 5MB repository budget for non-video assets
+- bundled video payload stays within the roughly 200–250MB offline package target
 
 ---
 
@@ -232,6 +234,7 @@ Use this phase to confirm:
 - client logic tests pass
 - version constants are synchronized
 - packaging still produces a portable offline artifact
+- size targets still fit the offline distribution constraints
 
 ---
 
