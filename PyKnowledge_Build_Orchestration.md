@@ -22,11 +22,11 @@ Key rule: do not build screens first. In this repository, rendering depends on s
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/utils/sanitize.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/utils/schema.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/utils/parser.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/utils/validator.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/utils/crypto.js`
+- `utils/sanitize.js`
+- `utils/schema.js`
+- `utils/parser.js`
+- `utils/validator.js`
+- `utils/crypto.js`
 
 Why first:
 
@@ -46,10 +46,10 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/storage/auth.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/storage.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/version.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/api.js`
+- `storage/auth.js`
+- `core/storage.js`
+- `core/version.js`
+- `core/api.js`
 
 Why here:
 
@@ -70,10 +70,10 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/loader.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/router.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/errors.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/engine.js`
+- `core/loader.js`
+- `core/router.js`
+- `core/errors.js`
+- `core/engine.js`
 
 Why here:
 
@@ -93,8 +93,8 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/storage/progress.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/storage/achievements.js`
+- `storage/progress.js`
+- `storage/achievements.js`
 
 Why here:
 
@@ -113,9 +113,9 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/content/lessons.json`
-- `/home/runner/work/PyKnowledge/PyKnowledge/content/quizzes.json`
-- `/home/runner/work/PyKnowledge/PyKnowledge/content/assets/videos/`
+- `content/lessons.json`
+- `content/quizzes.json`
+- `content/assets/videos/`
 
 Why after contracts:
 
@@ -134,12 +134,12 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/home/`
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/auth/`
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/dashboard/`
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/lessons/`
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/quizzes/`
-- `/home/runner/work/PyKnowledge/PyKnowledge/app/progress/`
+- `app/home/`
+- `app/auth/`
+- `app/dashboard/`
+- `app/lessons/`
+- `app/quizzes/`
+- `app/progress/`
 
 Why here:
 
@@ -160,17 +160,17 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/navbar.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/progress-bar.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/video-player.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/toast.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/offline-indicator.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/loading.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/update-notifier.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/animations.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/default.css`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/landing.css`
-- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/animations.css`
+- `ui/components/navbar.js`
+- `ui/components/progress-bar.js`
+- `ui/components/video-player.js`
+- `ui/components/toast.js`
+- `ui/components/offline-indicator.js`
+- `ui/components/loading.js`
+- `ui/components/update-notifier.js`
+- `ui/components/animations.js`
+- `ui/themes/default.css`
+- `ui/themes/landing.css`
+- `ui/themes/animations.css`
 
 Why after app flows:
 
@@ -189,8 +189,8 @@ Definition of done:
 
 Build or stabilize:
 
-- `/home/runner/work/PyKnowledge/PyKnowledge/core/service-worker.js`
-- `/home/runner/work/PyKnowledge/PyKnowledge/manifest.json`
+- `core/service-worker.js`
+- `manifest.json`
 
 Why near the end:
 
@@ -205,7 +205,7 @@ Definition of done:
 
 Versioning note:
 
-- keep `/home/runner/work/PyKnowledge/PyKnowledge/core/version.js` and `/home/runner/work/PyKnowledge/PyKnowledge/core/service-worker.js` in sync
+- keep `core/version.js` and `core/service-worker.js` in sync
 - verify version alignment with `npm run check:version`
 
 ---
@@ -253,4 +253,4 @@ git commit -m "Describe the change"
 # push branch and open a pull request
 ```
 
-This note is conceptual build guidance. For day-to-day contribution rules, treat `/home/runner/work/PyKnowledge/PyKnowledge/CONTRIBUTING.md` as the source of truth.
+This note is conceptual build guidance. For day-to-day contribution rules, treat `CONTRIBUTING.md` as the source of truth.
