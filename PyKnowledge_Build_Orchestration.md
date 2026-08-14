@@ -1,205 +1,256 @@
-# PyKnowledge — Offline Build Orchestration & UI Design Spec
+# PyKnowledge — Conceptual Build Order Note
 
-Purpose: a working order for building PyKnowledge's **client-only, offline-first** mode from source, structured as sequential build phases with a "prompt" for each phase (usable with an AI pair-programmer or as a personal task checklist), plus a UI design spec matching the confirmed architecture and hardware constraints.
+Purpose: a current, repo-aligned build order for PyKnowledge's client-first offline experience. This is a sequencing note for implementation, extension, or refactoring work — not a claim that every phase must be rebuilt from scratch.
 
-Scope note: this covers Option A (offline client PWA) only. `server/` (Express+Prisma+Postgres) is out of scope here — it's an optional v0.4.0+ add-on, not required for the offline deliverable.
+Scope note: the primary path here is the browser app in `/app`, `/core`, `/storage`, `/ui`, `/utils`, and `/content`. The optional `/server` workspace is additive and should not block delivery of the offline client.
 
 ---
 
 ## 0. Build Order Rationale
 
-Dependency chain, bottom-up — each phase only depends on what's already built:
+Build bottom-up so each layer depends only on stable lower-level behavior:
 
+```text
+utils/ → storage/auth + core/storage → core/loader + core/router + core/engine → storage/ domain logic → content/ → app/ → ui/ → service worker → validation + packaging
 ```
-utils/  →  core/  →  storage/  →  content/  →  app/  →  ui/  →  service worker  →  packaging
-```
 
-You cannot build `app/` (dashboard, lessons, quizzes) before `core/storage.js` exists, because every app module reads/writes progress through it. Content schema must exist before `checkPrerequisite()` can be tested against real data. UI is built last because it's the presentation layer over working logic — building it first means styling functions that don't exist yet.
+Key rule: do not build screens first. In this repository, rendering depends on stable content loading, auth/session state, progress persistence, and sanitization.
 
 ---
 
-## Phase 1 — Utils (foundation, no dependencies)
+## 1. Utilities and Content Contracts
 
-**Build:** `utils/sanitize.js`, `utils/schema.js`, `utils/parser.js`, `utils/validator.js`, `utils/crypto.js`
+Build or stabilize:
 
-**Prompt to use:**
-> Build `utils/sanitize.js` with an `escapeHtml(str)` function that neutralizes `<`, `>`, `&`, `"`, `'` for safe innerHTML use. Build `utils/schema.js` with `validateLessonsSchema(json)` and `validateQuizzesSchema(json)` that check required fields per the PyKnowledge content schema (module id/title/lessons array; quiz id/lessonId/questions array). Build `utils/crypto.js` with `hashPin(pin)` and `verifyPin(pin, hash, salt)` using Web Crypto SubtleCrypto PBKDF2, plus `generateUserId()` and `isCryptoAvailable()`. No external dependencies — Vanilla JS ES6+ only.
+- `/home/runner/work/PyKnowledge/PyKnowledge/utils/sanitize.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/utils/schema.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/utils/parser.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/utils/validator.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/utils/crypto.js`
 
-**Why first:** everything else imports from here. Zero circular dependencies possible if this layer has no imports of its own.
+Why first:
 
----
+- `escapeHtml()` is a repository-wide rendering rule for user-facing text.
+- schema and answer validation define the shape expected by content loaders and quiz flows.
+- local PIN auth depends on crypto helpers before profile creation can work.
 
-## Phase 2 — Core Kernel
+Definition of done:
 
-**Build:** `core/storage.js`, `core/router.js`, `core/loader.js`, `core/errors.js`, `core/version.js`, `core/engine.js`
-
-**Prompt to use:**
-> Build `core/storage.js` as a LocalStorage wrapper: `getProgress()` / `saveProgress(progress)` operating on key `pyknowledge_progress_${userId}` (fallback to plain `pyknowledge_progress` if no active user). Default progress shape: `{ completedLessons: [], quizScores: {}, unlockedModules: [], achievements: [] }`. Build `core/router.js` as hash-based SPA routing (`#/dashboard`, `#/lesson/:id`, `#/quiz/:id`) with a 404 fallback view. Build `core/loader.js` with `loadContent(path)` that fetches JSON and validates it via `utils/schema.js` before returning — throw on schema failure, never render invalid content. Build `core/version.js` exporting a single `APP_VERSION` constant used by both the UI footer and the service worker cache name. Build `core/engine.js` as the bootstrap: initializes router, loads content, mounts the initial view.
-
-**Why here:** storage.js must exist before any module that reads/writes progress (Phase 3 depends on it directly).
-
----
-
-## Phase 3 — Storage Domain Layer
-
-**Build:** `storage/progress.js`, `storage/achievements.js` (auth.js already exists per your upload)
-
-**Prompt to use:**
-> Build `storage/progress.js` with `checkPrerequisite(moduleId, lessonsData)`, `unlockNextModule(completedLessonId, lessonsData)`, `getModuleProgress(moduleId, lessonsData)`, `getOverallProgress(lessonsData)` — all reading/writing through `core/storage.js`'s `getProgress()`/`saveProgress()`. Build `storage/achievements.js` with a static `ACHIEVEMENTS` array (first-lesson, first-quiz, module-complete, perfect-score) and `checkAchievements(lessonsData)` that diff-checks against `progress.achievements`.
-
-**Status:** you've already confirmed this code exists and matches this spec exactly (from your earlier upload) — no rebuild needed, just verify it's wired to `core/storage.js` correctly.
+- dynamic text is sanitized before HTML rendering
+- lesson and quiz JSON can be validated consistently
+- PIN hashing and verification work in supported browsers
 
 ---
 
-## Phase 4 — Content
+## 2. Persistence and Session Foundation
 
-**Build:** `content/lessons.json`, `content/quizzes.json`, `content/assets/videos/`
+Build or stabilize:
 
-**Prompt to use:**
-> Create `content/lessons.json` following the CHED Python curriculum: modules with `id`, `title`, `description`, `prerequisite` (null or prior module id), and `lessons[]` each with `id`, `title`, `duration`, `video` path, `content.sections[]` (heading/body/optional code). Create matching `content/quizzes.json` — every quiz `id` must equal a lesson `id`. Use `multiple-choice` (index-based `correctAnswer`), `true-false` (boolean), and `fill-blank` (string or array, case-insensitive) question types. Run `npm run validate:content` after every edit.
+- `/home/runner/work/PyKnowledge/PyKnowledge/storage/auth.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/storage.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/version.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/api.js`
 
-**Hardware constraint to respect:** total video payload capped at 250MB (10× 720p H.264 MP4), core codebase under 5MB — don't reference uncompressed or 1080p+ assets.
+Why here:
 
----
+- progress is keyed per user through the auth layer
+- nearly every app flow reads from `core/storage.js`
+- version state must exist before service-worker cache versioning and version checks
+- API support is optional, but the app needs a clean offline fallback contract early
 
-## Phase 5 — App Modules
+Definition of done:
 
-**Build:** `app/dashboard/`, `app/lessons/`, `app/quizzes/`, `app/progress/`
-
-**Prompt to use:**
-> Build `app/dashboard/` to render module cards using `getOverallProgress()` and `checkPrerequisite()` — locked modules show a lock icon and the `reason` string, not just hidden. Build `app/lessons/` to render `content.sections` (heading/body/code with `escapeHtml()` applied to all user-facing text) plus a `<video>` element sourced from the lesson's `video` path. Build `app/quizzes/` with `calculateScore()` (percentage, 70% pass threshold) supporting all three question types from the schema, calling `saveProgress()` and `checkAchievements()` on submit. Build `app/progress/` as a read-only detailed view combining `getModuleProgress()` per module and `getAchievements()`.
-
-**Why after content:** these modules render real schema-shaped data — building the UI against a hypothetical shape risks mismatched field names.
-
----
-
-## Phase 6 — UI Layer (see design spec below)
-
-**Build:** `ui/components/`, `ui/themes/`, `ui/assets/`
-
-**Prompt to use:**
-> Build `ui/components/` as small, framework-free DOM-builder functions (no JSX, no React — Vanilla JS `document.createElement` or template strings + `escapeHtml()`). Build `ui/themes/` as CSS custom properties (`--color-primary`, `--color-bg`, `--spacing-unit`, etc.) so profile avatar colors and dark/light mode can be swapped without touching component code. Keep total UI asset weight minimal — no icon fonts, use inline SVG.
+- profiles, sessions, and per-user progress keys behave predictably
+- guest fallback still works
+- version constants are established and API configuration fails safely when absent
 
 ---
 
-## Phase 7 — Service Worker + Offline Strategy
+## 3. Core App Kernel
 
-**Build:** `core/service-worker.js`
+Build or stabilize:
 
-**Prompt to use:**
-> Build a cache-first service worker: on `install`, cache a `STATIC_ASSETS` array covering all HTML/CSS/JS/JSON/video paths, versioned by `core/version.js`'s `APP_VERSION` as the cache name. On `fetch`, serve from cache first, fall back to network, and cache the network response for next time. On `activate`, purge caches whose name doesn't match the current version. Show an update-available banner when a new SW version is waiting, and only reload on explicit user action — never force-reload mid-session.
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/loader.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/router.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/errors.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/engine.js`
 
-**Test:** load app, go offline in DevTools, confirm every route and asset still resolves.
+Why here:
+
+- routes should only exist after content loading and persistence rules are stable
+- the engine is the composition point for auth gating, content loading, and page mounting
+- error views should be defined before app modules rely on them
+
+Definition of done:
+
+- content loads from static JSON, with optional API use when configured
+- invalid content fails closed instead of rendering partially
+- core routes mount the correct flows and unknown routes fail gracefully
 
 ---
 
-## Phase 8 — Packaging & Validation
+## 4. Domain Logic Over Storage
 
-**Prompt to use:**
-> Run `npm run validate:content`, `npm test`, then `npm run package` to produce the USB-portable zip. Confirm final size: core codebase < 5MB, total package with videos < 250MB. Verify `npm start` serves the app with no build step (raw ES modules).
+Build or stabilize:
+
+- `/home/runner/work/PyKnowledge/PyKnowledge/storage/progress.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/storage/achievements.js`
+
+Why here:
+
+- unlocking, completion, percentages, and achievements should be solved once in storage/domain logic, not reimplemented in views
+- dashboard, quizzes, and progress screens all depend on these rules
+
+Definition of done:
+
+- prerequisite checks return both access state and user-facing reason text
+- module and overall progress calculations are consistent
+- achievement checks are derived from saved progress, not duplicated per screen
 
 ---
 
-## Termux Build Loop (tying it to your actual workflow)
+## 5. Content and Assets
+
+Build or stabilize:
+
+- `/home/runner/work/PyKnowledge/PyKnowledge/content/lessons.json`
+- `/home/runner/work/PyKnowledge/PyKnowledge/content/quizzes.json`
+- `/home/runner/work/PyKnowledge/PyKnowledge/content/assets/videos/`
+
+Why after contracts:
+
+- content shape must match the schema and app expectations
+- prerequisite chains, lesson IDs, and quiz IDs must be coherent before UI work is trusted
+
+Definition of done:
+
+- lessons, quizzes, and prerequisites validate cleanly
+- every quiz maps correctly to lesson flow expectations
+- media choices remain appropriate for offline delivery and legacy hardware
+
+---
+
+## 6. App Flows
+
+Build or stabilize:
+
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/home/`
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/auth/`
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/dashboard/`
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/lessons/`
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/quizzes/`
+- `/home/runner/work/PyKnowledge/PyKnowledge/app/progress/`
+
+Why here:
+
+- these modules turn content and domain logic into user journeys
+- auth and home flows belong here because they gate the rest of the application experience
+
+Definition of done:
+
+- home and auth flows enter the app cleanly for both profiles and guest use
+- dashboard reflects lock state and progress accurately
+- lesson flow respects sequencing and renders sanitized content
+- quiz flow scores locally and writes progress/achievements correctly
+- progress view reflects persisted state without recomputing business rules in the UI layer
+
+---
+
+## 7. UI Components and Themes
+
+Build or stabilize:
+
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/navbar.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/progress-bar.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/video-player.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/toast.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/offline-indicator.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/loading.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/update-notifier.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/components/animations.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/default.css`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/landing.css`
+- `/home/runner/work/PyKnowledge/PyKnowledge/ui/themes/animations.css`
+
+Why after app flows:
+
+- UI should wrap working behaviors, not invent them
+- component extraction is easier once repeated patterns are visible in real screens
+
+Definition of done:
+
+- components remain framework-free and light enough for the offline PWA target
+- user-facing dynamic text remains sanitized before insertion into HTML
+- theme choices respect the low-spec hardware target and existing avatar color system
+
+---
+
+## 8. Offline Runtime
+
+Build or stabilize:
+
+- `/home/runner/work/PyKnowledge/PyKnowledge/core/service-worker.js`
+- `/home/runner/work/PyKnowledge/PyKnowledge/manifest.json`
+
+Why near the end:
+
+- the service worker must know the final static asset set
+- offline caching is only trustworthy once routes, content, and UI assets are known
+
+Definition of done:
+
+- required static assets are cached for offline use
+- new static assets are added to the service-worker cache list
+- update behavior is explicit and user-safe
+
+Versioning note:
+
+- keep `/home/runner/work/PyKnowledge/PyKnowledge/core/version.js` and `/home/runner/work/PyKnowledge/PyKnowledge/core/service-worker.js` in sync
+- verify version alignment with `npm run check:version`
+
+---
+
+## 9. Validation and Packaging
+
+Run in this order as appropriate:
 
 ```bash
-cd ~/PyKnowledge
-git pull origin main --rebase        # sync first, always
-# work through one phase above
-npm run validate:content              # if content changed
-npm test                              # if logic changed
+npm run lint
+npm test
+npm run validate:content
+npm run check:version
+npm run package
+```
+
+Optional follow-up checks:
+
+```bash
+npm run test:perf
+```
+
+Use this phase to confirm:
+
+- content validates
+- client logic tests pass
+- version constants are synchronized
+- packaging still produces a portable offline artifact
+
+---
+
+## Workflow Note
+
+Use the repository contribution flow, not direct pushes to `main`:
+
+```bash
+git checkout -b <your-branch-from-main>
+# make focused changes
+npm run lint
+npm test
+npm run validate:content
+npm run check:version
 git add .
-git commit -m "Phase N: <what you built>"
-git push origin main
+git commit -m "Describe the change"
+# push branch and open a pull request
 ```
 
----
-
-## UI Design Spec
-
-Grounded in the confirmed constraints: 1024×768 minimum display, 2GB RAM legacy hardware, no external UI frameworks, <5MB codebase, offline-first.
-
-### Design Principles
-
-1. **No framework weight.** No Bootstrap/Tailwind CDN, no icon fonts — inline SVG only, CSS Grid/Flexbox for layout. This isn't just a style choice, it's the 5MB budget forcing it.
-2. **Legacy-hardware-safe rendering.** Avoid heavy CSS (backdrop-filter, complex box-shadows stacked, large blur radii) that taxes integrated GPUs on dual-core machines. Prefer flat design with restrained shadow use.
-3. **Design for 1024×768 first**, scale up — not the reverse. Test at minimum res before anything else.
-4. **Profile-avatar color system already exists in code** (`pickAvatar()` picks from a 6-color palette keyed by name's first character) — theme should incorporate those same 6 colors as accent options, not introduce a clashing palette.
-
-### Color System (as CSS custom properties)
-
-```css
-:root {
-  --color-primary: #0f3460;      /* from existing avatar palette */
-  --color-accent: #4ecca3;
-  --color-warning: #f0a500;
-  --color-danger: #e94560;
-  --color-bg: #f7f7fa;
-  --color-surface: #ffffff;
-  --color-text: #1a1a2e;
-  --color-text-muted: #6b6b80;
-  --color-locked: #b0b0c0;
-  --radius: 8px;
-  --spacing-unit: 8px;
-}
-```
-
-### Screen-by-screen
-
-**Profile Select (first screen, no login page in the traditional sense):**
-- Grid of profile cards, one per saved profile — avatar circle (color from `pickAvatar()`), display name, "Continue" on tap
-- "+ New Profile" card always last in the grid
-- New profile form: name field, 4+ digit numeric PIN field, PIN confirmation
-- Large tap targets (≥44px) — built for touchscreen labs and older trackpads alike
-
-**Dashboard:**
-- Module cards in a responsive grid (CSS Grid, `auto-fit, minmax(280px, 1fr)`)
-- Each card: title, progress bar (from `getModuleProgress()`), lock overlay + `reason` text if `checkPrerequisite()` fails
-- Overall progress ring or bar at top from `getOverallProgress()`
-- Offline indicator badge (small, persistent, non-intrusive) — since network state affects nothing functionally but users should still see it's working as intended
-
-**Lesson View:**
-- Video player (native `<video controls>` — no custom player chrome, keeps weight down and avoids GPU-heavy custom controls)
-- Section content below, rendered from `content.sections[]`, code blocks in monospace with a subtle background tint
-- Sticky "Mark Complete" / "Take Quiz" action bar at bottom
-
-**Quiz View:**
-- One question per screen (not a long scroll) — reduces cognitive load and matches small-screen/low-res constraint
-- Progress dots at top (`● ● ○ ○ ○`)
-- Immediate local validation, no server round-trip
-- Results screen: score, pass/fail against 70% threshold, "Retry" or "Continue" based on result
-
-**Progress View:**
-- Per-module breakdown (bar per module)
-- Achievement badges — locked achievements shown greyed/outlined, not hidden (this drives motivation more than hiding them)
-
-### Component Inventory (`ui/components/`)
-
-| Component | Used by |
-|---|---|
-| `ProfileCard.js` | Profile select |
-| `ModuleCard.js` | Dashboard |
-| `ProgressBar.js` | Dashboard, Progress view |
-| `LockOverlay.js` | Dashboard (locked modules) |
-| `VideoPlayer.js` | Lesson view (thin wrapper, native controls) |
-| `QuizQuestion.js` | Quiz view (renders per type: MC/TF/fill-blank) |
-| `AchievementBadge.js` | Progress view |
-| `OfflineIndicator.js` | Global header |
-| `Toast.js` | Save confirmations, errors |
-
-Each component: a plain function taking data + returning a DOM node or HTML string (post-`escapeHtml()`), no build step, no JSX — consistent with the "runs as-is from source ES modules" requirement in the README.
-
----
-
-## Summary Table
-
-| Phase | Depends on | Output |
-|---|---|---|
-| 1. Utils | — | sanitize, schema, parser, validator, crypto |
-| 2. Core | Utils | storage, router, loader, engine |
-| 3. Storage domain | Core | progress.js, achievements.js (already built) |
-| 4. Content | Utils (schema) | lessons.json, quizzes.json, videos |
-| 5. App modules | Core, Storage, Content | dashboard, lessons, quizzes, progress |
-| 6. UI | App modules | components, themes, assets |
-| 7. Service Worker | everything static | offline caching |
-| 8. Packaging | all | USB zip, size validation |
+This note is conceptual build guidance. For day-to-day contribution rules, treat `/home/runner/work/PyKnowledge/PyKnowledge/CONTRIBUTING.md` as the source of truth.
