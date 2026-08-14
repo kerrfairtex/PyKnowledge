@@ -1,7 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.pyright/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Node.js
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build
 dist/
-*.zip
-.DS_Store
-coverage/
+build/
+*.egg-info/
+.eggs/
+
+# Environment / Secrets
 .env
-.env.local
+.env.*
+!.env.example
+
+# AI / ML Models
+models/
+model/
+checkpoints/
+weights/
+*.gguf
+*.ggml
+*.safetensors
+*.pt
+*.pth
+*.onnx
+
+# Local Data / Databases
+data/
+datasets/
+*.db
+*.sqlite
+*.sqlite3
+
+# Coverage
+coverage/
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Archives / Temporary
+*.zip
+*.tar
+*.tar.gz
+*.tmp
+*.temp
+*.swp
+*.swo
