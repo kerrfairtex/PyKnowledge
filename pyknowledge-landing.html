@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyKnowledge — Learn Python. No Signal Required.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #0B2426;
+    --bg-panel: #123638;
+    --bg-panel-hi: #174446;
+    --line: #244D4F;
+    --text-hi: #EAF3F0;
+    --text-mid: #A9C4C0;
+    --text-dim: #6F8E8B;
+    --gold: #E8A33D;
+    --gold-dim: #B87F2C;
+    --signal: #4FD1A5;
+    --signal-dim: #2E7A5D;
+    --coral: #E2694A;
+    --radius: 14px;
+    --disp: 'Space Grotesk', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(232,163,61,0.08), transparent),
+      radial-gradient(ellipse 700px 500px at 90% 10%, rgba(79,209,165,0.06), transparent),
+      var(--bg-deep);
+    color:var(--text-hi);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,36,38,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:68px;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:var(--disp); font-weight:700; font-size:1.05rem; letter-spacing:-0.01em;}
+  .logo-mark{
+    width:26px; height:26px; border-radius:7px;
+    background:linear-gradient(135deg, var(--gold), var(--coral));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:12px; font-weight:600; color:var(--bg-deep);
+  }
+  .navlinks{display:flex; gap:34px; font-size:0.88rem; color:var(--text-mid);}
+  .navlinks a:hover{color:var(--text-hi);}
+  .nav-cta{
+    padding:9px 18px; border-radius:8px; background:var(--gold); color:var(--bg-deep);
+    font-weight:600; font-size:0.86rem;
+  }
+  .navlinks-wrap{display:flex; align-items:center; gap:32px;}
+  @media (max-width:820px){ .navlinks{display:none;} }
+
+  /* ===== HERO ===== */
+  header.hero{padding:76px 0 60px; position:relative; overflow:hidden;}
+  .status-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--bg-panel); border:1px solid var(--line);
+    padding:7px 14px 7px 10px; border-radius:100px;
+    font-family:var(--mono); font-size:0.76rem; color:var(--signal);
+    margin-bottom:28px;
+  }
+  .status-dot{width:7px; height:7px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 0 rgba(79,209,165,0.6); animation:pulse 2.2s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(79,209,165,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(79,209,165,0);}
+    100%{box-shadow:0 0 0 0 rgba(79,209,165,0);}
+  }
+  h1{
+    font-family:var(--disp); font-weight:700;
+    font-size:clamp(2.3rem, 5.4vw, 4.1rem);
+    letter-spacing:-0.025em; line-height:1.04;
+    max-width:820px;
+  }
+  h1 .line2{color:var(--text-mid);}
+  h1 .accent{color:var(--gold); font-style:italic;}
+  .hero-sub{
+    max-width:560px; margin-top:22px; font-size:1.08rem; color:var(--text-mid); line-height:1.65;
+  }
+  .hero-actions{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--gold); color:var(--bg-deep); font-weight:600; font-size:0.94rem;
+    padding:13px 26px; border-radius:9px; display:inline-flex; align-items:center; gap:8px;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary:hover{background:#f0ae4d; transform:translateY(-1px);}
+  .btn-ghost{
+    border:1px solid var(--line); color:var(--text-hi); font-weight:500; font-size:0.94rem;
+    padding:13px 24px; border-radius:9px; transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn-ghost:hover{border-color:var(--signal); background:rgba(79,209,165,0.06);}
+
+  /* storage panel */
+  .storage-panel{
+    margin-top:52px; max-width:620px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 22px;
+  }
+  .storage-row{display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:0.8rem; color:var(--text-mid); margin-bottom:12px;}
+  .storage-row b{color:var(--text-hi); font-weight:500;}
+  .bar-track{height:8px; border-radius:5px; background:var(--bg-deep); overflow:hidden; border:1px solid var(--line);}
+  .bar-fill{
+    height:100%; width:0%; border-radius:5px;
+    background:linear-gradient(90deg, var(--signal-dim), var(--signal));
+    animation:fillbar 1.6s 0.3s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  @keyframes fillbar{to{width:87%;}}
+  .storage-caption{margin-top:12px; font-size:0.78rem; color:var(--text-dim);}
+
+  /* ===== ARCHIPELAGO ROADMAP ===== */
+  .roadmap-section{padding:90px 0 70px; border-top:1px solid var(--line);}
+  .eyebrow{
+    font-family:var(--mono); font-size:0.76rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:14px;
+  }
+  h2{font-family:var(--disp); font-size:clamp(1.7rem,3.2vw,2.4rem); font-weight:600; letter-spacing:-0.02em; max-width:640px;}
+  .section-sub{color:var(--text-mid); max-width:560px; margin-top:14px; font-size:1rem; line-height:1.6;}
+
+  .archipelago{
+    margin-top:56px; position:relative; padding:20px 0 40px;
+    overflow-x:auto;
+  }
+  .islands{
+    display:flex; align-items:flex-end; gap:0; min-width:900px; position:relative; padding:0 10px;
+  }
+  .islands svg.path-svg{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;}
+  .island{
+    flex:1; display:flex; flex-direction:column; align-items:center; position:relative; z-index:2;
+    padding:0 6px;
+  }
+  .island-node{
+    width:64px; height:64px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:600; font-size:0.85rem;
+    border:2px solid var(--line); background:var(--bg-panel);
+    color:var(--text-dim); position:relative;
+    transition:transform 0.2s ease;
+  }
+  .island.unlocked .island-node{border-color:var(--signal); color:var(--signal); background:var(--bg-panel-hi);}
+  .island.current .island-node{border-color:var(--gold); color:var(--gold); background:var(--bg-panel-hi); box-shadow:0 0 0 5px rgba(232,163,61,0.12);}
+  .island.locked .island-node{opacity:0.5;}
+  .island:hover .island-node{transform:translateY(-3px);}
+  .island-label{margin-top:14px; font-size:0.82rem; font-weight:500; text-align:center; color:var(--text-hi); max-width:100px;}
+  .island-tag{
+    margin-top:6px; font-family:var(--mono); font-size:0.66rem; padding:2px 8px; border-radius:100px;
+    color:var(--text-dim); border:1px solid var(--line);
+  }
+  .island.unlocked .island-tag{color:var(--signal); border-color:var(--signal-dim);}
+  .island.current .island-tag{color:var(--gold); border-color:var(--gold-dim);}
+  .lock-icon{position:absolute; bottom:-3px; right:-3px; width:20px; height:20px; border-radius:50%; background:var(--bg-deep); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:10px;}
+
+  .gate-note{
+    margin-top:44px; background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 24px; display:flex; gap:16px; align-items:flex-start; max-width:680px;
+  }
+  .gate-note .glyph{font-family:var(--mono); color:var(--gold); font-size:1.2rem; line-height:1;}
+  .gate-note code{font-family:var(--mono); background:var(--bg-deep); padding:2px 6px; border-radius:4px; color:var(--signal); font-size:0.85rem;}
+  .gate-note p{font-size:0.88rem; color:var(--text-mid); line-height:1.6;}
+
+  /* ===== STATS ===== */
+  .stats-section{padding:70px 0; border-top:1px solid var(--line);}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:44px;}
+  .stat{background:var(--bg-panel); padding:30px 24px;}
+  .stat-num{font-family:var(--disp); font-size:2.1rem; font-weight:700; color:var(--gold);}
+  .stat-label{margin-top:6px; font-size:0.82rem; color:var(--text-mid);}
+  @media (max-width:760px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* ===== FEATURES ===== */
+  .features-section{padding:70px 0; border-top:1px solid var(--line);}
+  .feature-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:48px;}
+  .feature{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:28px 24px; transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .feature:hover{border-color:var(--signal-dim); transform:translateY(-2px);}
+  .feature-icon{
+    width:38px; height:38px; border-radius:9px; background:var(--bg-panel-hi);
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); color:var(--signal); font-size:1rem; margin-bottom:18px;
+  }
+  .feature h3{font-family:var(--disp); font-size:1.08rem; font-weight:600; margin-bottom:10px;}
+  .feature p{font-size:0.87rem; color:var(--text-mid); line-height:1.6;}
+  @media (max-width:820px){ .feature-grid{grid-template-columns:1fr;} }
+
+  /* ===== HARDWARE STRIP ===== */
+  .hw-section{padding:56px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--bg-panel);}
+  .hw-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px;}
+  .hw-text{max-width:460px;}
+  .hw-text h3{font-family:var(--disp); font-size:1.3rem; margin-bottom:10px;}
+  .hw-text p{color:var(--text-mid); font-size:0.9rem; line-height:1.6;}
+  .hw-specs{display:flex; gap:28px; flex-wrap:wrap;}
+  .hw-spec{font-family:var(--mono); font-size:0.78rem; color:var(--text-dim);}
+  .hw-spec b{display:block; color:var(--signal); font-size:1rem; margin-bottom:4px;}
+
+  /* ===== CTA ===== */
+  .cta-section{padding:100px 0; text-align:center;}
+  .cta-section h2{max-width:100%; margin:0 auto;}
+  .cta-section .section-sub{margin:16px auto 0;}
+  .cta-actions{display:flex; justify-content:center; gap:14px; margin-top:32px; flex-wrap:wrap;}
+
+  footer{border-top:1px solid var(--line); padding:36px 0; }
+  .footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-size:0.82rem; color:var(--text-dim);}
+  .footer-row b{color:var(--text-mid); font-weight:500;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="logo-mark">Py</span> PyKnowledge</div>
+    <div class="navlinks-wrap">
+      <div class="navlinks">
+        <a href="#roadmap">Curriculum</a>
+        <a href="#features">Platform</a>
+        <a href="#hardware">Hardware</a>
+      </div>
+      <a href="#" class="nav-cta">Start offline</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="status-chip"><span class="status-dot"></span> CACHED &amp; READY — WORKS WITH ZERO SIGNAL</div>
+    <h1>Learn Python<br><span class="line2">on an island with</span> <span class="accent">no connection.</span></h1>
+    <p class="hero-sub">PyKnowledge runs entirely in the browser once installed — lessons, quizzes, and code exercises are cached with Service Worker and stored locally, so a dropped signal in Tawi-Tawi never drops a lesson.</p>
+    <div class="hero-actions">
+      <a href="#roadmap" class="btn-primary">Open curriculum map →</a>
+      <a href="#features" class="btn-ghost">How it works offline</a>
+    </div>
+
+    <div class="storage-panel">
+      <div class="storage-row"><span>local_storage.db</span> <b>48.2 MB cached</b></div>
+      <div class="bar-track"><div class="bar-fill"></div></div>
+      <div class="storage-caption">0 KB pulled from network this session · last sync: before you lost signal</div>
+    </div>
+  </div>
+</header>
+
+<section class="roadmap-section" id="roadmap">
+  <div class="wrap">
+    <div class="eyebrow">Curriculum roadmap</div>
+    <h2>Every module is an island. You don't reach the next one without finishing the last.</h2>
+    <p class="section-sub"><code style="font-family:var(--mono); color:var(--signal); font-size:0.85rem;">checkPrerequisite()</code> gates progression the same way — no shortcuts to Generators before Loops actually clicks.</p>
+
+    <div class="archipelago">
+      <div class="islands" id="islands">
+        <svg class="path-svg" id="pathSvg"><line x1="0" y1="0" x2="0" y2="0" stroke="var(--line)" stroke-width="2" stroke-dasharray="4 5"/></svg>
+
+        <div class="island unlocked">
+          <div class="island-node">01</div>
+          <div class="island-label">Variables &amp; Types</div>
+          <div class="island-tag">completed</div>
+        </div>
+        <div class="island unlocked">
+          <div class="island-node">02</div>
+          <div class="island-label">Control Flow</div>
+          <div class="island-tag">completed</div>
+        </div>
+        <div class="island current">
+          <div class="island-node">03</div>
+          <div class="island-label">Loops &amp; Iteration</div>
+          <div class="island-tag">in progress</div>
+        </div>
+        <div class="island locked">
+          <div class="island-node">04<div class="lock-icon">🔒</div></div>
+          <div class="island-label">Functions</div>
+          <div class="island-tag">locked</div>
+        </div>
+        <div class="island locked">
+          <div class="island-node">05<div class="lock-icon">🔒</div></div>
+          <div class="island-label">Modules &amp; Packages</div>
+          <div class="island-tag">locked</div>
+        </div>
+        <div class="island locked">
+          <div class="island-node">06<div class="lock-icon">🔒</div></div>
+          <div class="island-label">Decorators</div>
+          <div class="island-tag">locked</div>
+        </div>
+        <div class="island locked">
+          <div class="island-node">07<div class="lock-icon">🔒</div></div>
+          <div class="island-label">Generators</div>
+          <div class="island-tag">locked</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-note">
+      <div class="glyph">{ }</div>
+      <p><b style="color:var(--text-hi); font-weight:500;">Mastery, not momentum.</b> Each island unlocks only after its quiz score clears the CHED IT-aligned threshold, stored locally and re-checked on every visit — even fully offline.<br><code>if (checkPrerequisite(currentModule)) unlockNext();</code></p>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="wrap">
+    <div class="eyebrow">Why it holds up offline</div>
+    <h2>Built for the connection students actually have.</h2>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num">₱0</div><div class="stat-label">Server or hosting cost — fully client-side</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Lesson content available after first cache</div></div>
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">Gated modules, CHED IT-aligned sequence</div></div>
+      <div class="stat"><div class="stat-num">2GB</div><div class="stat-label">RAM target — runs on legacy school hardware</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="features">
+  <div class="wrap">
+    <div class="eyebrow">Under the hood</div>
+    <h2>No server. No dependency on a signal that isn't coming back.</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-icon">◇</div>
+        <h3>Service Worker caching</h3>
+        <p>Every lesson, quiz, and media asset is intercepted and cached on first load, so revisiting a page never touches the network again.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">▤</div>
+        <h3>LocalStorage persistence</h3>
+        <p>Progress, quiz scores, and unlocked modules are written directly to the browser — nothing is lost when the device restarts or the tab closes.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⛁</div>
+        <h3>Prerequisite gatekeeping</h3>
+        <p><code style="font-family:var(--mono); font-size:0.83rem; color:var(--signal);">checkPrerequisite()</code> enforces the CHED IT sequence in logic, not just in the UI — the next island simply doesn't open until it should.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">▽</div>
+        <h3>Cache API for media</h3>
+        <p>Diagrams, narrated walkthroughs, and code demos are stored as cached responses — heavy media loads once, then plays instantly forever.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◫</div>
+        <h3>Zero-cost architecture</h3>
+        <p>HTML5, CSS3, and vanilla JavaScript only — no framework build step, no paid backend, nothing that breaks when funding does.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◔</div>
+        <h3>Legacy hardware target</h3>
+        <p>Tuned to run smoothly on the machines already sitting in classroom labs — not the newest devices, the ones that are actually there.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hw-section" id="hardware">
+  <div class="wrap">
+    <div class="hw-row">
+      <div class="hw-text">
+        <h3>Built for the lab you already have.</h3>
+        <p>No GPU, no fast disk, no guaranteed uptime assumed. PyKnowledge was profiled against the hardware realistically found in schools across Tawi-Tawi.</p>
+      </div>
+      <div class="hw-specs">
+        <div class="hw-spec"><b>2 GB</b>min. RAM</div>
+        <div class="hw-spec"><b>&lt;50 MB</b>full install size</div>
+        <div class="hw-spec"><b>1 visit</b>needed to cache everything</div>
+        <div class="hw-spec"><b>0</b>network calls after that</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center; display:flex;">Get started</div>
+    <h2>Open it once. Learn from it for as long as you need.</h2>
+    <p class="section-sub">One visit caches the whole curriculum. After that, PyKnowledge belongs to the device — not the connection.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-primary">Launch PyKnowledge →</a>
+      <a href="#" class="btn-ghost">View curriculum outline</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div><b>PyKnowledge</b> — an offline-first education blueprint for Tawi-Tawi and beyond.</div>
+    <div>HTML5 · CSS3 · Vanilla JS · Service Worker · Cache API · LocalStorage</div>
+  </div>
+</footer>
+
+<script>
+  // Draw dotted connective path between island nodes
+  function drawPath(){
+    const islands = document.querySelectorAll('#islands .island-node');
+    const svg = document.getElementById('pathSvg');
+    const container = document.getElementById('islands');
+    svg.innerHTML = '';
+    const containerRect = container.getBoundingClientRect();
+    let points = [];
+    islands.forEach(node => {
+      const r = node.getBoundingClientRect();
+      const x = r.left - containerRect.left + r.width/2;
+      const y = r.top - containerRect.top + r.height/2;
+      points.push([x,y]);
+    });
+    let d = `M ${points[0][0]} ${points[0][1]}`;
+    for(let i=1;i<points.length;i++){ d += ` L ${points[i][0]} ${points[i][1]}`; }
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', '#244D4F');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-dasharray', '2 8');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path);
+    svg.setAttribute('width', containerRect.width);
+    svg.setAttribute('height', containerRect.height);
+  }
+  window.addEventListener('load', drawPath);
+  window.addEventListener('resize', drawPath);
+</script>
+
+</body>
+</html>
