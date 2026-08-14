@@ -3,7 +3,7 @@
  * Cache-first strategy for offline learning after first install.
  */
 
-const APP_VERSION = '0.3.1';
+const APP_VERSION = '0.4.0';
 const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
 
 const STATIC_ASSETS = [
@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/core/engine.js',
+  '/core/api.js',
   '/core/loader.js',
   '/core/router.js',
   '/core/storage.js',
