@@ -6,6 +6,7 @@ export default {
     '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   testMatch: ['**/tests/**/*.test.js'],
+  testPathIgnorePatterns: ['/node_modules/', '/server/'],
   collectCoverageFrom: [
     'core/**/*.js',
     'storage/**/*.js',

@@ -13,7 +13,8 @@ const ROOT = join(__dirname, '..');
 const VERSION = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version;
 
 const FILES = [
-  'index.html', 'manifest.json', 'package.json', 'README.md',
+  'index.html', 'manifest.json', 'package.json', 'README.md', 'CHANGELOG.md',
+  'robots.txt', 'docs',
   'app', 'core', 'content', 'storage', 'ui', 'utils'
 ];
 
