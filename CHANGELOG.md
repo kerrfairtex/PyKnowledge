@@ -5,6 +5,60 @@ All notable changes to PyKnowledge are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-04
+
+### Added
+- **Full-stack server** (`server/`) — Express API + PostgreSQL + Prisma ORM
+- Docker Compose for local PostgreSQL
+- Content API: `GET /api/content/lessons`, `/quizzes`, `/manifest`
+- Auth API skeleton: register, login, JWT, `/api/auth/me`
+- Database schema: institutions, users, content_manifests, progress
+- Content seed script from `content/*.json`
+- Client `core/api.js` — API-first loader with static JSON fallback
+- `docs/FULLSTACK_ARCHITECTURE.md` — full-stack setup guide
+- Server integration tests (supertest)
+- CI: PostgreSQL service + migrate + seed + server tests
+
+### Changed
+- `core/loader.js` tries API when `PYKNOWLEDGE_API_URL` is set and online
+- Dashboard route remains `#/dashboard`; home at `#/`
+- Bumped version to 0.4.0
+- Fixed broken video reference in `lesson-1-1` (set to null)
+- Updated `docs/ARCHITECTURE.md` security and deployment sections
+
+## [0.3.1] - 2026-08-04
+
+### Added
+- Project front page at `#/` with hero, regional context, design, and development sections
+- TRAC / BARMM / CHED target area showcase with performance stats
+- Design philosophy and development stack documentation on landing page
+- Architecture flow visualization and stakeholder governance section
+- `ui/themes/landing.css` for landing page styles
+- Dashboard moved to `#/dashboard`; navbar updated with Home link
+
+## [0.3.0] - 2026-08-04
+
+### Added
+- **Local authentication** — student profiles with PIN (PBKDF2 hashed via Web Crypto)
+- Profile picker UI for shared school computers
+- Guest mode for quick access without a profile
+- Per-user progress isolation in LocalStorage
+- Session management with 30-minute idle timeout
+- **Design system** — expanded tokens, gradients, typography, card polish
+- **Animation system** — page transitions, staggered entrances, hover effects
+- Achievement celebration overlay animation
+- Quiz result scale-in animation
+- PIN shake animation on wrong entry
+- `ui/themes/animations.css` with `prefers-reduced-motion` support
+- Auth documentation (`docs/AUTHENTICATION.md`)
+- 12 new auth/crypto tests (35 total)
+
+### Changed
+- Dashboard shows personalized greeting for logged-in users
+- Navbar displays user avatar and sign-out button
+- Progress bar fill uses smooth cubic-bezier animation
+- Bumped version to 0.3.0
+
 ## [0.2.0] - 2026-08-04
 
 ### Added

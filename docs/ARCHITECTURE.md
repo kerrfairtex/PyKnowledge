@@ -95,11 +95,12 @@ Launch → Service Worker install → Cache assets
 
 ## Security Model
 
-- No server-side code — all execution in browser sandbox
+- Client runs entirely in browser sandbox; optional server API for sync and governance
 - Content rendered through `escapeHtml()` sanitization
-- No user authentication (single-user local progress)
-- No external API calls after cache
-- Content validated against schema before rendering
+- **Local auth (offline):** Device PIN profiles with PBKDF2 hashing (v0.3.0+)
+- **Server auth (online):** JWT-based accounts when API is available (v0.4.0+)
+- Content validated against schema before rendering (client and server)
+- No external API calls required after PWA cache install
 
 ## Testing Strategy
 
@@ -112,10 +113,16 @@ Launch → Service Worker install → Cache assets
 
 ## Deployment
 
-PyKnowledge requires no server. Distribution options:
+PyKnowledge supports two deployment modes:
 
+### Offline-only (client)
 1. **Zip package**: `npm run package` → copy to USB drive
 2. **Static host**: Deploy files to any HTTP server (first visit caches for offline)
 3. **Local file**: Serve via `npm start` or any static file server
 
-No build step required for runtime — the app runs as-is from source files.
+### Full-stack hybrid (v0.4.0+)
+1. **Docker Compose**: `docker compose up` — PostgreSQL + API server
+2. **Client + API**: PWA loads content from API when online; falls back to cached JSON offline
+3. See `docs/FULLSTACK_ARCHITECTURE.md` for server setup
+
+No build step required for client runtime — the app runs as-is from source ES modules.

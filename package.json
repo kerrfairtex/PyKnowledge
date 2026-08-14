@@ -1,12 +1,27 @@
 {
   "name": "pyknowledge",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Offline Python Learning Platform for TRAC/BARMM/CHED curriculum",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "server"
+  ],
   "scripts": {
-    "start": "npx --yes serve -l 8080",
+    "start": "npm run start:client",
+    "start:client": "npx --yes serve -l 8080",
+    "start:server": "npm run start -w pyknowledge-server",
+    "dev:server": "npm run dev -w pyknowledge-server",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run db:migrate -w pyknowledge-server",
+    "db:migrate:dev": "npm run db:migrate:dev -w pyknowledge-server",
+    "db:seed": "npm run db:seed -w pyknowledge-server",
+    "db:generate": "npm run db:generate -w pyknowledge-server",
+    "setup:fullstack": "npm run db:up && sleep 3 && npm run db:generate && npm run db:migrate:dev && npm run db:seed",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:server": "npm run test -w pyknowledge-server",
+    "test:all": "npm test && npm run test:server",
     "test:watch": "npm test -- --watch",
     "test:perf": "node scripts/perf-smoke.js",
     "lint": "eslint .",
@@ -14,14 +29,17 @@
     "check:version": "node scripts/check-version.js",
     "package": "node scripts/package.js"
   },
-  "keywords": ["offline", "pwa", "python", "education", "ched"],
+  "keywords": ["offline", "pwa", "python", "education", "ched", "fullstack"],
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "eslint": "^9.17.0",
-    "globals": "^15.14.0",
-    "jest": "^29.7.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.1",
+    "globals": "^17.9.0",
+    "jest": "^30.4.2",
     "jest-environment-jsdom": "^29.7.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1"
   },
   "engines": {
     "node": ">=18"
