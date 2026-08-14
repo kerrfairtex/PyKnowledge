@@ -41,7 +41,7 @@ export function renderProgressDashboard(main, lessonsData) {
       <div class="progress-modules">${modulesHtml}</div>
       <h3>Achievements</h3>
       <div class="achievements-grid" role="list">${achievementsHtml}</div>
-      <a href="#/" class="btn btn-secondary">Back to Dashboard</a>
+      <a href="#/dashboard" class="btn btn-secondary">Back to Dashboard</a>
     </section>`;
 
   animatePageEnter(main.querySelector('.page-content'));

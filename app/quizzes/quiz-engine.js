@@ -132,7 +132,7 @@ function handleQuizSubmit(quiz, lessonsData) {
         <p>Score: ${result.score}% (${result.correct}/${result.total})</p>
         ${achievementHtml}
         <a href="#/module/${escapeHtml(findModuleForLesson(quiz.id, lessonsData))}" class="btn btn-primary">Continue</a>
-        <a href="#/" class="btn btn-secondary">Dashboard</a>
+        <a href="#/dashboard" class="btn btn-secondary">Dashboard</a>
       </div>`;
   } else {
     resultsEl.innerHTML = `
@@ -140,7 +140,7 @@ function handleQuizSubmit(quiz, lessonsData) {
         <h3>Not quite — try again</h3>
         <p>Score: ${result.score}% (${result.correct}/${result.total}). You need 70% to pass.</p>
         <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
-        <a href="#/" class="btn btn-secondary">Dashboard</a>
+        <a href="#/dashboard" class="btn btn-secondary">Dashboard</a>
       </div>`;
 
     document.getElementById('quiz-retry').addEventListener('click', () => {

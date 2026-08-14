@@ -3,7 +3,7 @@
  * Cache-first strategy for offline learning after first install.
  */
 
-const APP_VERSION = '0.3.0';
+const APP_VERSION = '0.4.0';
 const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
 
 const STATIC_ASSETS = [
@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/core/engine.js',
+  '/core/api.js',
   '/core/loader.js',
   '/core/router.js',
   '/core/storage.js',
@@ -22,6 +23,7 @@ const STATIC_ASSETS = [
   '/app/quizzes/quiz-engine.js',
   '/app/progress/progress-dashboard.js',
   '/app/auth/auth-screen.js',
+  '/app/home/front-page.js',
   '/storage/progress.js',
   '/storage/achievements.js',
   '/storage/auth.js',
@@ -32,6 +34,7 @@ const STATIC_ASSETS = [
   '/utils/crypto.js',
   '/ui/themes/default.css',
   '/ui/themes/animations.css',
+  '/ui/themes/landing.css',
   '/ui/components/navbar.js',
   '/ui/components/progress-bar.js',
   '/ui/components/video-player.js',

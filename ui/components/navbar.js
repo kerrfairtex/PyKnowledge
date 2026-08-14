@@ -6,6 +6,11 @@ import { getCurrentRoute } from '../../core/router.js';
 import { getActiveUser, logout, hasProfiles } from '../../storage/auth.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 
+function isActive(route, path) {
+  if (path === '/') return route === '/';
+  return route === path || route.startsWith(`${path}/`);
+}
+
 export function renderNavbar(container) {
   if (!container) return;
 
@@ -27,10 +32,13 @@ export function renderNavbar(container) {
   container.innerHTML = `
     <ul class="nav-list" role="list">
       <li role="listitem">
-        <a href="#/" class="nav-link ${route === '/' ? 'active' : ''}" ${route === '/' ? 'aria-current="page"' : ''}>Dashboard</a>
+        <a href="#/" class="nav-link ${isActive(route, '/') ? 'active' : ''}" ${route === '/' ? 'aria-current="page"' : ''}>Home</a>
       </li>
       <li role="listitem">
-        <a href="#/progress" class="nav-link ${route === '/progress' ? 'active' : ''}" ${route === '/progress' ? 'aria-current="page"' : ''}>Progress</a>
+        <a href="#/dashboard" class="nav-link ${isActive(route, '/dashboard') ? 'active' : ''}" ${route === '/dashboard' ? 'aria-current="page"' : ''}>Dashboard</a>
+      </li>
+      <li role="listitem">
+        <a href="#/progress" class="nav-link ${isActive(route, '/progress') ? 'active' : ''}" ${route === '/progress' ? 'aria-current="page"' : ''}>Progress</a>
       </li>
       ${userMenu}
     </ul>`;

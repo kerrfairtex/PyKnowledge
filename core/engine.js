@@ -19,6 +19,7 @@ import { escapeHtml } from '../utils/sanitize.js';
 import { APP_VERSION } from './version.js';
 import { renderAuthGate, renderProfilePicker } from '../app/auth/auth-screen.js';
 import { isAuthenticated, hasProfiles } from '../storage/auth.js';
+import { renderFrontPage, clearFrontPageLayout } from '../app/home/front-page.js';
 import { animatePageEnter } from '../ui/components/animations.js';
 
 let lessonsData = null;
@@ -83,6 +84,12 @@ async function initApp() {
     if (loading) loading.remove();
 
     registerRoute('/', (m, p, r) => {
+      renderFrontPage(m, p, r, lessonsData);
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/dashboard', (m, p, r) => {
+      clearFrontPageLayout();
       renderDashboard(m, p, r, lessonsData);
       updateNavbarActiveState();
     });
@@ -90,14 +97,14 @@ async function initApp() {
     registerRoute('/module', async (m, params) => {
       await withErrorHandling(m, async () => {
         const moduleId = params[0];
-        if (!moduleId) { navigate('/'); return; }
+        if (!moduleId) { navigate('/dashboard'); return; }
         const result = await loadModule(moduleId);
         if (result.error) {
           m.innerHTML = `
             <div class="error-card page-content" role="alert">
               <h2>Module Locked</h2>
               <p>${escapeHtml(result.error)}</p>
-              <a href="#/" class="btn btn-primary">Back to Dashboard</a>
+              <a href="#/dashboard" class="btn btn-primary">Back to Dashboard</a>
             </div>`;
           animatePageEnter(m);
           return;
@@ -109,14 +116,14 @@ async function initApp() {
 
     registerRoute('/lesson', async (m, params) => {
       const lessonId = params[0];
-      if (!lessonId) { navigate('/'); return; }
+      if (!lessonId) { navigate('/dashboard'); return; }
       renderLessonViewer(m, lessonId, lessonsData);
       updateNavbarActiveState();
     });
 
     registerRoute('/quiz', async (m, params) => {
       const quizId = params[0];
-      if (!quizId) { navigate('/'); return; }
+      if (!quizId) { navigate('/dashboard'); return; }
       renderQuiz(m, quizId, quizzesData, lessonsData);
       updateNavbarActiveState();
     });
@@ -128,7 +135,7 @@ async function initApp() {
 
     registerRoute('/login', (m) => {
       if (isAuthenticated()) {
-        navigate('/');
+        navigate('/dashboard');
         return;
       }
       const header = document.querySelector('.app-header');
@@ -140,14 +147,14 @@ async function initApp() {
           if (header) header.hidden = false;
           if (footer) footer.hidden = false;
           startApp();
-          navigate('/');
+          navigate('/dashboard');
         });
       } else {
         renderAuthGate(m, () => {
           if (header) header.hidden = false;
           if (footer) footer.hidden = false;
           startApp();
-          navigate('/');
+          navigate('/dashboard');
         });
       }
     });
@@ -194,7 +201,7 @@ function renderModuleLessons(main, module) {
             </li>`;
         }).join('')}
       </ul>
-      <a href="#/" class="btn btn-secondary">Back to Dashboard</a>
+      <a href="#/dashboard" class="btn btn-secondary">Back to Dashboard</a>
     </section>`;
   animatePageEnter(main);
 }

@@ -58,11 +58,13 @@ export async function handleRoute() {
 
 function updatePageTitle(base, _params) {
   const titles = {
-    '/': 'Dashboard',
+    '/': 'Home',
+    '/dashboard': 'Dashboard',
     '/module': 'Module',
     '/lesson': 'Lesson',
     '/quiz': 'Quiz',
-    '/progress': 'Progress'
+    '/progress': 'Progress',
+    '/login': 'Sign In'
   };
   const section = titles[base] || 'PyKnowledge';
   document.title = `${section} — PyKnowledge`;
