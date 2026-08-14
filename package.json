@@ -32,7 +32,7 @@
   "keywords": ["offline", "pwa", "python", "education", "ched", "fullstack"],
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
+    "@eslint/js": "^10.0.1",
     "eslint": "^10.8.1",
     "globals": "^15.14.0",
     "jest": "^29.7.0",
