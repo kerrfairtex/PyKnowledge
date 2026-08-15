@@ -2,7 +2,7 @@
   "name": "PyKnowledge",
   "short_name": "PyKnowledge",
   "description": "Offline Python Learning Platform for remote areas with weak internet",
-  "start_url": "/index.html",
+  "start_url": "/app-shell.html",
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#16213e",

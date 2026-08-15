@@ -8,7 +8,7 @@ const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
 
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
+  '/app-shell.html',
   '/manifest.json',
   '/core/engine.js',
   '/core/api.js',
@@ -83,7 +83,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => {
         if (event.request.destination === 'document') {
-          return caches.match('/index.html');
+          return caches.match('/app-shell.html');
         }
         return new Response('Offline — content not cached', {
           status: 503,
