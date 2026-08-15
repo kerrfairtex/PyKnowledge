@@ -1,0 +1,42 @@
+<footer class="pk-footer">
+  <p>
+    PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi —
+    designed to run fully offline for areas with intermittent signal
+    and limited data. All lessons work without an internet connection
+    once loaded.
+  </p>
+
+  <p style="margin-top:10px;">
+    <span class="sync-status" id="syncStatus">Checking connection…</span>
+  </p>
+
+  <p style="margin-top:14px;">Maintained by Kerr Fairtex</p>
+  <div class="contact-links">
+    <a href="tel:+639637130812">09637130812</a>
+    <a href="mailto:kerrfairtex@gmail.com">kerrfairtex@gmail.com</a>
+    <a href="https://facebook.com/kerrfairtex" target="_blank" rel="noopener">Facebook</a>
+    <a href="https://github.com/kerrfairtex" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://discord.com/users/kerrfairtex" target="_blank" rel="noopener">Discord</a>
+    <a href="https://twitter.com/kerrfairtex" target="_blank" rel="noopener">Twitter</a>
+    <a href="https://tiktok.com/@kerrfairtex" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://youtube.com/@kerrfairtex" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://linkedin.com/in/kerrfairtex" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://instagram.com/kerrfairtex" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://kerrfairtex.tumblr.com" target="_blank" rel="noopener">Tumblr</a>
+  </div>
+</footer>
+
+<script>
+  function updateSyncChip() {
+    const el = document.getElementById('syncStatus');
+    if (!el) return;
+    const status = navigator.onLine ? 'is-synced' : 'is-offline';
+    el.classList.remove('is-synced', 'is-offline');
+    el.classList.add(status);
+    el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+  }
+
+  updateSyncChip();
+  window.addEventListener('online', updateSyncChip);
+  window.addEventListener('offline', updateSyncChip);
+</script>

@@ -1,0 +1,314 @@
+/* ==========================================================================
+   PyKnowledge Dashboard
+   Pattern adapted from freeCodeCamp/freeCodeCamp (client/src/components/Map,
+   Progress) — BSD-3-Clause. Rebuilt in plain CSS: no React, no JS animation
+   loop (native <details> + CSS transition replace their accordion/easing).
+   ========================================================================== */
+
+:root {
+  --pk-bg: #0f172a;
+  --pk-surface: #16213a;
+  --pk-surface-hover: #1c2b4a;
+  --pk-border: #26324a;
+  --pk-text: #e5e9f0;
+  --pk-text-dim: #93a1b8;
+  --pk-blue: #3776ab;
+  --pk-yellow: #ffd43b;
+  --pk-green: #2ecc71;
+  --pk-radius: 8px;
+}
+
+/* ---------- Module map (superblock list equivalent) ---------- */
+
+.map-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map-ui h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pk-text-dim);
+  margin: 20px 0 8px;
+}
+
+.map-ui ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-module-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--pk-surface);
+  border: 1px solid var(--pk-border);
+  border-radius: var(--pk-radius);
+  color: var(--pk-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.map-module-link:hover,
+.map-module-link:focus-visible {
+  background: var(--pk-surface-hover);
+  border-color: var(--pk-blue);
+  outline: none;
+}
+
+.map-module-link:focus-visible {
+  box-shadow: 0 0 0 2px var(--pk-blue);
+}
+
+.map-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--pk-yellow);
+}
+
+.map-module-title {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+/* ---------- Checkmark ---------- */
+
+.checkmark-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--pk-border);
+}
+
+.checkmark-wrap.is-completed {
+  background: var(--pk-green);
+  border-color: var(--pk-green);
+}
+
+.checkmark-wrap svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.checkmark-wrap.is-completed svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------- Accordion (native <details>, replaces SuperBlockAccordion) ---------- */
+
+.block-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.block-accordion {
+  background: var(--pk-surface);
+  border: 1px solid var(--pk-border);
+  border-radius: var(--pk-radius);
+  overflow: hidden;
+}
+
+.block-accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  list-style: none;
+}
+
+.block-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.block-accordion summary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--pk-text-dim);
+  border-bottom: 2px solid var(--pk-text-dim);
+  transform: rotate(-45deg);
+  transition: transform 150ms ease;
+}
+
+.block-accordion[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.block-accordion .lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 16px 12px;
+  border-top: 1px solid var(--pk-border);
+}
+
+.block-accordion .lesson-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pk-border);
+}
+
+.block-accordion .lesson-item:last-child {
+  border-bottom: none;
+}
+
+.block-accordion .lesson-item a {
+  color: var(--pk-text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.block-accordion .lesson-item a:hover {
+  color: var(--pk-yellow);
+}
+
+/* ---------- Progress bar ---------- */
+/* Replaces ProgressInner's setInterval + bezier-easing JS loop with a
+   single CSS transition using the same curve (0.2, 0.5, 0.4, 1). */
+
+.progress-header,
+.completion-block-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--pk-text-dim);
+}
+
+.completion-block-name {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.progress-bar-wrap {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.progress-bar-background {
+  position: absolute;
+  inset: 0;
+  background: var(--pk-border);
+}
+
+.progress-bar-percent {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--pk-blue), var(--pk-yellow));
+  border-radius: 999px;
+  transition: width 750ms cubic-bezier(0.2, 0.5, 0.4, 1);
+}
+
+/* ---------- Offline/sync status chip (PyKnowledge's own signature element) ---------- */
+
+.sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid var(--pk-border);
+  color: var(--pk-text-dim);
+}
+
+.sync-status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pk-text-dim);
+}
+
+.sync-status.is-offline::before {
+  background: var(--pk-yellow);
+}
+
+.sync-status.is-synced::before {
+  background: var(--pk-green);
+}
+
+/* ---------- Layout shell ---------- */
+
+.dashboard {
+  min-height: 100vh;
+  background: var(--pk-bg);
+  color: var(--pk-text);
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* ---------- Footer / contact ---------- */
+
+.pk-footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pk-border);
+  font-size: 0.8rem;
+  color: var(--pk-text-dim);
+}
+
+.pk-footer .contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 8px;
+}
+
+.pk-footer a {
+  color: var(--pk-text-dim);
+  text-decoration: none;
+}
+
+.pk-footer a:hover {
+  color: var(--pk-yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar-percent,
+  .checkmark-wrap svg,
+  .map-module-link,
+  .block-accordion summary::after {
+    transition: none;
+  }
+}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <title>PyKnowledge — Learn Python offline</title>
+  <meta name="description" content="A free, offline-first Python course built for TRAC, BARMM, and CHED students. Install once, learn anywhere, signal or not." />
+  <link rel="icon" href="ui/assets/icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <img src="ui/assets/place/school-seal-logo.png" alt="" />
+        <span>PyKnowledge<small>Offline Python · CHED curriculum</small></span>
+      </a>
+      <nav>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#offline">How it works</a>
+        <a href="place-context.html">About this place</a>
+        <a class="btn-cta-small" href="app-shell.html#/login">Open the app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="eyebrow">Works with zero signal, once installed</span>
+        <h1>Learn Python without <span class="hl">needing the internet</span>.</h1>
+        <p class="lede">
+          PyKnowledge is a free course built for TRAC, BARMM, and CHED students. Install it
+          once on a shared computer or your own phone, and every lesson, exercise, and quiz
+          keeps working — connection or not.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="app-shell.html#/login">Start learning</a>
+          <a class="btn btn-ghost" href="#curriculum">See the curriculum</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>7</strong><span>CHED modules</span></div>
+          <div><strong>0 MB</strong><span>data needed after install</span></div>
+          <div><strong>&lt;500ms</strong><span>page load, even offline</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="curriculum">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">The path</span>
+          <h2>Seven modules, in order</h2>
+          <p>Each module unlocks once you've finished the one before it — so you always know
+             exactly what's next, with no wrong turns.</p>
+        </div>
+        <ol class="path" style="list-style:none; padding:0; margin:0;">
+          <li class="path-item is-unlocked">
+            <span class="path-num">1</span>
+            <div class="path-body">
+              <h3>Getting Started with Python</h3>
+              <p>What Python is, installing nothing, and running your first line of code.</p>
+            </div>
+            <span class="path-status">Start here</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">2</span>
+            <div class="path-body">
+              <h3>Variables &amp; Data Types</h3>
+              <p>Storing values, naming things well, and Python's core building blocks.</p>
+            </div>
+            <span class="path-status">Module 2</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">3</span>
+            <div class="path-body">
+              <h3>Loops</h3>
+              <p>Repeating work with <code>for</code> and <code>while</code>, without repeating code.</p>
+            </div>
+            <span class="path-status">Module 3</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">4</span>
+            <div class="path-body">
+              <h3>Conditionals</h3>
+              <p>Making decisions in code with <code>if</code>, <code>elif</code>, and <code>else</code>.</p>
+            </div>
+            <span class="path-status">Module 4</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">5</span>
+            <div class="path-body">
+              <h3>Functions</h3>
+              <p>Packaging logic you can reuse, with inputs and return values.</p>
+            </div>
+            <span class="path-status">Module 5</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">6</span>
+            <div class="path-body">
+              <h3>Data Structures</h3>
+              <p>Lists, dictionaries, and tuples — organizing information that matters.</p>
+            </div>
+            <span class="path-status">Module 6</span>
+          </li>
+          <li class="path-item">
+            <span class="path-num">7</span>
+            <div class="path-body">
+              <h3>Final Project</h3>
+              <p>Bring every module together into one program you build yourself.</p>
+            </div>
+            <span class="path-status">Module 7</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="offline">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Built for real conditions</span>
+          <h2>Made for shared computers and patchy signal</h2>
+          <p>Every design choice here starts from the same constraint: this has to work on modest
+             hardware, without a steady connection.</p>
+        </div>
+        <div class="grid-3">
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z"/><path d="M8.5 14.5a5 5 0 0 1 7 0"/><path d="M5 11a10 10 0 0 1 14 0"/><path d="M2 7.5C6.5 3.5 17.5 3.5 22 7.5"/></svg>
+            <h3>Install once, use anywhere</h3>
+            <p>Add PyKnowledge to your home screen. After that first load, lessons, exercises,
+               and quizzes all run with no connection.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22c5.5-3 8-7 8-12V6l-8-3-8 3v4c0 5 2.5 9 8 12Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <h3>Your progress stays with you</h3>
+            <p>Set a PIN on a shared computer and your progress, scores, and unlocked modules
+               stay separate from the next student.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M4 19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+            <h3>Real code, real feedback</h3>
+            <p>Write actual Python in the browser and get told exactly what's right, what's off,
+               and why — no waiting on a grader.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" style="border-bottom:none;">
+      <div class="wrap">
+        <div class="place-strip">
+          <div class="place-copy">
+            <h2>Built in Tawi-Tawi, for Tawi-Tawi</h2>
+            <p>PyKnowledge started as coursework for TRAC and BARMM CHED students — the
+               curriculum, the pacing, and the offline-first design all come out of that
+               context.</p>
+            <a href="place-context.html" class="btn btn-ghost" style="align-self:flex-start;">More about this place</a>
+          </div>
+          <div class="place-photos">
+            <img class="tall" src="ui/assets/place/academic-building.jpg" alt="School academic building" loading="lazy" />
+            <img src="ui/assets/place/island-aerial-view.jpg" alt="Aerial view of an island in the region" loading="lazy" />
+            <img src="ui/assets/place/street-festival-buntings.jpg" alt="Municipality street decorated for a local festival" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="ui/assets/place/school-seal-logo.png" alt="" />
+        <span>PyKnowledge · MIT licensed · built by Kerr Fairtex</span>
+      </div>
+      <nav class="footer-links">
+        <a href="place-context.html">About this place</a>
+        <a href="https://github.com/kerrfairtex/PyKnowledge">Source on GitHub</a>
+        <a href="app-shell.html#/login">Open the app</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

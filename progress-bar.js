@@ -11,6 +11,8 @@ export function renderProgressBar(percent, label = '') {
   const clamped = Math.min(100, Math.max(0, percent));
   const id = `pb-${barCounter++}`;
 
+  // width set after insertion (see attachProgressBarAnimation) so the
+  // transition has a 0% -> N% change to animate, not a static jump.
   queueMicrotask(() => attachProgressBarAnimation(id, clamped));
 
   return `
@@ -26,7 +28,7 @@ export function renderProgressBar(percent, label = '') {
 
 function attachProgressBarAnimation(id, percent) {
   const wrap = document.getElementById(id);
-  if (!wrap) return;
+  if (!wrap) return; // not yet in DOM this tick, caller re-renders will fix width anyway
   const fill = wrap.querySelector('.progress-bar-percent');
   if (!fill) return;
   requestAnimationFrame(() => {

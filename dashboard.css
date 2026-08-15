@@ -1,0 +1,266 @@
+/* ==========================================================================
+   PyKnowledge Dashboard — v2
+   Design tokens ported directly from freeCodeCamp/freeCodeCamp
+   client/src/components/layouts/variables.css (BSD-3-Clause).
+   Structure kept (semantic --primary-background / --highlight-color etc,
+   dark palette swap), values are theirs, applied to PyKnowledge's own
+   content, copy, and Tawi-Tawi/TRAC context — not their brand/name.
+   ========================================================================== */
+
+:root {
+  --theme-color: #0a0a23;
+  --yellow-gold: #ffbf00;
+  --gray-00: #ffffff;
+  --gray-05: #f5f6f7;
+  --gray-10: #dfdfe2;
+  --gray-15: #d0d0d5;
+  --gray-45: #858591;
+  --gray-75: #3b3b4f;
+  --gray-80: #2a2a40;
+  --gray-85: #1b1b32;
+  --gray-90: #0a0a23;
+  --blue-light: rgb(153, 201, 255);
+  --blue-dark: rgb(0, 46, 173);
+  --blue-mid: #198eee;
+  --green-light: #acd157;
+  --green-dark: #00471b;
+  --yellow-light: #ffc300;
+  --yellow-dark: #4d3800;
+
+  --font-family-sans-serif: 'Lato', system-ui, sans-serif;
+  --font-family-monospace: 'Hack', 'Courier New', monospace;
+
+  --primary-color: var(--gray-00);
+  --secondary-color: var(--gray-05);
+  --tertiary-color: var(--gray-10);
+  --quaternary-color: var(--gray-15);
+  --quaternary-background: var(--gray-75);
+  --tertiary-background: var(--gray-80);
+  --secondary-background: var(--gray-85);
+  --primary-background: var(--gray-90);
+  --highlight-color: var(--blue-light);
+  --highlight-background: var(--blue-dark);
+  --success-color: var(--green-light);
+  --success-background: var(--green-dark);
+  --yellow-color: var(--yellow-light);
+  --yellow-background: var(--yellow-dark);
+}
+
+body {
+  font-family: var(--font-family-sans-serif);
+}
+
+code, pre, .code-preview {
+  font-family: var(--font-family-monospace);
+}
+
+/* ---------- Module map ---------- */
+
+.map-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map-ui h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--quaternary-color);
+  margin: 20px 0 8px;
+}
+
+.map-ui ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-module-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 80px;
+  padding: 14px 16px;
+  background: var(--secondary-background);
+  border: 1px solid var(--quaternary-background);
+  border-radius: 6px;
+  color: var(--primary-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.map-module-link:hover,
+.map-module-link:focus-visible {
+  background: var(--tertiary-background);
+  border-color: var(--highlight-color);
+  outline: none;
+}
+
+.map-module-link:focus-visible {
+  box-shadow: 0 0 0 2px var(--highlight-color);
+}
+
+/* ---------- Checkmark ---------- */
+
+.checkmark-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--quaternary-background);
+}
+
+.checkmark-wrap.is-completed {
+  background: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.checkmark-wrap svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.checkmark-wrap.is-completed svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------- Progress bar ---------- */
+
+.progress-header,
+.completion-block-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--quaternary-color);
+}
+
+.completion-block-name {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.progress-bar-wrap {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.progress-bar-background {
+  position: absolute;
+  inset: 0;
+  background: var(--quaternary-background);
+}
+
+.progress-bar-percent {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--blue-mid), var(--yellow-gold));
+  border-radius: 999px;
+  transition: width 750ms cubic-bezier(0.2, 0.5, 0.4, 1);
+}
+
+/* ---------- Sync status chip ---------- */
+
+.sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid var(--quaternary-background);
+  color: var(--quaternary-color);
+}
+
+.sync-status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--quaternary-color);
+}
+
+.sync-status.is-offline::before { background: var(--yellow-gold); }
+.sync-status.is-synced::before { background: var(--success-color); }
+
+/* ---------- Place / context section ---------- */
+/* Real photos of TRAC/Tawi-Tawi, captioned to the curriculum content —
+   mirrors FCC's testimonial-card/photo+caption pattern but with local
+   content, not decorative stock imagery. */
+
+.place-context {
+  padding: 4vw 15px;
+  background: var(--secondary-background);
+}
+
+.place-context h2 {
+  color: var(--tertiary-color);
+  margin-top: 0;
+}
+
+.place-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (min-width: 700px) {
+  .place-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.place-card {
+  background: var(--primary-background);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 13px 1px rgba(0, 0, 0, 0.25);
+}
+
+.place-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.place-card figcaption {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: var(--quaternary-color);
+  text-align: left;
+  font-weight: 600;
+}
+
+.place-card figcaption span {
+  display: block;
+  font-weight: 400;
+  color: var(--tertiary-color);
+  margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar-percent,
+  .checkmark-wrap svg,
+  .map-module-link {
+    transition: none;
+  }
+}
