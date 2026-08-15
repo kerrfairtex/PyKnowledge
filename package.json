@@ -1,6 +1,6 @@
 {
   "name": "pyknowledge",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Offline Python Learning Platform for TRAC/BARMM/CHED curriculum",
   "private": true,
   "type": "module",
@@ -29,7 +29,14 @@
     "check:version": "node scripts/check-version.js",
     "package": "node scripts/package.js"
   },
-  "keywords": ["offline", "pwa", "python", "education", "ched", "fullstack"],
+  "keywords": [
+    "offline",
+    "pwa",
+    "python",
+    "education",
+    "ched",
+    "fullstack"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
