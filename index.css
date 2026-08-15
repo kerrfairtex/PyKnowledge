@@ -1,0 +1,446 @@
+/* ==========================================================================
+   PyKnowledge — Landing page styles
+   Visual language borrowed from freeCodeCamp (dark navy canvas, high-signal
+   yellow CTA, card-grid curriculum map) — recomposed around PyKnowledge's
+   own subject: offline Python for TRAC/BARMM/CHED students.
+   No build step: plain CSS, no external font/icon requests (offline-safe).
+   ========================================================================== */
+
+:root {
+  /* Color */
+  --bg: #0a0a23;          /* fCC-style near-black navy canvas */
+  --bg-raised: #14152e;
+  --panel: #1b1d3d;
+  --panel-border: #2c2f57;
+  --text: #f5f6fa;
+  --text-dim: #a9adc9;
+  --yellow: #ffc900;      /* primary CTA — the one accent that carries weight */
+  --yellow-ink: #1a1300;  /* text-on-yellow */
+  --green: #2fbd60;       /* completed / unlocked state */
+  --blue: #5b9dff;        /* links, secondary accents */
+  --lock: #565a7e;
+
+  /* Type */
+  --font-display: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Liberation Sans', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Liberation Sans', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Consolas', 'Liberation Mono', monospace;
+
+  --radius: 10px;
+  --container: 1120px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--blue); }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(10, 10, 35, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--panel-border);
+}
+.topbar .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.brand img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
+.brand small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+.topbar nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.topbar nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+.topbar nav a:hover { color: var(--text); }
+.btn-cta-small {
+  background: var(--yellow);
+  color: var(--yellow-ink);
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  padding: 64px 0 56px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--panel-border);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(180deg, rgba(10,10,35,0.72) 0%, rgba(10,10,35,0.94) 65%, var(--bg) 100%),
+                     url('ui/assets/place/banner-flag-raising.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  filter: saturate(0.7);
+}
+.hero .wrap { position: relative; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--green);
+  background: rgba(47, 189, 96, 0.12);
+  border: 1px solid rgba(47, 189, 96, 0.35);
+  padding: 5px 10px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.08;
+  margin: 0 0 18px;
+  max-width: 16ch;
+}
+.hero h1 .hl { color: var(--yellow); }
+.hero p.lede {
+  font-size: 1.08rem;
+  color: var(--text-dim);
+  max-width: 52ch;
+  margin: 0 0 30px;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 34px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+.btn-primary {
+  background: var(--yellow);
+  color: var(--yellow-ink);
+}
+.btn-primary:hover { background: #ffd93d; }
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--panel-border);
+}
+.btn-ghost:hover { border-color: var(--text-dim); }
+
+.hero-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.hero-stats div {
+  font-family: var(--font-mono);
+}
+.hero-stats strong {
+  display: block;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+.hero-stats span {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Section shell ---------- */
+section.band {
+  padding: 64px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+.section-head {
+  max-width: 60ch;
+  margin: 0 0 36px;
+}
+.section-head .kicker {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  display: block;
+  margin-bottom: 10px;
+}
+.section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 10px;
+}
+.section-head p {
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* ---------- Curriculum path (signature element) ---------- */
+.path {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.path-item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 18px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  position: relative;
+}
+.path-item:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+.path-item:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+.path-item + .path-item { border-top: none; }
+.path-item::before {
+  /* connecting line */
+  content: '';
+  position: absolute;
+  left: 46px;
+  top: -1px;
+  width: 2px;
+  height: 19px;
+  background: var(--panel-border);
+}
+.path-item:first-child::before { display: none; }
+
+.path-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid var(--panel-border);
+  color: var(--text-dim);
+}
+.path-item.is-unlocked .path-num {
+  border-color: var(--green);
+  color: var(--green);
+}
+.path-item.is-done .path-num {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--bg);
+}
+.path-body h3 {
+  margin: 0 0 4px;
+  font-size: 1.02rem;
+  font-family: var(--font-display);
+}
+.path-body p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+.path-status {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.path-item.is-done .path-status {
+  background: rgba(47,189,96,0.14);
+  color: var(--green);
+}
+.path-item.is-unlocked .path-status {
+  background: rgba(91,157,255,0.14);
+  color: var(--blue);
+}
+.path-item.is-locked .path-status {
+  background: rgba(86,90,126,0.18);
+  color: var(--lock);
+}
+
+/* ---------- Feature grid ---------- */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.feature-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.feature-card .icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  color: var(--yellow);
+}
+.feature-card h3 {
+  font-family: var(--font-display);
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+}
+.feature-card p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+/* ---------- Place strip ---------- */
+.place-strip {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+.place-copy {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.place-copy h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+}
+.place-copy p {
+  color: var(--text-dim);
+  margin: 0 0 16px;
+}
+.place-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.place-photos img {
+  width: 100%;
+  height: 100%;
+  min-height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+  display: block;
+}
+.place-photos .tall { grid-row: span 2; }
+
+/* ---------- Footer ---------- */
+footer.site-footer {
+  padding: 40px 0;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.footer-brand img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+}
+.footer-links {
+  display: flex;
+  gap: 18px;
+}
+.footer-links a {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.footer-links a:hover { color: var(--text); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .place-strip { grid-template-columns: 1fr; }
+  .path-item { grid-template-columns: 40px 1fr; }
+  .path-status { grid-column: 2; justify-self: start; }
+  .topbar nav a:not(.btn-cta-small) { display: none; }
+}
