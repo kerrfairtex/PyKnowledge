@@ -43,10 +43,22 @@ const STATIC_ASSETS = [
   '/ui/components/loading.js',
   '/ui/components/update-notifier.js',
   '/ui/components/animations.js',
+  '/ui/components/code-editor.js',
+  '/lib/python-executor.js',
   '/content/lessons.json',
   '/content/quizzes.json',
   '/ui/assets/icon-192.png',
-  '/ui/assets/icon-512.png'
+  '/ui/assets/icon-512.png',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/skulpt.min.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/sys.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/math.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/random.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/datetime.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/json.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/re.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/itertools.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/collections.js',
+  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/string.js'
 ];
 
 self.addEventListener('install', (event) => {

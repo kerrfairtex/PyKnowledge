@@ -23,9 +23,101 @@
               {
                 "heading": "Why Python?",
                 "body": "Python's simple syntax makes it ideal for beginners. It runs on Windows, macOS, and Linux without modification."
+              },
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Explain what Python is and why it is used\n2. Write and run a simple print() statement\n3. Understand the basic structure of a Python program",
+                "code": null
+              },
+              {
+                "heading": "Worked Example: Your First Program",
+                "body": "Let us walk through a complete Python program step by step.",
+                "code": "# Step 1: Use the print() function to display text\nprint('Hello, World!')\n\n# Step 2: The text inside quotes is called a string\n# Step 3: When you run this, the output will be:\n# Hello, World!"
               }
             ]
-          }
+          },
+          "exercises": [
+            {
+              "id": "ex-1-1-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "print('Welcome to PyKnowledge!')",
+              "options": [
+                "Welcome to PyKnowledge!",
+                "print('Welcome to PyKnowledge!')",
+                "Welcome",
+                "error"
+              ],
+              "answer": "Welcome to PyKnowledge!",
+              "explanation": "print() displays the text inside the parentheses. The quotes are part of the syntax, not the output.",
+              "difficulty": "easy",
+              "concept": "output"
+            },
+            {
+              "id": "ex-1-1-b",
+              "type": "write_code",
+              "prompt": "Write code that prints your name on the screen.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "Maria\n"
+                },
+                {
+                  "expected_stdout": "Juan\n"
+                }
+              ],
+              "hints": [
+                "Use the print() function to display text.",
+                "Put your name inside quotes so Python treats it as a string.",
+                "Try: print('Your Name')"
+              ],
+              "difficulty": "easy",
+              "concept": "output",
+              "misconceptions": [
+                {
+                  "concept": "output",
+                  "detection": "Code uses print without parentheses, e.g. print Name",
+                  "explanation": "In Python 3, print() is a function and requires parentheses. print Name would cause a SyntaxError.",
+                  "hint": "Remember: print() needs parentheses around the text you want to display.",
+                  "remediationExerciseId": "ex-1-1-a"
+                },
+                {
+                  "concept": "output",
+                  "detection": "Code omits quotes around the name, e.g. print(Name)",
+                  "explanation": "Without quotes, Python treats Name as a variable, not text. If no variable named Name exists, this causes a NameError.",
+                  "hint": "Put your name inside single or double quotes to make it a string literal.",
+                  "remediationExerciseId": "ex-1-1-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-1-c",
+              "type": "challenge",
+              "prompt": "Print the following three lines exactly as shown:\nHello, World!\nWelcome to Python!\nLet us learn together!",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "Hello, World!\nWelcome to Python!\nLet us learn together!\n"
+                }
+              ],
+              "hints": [
+                "Use three separate print() calls, one for each line.",
+                "Each print() call outputs on its own line by default.",
+                "Make sure the text inside quotes matches exactly, including punctuation."
+              ],
+              "difficulty": "medium",
+              "concept": "output",
+              "misconceptions": [
+                {
+                  "concept": "output",
+                  "detection": "Code uses a single print() with commas, e.g. print(\"Hello, World!\", \"Welcome to Python!\", \"Let us learn together!\")",
+                  "explanation": "Using commas in print() separates values with spaces, not newlines. Each item would appear on the same line separated by spaces.",
+                  "hint": "Use three separate print() statements, one for each line of output.",
+                  "remediationExerciseId": "ex-1-1-b"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "lesson-1-2",
@@ -35,6 +127,11 @@
           "content": {
             "sections": [
               {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Create variables and assign values using the assignment operator\n2. Identify the four basic data types: str, int, float, bool\n3. Perform type conversion using str(), int(), and float()\n4. Swap values between two variables using a temporary variable",
+                "code": null
+              },
+              {
                 "heading": "Variables",
                 "body": "Variables store data values. In Python, you create a variable by assigning a value using the equals sign.",
                 "code": "name = 'Maria'\nage = 20\nis_student = True"
@@ -42,9 +139,157 @@
               {
                 "heading": "Data Types",
                 "body": "Python has several built-in data types: strings (str), integers (int), floats (float), and booleans (bool)."
+              },
+              {
+                "heading": "Worked Example: Variable Assignment and Type Conversion",
+                "body": "Let us walk through a program that reads user input, converts it, and displays the result.",
+                "code": "# Step 1: Ask for the user's name (returns a string)\nname = input('What is your name? ')\n\n# Step 2: Ask for their age (also returns a string)\nage_text = input('How old are you? ')\n\n# Step 3: Convert the age to an integer so we can do math\nage = int(age_text)\n\n# Step 4: Use the variables in a print statement\nprint('Hello, ' + name + '! You are ' + str(age) + ' years old.')\n\n# Step 5: The output would be:\n# Hello, Maria! You are 20 years old."
               }
             ]
-          }
+          },
+          "exercises": [
+            {
+              "id": "ex-1-2-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "x = 5\ny = 3\nprint(x + y)",
+              "options": [
+                "8",
+                "53",
+                "2",
+                "5 3"
+              ],
+              "answer": "8",
+              "explanation": "x is 5 and y is 3, so x + y equals 8.",
+              "difficulty": "easy",
+              "concept": "variable-assignment",
+              "misconceptions": [
+                {
+                  "concept": "variable-assignment",
+                  "detection": "Learner selects \"53\" (string concatenation) instead of \"8\"",
+                  "explanation": "When both operands are integers, + performs arithmetic addition, not string concatenation.",
+                  "hint": "Remember: + adds numbers when both sides are numbers. If you want to join text, you need strings on both sides.",
+                  "remediationExerciseId": "ex-1-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-2-b",
+              "type": "fix_the_code",
+              "prompt": "This code should store a person's name and age, then print them. Fix it.",
+              "buggy_code": "name = 'Alice'\nage = 25\nprint('Name: ' + name + ', Age: ' + age)",
+              "solution_code": "name = 'Alice'\nage = 25\nprint('Name: ' + name + ', Age: ' + str(age))",
+              "hints": [
+                "You cannot concatenate strings and integers directly in Python.",
+                "Convert the integer age to a string first using str().",
+                "Try: print('Name: ' + name + ', Age: ' + str(age))"
+              ],
+              "difficulty": "easy",
+              "concept": "type-conversion",
+              "misconceptions": [
+                {
+                  "concept": "type-conversion",
+                  "detection": "Fix still contains Name: + name + , Age: + age without str()",
+                  "explanation": "Python raises TypeError when trying to add str and int. You must convert with str().",
+                  "hint": "Convert the integer to a string first, e.g. str(age), before using +.",
+                  "remediationExerciseId": "ex-1-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-2-c",
+              "type": "parsons",
+              "prompt": "Arrange these lines to swap the values of two variables.",
+              "blocks": [
+                "a = 10",
+                "b = 20",
+                "temp = a",
+                "a = b",
+                "b = temp"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "distractor_blocks": [
+                "a, b = b, a"
+              ],
+              "difficulty": "medium",
+              "concept": "variable-swap",
+              "misconceptions": [
+                {
+                  "concept": "variable-swap",
+                  "detection": "Blocks ordered as [a=b; b=a; temp=a] or similar losing original value",
+                  "explanation": "The second assignment overwrites the original a before it can be saved, so both variables end up with the same value.",
+                  "hint": "You need to keep the original value of a somewhere before you overwrite it.",
+                  "remediationExerciseId": "ex-1-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-2-d",
+              "type": "write_code",
+              "prompt": "Write code that asks for the user's name and prints a greeting.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdin": "Maria\n",
+                  "expected_stdout": "Hello, Maria!\n"
+                }
+              ],
+              "hints": [
+                "Use input() to get the user's name.",
+                "Use print() to display the greeting.",
+                "Remember to include a space after the comma or use an f-string."
+              ],
+              "difficulty": "medium",
+              "concept": "input",
+              "misconceptions": [
+                {
+                  "concept": "input",
+                  "detection": "Code uses int(input()) and fails on non-numeric input",
+                  "explanation": "input() always returns a string. Treating it as a number without conversion can cause errors.",
+                  "hint": "input() gives you text. If you need a number, wrap it with int(); otherwise keep it as a string for printing.",
+                  "remediationExerciseId": "ex-1-3-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-2-e",
+              "type": "challenge",
+              "prompt": "Write code that asks for a product name and its price, then prints a formatted receipt line like:\nApple: $1.50\nThe price must be displayed with exactly 2 decimal places.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdin": "Apple\n1.5\n",
+                  "expected_stdout": "Apple: $1.50\n"
+                },
+                {
+                  "expected_stdin": "Banana\n2\n",
+                  "expected_stdout": "Banana: $2.00\n"
+                }
+              ],
+              "hints": [
+                "Use input() twice - once for the name, once for the price.",
+                "Convert the price to a float using float().",
+                "Use an f-string with format specifiers: f\"{name}: ${price:.2f}\""
+              ],
+              "difficulty": "hard",
+              "concept": "type-conversion",
+              "misconceptions": [
+                {
+                  "concept": "type-conversion",
+                  "detection": "Code uses str(price) directly without formatting, e.g. print(name + \": $\" + str(price))",
+                  "explanation": "Converting a float to string directly may not produce 2 decimal places. 1.5 becomes \"1.5\" not \"1.50\".",
+                  "hint": "Use f-string formatting: f\"{name}: ${price:.2f}\" to control decimal places.",
+                  "remediationExerciseId": "ex-1-2-b"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "lesson-1-3",
@@ -54,6 +299,11 @@
           "content": {
             "sections": [
               {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use print() to display output to the console\n2. Use input() to receive text from the user\n3. Understand that input() always returns a string\n4. Convert user input to the appropriate data type when needed",
+                "code": null
+              },
+              {
                 "heading": "The print() Function",
                 "body": "Use print() to display output to the console.",
                 "code": "print('Welcome to PyKnowledge!')"
@@ -62,9 +312,161 @@
                 "heading": "The input() Function",
                 "body": "Use input() to receive text from the user.",
                 "code": "name = input('Enter your name: ')\nprint(f'Hello, {name}!')"
+              },
+              {
+                "heading": "Worked Example: Reading Input and Making Decisions",
+                "body": "Let us walk through a program that reads the user age and determines if they are a teenager.",
+                "code": "# Step 1: Ask for the age (input returns a string)\nage_text = input('How old are you? ')\n\n# Step 2: Convert to integer for comparison\nage = int(age_text)\n\n# Step 3: Check the condition\nif age >= 13 and age <= 19:\n    print('You are a teenager!')\nelse:\n    print('You are not a teenager.')\n\n# Step 4: With age=15, output is:\n# You are a teenager!"
               }
             ]
-          }
+          },
+          "exercises": [
+            {
+              "id": "ex-1-3-a",
+              "type": "predict_output",
+              "prompt": "What will this code print when the user enters 'Alice'?",
+              "code": "name = input()\nprint('Hello, ' + name)",
+              "options": [
+                "Hello, Alice",
+                "Hello, ",
+                "Alice",
+                "error"
+              ],
+              "answer": "Hello, Alice",
+              "explanation": "input() gets the user's input, which is then concatenated with 'Hello, ' and printed.",
+              "difficulty": "easy",
+              "concept": "output",
+              "misconceptions": [
+                {
+                  "concept": "output",
+                  "detection": "Learner selects \"Hello,\" (missing name) or \"Alice\" (missing greeting)",
+                  "explanation": "input() returns the user text, which is then concatenated with the greeting string and printed.",
+                  "hint": "The full expression print(\"Hello, \" + name) outputs both the greeting and the user input.",
+                  "remediationExerciseId": "ex-1-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-3-b",
+              "type": "fix_the_code",
+              "prompt": "This code should ask for two numbers and print their sum. Fix it.",
+              "buggy_code": "a = input('First number: ')\nb = input('Second number: ')\nprint(a + b)",
+              "solution_code": "a = int(input('First number: '))\nb = int(input('Second number: '))\nprint(a + b)",
+              "hints": [
+                "input() returns a string, not a number.",
+                "Convert the strings to integers using int().",
+                "Try: a = int(input('First number: '))"
+              ],
+              "difficulty": "medium",
+              "concept": "type-conversion",
+              "misconceptions": [
+                {
+                  "concept": "type-conversion",
+                  "detection": "Fix still prints a + b without int() conversion",
+                  "explanation": "input() returns strings. Adding two strings concatenates them rather than summing numerically.",
+                  "hint": "Convert each input to an integer with int() before adding.",
+                  "remediationExerciseId": "ex-2-1-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-3-c",
+              "type": "parsons",
+              "prompt": "Arrange these lines to ask for a name and print a greeting.",
+              "blocks": [
+                "name = input('What is your name? ')",
+                "print('Hello, ' + name + '!')"
+              ],
+              "correct_order": [
+                0,
+                1
+              ],
+              "distractor_blocks": [
+                "print('Hello, ' + name + '!')",
+                "name = input('What is your name? ')"
+              ],
+              "difficulty": "easy",
+              "concept": "input",
+              "misconceptions": [
+                {
+                  "concept": "input",
+                  "detection": "Blocks ordered with print before input",
+                  "explanation": "The variable name is referenced before it is assigned, causing a NameError at runtime.",
+                  "hint": "You must ask for the name before you try to use it in the print statement.",
+                  "remediationExerciseId": "ex-1-3-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-3-d",
+              "type": "write_code",
+              "prompt": "Write code that asks for the user's age and prints whether they are a teenager (13-19).",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdin": "15\n",
+                  "expected_stdout": "You are a teenager!\n"
+                },
+                {
+                  "expected_stdin": "10\n",
+                  "expected_stdout": "You are not a teenager.\n"
+                }
+              ],
+              "hints": [
+                "Use input() to get the age and convert it to an integer.",
+                "Use an if statement to check if age is between 13 and 19.",
+                "Don't forget to print the appropriate message."
+              ],
+              "difficulty": "medium",
+              "concept": "conditionals",
+              "misconceptions": [
+                {
+                  "concept": "conditionals",
+                  "detection": "Code compares string directly to numbers (if age > 12:)",
+                  "explanation": "Python raises TypeError when comparing str with int in a relational operator.",
+                  "hint": "Turn the input into a number with int() before doing any math or comparisons.",
+                  "remediationExerciseId": "ex-2-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-1-3-e",
+              "type": "challenge",
+              "prompt": "Write code that asks for a temperature in Celsius and converts it to Fahrenheit. Print the result rounded to 1 decimal place.\nFormula: F = (C * 9/5) + 32",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdin": "0\n",
+                  "expected_stdout": "32.0\n"
+                },
+                {
+                  "expected_stdin": "100\n",
+                  "expected_stdout": "212.0\n"
+                },
+                {
+                  "expected_stdin": "37\n",
+                  "expected_stdout": "98.6\n"
+                }
+              ],
+              "hints": [
+                "Use input() to get the Celsius temperature.",
+                "Convert it to float using float().",
+                "Apply the formula: F = (C * 9/5) + 32",
+                "Use round(result, 1) or f\"{result:.1f}\" for 1 decimal place."
+              ],
+              "difficulty": "hard",
+              "concept": "type-conversion",
+              "misconceptions": [
+                {
+                  "concept": "type-conversion",
+                  "detection": "Code uses integer division (C * 9/5) producing wrong result for some inputs",
+                  "explanation": "In Python 3, / is float division. But if the code uses // (floor division), results will be wrong.",
+                  "hint": "Use / (single slash) for float division, not // (floor division).",
+                  "remediationExerciseId": "ex-1-3-b"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -82,12 +484,183 @@
           "content": {
             "sections": [
               {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Write if statements to make decisions based on conditions\n2. Use else clauses to handle the false case\n3. Understand comparison operators: >, <, >=, <=, ==, !=\n4. Use the modulo operator (%) to check divisibility",
+                "code": null
+              },
+              {
                 "heading": "Conditional Logic",
                 "body": "If-else statements let your program make decisions based on conditions.",
                 "code": "score = 85\nif score >= 75:\n    print('Passed')\nelse:\n    print('Failed')"
+              },
+              {
+                "heading": "Worked Example: Even or Odd Check",
+                "body": "Let us walk through a program that determines if a number is even or odd using the modulo operator.",
+                "code": "# Step 1: Get a number from the user\nnum = int(input('Enter a number: '))\n\n# Step 2: Use modulo to check remainder when divided by 2\nif num % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')\n\n# Step 3: With num=4, output is: Even\n# Step 4: With num=7, output is: Odd"
               }
             ]
-          }
+          },
+          "exercises": [
+            {
+              "id": "ex-2-1-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "temperature = 30\nif temperature > 25:\n    print('It\\'s hot')\nelse:\n    print('It\\'s cold')",
+              "options": [
+                "It's hot",
+                "It's cold",
+                "nothing",
+                "error"
+              ],
+              "answer": "It's hot",
+              "explanation": "Since temperature (30) is greater than 25, the if condition is true and 'It\\'s hot' is printed.",
+              "difficulty": "easy",
+              "concept": "conditionals",
+              "misconceptions": [
+                {
+                  "concept": "conditionals",
+                  "detection": "Learner selects \"nothing prints\" for temperature=25",
+                  "explanation": "else runs when the condition is False. For temperature=25, temperature>25 is False, so else executes.",
+                  "hint": "Think of else as \"everything else\" - it runs whenever the if condition is not true.",
+                  "remediationExerciseId": "ex-2-1-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-1-b",
+              "type": "fix_the_code",
+              "prompt": "This code should check if a number is positive. Fix it.",
+              "buggy_code": "num = 5\nif num > 0:\n    print('Positive')",
+              "solution_code": "num = 5\nif num > 0:\n    print('Positive')\nelse:\n    print('Not positive')",
+              "hints": [
+                "An if statement needs an else clause to handle the false case.",
+                "Add an else block to print when the number is not positive.",
+                "Try adding: else: print('Not positive')"
+              ],
+              "difficulty": "easy",
+              "concept": "conditionals",
+              "misconceptions": [
+                {
+                  "concept": "conditionals",
+                  "detection": "Fix still lacks an else block",
+                  "explanation": "Without an else, the program has no output for numbers <= 0, which can look like the program did nothing.",
+                  "hint": "Always think about what should happen when the condition is not true - add an else clause.",
+                  "remediationExerciseId": "ex-2-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-1-c",
+              "type": "parsons",
+              "prompt": "Arrange these lines to check if a person can vote (age >= 18).",
+              "blocks": [
+                "age = 20",
+                "if age >= 18:",
+                "    print('Can vote')",
+                "else:",
+                "    print('Cannot vote')"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "distractor_blocks": [
+                "print('Can vote')",
+                "if age > 18:",
+                "age = 18"
+              ],
+              "difficulty": "easy",
+              "concept": "conditionals",
+              "misconceptions": [
+                {
+                  "concept": "conditionals",
+                  "detection": "Blocks ordered as [else:..., if age>=18:,...]",
+                  "explanation": "Syntax error: else without a preceding if is invalid in Python.",
+                  "hint": "The if must come first; else (or elif) follows it.",
+                  "remediationExerciseId": "ex-2-1-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-1-d",
+              "type": "write_code",
+              "prompt": "Write code that checks if a number is even or odd.",
+              "starter_code": "# your code here\nnum = int(input())",
+              "test_cases": [
+                {
+                  "expected_stdin": "4\n",
+                  "expected_stdout": "Even\n"
+                },
+                {
+                  "expected_stdin": "7\n",
+                  "expected_stdout": "Odd\n"
+                }
+              ],
+              "hints": [
+                "Use the modulo operator (%) to check if a number is divisible by 2.",
+                "If num % 2 equals 0, the number is even.",
+                "Otherwise, it's odd."
+              ],
+              "difficulty": "medium",
+              "concept": "modulo",
+              "misconceptions": [
+                {
+                  "concept": "modulo",
+                  "detection": "Code uses / instead of % (if num / 2 == 0:)",
+                  "explanation": "/ is floating-point division; % is remainder. Using the wrong operator leads to wrong logic.",
+                  "hint": "Use % 2 to get the remainder when dividing by 2; zero means even, one means odd.",
+                  "remediationExerciseId": "ex-2-2-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-1-e",
+              "type": "challenge",
+              "prompt": "Write code that asks for a score (0-100) and prints a grade:\n90-100: A\n80-89: B\n70-79: C\n60-69: D\nBelow 60: F",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdin": "95\n",
+                  "expected_stdout": "A\n"
+                },
+                {
+                  "expected_stdin": "85\n",
+                  "expected_stdout": "B\n"
+                },
+                {
+                  "expected_stdin": "75\n",
+                  "expected_stdout": "C\n"
+                },
+                {
+                  "expected_stdin": "65\n",
+                  "expected_stdout": "D\n"
+                },
+                {
+                  "expected_stdin": "55\n",
+                  "expected_stdout": "F\n"
+                }
+              ],
+              "hints": [
+                "Use if/elif/else chains for multiple conditions.",
+                "Check from highest to lowest or lowest to highest.",
+                "Remember: >= includes the boundary value."
+              ],
+              "difficulty": "hard",
+              "concept": "conditionals",
+              "misconceptions": [
+                {
+                  "concept": "conditionals",
+                  "detection": "Code uses if score >= 90 and score <= 100: instead of just if score >= 90:",
+                  "explanation": "Since scores above 100 are invalid, checking >= 90 is sufficient. The upper bound check is redundant but not wrong.",
+                  "hint": "Use if/elif chains. Each elif only runs if previous conditions were false.",
+                  "remediationExerciseId": "ex-2-1-d"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "lesson-2-2",
@@ -97,6 +670,11 @@
           "content": {
             "sections": [
               {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use for loops to iterate over ranges and lists\n2. Use while loops to repeat code while a condition is true\n3. Understand how range() works with start, stop, and step parameters\n4. Avoid common loop errors like off-by-one mistakes and infinite loops",
+                "code": null
+              },
+              {
                 "heading": "For Loops",
                 "body": "For loops iterate over sequences like lists and ranges.",
                 "code": "for i in range(5):\n    print(i)"
@@ -105,9 +683,147 @@
                 "heading": "While Loops",
                 "body": "While loops repeat as long as a condition is true.",
                 "code": "count = 0\nwhile count < 3:\n    print(count)\n    count += 1"
+              },
+              {
+                "heading": "Worked Example: Countdown Loop",
+                "body": "Let us walk through a while loop that counts down from 10 to 1.",
+                "code": "# Step 1: Start with a counter variable\ncount = 10\n\n# Step 2: Loop while count is greater than 0\nwhile count > 0:\n    print(count)\n    count = count - 1  # Decrement the counter\n\n# Step 3: Output is:\n# 10\n# 9\n# 8\n# 7\n# 6\n# 5\n# 4\n# 3\n# 2\n# 1"
               }
             ]
-          }
+          },
+          "exercises": [
+            {
+              "id": "ex-2-2-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "for i in range(3):\n    print(i * 2)",
+              "options": [
+                "0 2 4",
+                "1 2 3",
+                "0 1 2",
+                "2 4 6"
+              ],
+              "answer": "0 2 4",
+              "explanation": "range(3) produces 0,1,2. Each value is multiplied by 2.",
+              "difficulty": "easy",
+              "concept": "range",
+              "misconceptions": [
+                {
+                  "concept": "range",
+                  "detection": "Learner selects \"2 4 6\" (starting at 1) instead of \"0 2 4\"",
+                  "explanation": "range(stop) starts at 0 and stops before stop. range(3) yields 0,1,2.",
+                  "hint": "Remember: range(n) counts from 0 up to n-1.",
+                  "remediationExerciseId": "ex-2-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-2-b",
+              "type": "fix_the_code",
+              "prompt": "This code should print numbers 1 to 5, but it prints 0 to 4. Fix it.",
+              "buggy_code": "for i in range(5):\n    print(i)",
+              "solution_code": "for i in range(1, 6):\n    print(i)",
+              "hints": [
+                "range(5) starts at 0 and ends at 4.",
+                "To start at 1, use range(1, 6).",
+                "Remember the stop value in range is exclusive."
+              ],
+              "difficulty": "medium",
+              "concept": "range",
+              "misconceptions": [
+                {
+                  "concept": "range",
+                  "detection": "Fix changes range to range(6) but still prints wrong numbers",
+                  "explanation": "range(5) yields 0-4. To print 1-5 you need range(1,6). The stop value is exclusive.",
+                  "hint": "Think about the first number you want and the first number you do not want; those are start and stop.",
+                  "remediationExerciseId": "ex-2-2-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-2-c",
+              "type": "parsons",
+              "prompt": "Arrange these lines to print each item in a list.",
+              "blocks": [
+                "items = ['apple', 'banana', 'cherry']",
+                "for item in items:",
+                "    print(item)"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2
+              ],
+              "distractor_blocks": [
+                "    print(items)"
+              ],
+              "difficulty": "medium",
+              "concept": "lists",
+              "misconceptions": [
+                {
+                  "concept": "lists",
+                  "detection": "Blocks ordered as [print(items); for item in items:...] or omits loop",
+                  "explanation": "Printing items shows the list representation, not the individual elements on separate lines.",
+                  "hint": "To work with each element one-by-one, you need a for loop that runs the body for every item.",
+                  "remediationExerciseId": "ex-2-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-2-d",
+              "type": "write_code",
+              "prompt": "Write a while loop that prints numbers from 10 down to 1.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n"
+                }
+              ],
+              "hints": [
+                "Start with a variable set to 10.",
+                "Use while variable > 0:",
+                "Print the variable then decrement it by 1."
+              ],
+              "difficulty": "medium",
+              "concept": "while-loops",
+              "misconceptions": [
+                {
+                  "concept": "while-loops",
+                  "detection": "Code uses while num >= 0: (prints 0 as well) or while num > 0: (missing final 1)",
+                  "explanation": "The spec was to print 10 down to 1 inclusive. Using >= 0 prints an extra 0; using > 0 stops after printing 2.",
+                  "hint": "Include the last value you want to see in the condition, then decrement after printing.",
+                  "remediationExerciseId": "ex-1-2-d"
+                }
+              ]
+            },
+            {
+              "id": "ex-2-2-e",
+              "type": "challenge",
+              "prompt": "Write code that prints a multiplication table (1-12) for the number 7. Format each line as:\n7 x 1 = 7\n7 x 2 = 14\n...\n7 x 12 = 84",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n7 x 10 = 70\n7 x 11 = 77\n7 x 12 = 84\n"
+                }
+              ],
+              "hints": [
+                "Use a for loop with range(1, 13) to iterate from 1 to 12.",
+                "Multiply 7 by the loop variable for each line.",
+                "Use an f-string: f\"7 x {i} = {7 * i}\""
+              ],
+              "difficulty": "hard",
+              "concept": "for-loops",
+              "misconceptions": [
+                {
+                  "concept": "for-loops",
+                  "detection": "Code uses range(12) which starts at 0 instead of range(1, 13)",
+                  "explanation": "range(12) yields 0-11, not 1-12. The multiplication table would start with 7 x 0 = 0.",
+                  "hint": "Use range(1, 13) to iterate from 1 to 12 inclusive.",
+                  "remediationExerciseId": "ex-2-2-b"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
