@@ -13,7 +13,7 @@ import { celebrateAchievement } from '../../ui/components/animations.js';
 
 export function calculateScore(questions, answers) {
   if (!questions || questions.length === 0) {
-    return { score: 0, correct: 0, total: 0, passed: false, details: [] };
+    return { score: 0, correct: 0, total: 0, passed: false, details: [], results: {} };
   }
 
   const results = validateQuizAnswers(questions, answers);
@@ -22,11 +22,17 @@ export function calculateScore(questions, answers) {
   const score = Math.round((correct / total) * 100);
   const passingThreshold = 70;
 
+  const perQuestion = {};
+  results.forEach((isCorrect, i) => {
+    perQuestion[questions[i].id] = isCorrect;
+  });
+
   return {
     score,
     correct,
     total,
     passed: score >= passingThreshold,
+    results: perQuestion,
     details: results.map((isCorrect, i) => ({
       questionId: questions[i].id,
       correct: isCorrect

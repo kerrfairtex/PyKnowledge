@@ -210,12 +210,31 @@
   margin: 0;
 }
 
-/* Locked cards read as inactive — no icon color, no button */
+/* Locked cards read as inactive — hatch pattern, dashed border, no button */
 .dash-card--locked {
-  opacity: 0.7;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,0.03) 12px 24px),
+    var(--panel);
+  border-style: dashed;
+  border-color: var(--lock);
+  opacity: 0.9;
 }
 .dash-card--locked .dash-card-icon {
   color: var(--lock);
+  border-color: var(--lock);
+}
+.dash-card--locked .dash-card-badge {
+  color: var(--lock);
+  opacity: 0.8;
+}
+
+/* Unlocked cards: gradient for easy visualization */
+.dash-card--unlocked {
+  background: linear-gradient(135deg, rgba(47,189,96,0.16) 0%, rgba(91,157,255,0.14) 100%);
+  border-color: rgba(47,189,96,0.45);
+}
+.dash-card--unlocked .dash-card-icon {
+  border-color: rgba(47,189,96,0.5);
 }
 
 .dash-card--done .dash-card-icon {

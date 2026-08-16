@@ -86,11 +86,10 @@ a:focus-visible, button:focus-visible {
   text-decoration: none;
 }
 .brand img {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  background: #0a0a23;
 }
 .brand small {
   display: block;
@@ -331,6 +330,27 @@ section.band {
   color: var(--lock);
 }
 
+/* Locked path items: hatch pattern + dashed border + lock watermark */
+.path-item.is-locked {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(255,255,255,0.03) 10px 20px),
+    var(--panel);
+  border-style: dashed;
+  border-color: var(--lock);
+}
+.path-item.is-locked .path-status::before {
+  content: '🔒 ';
+}
+
+/* Unlocked path items: gradient for easy visualization */
+.path-item.is-unlocked {
+  background: linear-gradient(135deg, rgba(47,189,96,0.16) 0%, rgba(91,157,255,0.14) 100%);
+  border-color: rgba(47,189,96,0.45);
+}
+.path-item.is-unlocked .path-status::before {
+  content: '▸ ';
+}
+
 /* ---------- Feature grid ---------- */
 .grid-3 {
   display: grid;
@@ -407,10 +427,11 @@ footer.site-footer {
 }
 .footer-inner {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
 }
 .footer-brand {
   display: flex;
@@ -420,10 +441,10 @@ footer.site-footer {
   font-size: 0.85rem;
 }
 .footer-brand img {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #0a0a23;
+  object-fit: cover;
 }
 .footer-links {
   display: flex;
@@ -436,14 +457,30 @@ footer.site-footer {
 }
 .footer-links a:hover { color: var(--text); }
 
-/* PWA install button (button reset — btn-cta-small was styled for <a>) */
-.btn-cta-small.footer-download {
+/* PWA install button — big, centered, royal green */
+.footer-download {
   border: none;
   cursor: pointer;
   font-family: inherit;
+  display: inline-block;
+  margin: 0 auto;
+  background: #136207;
+  color: #ffffff;
+  font-weight: 800;
+  padding: 16px 44px;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 18px rgba(19, 98, 7, 0.45);
+  transition: transform 150ms ease-out, filter 150ms ease-out;
 }
-.btn-cta-small.footer-download:hover {
-  filter: brightness(1.06);
+.footer-download:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+.footer-download:active {
+  transform: translateY(0);
 }
 
 /* Offline indicator */
