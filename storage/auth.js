@@ -4,6 +4,7 @@
  */
 
 import { hashPin, verifyPin, generateUserId, isCryptoAvailable } from '../utils/crypto.js';
+import { remove } from '../core/idb.js';
 
 const PROFILES_KEY = 'pyknowledge_profiles';
 const SESSION_KEY = 'pyknowledge_session';
@@ -142,6 +143,7 @@ export function deleteProfile(userId) {
   const profiles = getProfiles().filter((p) => p.id !== userId);
   saveProfiles(profiles);
   localStorage.removeItem(`pyknowledge_progress_${userId}`);
+  remove('progress', `pyknowledge_progress_${userId}`).catch(() => {});
   if (activeUserId === userId) clearSession();
 }
 

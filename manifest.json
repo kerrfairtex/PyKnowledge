@@ -1,12 +1,13 @@
 {
   "name": "PyKnowledge",
   "short_name": "PyKnowledge",
-  "description": "Offline Python Learning Platform for remote areas with weak internet",
+  "description": "Offline-first Python learning platform",
   "start_url": "/app-shell.html",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
+  "background_color": "#16213e",
   "theme_color": "#16213e",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "ui/assets/icon-192.png",

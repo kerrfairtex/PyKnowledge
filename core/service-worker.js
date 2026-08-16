@@ -3,7 +3,7 @@
  * Cache-first strategy for offline learning after first install.
  */
 
-const APP_VERSION = '0.4.1';
+const APP_VERSION = '0.4.2';
 const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
 
 const STATIC_ASSETS = [
@@ -40,6 +40,7 @@ const STATIC_ASSETS = [
   '/ui/components/video-player.js',
   '/ui/components/toast.js',
   '/ui/components/offline-indicator.js',
+  '/ui/components/install-prompt.js',
   '/ui/components/loading.js',
   '/ui/components/update-notifier.js',
   '/ui/components/animations.js',
@@ -49,6 +50,7 @@ const STATIC_ASSETS = [
   '/content/quizzes.json',
   '/ui/assets/icon-192.png',
   '/ui/assets/icon-512.png',
+  '/ui/assets/logo.png',
   'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/skulpt.min.js',
   'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/sys.js',
   'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/math.js',
@@ -82,6 +84,17 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  const url = new URL(event.request.url);
+
+  // Network-first for API data (spec: API data → network-first),
+  // so live content wins when online and cache is the offline fallback.
+  if (url.pathname.includes('/api/')) {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+
+  // Cache-first for the application shell, CSS, JS, images and lesson
+  // content (spec: cache-first with versioning via CACHE_NAME).
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
@@ -105,6 +118,26 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+// Network-first: try the network, fall back to cache when offline.
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    if (response && response.status === 200 && response.type !== 'opaque') {
+      const clone = response.clone();
+      caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+      return response;
+    }
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    return new Response(JSON.stringify({ error: 'Offline' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

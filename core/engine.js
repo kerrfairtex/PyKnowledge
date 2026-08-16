@@ -4,7 +4,7 @@
 
 import { loadAllContent } from './loader.js';
 import { registerRoute, initRouter, navigate } from './router.js';
-import { getProgress } from './storage.js';
+import { getProgress, initStorage } from './storage.js';
 import { checkPrerequisite } from '../storage/progress.js';
 import { calculateScore } from '../app/quizzes/quiz-engine.js';
 import { renderDashboard } from '../app/dashboard/dashboard.js';
@@ -74,6 +74,7 @@ async function initApp() {
 
   try {
     await registerServiceWorker();
+    await initStorage();
     initOfflineIndicator();
     initUpdateNotifier();
 

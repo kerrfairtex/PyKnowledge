@@ -90,7 +90,7 @@ a:focus-visible, button:focus-visible {
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
+  background: #0a0a23;
 }
 .brand small {
   display: block;
@@ -423,7 +423,7 @@ footer.site-footer {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #fff;
+  background: #0a0a23;
 }
 .footer-links {
   display: flex;
@@ -435,6 +435,31 @@ footer.site-footer {
   text-decoration: none;
 }
 .footer-links a:hover { color: var(--text); }
+
+/* PWA install button (button reset — btn-cta-small was styled for <a>) */
+.btn-cta-small.footer-download {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-cta-small.footer-download:hover {
+  filter: brightness(1.06);
+}
+
+/* Offline indicator */
+.offline-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--yellow);
+  color: var(--yellow-ink);
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 9998;
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <meta name="theme-color" content="#16213e" />
   <title>PyKnowledge — Learn Python offline</title>
   <meta name="description" content="A free, offline-first Python course built for TRAC, BARMM, and CHED students. Install once, learn anywhere, signal or not." />
   <link rel="icon" href="ui/assets/icon-192.png" />
@@ -14,7 +15,7 @@
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="#top">
-        <img src="ui/assets/place/school-seal-logo.png" alt="" />
+        <img src="ui/assets/logo.png" alt="" />
         <span>PyKnowledge<small>Offline Python · CHED curriculum</small></span>
       </a>
       <nav>
@@ -172,16 +173,49 @@
   <footer class="site-footer">
     <div class="wrap footer-inner">
       <div class="footer-brand">
-        <img src="ui/assets/place/school-seal-logo.png" alt="" />
+        <img src="ui/assets/logo.png" alt="" />
         <span>PyKnowledge · MIT licensed · built by Kerr Fairtex</span>
       </div>
-      <nav class="footer-links">
-        <a href="place-context.html">About this place</a>
-        <a href="https://github.com/kerrfairtex/PyKnowledge">Source on GitHub</a>
-        <a href="app-shell.html#/login">Open the app</a>
-      </nav>
+      <button
+        id="installAppButton"
+        type="button"
+        class="btn-cta-small footer-download"
+        hidden
+      >Download App</button>
     </div>
   </footer>
 
+  <div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
+
+  <script>
+    // Offline / online indicator (Phase 3 — network detection)
+    function updateNetworkStatus() {
+      const indicator = document.getElementById('offlineIndicator');
+      if (!indicator) return;
+      indicator.hidden = navigator.onLine;
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    updateNetworkStatus();
+  </script>
+
+  <script>
+    // Service Worker registration — separate system from PWA install (Phase 3)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('/core/service-worker.js');
+          console.log('PyKnowledge Service Worker registered:', registration.scope);
+        } catch (error) {
+          console.error('PyKnowledge Service Worker registration failed:', error);
+        }
+      });
+    }
+  </script>
+
+  <script type="module">
+    import { initInstallPrompt } from './ui/components/install-prompt.js';
+    initInstallPrompt();
+  </script>
 </body>
 </html>
