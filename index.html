@@ -65,7 +65,7 @@
               <h3>Getting Started with Python</h3>
               <p>What Python is, installing nothing, and running your first line of code.</p>
             </div>
-            <span class="path-status">Start here</span>
+            <a class="path-start" href="app-shell.html#/login">Start here →</a>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">2</span>
@@ -73,7 +73,11 @@
               <h3>Variables &amp; Data Types</h3>
               <p>Storing values, naming things well, and Python's core building blocks.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 2</span>
+            <button type="button" class="path-info" aria-label="About Variables &amp; Data Types">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Storing values, naming things well, and Python's core building blocks.</div>
+          </div>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">3</span>
@@ -81,7 +85,11 @@
               <h3>Loops</h3>
               <p>Repeating work with <code>for</code> and <code>while</code>, without repeating code.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 3</span>
+            <button type="button" class="path-info" aria-label="About Loops">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Repeating work with <code>for</code> and <code>while</code>, without repeating code.</div>
+          </div>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">4</span>
@@ -89,7 +97,11 @@
               <h3>Conditionals</h3>
               <p>Making decisions in code with <code>if</code>, <code>elif</code>, and <code>else</code>.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 4</span>
+            <button type="button" class="path-info" aria-label="About Conditionals">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Making decisions in code with <code>if</code>, <code>elif</code>, and <code>else</code>.</div>
+          </div>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">5</span>
@@ -97,7 +109,11 @@
               <h3>Functions</h3>
               <p>Packaging logic you can reuse, with inputs and return values.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 5</span>
+            <button type="button" class="path-info" aria-label="About Functions">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Packaging logic you can reuse, with inputs and return values.</div>
+          </div>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">6</span>
@@ -105,7 +121,11 @@
               <h3>Data Structures</h3>
               <p>Lists, dictionaries, and tuples — organizing information that matters.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 6</span>
+            <button type="button" class="path-info" aria-label="About Data Structures">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Lists, dictionaries, and tuples — organizing information that matters.</div>
+          </div>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">7</span>
@@ -113,7 +133,11 @@
               <h3>Final Project</h3>
               <p>Bring every module together into one program you build yourself.</p>
             </div>
+            <div class="path-status-row">
             <span class="path-status">Module 7</span>
+            <button type="button" class="path-info" aria-label="About Final Project">?</button>
+            <div class="path-info-pop" role="tooltip" hidden>Bring every module together into one program you build yourself.</div>
+          </div>
           </li>
         </ol>
       </div>
@@ -184,6 +208,33 @@
       >Download App</button>
     </div>
   </footer>
+
+  <script>
+    // Module info "?" tooltips on locked path items
+    (function () {
+      const pops = document.querySelectorAll('.path-info-pop');
+      function closeAll(except) {
+        pops.forEach((pop) => {
+          if (pop !== except) pop.hidden = true;
+        });
+      }
+      document.querySelectorAll('.path-info').forEach((btn) => {
+        btn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const pop = btn.parentElement.querySelector('.path-info-pop');
+          if (pop) {
+            const willOpen = pop.hidden;
+            closeAll();
+            pop.hidden = !willOpen;
+          }
+        });
+      });
+      document.addEventListener('click', () => closeAll());
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeAll();
+      });
+    })();
+  </script>
 
   <div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
 
