@@ -218,6 +218,306 @@
           ]
         }
       ]
+    },
+    {
+      "id": "lesson-3-1",
+      "title": "Quiz: For Loops",
+      "lessonId": "lesson-3-1",
+      "questions": [
+        {
+          "id": "lesson-3-1-q1",
+          "type": "multiple-choice",
+          "question": "What does range(5) produce?",
+          "options": [
+            "1, 2, 3, 4, 5",
+            "0, 1, 2, 3, 4",
+            "0, 1, 2, 3, 4, 5",
+            "1, 2, 3, 4"
+          ],
+          "correctAnswer": 1,
+          "concept": "for-loop"
+        },
+        {
+          "id": "lesson-3-1-q2",
+          "type": "true-false",
+          "question": "A for loop can iterate directly over the characters of a string.",
+          "correctAnswer": true,
+          "concept": "for-loop"
+        },
+        {
+          "id": "lesson-3-1-q3",
+          "type": "fill-blank",
+          "question": "What built-in function generates a sequence of numbers in Python?",
+          "correctAnswer": [
+            "range",
+            "range()"
+          ],
+          "concept": "for-loop"
+        }
+      ]
+    },
+    {
+      "id": "lesson-3-2",
+      "title": "Quiz: While Loops",
+      "lessonId": "lesson-3-2",
+      "questions": [
+        {
+          "id": "lesson-3-2-q1",
+          "type": "multiple-choice",
+          "question": "A while loop runs as long as its condition is:",
+          "options": [
+            "False",
+            "True",
+            "0",
+            "None"
+          ],
+          "correctAnswer": 1,
+          "concept": "while-loop"
+        },
+        {
+          "id": "lesson-3-2-q2",
+          "type": "multiple-choice",
+          "question": "What is the most common mistake with while loops?",
+          "options": [
+            "Using the wrong variable name",
+            "Forgetting to update the condition variable",
+            "Using print() inside the loop",
+            "Indenting the body wrong"
+          ],
+          "correctAnswer": 1,
+          "concept": "while-loop"
+        },
+        {
+          "id": "lesson-3-2-q3",
+          "type": "fill-blank",
+          "question": "From memory: when is a while loop the right choice instead of a for loop?",
+          "concept": "while-loop",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "When you don't know how many times to repeat in advance",
+            "When you don't know the number of iterations beforehand"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-3-3",
+      "title": "Quiz: Break, Continue, and Nested Loops",
+      "lessonId": "lesson-3-3",
+      "questions": [
+        {
+          "id": "lesson-3-3-q1",
+          "type": "multiple-choice",
+          "question": "What does the break statement do inside a loop?",
+          "options": [
+            "Skips the current iteration only",
+            "Exits the loop immediately",
+            "Restarts the loop from the beginning",
+            "Causes a syntax error"
+          ],
+          "correctAnswer": 1,
+          "concept": "break-continue"
+        },
+        {
+          "id": "lesson-3-3-q2",
+          "type": "multiple-choice",
+          "question": "What does continue do inside a loop?",
+          "options": [
+            "Exits the loop",
+            "Skips the rest of the current iteration and moves to the next",
+            "Pauses execution",
+            "Repeats the current iteration"
+          ],
+          "correctAnswer": 1,
+          "concept": "break-continue"
+        },
+        {
+          "id": "lesson-3-3-q3",
+          "type": "true-false",
+          "question": "In nested loops, the inner loop completes all its iterations for each single pass of the outer loop.",
+          "correctAnswer": true,
+          "concept": "nested-loops"
+        },
+        {
+          "id": "lesson-3-3-q4",
+          "type": "fill-blank",
+          "question": "From memory: what is the difference between break and continue?",
+          "concept": "break-continue",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "break exits the loop entirely; continue skips only the current iteration",
+            "break stops the loop; continue skips to the next iteration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-4-1",
+      "title": "Quiz: Defining and Calling Functions",
+      "lessonId": "lesson-4-1",
+      "questions": [
+        {
+          "id": "lesson-4-1-q1",
+          "type": "multiple-choice",
+          "question": "Which keyword is used to define a function in Python?",
+          "options": [
+            "function",
+            "def",
+            "define",
+            "func"
+          ],
+          "correctAnswer": 1,
+          "concept": "function-definition"
+        },
+        {
+          "id": "lesson-4-1-q2",
+          "type": "true-false",
+          "question": "A function must be called after it is defined, or the code inside it never runs.",
+          "correctAnswer": true,
+          "concept": "function-call"
+        },
+        {
+          "id": "lesson-4-1-q3",
+          "type": "fill-blank",
+          "question": "From memory: why are functions useful? Give one reason.",
+          "concept": "function-definition",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "They let you reuse code without copying and pasting",
+            "They make code reusable and organised",
+            "They avoid repeating the same code multiple times"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-4-2",
+      "title": "Quiz: Parameters and Arguments",
+      "lessonId": "lesson-4-2",
+      "questions": [
+        {
+          "id": "lesson-4-2-q1",
+          "type": "multiple-choice",
+          "question": "What do you call the values passed into a function when calling it?",
+          "options": [
+            "Parameters",
+            "Arguments",
+            "Variables",
+            "Defaults"
+          ],
+          "correctAnswer": 1,
+          "concept": "parameters"
+        },
+        {
+          "id": "lesson-4-2-q2",
+          "type": "multiple-choice",
+          "question": "Where must default parameters appear in a function definition?",
+          "options": [
+            "Before required parameters",
+            "After required parameters",
+            "In any order",
+            "They cannot be mixed with required parameters"
+          ],
+          "correctAnswer": 1,
+          "concept": "default-parameters"
+        },
+        {
+          "id": "lesson-4-2-q3",
+          "type": "true-false",
+          "question": "A function can have any number of parameters.",
+          "correctAnswer": true,
+          "concept": "parameters"
+        }
+      ]
+    },
+    {
+      "id": "lesson-4-3",
+      "title": "Quiz: Return Values",
+      "lessonId": "lesson-4-3",
+      "questions": [
+        {
+          "id": "lesson-4-3-q1",
+          "type": "multiple-choice",
+          "question": "What special value does a function return if it has no return statement?",
+          "options": [
+            "0",
+            "False",
+            "None",
+            "undefined"
+          ],
+          "correctAnswer": 2,
+          "concept": "return-values"
+        },
+        {
+          "id": "lesson-4-3-q2",
+          "type": "true-false",
+          "question": "Once a return statement is reached, the function stops executing any further code inside it.",
+          "correctAnswer": true,
+          "concept": "return-values"
+        },
+        {
+          "id": "lesson-4-3-q3",
+          "type": "fill-blank",
+          "question": "From memory: what is the difference between printing a result and returning it?",
+          "concept": "return-values",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "print() shows the value on screen but the caller cannot use it; return sends the value back to the caller",
+            "print() displays it; return gives it to the caller to store in a variable"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-4-4",
+      "title": "Quiz: Scope, Docstrings, and Best Practices",
+      "lessonId": "lesson-4-4",
+      "questions": [
+        {
+          "id": "lesson-4-4-q1",
+          "type": "multiple-choice",
+          "question": "A variable created inside a function is called:",
+          "options": [
+            "Global",
+            "Local",
+            "Public",
+            "External"
+          ],
+          "correctAnswer": 1,
+          "concept": "scope"
+        },
+        {
+          "id": "lesson-4-4-q2",
+          "type": "multiple-choice",
+          "question": "What keyword lets you modify a global variable from inside a function?",
+          "options": [
+            "global",
+            "extern",
+            "public",
+            "outer"
+          ],
+          "correctAnswer": 0,
+          "concept": "scope"
+        },
+        {
+          "id": "lesson-4-4-q3",
+          "type": "true-false",
+          "question": "A docstring is a special comment that Python ignores at runtime.",
+          "correctAnswer": false,
+          "concept": "docstrings"
+        },
+        {
+          "id": "lesson-4-4-q4",
+          "type": "fill-blank",
+          "question": "From memory: explain what 'variable shadowing' means.",
+          "concept": "scope",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "When a local variable has the same name as a global one, the local version is used inside the function",
+            "Creating a local variable with the same name as a global, hiding the global inside the function"
+          ]
+        }
+      ]
     }
   ]
 }

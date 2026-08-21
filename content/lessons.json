@@ -875,7 +875,7 @@
                 "3"
               ],
               "answer": "0\n1\n2",
-              "explanation": "range(3) counts 0, 1, 2 \u2014 it stops before reaching 3, so three numbers print, starting at 0.",
+              "explanation": "range(3) counts 0, 1, 2 — it stops before reaching 3, so three numbers print, starting at 0.",
               "difficulty": "easy",
               "concept": "for-loop",
               "misconceptions": [
@@ -883,7 +883,7 @@
                   "concept": "for-loop",
                   "detection": "Learner selects \"1\\n2\\n3\" instead of \"0\\n1\\n2\"",
                   "explanation": "range(n) starts counting at 0 by default, not 1.",
-                  "hint": "range(3) gives you 0, 1, 2 \u2014 three values starting from zero.",
+                  "hint": "range(3) gives you 0, 1, 2 — three values starting from zero.",
                   "remediationExerciseId": "ex-3-1-b"
                 }
               ]
@@ -896,7 +896,7 @@
               "solution_code": "for i in range(1, 6):\n    print(i)",
               "hints": [
                 "range(5) starts at 0, not 1.",
-                "range() stops one before its second argument \u2014 to include 5, the stop value needs to be 6.",
+                "range() stops one before its second argument — to include 5, the stop value needs to be 6.",
                 "Try: range(1, 6)"
               ],
               "difficulty": "easy",
@@ -923,7 +923,7 @@
               ],
               "hints": [
                 "You can loop over a string directly with: for letter in 'Tawi':",
-                "Each iteration gives you one character \u2014 print it inside the loop."
+                "Each iteration gives you one character — print it inside the loop."
               ],
               "difficulty": "easy",
               "concept": "for-loop"
@@ -944,12 +944,12 @@
               },
               {
                 "heading": "When You Don't Know the Count",
-                "body": "A for loop is great when you know how many times to repeat something. A while loop repeats as long as a condition stays true \u2014 useful when you don't know the number of repeats in advance, like waiting for valid input.",
+                "body": "A for loop is great when you know how many times to repeat something. A while loop repeats as long as a condition stays true — useful when you don't know the number of repeats in advance, like waiting for valid input.",
                 "code": "count = 0\nwhile count < 3:\n    print(count)\n    count = count + 1"
               },
               {
                 "heading": "The Infinite Loop Trap",
-                "body": "If the condition never becomes false, the loop never stops. This is the single most common while loop bug \u2014 always make sure something inside the loop moves you toward the condition becoming false.",
+                "body": "If the condition never becomes false, the loop never stops. This is the single most common while loop bug — always make sure something inside the loop moves you toward the condition becoming false.",
                 "code": "# DANGER: this never stops, because count never changes\n# count = 0\n# while count < 3:\n#     print(count)"
               },
               {
@@ -969,7 +969,7 @@
                 "3\n2\n1",
                 "3\n2\n1\n0",
                 "0\n1\n2\n3",
-                "Nothing \u2014 infinite loop"
+                "Nothing — infinite loop"
               ],
               "answer": "3\n2\n1",
               "explanation": "The loop runs while n > 0. It prints 3, 2, 1, then n becomes 0, the condition fails, and the loop stops before printing 0.",
@@ -979,7 +979,7 @@
             {
               "id": "ex-3-2-b",
               "type": "fix_the_code",
-              "prompt": "This loop should print 1, 2, 3 then stop \u2014 but it never stops. Fix it.",
+              "prompt": "This loop should print 1, 2, 3 then stop — but it never stops. Fix it.",
               "buggy_code": "n = 1\nwhile n <= 3:\n    print(n)",
               "solution_code": "n = 1\nwhile n <= 3:\n    print(n)\n    n = n + 1",
               "hints": [
@@ -1034,12 +1034,12 @@
               {
                 "heading": "break: Stop the Loop Early",
                 "body": "break exits the loop immediately, even if the loop's condition would otherwise still be true.",
-                "code": "for i in range(10):\n    if i == 4:\n        break\n    print(i)\n# prints 0, 1, 2, 3 \u2014 then stops"
+                "code": "for i in range(10):\n    if i == 4:\n        break\n    print(i)\n# prints 0, 1, 2, 3 — then stops"
               },
               {
                 "heading": "continue: Skip This Iteration",
                 "body": "continue skips the rest of the current loop body and jumps to the next iteration, without exiting the loop entirely.",
-                "code": "for i in range(5):\n    if i == 2:\n        continue\n    print(i)\n# prints 0, 1, 3, 4 \u2014 skips only 2"
+                "code": "for i in range(5):\n    if i == 2:\n        continue\n    print(i)\n# prints 0, 1, 3, 4 — skips only 2"
               },
               {
                 "heading": "Nested Loops",
@@ -1105,7 +1105,7 @@
             {
               "id": "ex-3-3-c",
               "type": "challenge",
-              "prompt": "You're given a fixed list of exam scores: [88, 45, 92, -1, 76]. A score of -1 marks the end of valid data \u2014 stop processing as soon as you see it. Print each valid score, but skip any score below 50 (skip it, don't stop). Store scores in this exact list at the top of your code.",
+              "prompt": "You're given a fixed list of exam scores: [88, 45, 92, -1, 76]. A score of -1 marks the end of valid data — stop processing as soon as you see it. Print each valid score, but skip any score below 50 (skip it, don't stop). Store scores in this exact list at the top of your code.",
               "starter_code": "scores = [88, 45, 92, -1, 76]\n# your code here",
               "test_cases": [
                 {
@@ -1123,9 +1123,581 @@
                 {
                   "concept": "break-continue",
                   "detection": "Code uses break for scores below 50 instead of continue",
-                  "explanation": "A low score should be skipped, not treated as the end of the data \u2014 only -1 marks the end.",
-                  "hint": "Skipping (continue) and stopping (break) are different \u2014 only -1 should stop the loop.",
+                  "explanation": "A low score should be skipped, not treated as the end of the data — only -1 marks the end.",
+                  "hint": "Skipping (continue) and stopping (break) are different — only -1 should stop the loop.",
                   "remediationExerciseId": "ex-3-3-b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-4",
+      "title": "Functions",
+      "description": "Write reusable code with functions, pass data with parameters, get results with return values, and understand how variable scope works.",
+      "prerequisite": "module-3",
+      "lessons": [
+        {
+          "id": "lesson-4-1",
+          "title": "Defining and Calling Functions",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Explain what a function is and why we use them\n2. Define a function using the def keyword\n3. Call a function by name with parentheses\n4. Understand the difference between defining and calling",
+                "code": null
+              },
+              {
+                "heading": "What is a Function?",
+                "body": "A function is a reusable block of code that performs a specific task. Instead of copying the same code over and over, you write it once inside a function and call it whenever you need it.",
+                "code": "# Defining a function\ndef greet():\n    print('Hello from PyKnowledge!')\n\n# Calling the function\ngreet()\ngreet()  # call it again"
+              },
+              {
+                "heading": "Function Naming Rules",
+                "body": "Function names follow the same rules as variable names: use lowercase letters, numbers, and underscores. Use descriptive names that say what the function does. Start with a verb if possible.",
+                "code": "# Good function names\ndef say_hello():\n    print('Hello!')\n\ndef show_menu():\n    print('1. Start')\n    print('2. Quit')\n\n# Bad: def a(): , def FUNC1(): , def print():"
+              },
+              {
+                "heading": "Worked Example: A Helpful Assistant",
+                "body": "Let's build a function that displays a welcome banner for a school app. We'll define it once and call it at different points in the program.",
+                "code": "# Step 1: Define the function\ndef show_banner():\n    print('=' * 30)\n    print('   WELCOME TO PYKNOWLEDGE')\n    print('   Learn Python, anywhere.')\n    print('=' * 30)\n\n# Step 2: The function is defined but hasn't run yet\nprint('Starting program...')\n\n# Step 3: Call the function - now it runs\nshow_banner()\n\n# Step 4: More work...\nprint('Loading lessons...')\n\n# Step 5: Show the banner again\nshow_banner()"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-4-1-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "def greet():\n    print('Hi!')\n\nprint('Start')\ngreet()\nprint('End')",
+              "options": [
+                "Hi!",
+                "Start\\nHi!\\nEnd",
+                "Hi!\\nStart\\nEnd",
+                "Start\\nEnd"
+              ],
+              "answer": "Start\\nHi!\\nEnd",
+              "explanation": "The function is defined but not executed until it's called. So 'Start' prints first, then greet() runs and prints 'Hi!', then 'End' prints.",
+              "difficulty": "easy",
+              "concept": "function-call",
+              "misconceptions": [
+                {
+                  "concept": "function-call",
+                  "detection": "Learner selects 'Hi!' only, ignoring the rest of the program",
+                  "explanation": "Defining a function does not execute it - only the function call greet() causes the body to run.",
+                  "hint": "The print('Start') runs first, then greet() runs, then print('End') runs. Trace the order carefully.",
+                  "remediationExerciseId": "ex-4-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-1-b",
+              "type": "fix_the_code",
+              "prompt": "This code tries to define and call a function, but it causes an error. Fix it.",
+              "buggy_code": "def say_hello()\nprint('Hello!')\n\nSay_hello()",
+              "solution_code": "def say_hello():\n    print('Hello!')\n\nsay_hello()",
+              "hints": [
+                "A function definition needs a colon at the end of the def line.",
+                "The function body must be indented.",
+                "Function names are case-sensitive - say_hello is not the same as Say_hello."
+              ],
+              "difficulty": "easy",
+              "concept": "function-definition",
+              "misconceptions": [
+                {
+                  "concept": "function-definition",
+                  "detection": "Fix adds colon but still uses Say_hello() with capital S",
+                  "explanation": "Python is case-sensitive. Say_hello (with capital S) is a different name from say_hello (lowercase s).",
+                  "hint": "The definition and the call must use exactly the same name, including capitalisation.",
+                  "remediationExerciseId": "ex-4-1-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-1-c",
+              "type": "write_code",
+              "prompt": "Define a function called show_menu that prints:\n1. Start\n2. Quit\nThen call it.",
+              "starter_code": "# define your function here\n\n# then call it",
+              "test_cases": [
+                {
+                  "expected_stdout": "1. Start\n2. Quit\n"
+                }
+              ],
+              "hints": [
+                "Use def show_menu(): to define the function.",
+                "Indent the print statements inside the function body.",
+                "After the definition, call the function with show_menu() on its own line, no indent."
+              ],
+              "difficulty": "easy",
+              "concept": "function-definition",
+              "misconceptions": [
+                {
+                  "concept": "function-definition",
+                  "detection": "Code defines function but forgets to call it (no show_menu() line)",
+                  "explanation": "Defining the function only tells Python what to do - you must call it to actually run the code.",
+                  "hint": "After the function definition, add a line that calls it: show_menu()",
+                  "remediationExerciseId": "ex-4-1-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-1-d",
+              "type": "challenge",
+              "prompt": "Define a function called draw_line that prints a line of 20 dashes (--------------------). Then call it three times to create a separator between three sections. After the first call, print 'Section 1', call it again, print 'Section 2', call it again, print 'Section 3', and call it one last time.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "--------------------\nSection 1\n--------------------\nSection 2\n--------------------\nSection 3\n--------------------\n"
+                }
+              ],
+              "hints": [
+                "Define a function named draw_line with no parameters.",
+                "Inside it, print 20 dash characters.",
+                "Call draw_line() before and after each section title."
+              ],
+              "difficulty": "medium",
+              "concept": "function-call",
+              "misconceptions": [
+                {
+                  "concept": "function-call",
+                  "detection": "Code uses print('--------------------') but writes a different number of dashes",
+                  "explanation": "The test expects exactly 20 dashes. Count the dashes in the string to ensure the correct amount.",
+                  "hint": "Count the characters carefully - the test needs exactly 20 dashes per line.",
+                  "remediationExerciseId": "ex-4-1-c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-4-2",
+          "title": "Parameters and Arguments",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Define a function with one or more parameters\n2. Pass arguments to a function call\n3. Use default parameter values\n4. Understand positional vs keyword argument passing",
+                "code": null
+              },
+              {
+                "heading": "Functions with Input",
+                "body": "Parameters let a function receive data. They act like variables inside the function that get their values from the arguments you pass when calling it.",
+                "code": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Maria')   # name = 'Maria'\ngreet('Juan')    # name = 'Juan'"
+              },
+              {
+                "heading": "Multiple Parameters",
+                "body": "You can have as many parameters as you need. Separate them with commas. The order matters - the first argument goes to the first parameter, and so on.",
+                "code": "def introduce(name, age):\n    print(f'{name} is {age} years old.')\n\nintroduce('Maria', 20)\nintroduce('Juan', 18)"
+              },
+              {
+                "heading": "Default Parameters",
+                "body": "You can give a parameter a default value. If the caller doesn't pass that argument, the default is used. Default parameters must come after all required parameters.",
+                "code": "def greet(name, greeting='Hello'):\n    print(f'{greeting}, {name}!')\n\ngreet('Maria')                      # Hello, Maria!\ngreet('Juan', 'Assalamu Alaikum')   # Assalamu Alaikum, Juan!"
+              },
+              {
+                "heading": "Worked Example: Grade Calculator",
+                "body": "Let's build a function that calculates a grade based on a score and an optional passing threshold.",
+                "code": "# Step 1: Define with one required and one default parameter\ndef check_grade(score, passing=75):\n    if score >= passing:\n        print(f'Score {score}: Passed')\n    else:\n        print(f'Score {score}: Failed')\n\n# Step 2: Use the default passing threshold of 75\ncheck_grade(85)   # Score 85: Passed\ncheck_grade(60)   # Score 60: Failed\n\n# Step 3: Override the default\ncheck_grade(60, 50)  # Score 60: Passed"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-4-2-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "def double(n):\n    print(n * 2)\n\ndouble(5)",
+              "options": [
+                "5",
+                "10",
+                "55",
+                "25"
+              ],
+              "answer": "10",
+              "explanation": "The function receives n=5, then prints n * 2 which is 5 * 2 = 10.",
+              "difficulty": "easy",
+              "concept": "parameters",
+              "misconceptions": [
+                {
+                  "concept": "parameters",
+                  "detection": "Learner selects '55' thinking string concatenation",
+                  "explanation": "When n is an integer, * performs multiplication, not string repetition. n=5 is an integer literal, so n * 2 = 10.",
+                  "hint": "Determine what data type n holds. Since 5 is a number, * means multiplication.",
+                  "remediationExerciseId": "ex-4-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-2-b",
+              "type": "fix_the_code",
+              "prompt": "This function should print a greeting with the given name, but it's broken. Fix it.",
+              "buggy_code": "def greet name:\n    print('Hello, ' + name)\n\ngreet('Ahmad')",
+              "solution_code": "def greet(name):\n    print('Hello, ' + name)\n\ngreet('Ahmad')",
+              "hints": [
+                "Parameters must go inside parentheses in the function definition.",
+                "Check the def line for missing parentheses.",
+                "The correct syntax is def greet(name):"
+              ],
+              "difficulty": "easy",
+              "concept": "parameters",
+              "misconceptions": [
+                {
+                  "concept": "parameters",
+                  "detection": "Fix adds parentheses but puts the colon inside them",
+                  "explanation": "The colon comes after the closing parenthesis, not before or inside. def greet(name): is correct.",
+                  "hint": "Parentheses hold the parameter list. The colon marks the start of the function body.",
+                  "remediationExerciseId": "ex-4-2-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-2-c",
+              "type": "write_code",
+              "prompt": "Define a function called add that takes two parameters (a and b) and prints their sum. Then call it with 7 and 3.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "10\n"
+                }
+              ],
+              "hints": [
+                "Define the function with: def add(a, b):",
+                "Inside, use print(a + b)",
+                "Call it with: add(7, 3)"
+              ],
+              "difficulty": "easy",
+              "concept": "parameters"
+            },
+            {
+              "id": "ex-4-2-d",
+              "type": "write_code",
+              "prompt": "Define a function called repeat_message that takes a message and a count parameter (default 3). It should print the message that many times, each on its own line.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "Go!\nGo!\nGo!\n"
+                }
+              ],
+              "hints": [
+                "Define with: def repeat_message(message, count=3):",
+                "Use a for loop with range(count) to print the message.",
+                "The test calls the function with only one argument, so the default count=3 is used."
+              ],
+              "difficulty": "medium",
+              "concept": "default-parameters",
+              "misconceptions": [
+                {
+                  "concept": "default-parameters",
+                  "detection": "Code defines function without a default value for count",
+                  "explanation": "Without a default, the caller must always provide two arguments. But the test passes only one, which would cause a TypeError.",
+                  "hint": "The function signature should be def repeat_message(message, count=3): so count defaults to 3 when omitted.",
+                  "remediationExerciseId": "ex-4-2-c"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-2-e",
+              "type": "challenge",
+              "prompt": "Define a function called describe_pet that takes a pet name and an animal type (default 'dog'). It should print: 'name' is a 'type'. Then call it with:\n1. Just a name (uses default type)\n2. A name and a different type",
+              "starter_code": "# your code here\n\ndescribe_pet('Max')\ndescribe_pet('Luna', 'cat')",
+              "test_cases": [
+                {
+                  "expected_stdout": "Max is a dog.\nLuna is a cat.\n"
+                }
+              ],
+              "hints": [
+                "Define with: def describe_pet(name, animal='dog'):",
+                "Use print(f'{name} is a {animal}.')",
+                "The test already provides the two function calls."
+              ],
+              "difficulty": "medium",
+              "concept": "default-parameters",
+              "misconceptions": [
+                {
+                  "concept": "default-parameters",
+                  "detection": "Code defines parameters in wrong order (default before required)",
+                  "explanation": "Parameters with default values must come after all required parameters.",
+                  "hint": "Required parameters come first, then default parameters. Write: def describe_pet(name, animal='dog'):",
+                  "remediationExerciseId": "ex-4-2-d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-4-3",
+          "title": "Return Values",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use the return statement to send a value back to the caller\n2. Store and use a returned value\n3. Understand that functions without return give None\n4. Return early from a function with conditional logic",
+                "code": null
+              },
+              {
+                "heading": "Sending Results Back",
+                "body": "So far our functions print results directly. But functions can also return a value to the caller - the caller then decides what to do with it.",
+                "code": "def add(a, b):\n    result = a + b\n    return result\n\n# Capture the returned value\nsum = add(5, 3)\nprint(sum)  # 8\n\n# Or use it directly\nprint(add(10, 20))  # 30"
+              },
+              {
+                "heading": "None - The Empty Return",
+                "body": "If a function doesn't have a return statement, it returns None automatically. None is a special value meaning 'nothing'.",
+                "code": "def greet(name):\n    print(f'Hello, {name}!')\n\nresult = greet('Maria')\nprint(result)  # None"
+              },
+              {
+                "heading": "Early Return",
+                "body": "A function can have multiple return statements. Once return is reached, the function exits immediately - any code after it does NOT run.",
+                "code": "def check_age(age):\n    if age < 0:\n        return 'Invalid age'\n    if age >= 18:\n        return 'Adult'\n    return 'Minor'\n\nprint(check_age(25))  # Adult\nprint(check_age(12))  # Minor\nprint(check_age(-5))  # Invalid age"
+              },
+              {
+                "heading": "Worked Example: Temperature Converter",
+                "body": "Let's build a function that converts Celsius to Fahrenheit and returns the result, so the caller can format it however they like.",
+                "code": "# Step 1: Function returns the converted value\ndef celsius_to_fahrenheit(c):\n    f = (c * 9/5) + 32\n    return f\n\n# Step 2: Caller stores the result\ntemp = celsius_to_fahrenheit(37)\nprint(f'{temp:.1f}F')  # 98.6F\n\n# Step 3: Use the function in another expression\nif celsius_to_fahrenheit(100) > 200:\n    print('Water is boiling hot!')"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-4-3-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "def square(n):\n    return n * n\n\nresult = square(4)\nprint(result)",
+              "options": [
+                "16",
+                "4",
+                "square(4)",
+                "None"
+              ],
+              "answer": "16",
+              "explanation": "square(4) returns 4 * 4 = 16. The returned value is stored in result, then printed.",
+              "difficulty": "easy",
+              "concept": "return-values",
+              "misconceptions": [
+                {
+                  "concept": "return-values",
+                  "detection": "Learner selects 'None' thinking functions always return None",
+                  "explanation": "A function returns None only if it doesn't have a return statement. This function explicitly returns n * n.",
+                  "hint": "Look for the word return in the function. What value follows it?",
+                  "remediationExerciseId": "ex-4-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-3-b",
+              "type": "fix_the_code",
+              "prompt": "This function should return the product of two numbers, but it prints instead of returning. Fix it so it returns the result.",
+              "buggy_code": "def multiply(a, b):\n    print(a * b)\n\nresult = multiply(4, 5)\nprint('Twice the product:', result * 2)",
+              "solution_code": "def multiply(a, b):\n    return a * b\n\nresult = multiply(4, 5)\nprint('Twice the product:', result * 2)",
+              "hints": [
+                "Replace print(a * b) with return a * b.",
+                "After fixing, the caller can use result * 2 because result holds the number."
+              ],
+              "difficulty": "medium",
+              "concept": "return-values",
+              "misconceptions": [
+                {
+                  "concept": "return-values",
+                  "detection": "Fix changes to print(return a * b) instead of return a * b",
+                  "explanation": "return is a statement, not a function - you cannot put it inside print().",
+                  "hint": "Simply write: return a * b on its own line. No print() around it.",
+                  "remediationExerciseId": "ex-4-3-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-3-c",
+              "type": "write_code",
+              "prompt": "Define a function called get_max that takes two numbers and returns the larger one. Then call it and print the result.",
+              "starter_code": "# your code here\n\nprint(get_max(10, 7))",
+              "test_cases": [
+                {
+                  "expected_stdout": "10\n"
+                }
+              ],
+              "hints": [
+                "Use an if statement to compare a and b.",
+                "If a > b, return a. Otherwise return b.",
+                "The test already provides the function call and print."
+              ],
+              "difficulty": "medium",
+              "concept": "return-values",
+              "misconceptions": [
+                {
+                  "concept": "return-values",
+                  "detection": "Code prints inside function instead of returning",
+                  "explanation": "The test already has a print() around the call. If the function also prints, the output will be duplicated or in the wrong order.",
+                  "hint": "The function should only return the value, not print it. The print() happens outside.",
+                  "remediationExerciseId": "ex-4-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-3-d",
+              "type": "challenge",
+              "prompt": "Define a function called is_even that takes a number and returns True if it's even, False if it's odd. Then call it to check the numbers 4, 7, and 0, printing the results.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "True\nFalse\nTrue\n"
+                }
+              ],
+              "hints": [
+                "Use the modulo operator: n % 2 == 0 means even.",
+                "Return True for even, False for odd.",
+                "Call the function three times with print()."
+              ],
+              "difficulty": "medium",
+              "concept": "return-values",
+              "misconceptions": [
+                {
+                  "concept": "return-values",
+                  "detection": "Code uses print(True) / print(False) instead of return True / return False",
+                  "explanation": "The function must return a boolean value so the caller can use it in conditions or print it.",
+                  "hint": "Write 'return True' and 'return False' inside the function, not print().",
+                  "remediationExerciseId": "ex-4-3-c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-4-4",
+          "title": "Scope, Docstrings, and Best Practices",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Distinguish between local and global variables\n2. Understand that variables inside functions are isolated\n3. Write a docstring to document a function\n4. Organise code by grouping related functions together",
+                "code": null
+              },
+              {
+                "heading": "Local vs Global Variables",
+                "body": "A variable created inside a function is local - it only exists inside that function. Variables created outside are global and can be read anywhere.",
+                "code": "message = 'Hello from the top level!'\n\ndef show():\n    local_var = 'I only exist inside show()'\n    print(message)       # can read the global\n    print(local_var)     # works - local here\n\nshow()\n# print(local_var)  # Error! local_var doesn't exist outside"
+              },
+              {
+                "heading": "Variable Shadowing",
+                "body": "If you create a local variable with the same name as a global one, the local version 'shadows' the global inside the function. The global is unchanged.",
+                "code": "name = 'Global'\n\ndef show():\n    name = 'Local'\n    print(name)  # Local\n\nshow()\nprint(name)      # Global (unchanged)"
+              },
+              {
+                "heading": "Docstrings: Documenting Your Functions",
+                "body": "A docstring is a string at the top of a function that explains what it does. Write it in triple quotes right after the def line.",
+                "code": "def add(a, b):\n    \"\"\"Return the sum of two numbers.\"\"\"\n    return a + b\n\ndef celsius_to_fahrenheit(c):\n    \"\"\"\n    Convert Celsius to Fahrenheit.\n\n    Args:\n        c: Temperature in Celsius (float or int)\n\n    Returns:\n        Temperature in Fahrenheit\n    \"\"\"\n    return (c * 9/5) + 32"
+              },
+              {
+                "heading": "Worked Example: Well-Structured Program",
+                "body": "Let's see how all the pieces fit together in a well-structured program with clear functions, docstrings, and proper scoping.",
+                "code": "# --- Constants ---\nPASSING_SCORE = 75\n\n# --- Functions ---\ndef get_grade(score):\n    \"\"\"Return 'Passed' or 'Failed' based on score.\"\"\"\n    if score >= PASSING_SCORE:\n        return 'Passed'\n    return 'Failed'\n\ndef main():\n    \"\"\"Run the main program logic.\"\"\"\n    print('Grade Checker')\n    print('=' * 30)\n    for score in [85, 60, 92]:\n        result = get_grade(score)\n        print(f'{score}: {result}')\n\n# --- Entry point ---\nmain()"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-4-4-a",
+              "type": "predict_output",
+              "prompt": "What will this code print?",
+              "code": "x = 10\n\ndef change():\n    x = 5\n    print(x)\n\nchange()\nprint(x)",
+              "options": [
+                "5\\n10",
+                "10\\n10",
+                "5\\n5",
+                "10\\n5"
+              ],
+              "answer": "5\\n10",
+              "explanation": "Inside change(), x = 5 creates a new local variable that shadows the global. So the function prints 5. Outside, the global x is still 10.",
+              "difficulty": "medium",
+              "concept": "scope",
+              "misconceptions": [
+                {
+                  "concept": "scope",
+                  "detection": "Learner selects '5\\n5' thinking the global was changed",
+                  "explanation": "Assigning x = 5 inside the function creates a local variable - it does not modify the global x.",
+                  "hint": "Variables created inside a function are separate from those outside, even if they share the same name.",
+                  "remediationExerciseId": "ex-4-4-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-4-b",
+              "type": "fix_the_code",
+              "prompt": "This function tries to double a global variable but it's not working. Fix it to double the global counter.",
+              "buggy_code": "counter = 5\n\ndef double_counter():\n    counter = counter * 2\n\ndouble_counter()\nprint(counter)",
+              "solution_code": "counter = 5\n\ndef double_counter():\n    global counter\n    counter = counter * 2\n\ndouble_counter()\nprint(counter)",
+              "hints": [
+                "Without the global keyword, counter inside the function is treated as a new local variable.",
+                "Add 'global counter' at the start of the function body.",
+                "This tells Python to use the global counter variable."
+              ],
+              "difficulty": "hard",
+              "concept": "scope",
+              "misconceptions": [
+                {
+                  "concept": "scope",
+                  "detection": "Fix adds global but still gets UnboundLocalError",
+                  "explanation": "The global statement must come before any use of the variable. Put it as the very first line inside the function.",
+                  "hint": "Write 'global counter' on its own line before the assignment.",
+                  "remediationExerciseId": "ex-4-4-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-4-4-c",
+              "type": "write_code",
+              "prompt": "Define a function called greet_user that takes a name and prints 'Hello, name!'. Add a docstring that says 'Print a greeting for the given user.' Then call the function.",
+              "starter_code": "# your code here\n\ngreet_user('Maria')",
+              "test_cases": [
+                {
+                  "expected_stdout": "Hello, Maria!\n"
+                }
+              ],
+              "hints": [
+                "Define with def greet_user(name):",
+                "The docstring goes right after the def line, inside triple quotes.",
+                "The test already provides the function call."
+              ],
+              "difficulty": "easy",
+              "concept": "docstrings"
+            },
+            {
+              "id": "ex-4-4-d",
+              "type": "challenge",
+              "prompt": "Combine everything you've learned. Define three functions:\n\n1. get_input(msg) - takes a prompt message, returns int(input(msg))\n2. calculate_total(price, tax_rate) - returns price + (price * tax_rate / 100)\n3. main() - uses get_input to ask for price and tax rate, calls calculate_total, and prints the formatted total with 2 decimal places\n\nThen call main().",
+              "starter_code": "# your code here\n\nmain()",
+              "test_cases": [
+                {
+                  "expected_stdin": "100\n12\n",
+                  "expected_stdout": "Total: $112.00\n"
+                },
+                {
+                  "expected_stdin": "50\n8\n",
+                  "expected_stdout": "Total: $54.00\n"
+                }
+              ],
+              "hints": [
+                "get_input wraps int(input(msg)) so the caller doesn't need to convert manually.",
+                "calculate_total returns a float - use f'{value:.2f}' to format with 2 decimal places.",
+                "main() orchestrates the flow: prompt, compute, display."
+              ],
+              "difficulty": "hard",
+              "concept": "scope",
+              "misconceptions": [
+                {
+                  "concept": "scope",
+                  "detection": "Code defines functions but never calls main()",
+                  "explanation": "All three functions are defined but the program never starts - main() must be called to execute.",
+                  "hint": "Add a line at the bottom that calls main() with no arguments.",
+                  "remediationExerciseId": "ex-4-4-c"
                 }
               ]
             }

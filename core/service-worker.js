@@ -3,8 +3,9 @@
  * Cache-first strategy for offline learning after first install.
  */
 
-const APP_VERSION = '0.4.3';
-const CACHE_NAME = `pyknowledge-v${APP_VERSION}`;
+importScripts('/core/sw-version.js');
+
+const CACHE_NAME = `pyknowledge-v${SW_VERSION}`;
 
 const STATIC_ASSETS = [
   '/',
@@ -17,7 +18,6 @@ const STATIC_ASSETS = [
   '/core/storage.js',
   '/core/errors.js',
   '/core/version.js',
-  '/core/service-worker.js',
   '/app/dashboard/dashboard.js',
   '/app/lessons/lesson-viewer.js',
   '/app/quizzes/quiz-engine.js',
@@ -50,17 +50,7 @@ const STATIC_ASSETS = [
   '/content/quizzes.json',
   '/ui/assets/icon-192.png',
   '/ui/assets/icon-512.png',
-  '/ui/assets/logo.png',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/skulpt.min.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/sys.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/math.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/random.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/datetime.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/json.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/re.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/itertools.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/collections.js',
-  'https://cdn.jsdelivr.net/npm/skulpt@1.3.0/dist/string.js'
+  '/ui/assets/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -86,15 +76,13 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Network-first for API data (spec: API data → network-first),
-  // so live content wins when online and cache is the offline fallback.
+  // Network-first for API data
   if (url.pathname.includes('/api/')) {
     event.respondWith(networkFirst(event.request));
     return;
   }
 
-  // Cache-first for the application shell, CSS, JS, images and lesson
-  // content (spec: cache-first with versioning via CACHE_NAME).
+  // Cache-first for the application shell and assets
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
