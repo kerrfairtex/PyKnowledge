@@ -74,6 +74,8 @@ Thumbs.db
 *.temp
 *.swp
 *.swo
+# Built by Render build script (scripts/render-build.js)
+api-config.js
 fcc-reference/
 # Third-party educational resources (D3 viz scripts, external tutorials)
 educational_resources/
