@@ -44,8 +44,8 @@ services:
     repo: https://github.com/kerrfairtex/PyKnowledge
     branch: main
     autoDeploy: true
-    buildCommand: cd server && npm install --ignore-scripts
-    startCommand: cd server && npx prisma generate && node src/index.js
+    buildCommand: cd server && npm install
+    startCommand: cd server && node src/index.js
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
