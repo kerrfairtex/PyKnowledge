@@ -47,6 +47,24 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
     return;
   }
 
+  // Show a Start splash before revealing questions
+  main.innerHTML = `
+    <section class="quiz-container quiz-intro" aria-labelledby="quiz-title">
+      <h2 id="quiz-title">${escapeHtml(quiz.title)}</h2>
+      <p class="quiz-meta"><strong>${quiz.questions.length}</strong> questions &middot; Need 70% to pass</p>
+      <p>Take your time — you can retry if you don't pass on the first attempt.</p>
+      <button type="button" id="quiz-start-btn" class="btn btn-primary btn-lg">
+        Start Quiz
+      </button>
+      <a href="#/lesson/${escapeHtml(quizId)}" class="btn btn-secondary">Back to Lesson</a>
+    </section>`;
+
+  document.getElementById('quiz-start-btn').addEventListener('click', () => {
+    showQuizQuestions(main, quiz, lessonsData);
+  });
+}
+
+function showQuizQuestions(main, quiz, lessonsData) {
   const questionsHtml = quiz.questions.map((q, i) => {
     if (q.type === 'multiple-choice') {
       const options = q.options.map((opt, j) => `
