@@ -36,7 +36,8 @@ export default [
     files: ['core/service-worker.js'],
     languageOptions: {
       globals: {
-        ...globals.serviceworker
+        ...globals.serviceworker,
+        SW_VERSION: 'readonly'
       }
     }
   },
