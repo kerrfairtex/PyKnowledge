@@ -3,20 +3,25 @@
 #
 # After first deploy:
 #   1. Set CORS_ORIGIN on the API service to your static site URL
-#      (e.g. https://pyknowledge-client.onrender.com)
-#   2. If using Supabase instead of Render Postgres, update DATABASE_URL
-#      on the API service via Render dashboard
+#      (https://pyknowledge-client.onrender.com)
+#   2. Set API_URL on the static site to your API URL
+#      (https://pyknowledge-api.onrender.com)
+#   3. Run migrations: npm run db:migrate -w pyknowledge-server
 
 services:
   # ── Static frontend ─────────────────────────────────────────────
-  # Serves the root directory as-is (plain HTML/CSS/JS, no build).
-  # Hash-based routing (#/dashboard, #/lesson) works without rewrites.
+  # Serves root directory as-is (plain HTML/CSS/JS, no build step).
+  # Hash-based routing works without rewrites.
   - type: static_site
     name: pyknowledge-client
     repo: https://github.com/kerrfairtex/PyKnowledge
     branch: main
-    buildCommand: ""
-    publishDir: .
+    autoDeploy: true
+    buildCommand: node scripts/render-build.js
+    publishPath: .
+    envVars:
+      - key: API_URL
+        value: "" # ← set to https://pyknowledge-api.onrender.com after deploy
     headers:
       - path: /core/service-worker.js
         name: Cache-Control
@@ -38,6 +43,7 @@ services:
     runtime: node
     repo: https://github.com/kerrfairtex/PyKnowledge
     branch: main
+    autoDeploy: true
     buildCommand: npm ci && npm run db:generate -w pyknowledge-server
     startCommand: npm run start:server
     healthCheckPath: /api/health
@@ -55,10 +61,10 @@ services:
           name: pyknowledge-db
           property: connectionString
       - key: CORS_ORIGIN
-        value: "" # ← set to your static site URL after deploy
+        value: "" # ← set to https://pyknowledge-client.onrender.com after deploy
 
 databases:
   # ── PostgreSQL ──────────────────────────────────────────────────
   - name: pyknowledge-db
     plan: free
-    ipAllowList: [] # disallow external access (API-only via private network)
+    ipAllowList: [] # API-only via private network
