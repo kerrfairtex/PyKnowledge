@@ -34,7 +34,6 @@ jobs:
 
       - name: Run server tests
         run: npm run test:server
-        working-directory: ./server
 
   # Optional: Integration tests with PostgreSQL
   integration-tests:
