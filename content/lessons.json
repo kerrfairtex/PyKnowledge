@@ -1704,6 +1704,1852 @@
           ]
         }
       ]
+    },
+    {
+      "id": "module-5",
+      "title": "Data Structures",
+      "description": "Master Python's built-in data structures — lists, tuples, sets, and dictionaries — and learn powerful techniques like comprehensions and looping patterns.",
+      "prerequisite": "module-4",
+      "lessons": [
+        {
+          "id": "lesson-5-1",
+          "title": "List Methods",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use common list methods: append, extend, insert, remove, pop, index, count, sort, reverse\n2. Understand that list methods modify in place and return None\n3. Use a list as a stack (LIFO) with append and pop\n4. Use a list as a queue (FIFO) with collections.deque",
+                "code": null
+              },
+              {
+                "heading": "List Methods Overview",
+                "body": "Lists have many built-in methods. Unlike string methods, most list methods modify the list in-place and return None.",
+                "code": "fruits = ['orange', 'apple', 'pear', 'banana']\n\n# Add to end\nfruits.append('grape')\n\n# Insert at position\nfruits.insert(0, 'kiwi')  # insert at front\n\n# Remove first occurrence\nfruits.remove('apple')\n\n# Remove and return last item\nlast = fruits.pop()\nprint(last)       # 'grape'\nprint(fruits)     # ['kiwi', 'orange', 'pear', 'banana']"
+              },
+              {
+                "heading": "List as a Stack",
+                "body": "A stack follows last-in, first-out (LIFO). Use append() to push and pop() with no argument to pop.",
+                "code": "stack = [3, 4, 5]\nstack.append(6)\nstack.append(7)\nprint(stack)      # [3, 4, 5, 6, 7]\nprint(stack.pop())  # 7\nprint(stack)      # [3, 4, 5, 6]\nprint(stack.pop())  # 6"
+              },
+              {
+                "heading": "Sorting and Searching",
+                "body": "The sort() method sorts in place. The index() method finds the position of an item. count() counts occurrences.",
+                "code": "nums = [4, 2, 9, 1, 5]\nnums.sort()\nprint(nums)       # [1, 2, 4, 5, 9]\n\n# Reverse order\nnums.sort(reverse=True)\nprint(nums)       # [9, 5, 4, 2, 1]\n\n# Find index\nprint(nums.index(4))  # 2\n\n# Count occurrences\ndata = ['a', 'b', 'a', 'c', 'a']\nprint(data.count('a'))  # 3"
+              },
+              {
+                "heading": "Worked Example: Shopping List Manager",
+                "body": "Let's build a simple program that manages a shopping list using list methods.",
+                "code": "# Start with some items\ncart = ['rice', 'eggs', 'milk']\n\n# Add more items\ncart.append('bread')\ncart.append('fish')\n\n# Sort alphabetically\ncart.sort()\nprint('Sorted cart:', cart)\n\n# Remove the first item after sorting\nremoved = cart.pop(0)\nprint(f'Removed: {removed}')\nprint(f'Remaining: {cart}')\n\n# Check if 'milk' is in the list\nif 'milk' in cart:\n    idx = cart.index('milk')\n    print(f'Milk is at position {idx}')"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-5-1-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "nums = [1, 3, 2]\nnums.append(4)\nnums.sort()\nnums.pop()\nprint(nums)",
+              "options": [
+                "[1, 2, 3]",
+                "[1, 2, 3, 4]",
+                "[1, 3, 2, 4]",
+                "[4, 3, 2, 1]"
+              ],
+              "answer": "[1, 2, 3]",
+              "explanation": "append(4) adds 4 making [1,3,2,4]; sort() makes [1,2,3,4]; pop() removes and returns 4, leaving [1,2,3].",
+              "difficulty": "easy",
+              "concept": "list-methods",
+              "misconceptions": [
+                {
+                  "concept": "list-methods",
+                  "detection": "Learner selects [1,2,3,4] forgetting that pop() removes the last element",
+                  "explanation": "pop() without an argument removes and returns the last item of the list.",
+                  "hint": "Trace each step: append adds, sort reorders, pop removes the last one.",
+                  "remediationExerciseId": "ex-5-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-5-1-b",
+              "type": "fix_the_code",
+              "prompt": "This code should add 10 to the end, then insert 0 at the front, then remove 5. Fix it.",
+              "buggy_code": "nums = [1, 5, 3]\nnums.append(10)\nnums.insert(1, 0)\nnums.remove()\nprint(nums)",
+              "solution_code": "nums = [1, 5, 3]\nnums.append(10)\nnums.insert(0, 0)\nnums.remove(5)\nprint(nums)",
+              "hints": [
+                "insert(0, value) inserts at the front. insert(1, value) inserts at position 1.",
+                "remove() requires a value argument — tell it which value to remove."
+              ],
+              "difficulty": "easy",
+              "concept": "list-methods",
+              "misconceptions": [
+                {
+                  "concept": "list-methods",
+                  "detection": "Fix still uses insert(1, 0) instead of insert(0, 0)",
+                  "explanation": "Insert positions are zero-indexed. insert(0, x) puts x at the very front.",
+                  "hint": "To insert at the front, the index must be 0.",
+                  "remediationExerciseId": "ex-5-1-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-5-1-c",
+              "type": "write_code",
+              "prompt": "Define a function called stack_demo that takes a list of numbers. Use it as a stack: push 99 and 100, then pop two items. Return the final stack.",
+              "starter_code": "def stack_demo(stack):\n    # your code here\n    return stack\n\nprint(stack_demo([1, 2, 3]))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[1, 2, 3]\n"
+                }
+              ],
+              "hints": [
+                "Use append() to push items onto the stack.",
+                "Use pop() with no argument to remove from the top.",
+                "The function should return the modified stack."
+              ],
+              "difficulty": "medium",
+              "concept": "list-methods"
+            },
+            {
+              "id": "ex-5-1-d",
+              "type": "challenge",
+              "prompt": "Write code that creates a list of names: ['Zara', 'Mia', 'Ali', 'Ben', 'Mia', 'Eve']. Sort it, then remove the first occurrence of 'Mia'. Count how many times 'Mia' appears after removal and print that count.",
+              "starter_code": "names = ['Zara', 'Mia', 'Ali', 'Ben', 'Mia', 'Eve']\n# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "1\n"
+                }
+              ],
+              "hints": [
+                "Sort with .sort() first.",
+                "Use .remove('Mia') to remove the first occurrence.",
+                "Use .count('Mia') to count remaining occurrences."
+              ],
+              "difficulty": "medium",
+              "concept": "list-methods",
+              "misconceptions": [
+                {
+                  "concept": "list-methods",
+                  "detection": "Code removes Mia before sorting, changing position semantics",
+                  "explanation": "The order matters. Sort first, then remove — to match expected output.",
+                  "hint": "Sort the list BEFORE removing anything.",
+                  "remediationExerciseId": "ex-5-1-c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-5-2",
+          "title": "List Comprehensions",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Write list comprehensions to create lists compactly\n2. Add conditional filtering to comprehensions\n3. Write nested list comprehensions\n4. Use the del statement to remove items by index or slice",
+                "code": null
+              },
+              {
+                "heading": "Basic List Comprehensions",
+                "body": "A list comprehension provides a concise way to create lists. It consists of brackets containing an expression followed by a for clause.",
+                "code": "# Traditional way\nsquares = []\nfor x in range(10):\n    squares.append(x**2)\nprint(squares)\n\n# Same with a list comprehension\nsquares = [x**2 for x in range(10)]\nprint(squares)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"
+              },
+              {
+                "heading": "Conditional Comprehensions",
+                "body": "You can add an if clause at the end to filter items.",
+                "code": "# Even squares only\neven_squares = [x**2 for x in range(10) if x % 2 == 0]\nprint(even_squares)  # [0, 4, 16, 36, 64]\n\n# Convert strings to uppercase\nwords = ['tawi', 'tawi', 'python']\nupper = [w.upper() for w in words]\nprint(upper)  # ['TAWI', 'TAWI', 'PYTHON']"
+              },
+              {
+                "heading": "Nested List Comprehensions",
+                "body": "The initial expression in a comprehension can be any expression, including another list comprehension.",
+                "code": "# Create a 3x3 matrix\nmatrix = [[j for j in range(3)] for i in range(3)]\nprint(matrix)  # [[0, 1, 2], [0, 1, 2], [0, 1, 2]]\n\n# Flatten a matrix\nflat = [num for row in matrix for num in row]\nprint(flat)  # [0, 1, 2, 0, 1, 2, 0, 1, 2]"
+              },
+              {
+                "heading": "The del Statement",
+                "body": "The del statement removes items from a list by index or slice, or clears the list entirely.",
+                "code": "a = [-1, 1, 66.25, 333, 333, 1234.5]\ndel a[0]       # remove first item\nprint(a)       # [1, 66.25, 333, 333, 1234.5]\ndel a[2:4]     # remove items at indices 2-3\nprint(a)       # [1, 66.25, 1234.5]\ndel a[:]       # clear the list\nprint(a)       # []"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-5-2-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "result = [n * 2 for n in range(5)]\nprint(result)",
+              "options": [
+                "[0, 2, 4, 6, 8]",
+                "[2, 4, 6, 8, 10]",
+                "[1, 2, 3, 4, 5]",
+                "[0, 1, 2, 3, 4]"
+              ],
+              "answer": "[0, 2, 4, 6, 8]",
+              "explanation": "range(5) gives 0,1,2,3,4. Each gets multiplied by 2: 0,2,4,6,8.",
+              "difficulty": "easy",
+              "concept": "list-comprehensions",
+              "misconceptions": [
+                {
+                  "concept": "list-comprehensions",
+                  "detection": "Learner selects [2,4,6,8,10] starting from 1 instead of 0",
+                  "explanation": "range(5) starts at 0, not 1.",
+                  "hint": "Remember that range(5) produces 0, 1, 2, 3, 4 — starting from zero.",
+                  "remediationExerciseId": "ex-5-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-5-2-b",
+              "type": "write_code",
+              "prompt": "Use a list comprehension to create a list of squares for numbers 1 through 5. Print the result.",
+              "starter_code": "squares = [n**2 for n in range(1, 6)]\nprint(squares)",
+              "test_cases": [
+                {
+                  "expected_stdout": "[1, 4, 9, 16, 25]\n"
+                }
+              ],
+              "hints": [
+                "Use range(1, 6) to get 1 through 5.",
+                "Use n**2 inside the comprehension."
+              ],
+              "difficulty": "easy",
+              "concept": "list-comprehensions"
+            },
+            {
+              "id": "ex-5-2-c",
+              "type": "write_code",
+              "prompt": "Use a list comprehension with a condition to create a list of all numbers from 0 to 20 that are divisible by 3. Print the result.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "[0, 3, 6, 9, 12, 15, 18]\n"
+                }
+              ],
+              "hints": [
+                "Use for n in range(21)",
+                "Add if n % 3 == 0 at the end"
+              ],
+              "difficulty": "medium",
+              "concept": "list-comprehensions"
+            },
+            {
+              "id": "ex-5-2-d",
+              "type": "challenge",
+              "prompt": "Use a list comprehension to create a list of tuples (x, x**2) for x from 0 to 4. Print the result.",
+              "starter_code": "# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "[(0, 0), (1, 1), (2, 4), (3, 9), (4, 16)]\n"
+                }
+              ],
+              "hints": [
+                "The expression in the comprehension should be a tuple: (x, x**2)",
+                "Use for x in range(5)"
+              ],
+              "difficulty": "hard",
+              "concept": "list-comprehensions",
+              "misconceptions": [
+                {
+                  "concept": "list-comprehensions",
+                  "detection": "Code writes [(x, x**2)] instead of (x, x**2)",
+                  "explanation": "The expression should be a tuple (x, x**2), not a list containing a tuple.",
+                  "hint": "Use parentheses for the tuple: (x, x**2) for x in range(5)",
+                  "remediationExerciseId": "ex-5-2-c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-5-3",
+          "title": "Tuples, Sets, and Dictionaries",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Create and use tuples for immutable sequences\n2. Use sets for unique collections with union, intersection, difference\n3. Work with dictionaries — keys, values, and items\n4. Choose the right data structure for the task",
+                "code": null
+              },
+              {
+                "heading": "Tuples",
+                "body": "A tuple is an immutable sequence of values. Use them when the data shouldn't change. Tuples can be used as dictionary keys (unlike lists).",
+                "code": "# Creating tuples\nt = (1, 2, 3)\nsingle = (42,)  # comma required for single-element tuple\n\n# Tuple unpacking\npoint = (3, 4)\nx, y = point\nprint(f'x={x}, y={y}')  # x=3, y=4\n\n# Tuples are immutable\n# t[0] = 99  # TypeError!"
+              },
+              {
+                "heading": "Sets",
+                "body": "A set is an unordered collection with no duplicate elements. Useful for membership testing, eliminating duplicates, and set operations.",
+                "code": "# Creating sets\nbasket = {'apple', 'orange', 'apple', 'pear', 'orange'}\nprint(basket)  # {'orange', 'pear', 'apple'} -- duplicates removed\n\n# Membership testing\nprint('orange' in basket)  # True\nprint('grape' in basket)   # False\n\n# Set operations\na = set('abracadabra')\nb = set('alacazam')\nprint(a - b)  # letters in a but not in b: {'r', 'd', 'b'}\nprint(a | b)  # letters in either: {'a', 'c', 'r', 'd', 'b', 'm', 'z', 'l'}\nprint(a & b)  # letters in both: {'a', 'c'}\nprint(a ^ b)  # letters in either but not both: {'r', 'd', 'b', 'm', 'z', 'l'}"
+              },
+              {
+                "heading": "Dictionaries",
+                "body": "A dictionary maps keys to values. Keys must be unique and immutable (strings, numbers, tuples are fine; lists are not).",
+                "code": "# Creating dictionaries\ntel = {'jack': 4098, 'sape': 4139}\ntel['guido'] = 4127\nprint(tel)       # {'jack': 4098, 'sape': 4139, 'guido': 4127}\nprint(tel['jack'])  # 4098\n\n# Get all keys, values, items\nprint(list(tel.keys()))    # ['jack', 'sape', 'guido']\nprint(list(tel.values()))  # [4098, 4139, 4127]\nprint(list(tel.items()))   # [('jack', 4098), ('sape', 4139), ('guido', 4127)]\n\n# Check if key exists\nprint('guido' in tel)  # True\nprint('jack' not in tel)  # False"
+              },
+              {
+                "heading": "Worked Example: Word Counter",
+                "body": "Let's use a dictionary to count how many times each word appears in a sentence.",
+                "code": "sentence = 'the cat and the dog and the bird'\nwords = sentence.split()\ncount = {}\n\nfor word in words:\n    if word in count:\n        count[word] += 1\n    else:\n        count[word] = 1\n\nprint(count)\n# {'the': 3, 'cat': 1, 'and': 2, 'dog': 1, 'bird': 1}\n\n# Alternative using dict.get()\ncount2 = {}\nfor word in words:\n    count2[word] = count2.get(word, 0) + 1\nprint(count2)  # same result"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-5-3-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)",
+              "options": [
+                "{1, 2, 3, 4}",
+                "{2, 3}",
+                "{1, 4}",
+                "{1, 2, 3}"
+              ],
+              "answer": "{1, 2, 3, 4}",
+              "explanation": "The | operator returns the union — all elements that appear in either set.",
+              "difficulty": "easy",
+              "concept": "sets",
+              "misconceptions": [
+                {
+                  "concept": "sets",
+                  "detection": "Learner selects {2, 3} confusing intersection with union",
+                  "explanation": "| is union (all elements), & is intersection (common elements only).",
+                  "hint": "The | operator means union — combine all unique elements from both sets.",
+                  "remediationExerciseId": "ex-5-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-5-3-b",
+              "type": "write_code",
+              "prompt": "Create a dictionary called student with keys 'name', 'age', and 'grade', set to your own values. Print the value of 'name'.",
+              "starter_code": "student = {'name': 'Maria', 'age': 20, 'grade': 'A'}\nprint(student['name'])",
+              "test_cases": [
+                {
+                  "expected_stdout": "Maria\n"
+                }
+              ],
+              "hints": [
+                "The starter code is already correct — just run it."
+              ],
+              "difficulty": "easy",
+              "concept": "dictionaries"
+            },
+            {
+              "id": "ex-5-3-c",
+              "type": "write_code",
+              "prompt": "Write a function called find_common that takes two lists and returns a sorted list of elements they have in common (using sets).",
+              "starter_code": "def find_common(a, b):\n    return sorted(list(set(a) & set(b)))\n\nprint(find_common([1, 2, 3, 4], [3, 4, 5, 6]))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[3, 4]\n"
+                }
+              ],
+              "hints": [
+                "Convert both lists to sets.",
+                "Use the & operator for intersection.",
+                "Convert back to list and sort."
+              ],
+              "difficulty": "medium",
+              "concept": "sets"
+            },
+            {
+              "id": "ex-5-3-d",
+              "type": "challenge",
+              "prompt": "Write code that takes the sentence 'the quick brown fox jumps over the lazy dog' and counts how many times each word appears. Use a dictionary. Then print the count for the word 'the'.",
+              "starter_code": "sentence = 'the quick brown fox jumps over the lazy dog'\n# your code here\nprint(count['the'])",
+              "test_cases": [
+                {
+                  "expected_stdout": "2\n"
+                }
+              ],
+              "hints": [
+                "Split the sentence with .split()",
+                "Loop through each word and update the dictionary.",
+                "Use dict.get(word, 0) + 1 to simplify the counting logic."
+              ],
+              "difficulty": "hard",
+              "concept": "dictionaries",
+              "misconceptions": [
+                {
+                  "concept": "dictionaries",
+                  "detection": "Code tries to access count['the'] before the dictionary is populated",
+                  "explanation": "The count dictionary must be built before accessing it. Make sure the loop runs first.",
+                  "hint": "Initialize count = {} before the loop, then populate it, then print.",
+                  "remediationExerciseId": "ex-5-3-b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-5-4",
+          "title": "Looping Techniques",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use enumerate() to get index and value while looping\n2. Use zip() to loop over multiple sequences in parallel\n3. Use reversed() and sorted() on any iterable\n4. Use .items(), .keys(), .values() with dictionaries\n5. Use any() and all() for condition checking",
+                "code": null
+              },
+              {
+                "heading": "Enumerate — Get Index and Value",
+                "body": "When looping through a sequence, use enumerate() to get both the position index and the value at the same time.",
+                "code": "colors = ['red', 'green', 'blue']\nfor i, color in enumerate(colors):\n    print(f'{i}: {color}')\n# 0: red\n# 1: green\n# 2: blue"
+              },
+              {
+                "heading": "Zip — Loop Over Multiple Sequences",
+                "body": "Use zip() to combine multiple sequences and loop through them in parallel.",
+                "code": "names = ['Alice', 'Bob', 'Charlie']\nscores = [85, 92, 78]\n\nfor name, score in zip(names, scores):\n    print(f'{name}: {score}')\n# Alice: 85\n# Bob: 92\n# Charlie: 78"
+              },
+              {
+                "heading": "Reversed and Sorted",
+                "body": "Use reversed() to loop in reverse order and sorted() to loop in sorted order — neither modifies the original.",
+                "code": "nums = [3, 1, 4, 1, 5, 9]\n\nfor n in sorted(nums):\n    print(n, end=' ')   # 1 1 3 4 5 9\n\nprint()\nfor n in reversed(nums):\n    print(n, end=' ')   # 9 5 1 4 1 3"
+              },
+              {
+                "heading": "Dictionary Looping",
+                "body": "Loop through dictionary keys, values, or key-value pairs using .items(), .keys(), or .values().",
+                "code": "grades = {'Math': 90, 'Science': 85, 'English': 88}\n\nfor subject, grade in grades.items():\n    print(f'{subject}: {grade}')\n\n# Keys only:\nfor subject in grades.keys():\n    print(subject)\n\n# Values only:\nfor grade in grades.values():\n    print(grade)"
+              },
+              {
+                "heading": "Worked Example: Grade Report",
+                "body": "Let's combine these techniques to build a grade report from two parallel lists.",
+                "code": "subjects = ['Math', 'Science', 'English', 'History']\ngrades = [90, 85, 88, 92]\n\nprint('Grade Report')\nprint('=' * 30)\n\n# Use zip to pair subjects with grades\nfor i, (subject, grade) in enumerate(zip(subjects, grades), 1):\n    print(f'{i}. {subject}: {grade}')\n\n# Calculate average using all() and sum()/len()\naverage = sum(grades) / len(grades)\nprint(f'\\nAverage: {average:.1f}')\n\n# Check if all grades passed (>= 75)\nall_passed = all(g >= 75 for g in grades)\nprint(f'All passed: {all_passed}')"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-5-4-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "names = ['Ana', 'Ben', 'Eli']\nfor i, name in enumerate(names):\n    print(i, name)",
+              "options": [
+                "0 Ana\\n1 Ben\\n2 Eli",
+                "1 Ana\\n2 Ben\\n3 Eli",
+                "Ana\\nBen\\nEli",
+                "0: Ana\\n1: Ben\\n2: Eli"
+              ],
+              "answer": "0 Ana\\n1 Ben\\n2 Eli",
+              "explanation": "enumerate() returns (index, value) starting from 0 by default.",
+              "difficulty": "easy",
+              "concept": "enumerate",
+              "misconceptions": [
+                {
+                  "concept": "enumerate",
+                  "detection": "Learner selects starting at 1 instead of 0",
+                  "explanation": "enumerate() starts counting from 0 by default.",
+                  "hint": "enumerate starts at 0. To start at 1, use enumerate(names, start=1).",
+                  "remediationExerciseId": "ex-5-4-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-5-4-b",
+              "type": "write_code",
+              "prompt": "Write a function called combine that takes two lists (names and ages) and prints 'name is age years old' for each pair.",
+              "starter_code": "def combine(names, ages):\n    for name, age in zip(names, ages):\n        print(f'{name} is {age} years old')\n\ncombine(['Ali', 'Beth'], [22, 25])",
+              "test_cases": [
+                {
+                  "expected_stdout": "Ali is 22 years old\nBeth is 25 years old\n"
+                }
+              ],
+              "hints": [
+                "Use zip(names, ages) to pair them.",
+                "Use an f-string for the output format."
+              ],
+              "difficulty": "easy",
+              "concept": "zip"
+            },
+            {
+              "id": "ex-5-4-c",
+              "type": "write_code",
+              "prompt": "Write a function called all_positive that takes a list of numbers and returns True if all numbers are greater than 0.",
+              "starter_code": "def all_positive(nums):\n    return all(n > 0 for n in nums)\n\nprint(all_positive([1, 5, 3]))\nprint(all_positive([1, -2, 3]))",
+              "test_cases": [
+                {
+                  "expected_stdout": "True\nFalse\n"
+                }
+              ],
+              "hints": [
+                "Use all() with a generator expression.",
+                "The condition inside should be n > 0."
+              ],
+              "difficulty": "medium",
+              "concept": "any-all"
+            },
+            {
+              "id": "ex-5-4-d",
+              "type": "challenge",
+              "prompt": "Given two lists — subjects and scores — print each subject and its score sorted alphabetically by subject name. Use sorted() and zip().",
+              "starter_code": "subjects = ['Math', 'Science', 'English']\nscores = [90, 85, 88]\n# your code here",
+              "test_cases": [
+                {
+                  "expected_stdout": "English: 88\nMath: 90\nScience: 85\n"
+                }
+              ],
+              "hints": [
+                "Use sorted(zip(subjects, scores)) to sort by subject.",
+                "Unpack name and score in the loop."
+              ],
+              "difficulty": "hard",
+              "concept": "sorted-zip",
+              "misconceptions": [
+                {
+                  "concept": "sorted-zip",
+                  "detection": "Code sorts subjects and scores separately",
+                  "explanation": "Sorting them separately breaks the pairing. Zip first, then sort the zipped pairs.",
+                  "hint": "Zip the lists together first, then sort the result.",
+                  "remediationExerciseId": "ex-5-4-c"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-6",
+      "title": "Modules and Imports",
+      "description": "Learn how to organize code across multiple files using modules, import code from the standard library, and create your own reusable packages.",
+      "prerequisite": "module-5",
+      "lessons": [
+        {
+          "id": "lesson-6-1",
+          "title": "Creating and Importing Modules",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Create a Python module (a .py file)\n2. Import a module using import\n3. Import specific names with from...import\n4. Use the module's private namespace\n5. Check the __name__ attribute of a module",
+                "code": null
+              },
+              {
+                "heading": "What is a Module?",
+                "body": "A module is simply a file containing Python definitions and statements. The filename is the module name with .py appended. Any Python file can be imported as a module.",
+                "code": "# Save this as fibo.py\n# Fibonacci numbers module\n\ndef fib(n):\n    \"\"\"Write Fibonacci series up to n.\"\"\"\n    a, b = 0, 1\n    while a < n:\n        print(a, end=' ')\n        a, b = b, a + b\n    print()\n\ndef fib2(n):\n    \"\"\"Return list of Fibonacci numbers up to n.\"\"\"\n    result = []\n    a, b = 0, 1\n    while a < n:\n        result.append(a)\n        a, b = b, a + b\n    return result"
+              },
+              {
+                "heading": "Importing a Module",
+                "body": "Use import to bring a module into your program. Access its contents with dot notation.",
+                "code": "import fibo\n\nfibo.fib(1000)  # 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987\nprint(fibo.fib2(100))  # [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]\nprint(fibo.__name__)  # 'fibo'\n\n# Assign to a local name for convenience\nfib = fibo.fib\nfib(500)  # 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377"
+              },
+              {
+                "heading": "From...Import",
+                "body": "Use from module import name to import specific names directly into your namespace, avoiding dot notation.",
+                "code": "from fibo import fib, fib2\n\nfib(500)  # no need to write fibo.fib\n\n# Import all names (use sparingly)\n# from fibo import *\n\n# Each module has its own private namespace\n# Variables defined inside the module don't clash with yours"
+              },
+              {
+                "heading": "Worked Example: Using the math Module",
+                "body": "Let's import and use the math module from the standard library for some calculations.",
+                "code": "import math\n\nprint(math.sqrt(16))        # 4.0\nprint(math.pi)              # 3.14159...\nprint(math.floor(3.7))      # 3\nprint(math.ceil(3.2))       # 4\nprint(math.factorial(5))    # 120\n\n# Using from...import for commonly used names\nfrom math import sin, cos, radians\n\nangle = radians(90)\nprint(f'sin(90) = {sin(angle):.1f}')  # sin(90) = 1.0"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-6-1-a",
+              "type": "predict_output",
+              "prompt": "If a module named tools.py defines a function greet(name), which import lets you call greet('Ana') directly?",
+              "code": "# Which import?\n# A: import tools\n# B: from tools import greet\n# C: from tools import *\n# D: Both B and C",
+              "options": [
+                "A only",
+                "B only",
+                "C only",
+                "Both B and C"
+              ],
+              "answer": "Both B and C",
+              "explanation": "Both from tools import greet and from tools import * make greet() available directly. import tools requires tools.greet().",
+              "difficulty": "easy",
+              "concept": "imports",
+              "misconceptions": [
+                {
+                  "concept": "imports",
+                  "detection": "Learner selects B only, forgetting about import *",
+                  "explanation": "from tools import * also imports all public names from the module.",
+                  "hint": "Both from...import and from...import * put the name in your namespace.",
+                  "remediationExerciseId": "ex-6-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-6-1-b",
+              "type": "write_code",
+              "prompt": "Import the math module and use sqrt() to print the square root of 144.",
+              "starter_code": "import math\nprint(math.sqrt(144))",
+              "test_cases": [
+                {
+                  "expected_stdout": "12.0\n"
+                }
+              ],
+              "hints": [
+                "import math gives you access to math.sqrt().",
+                "math.sqrt(144) returns 12.0."
+              ],
+              "difficulty": "easy",
+              "concept": "imports"
+            },
+            {
+              "id": "ex-6-1-c",
+              "type": "write_code",
+              "prompt": "From the math module, import pi and floor. Print pi rounded down (floored).",
+              "starter_code": "from math import pi, floor\nprint(floor(pi))",
+              "test_cases": [
+                {
+                  "expected_stdout": "3\n"
+                }
+              ],
+              "hints": [
+                "from math import pi, floor",
+                "Use floor(pi) to round down."
+              ],
+              "difficulty": "easy",
+              "concept": "from-import"
+            },
+            {
+              "id": "ex-6-1-d",
+              "type": "challenge",
+              "prompt": "Import the random module. Use random.randint() to generate a random integer between 1 and 10 (inclusive). Print it. Then import randint directly and print another random number.",
+              "starter_code": "import random\nprint(random.randint(1, 10))\nfrom random import randint\nprint(randint(1, 10))",
+              "test_cases": [
+                {
+                  "expected_stdout": ""
+                }
+              ],
+              "hints": [
+                "randint(a, b) returns a random integer N such that a <= N <= b.",
+                "Both import styles work."
+              ],
+              "difficulty": "medium",
+              "concept": "imports"
+            }
+          ]
+        },
+        {
+          "id": "lesson-6-2",
+          "title": "Packages and Module Organization",
+          "duration": "15 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Organize modules into packages using directories\n2. Create an __init__.py to initialize a package\n3. Import from subpackages\n4. Understand how Python finds modules",
+                "code": null
+              },
+              {
+                "heading": "What is a Package?",
+                "body": "A package is a way of organizing related modules into a directory hierarchy. Any directory with an __init__.py file is treated as a package.",
+                "code": "# Directory structure:\n# sound/                          # top-level package\n#     __init__.py                # marks directory as package\n#     formats/                   # subpackage\n#         __init__.py\n#         wavread.py\n#         wavwrite.py\n#         aiffread.py\n#     effects/                   # subpackage\n#         __init__.py\n#         echo.py\n#         surround.py\n#         reverse.py\n\n# Importing from the package:\n# import sound.effects.echo\n# from sound.effects import echo"
+              },
+              {
+                "heading": "The Module Search Path",
+                "body": "When you import a module, Python searches in this order:\n1. The directory of the current script\n2. Directories in PYTHONPATH environment variable\n3. The standard library directories\n4. Site-packages directory (for third-party packages)\n\nThe sys.path list shows all search paths.",
+                "code": "import sys\nprint(sys.path)\n# ['', '/usr/lib/python3.14', '/usr/lib/python3.14/lib-dynload', ...]"
+              },
+              {
+                "heading": "Running a Module as a Script",
+                "body": "Every module has a __name__ attribute. When run directly, __name__ is '__main__'. When imported, __name__ is the module name. Use this for testing.",
+                "code": "# In mymodule.py:\ndef main():\n    print('Running directly!')\n\nif __name__ == '__main__':\n    main()  # runs only when executed directly\n\n# When imported:\n# import mymodule  # nothing runs automatically"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-6-2-a",
+              "type": "predict_output",
+              "prompt": "What is the value of __name__ when a Python file is run directly?",
+              "options": [
+                "The filename",
+                "'__main__'",
+                "The module name",
+                "'__module__'"
+              ],
+              "answer": "'__main__'",
+              "explanation": "When a file is run directly, Python sets __name__ to '__main__'. When imported, it's set to the module name.",
+              "difficulty": "easy",
+              "concept": "name-main",
+              "misconceptions": [
+                {
+                  "concept": "name-main",
+                  "detection": "Learner selects 'the filename'",
+                  "explanation": "__name__ is always '__main__' when running directly, regardless of the filename.",
+                  "hint": "Run a file directly: __name__ is '__main__'. Import it: __name__ is the module name.",
+                  "remediationExerciseId": "ex-6-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-6-2-b",
+              "type": "write_code",
+              "prompt": "Write a print statement that only runs when the file is executed directly (not when imported).",
+              "starter_code": "if __name__ == '__main__':\n    print('Running standalone')",
+              "test_cases": [
+                {
+                  "expected_stdout": "Running standalone\n"
+                }
+              ],
+              "hints": [
+                "The code after if __name__ == '__main__': runs only when the file is executed directly."
+              ],
+              "difficulty": "medium",
+              "concept": "name-main"
+            }
+          ]
+        },
+        {
+          "id": "lesson-6-3",
+          "title": "Exploring the Standard Library",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use the math module for mathematical operations\n2. Use the random module for generating random values\n3. Use the statistics module for basic statistics\n4. Use datetime for working with dates and times\n5. Use os.path for file path operations",
+                "code": null
+              },
+              {
+                "heading": "math — Mathematical Functions",
+                "body": "The math module provides access to mathematical functions and constants.",
+                "code": "import math\n\n# Constants\nprint(math.pi)      # 3.141592653589793\nprint(math.e)       # 2.718281828459045\n\n# Common functions\nprint(math.sqrt(25))     # 5.0\nprint(math.pow(2, 10))   # 1024.0\nprint(math.log(100, 10)) # 2.0\nprint(math.sin(math.pi/2))  # 1.0\nprint(math.degrees(math.pi)) # 180.0\nprint(math.radians(180))    # 3.14159..."
+              },
+              {
+                "heading": "random — Generate Random Values",
+                "body": "The random module is used for generating pseudo-random numbers, picking random items, and shuffling sequences.",
+                "code": "import random\n\n# Random float between 0 and 1\nprint(random.random())\n\n# Random integer between 1 and 6 (inclusive)\ndie = random.randint(1, 6)\n\n# Random choice from a list\ncolors = ['red', 'green', 'blue']\nprint(random.choice(colors))\n\n# Shuffle a list in place\ndeck = list(range(1, 53))\nrandom.shuffle(deck)\nprint(deck[:5])  # first 5 after shuffle\n\n# Sample without replacement\nprint(random.sample(range(100), 5))  # 5 unique numbers"
+              },
+              {
+                "heading": "statistics and datetime",
+                "body": "The statistics module has basic statistical functions. The datetime module handles dates and times.",
+                "code": "import statistics\ndata = [2.75, 1.75, 1.25, 0.25, 0.5, 1.25, 3.5]\nprint(statistics.mean(data))     # 1.607...\nprint(statistics.median(data))   # 1.25\nprint(statistics.stdev(data))    # 1.119...\n\nfrom datetime import date, timedelta\ntoday = date.today()\nprint(today)                     # 2026-08-22\nprint(today.year)                # 2026\n\n# Add days\nfuture = today + timedelta(days=7)\nprint(future)                    # 2026-08-29"
+              },
+              {
+                "heading": "Worked Example: Math Quiz Game",
+                "body": "Let's combine random and math to create a simple multiplication quiz.",
+                "code": "import random\n\ndef quiz():\n    score = 0\n    for i in range(5):\n        a = random.randint(2, 12)\n        b = random.randint(2, 12)\n        answer = a * b\n        \n        print(f'Question {i+1}: {a} x {b} = ?')\n        guess = int(input('Your answer: '))\n        \n        if guess == answer:\n            print('Correct!')\n            score += 1\n        else:\n            print(f'Sorry, the answer is {answer}')\n    \n    print(f'Final score: {score}/5')\n\n# Run the quiz\nquiz()"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-6-3-a",
+              "type": "predict_output",
+              "prompt": "What does random.randint(1, 3) return?",
+              "options": [
+                "A random number: 1, 2, or 3",
+                "A random number: 1 or 3 only",
+                "Always 2",
+                "A random number: 0, 1, 2, or 3"
+              ],
+              "answer": "A random number: 1, 2, or 3",
+              "explanation": "randint(a, b) returns a random integer N where a <= N <= b. So randint(1,3) returns 1, 2, or 3.",
+              "difficulty": "easy",
+              "concept": "random",
+              "misconceptions": [
+                {
+                  "concept": "random",
+                  "detection": "Learner thinks randint is like range, excluding the upper bound",
+                  "explanation": "randint INCLUDES both endpoints. randint(1,3) can return 1, 2, or 3.",
+                  "hint": "randint(a, b) includes both a and b in the possible values.",
+                  "remediationExerciseId": "ex-6-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-6-3-b",
+              "type": "write_code",
+              "prompt": "Use the math module to print the value of pi squared (pi * pi).",
+              "starter_code": "import math\nprint(math.pi ** 2)",
+              "test_cases": [
+                {
+                  "expected_stdout": "9.869604401089358\n"
+                }
+              ],
+              "hints": [
+                "math.pi gives the constant pi.",
+                "Use ** 2 or math.pow() to square it."
+              ],
+              "difficulty": "easy",
+              "concept": "math"
+            },
+            {
+              "id": "ex-6-3-c",
+              "type": "write_code",
+              "prompt": "Use the random module to randomly choose a winner from the list ['Ali', 'Beth', 'Carlos', 'Dina'] and print the winner's name.",
+              "starter_code": "import random\nwinners = ['Ali', 'Beth', 'Carlos', 'Dina']\nprint(random.choice(winners))",
+              "test_cases": [
+                {
+                  "expected_stdout": ""
+                }
+              ],
+              "hints": [
+                "random.choice(seq) returns a random element from a non-empty sequence."
+              ],
+              "difficulty": "easy",
+              "concept": "random"
+            },
+            {
+              "id": "ex-6-3-d",
+              "type": "challenge",
+              "prompt": "Write code that generates 5 random integers between 1 and 100, stores them in a list, then prints the mean (average) using the statistics module.",
+              "starter_code": "import random\nimport statistics\n\nnums = [random.randint(1, 100) for _ in range(5)]\nprint(statistics.mean(nums))",
+              "test_cases": [
+                {
+                  "expected_stdout": ""
+                }
+              ],
+              "hints": [
+                "Use random.randint(1, 100) in a list comprehension.",
+                "Use statistics.mean() to calculate the average."
+              ],
+              "difficulty": "medium",
+              "concept": "random-statistics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-7",
+      "title": "Input and Output",
+      "description": "Go beyond basic print() — master f-strings, file I/O, and JSON serialization for real-world data handling.",
+      "prerequisite": "module-6",
+      "lessons": [
+        {
+          "id": "lesson-7-1",
+          "title": "Fancier Output Formatting",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Format strings using f-strings with expressions\n2. Use format specifiers for alignment, padding, and precision\n3. Use str.format() for more complex formatting\n4. Distinguish between str() and repr()",
+                "code": null
+              },
+              {
+                "heading": "Formatted String Literals (f-strings)",
+                "body": "f-strings let you embed Python expressions directly inside string literals. Just prefix with f or F.",
+                "code": "name = 'Maria'\nage = 20\nprint(f'Hello, {name}! You are {age} years old.')\n# Hello, Maria! You are 20 years old.\n\n# Expressions work too\nprint(f'In 5 years, you will be {age + 5}.')\n# In 5 years, you will be 25."
+              },
+              {
+                "heading": "Format Specifiers",
+                "body": "You can control formatting with : followed by format specifiers inside the curly braces.",
+                "code": "price = 49.5\nprint(f'Price: ${price:.2f}')  # Price: $49.50 (2 decimal places)\n\npercent = 0.4967\nprint(f'Progress: {percent:.1%}')  # Progress: 49.7%\n\n# Padding and alignment\nfor i in range(1, 6):\n    print(f'Number {i:>5}')  # right-align in 5-char field\n# Number     1\n# Number     2\n# Number     3\n# Number     4\n# Number     5"
+              },
+              {
+                "heading": "The str.format() Method",
+                "body": "The older str.format() method uses { and } as placeholders and passes values as arguments.",
+                "code": "yes_votes = 42572654\ntotal_votes = 85705149\npercent = yes_votes / total_votes\n\nprint('{:-9} YES votes  {:2.2%}'.format(yes_votes, percent))\n#  42572654 YES votes  49.67%\n\n# Named placeholders\ndata = {'name': 'Alice', 'score': 92}\nprint('Name: {name}, Score: {score}'.format(**data))\n# Name: Alice, Score: 92"
+              },
+              {
+                "heading": "str() vs repr()",
+                "body": "str() returns a human-readable representation. repr() returns a representation that Python can read (or gives SyntaxError).",
+                "code": "s = 'Hello\\nWorld'\nprint(str(s))   # Hello\n                # World\nprint(repr(s))  # 'Hello\\nWorld'"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-7-1-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "val = 3.14159\nprint(f'Value: {val:.2f}')",
+              "options": [
+                "Value: 3.14",
+                "Value: 3.14159",
+                "Value: 3.1",
+                "Value: 3.142"
+              ],
+              "answer": "Value: 3.14",
+              "explanation": "The :.2f format specifier rounds to 2 decimal places, giving 3.14.",
+              "difficulty": "easy",
+              "concept": "f-strings",
+              "misconceptions": [
+                {
+                  "concept": "f-strings",
+                  "detection": "Learner selects 3.142 thinking banker's rounding (3 decimal places)",
+                  "explanation": ":.2f means exactly 2 digits after the decimal point.",
+                  "hint": "The .2 in :.2f means two digits after the decimal point.",
+                  "remediationExerciseId": "ex-7-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-7-1-b",
+              "type": "write_code",
+              "prompt": "Print the string 'Hello' right-aligned in a 10-character field using an f-string.",
+              "starter_code": "print(f'{\"Hello\":>10}')",
+              "test_cases": [
+                {
+                  "expected_stdout": "     Hello\n"
+                }
+              ],
+              "hints": [
+                ">10 means right-aligned in a 10-character field."
+              ],
+              "difficulty": "easy",
+              "concept": "f-strings"
+            },
+            {
+              "id": "ex-7-1-c",
+              "type": "write_code",
+              "prompt": "Create a variable price = 19.995 and print it formatted as a currency with 2 decimal places.",
+              "starter_code": "price = 19.995\nprint(f'${price:.2f}')",
+              "test_cases": [
+                {
+                  "expected_stdout": "$20.00\n"
+                }
+              ],
+              "hints": [
+                ":.2f rounds to 2 decimal places."
+              ],
+              "difficulty": "easy",
+              "concept": "f-strings"
+            },
+            {
+              "id": "ex-7-1-d",
+              "type": "challenge",
+              "prompt": "Print a multiplication table row for 7, showing '7 x 1 = 7' up to '7 x 5 = 35'. Each line should be formatted so the numbers are aligned. Use an f-string with format specifiers.",
+              "starter_code": "n = 7\nfor i in range(1, 6):\n    print(f'{n} x {i} = {n * i:>2}')",
+              "test_cases": [
+                {
+                  "expected_stdout": "7 x 1 =  7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n"
+                }
+              ],
+              "hints": [
+                "Use :>2 to right-align the result in a 2-character field.",
+                "The starter code already solves it."
+              ],
+              "difficulty": "medium",
+              "concept": "f-strings"
+            }
+          ]
+        },
+        {
+          "id": "lesson-7-2",
+          "title": "Reading and Writing Files",
+          "duration": "25 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Open a file with open() in different modes\n2. Read a file's entire contents or line by line\n3. Write text to a file\n4. Use the with statement for automatic file closing\n5. Understand common file methods: read(), write(), readline()",
+                "code": null
+              },
+              {
+                "heading": "Opening Files",
+                "body": "Use open() to open a file. The first argument is the filename. The second is the mode: 'r' for read, 'w' for write (overwrites!), 'a' for append, 'r+' for read and write.",
+                "code": "# ALWAYS use a with statement — it closes the file automatically\nwith open('hello.txt', 'w') as f:\n    f.write('Hello, World!\\n')\n    f.write('This is a file.\\n')\n\n# Read it back\nwith open('hello.txt', 'r') as f:\n    content = f.read()\n    print(content)\n\n# The with statement ensures f.close() is called even on errors"
+              },
+              {
+                "heading": "Reading Line by Line",
+                "body": "For large files, read one line at a time to save memory. Files can be looped over directly.",
+                "code": "# Write a multi-line file\nwith open('data.txt', 'w') as f:\n    f.write('Line 1\\n')\n    f.write('Line 2\\n')\n    f.write('Line 3\\n')\n\n# Read line by line\nwith open('data.txt', 'r') as f:\n    for line in f:\n        print(line, end='')  # line already contains \\n\n\n# Read all lines into a list\nwith open('data.txt', 'r') as f:\n    lines = f.readlines()\nprint(lines)  # ['Line 1\\n', 'Line 2\\n', 'Line 3\\n']"
+              },
+              {
+                "heading": "File Modes and Appending",
+                "body": "Choose the right mode: 'w' overwrites, 'a' appends, 'x' creates a new file (fails if exists).",
+                "code": "# Append mode\nwith open('log.txt', 'a') as f:\n    f.write('New log entry\\n')\n\n# Read the first 10 characters\nwith open('hello.txt', 'r') as f:\n    first_10 = f.read(10)\n    print(first_10)\n\n# Read a single line\nwith open('data.txt', 'r') as f:\n    first_line = f.readline()\n    print(first_line, end='')"
+              },
+              {
+                "heading": "Worked Example: Note Taker",
+                "body": "Let's build a simple program that saves notes to a file and reads them back.",
+                "code": "# Writing notes\nnotes = [\n    'Buy groceries',\n    'Study Python',\n    'Call Maria'\n]\n\nwith open('notes.txt', 'w') as f:\n    for note in notes:\n        f.write(f'- {note}\\n')\n\nprint('Notes saved!')\n\n# Reading notes back\nwith open('notes.txt', 'r') as f:\n    content = f.read()\nprint(content)\n\n# Output:\n# - Buy groceries\n# - Study Python\n# - Call Maria"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-7-2-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "with open('test.txt', 'w') as f:\n    f.write('Hello')\n\nwith open('test.txt', 'r') as f:\n    print(f.read())",
+              "options": [
+                "Hello",
+                "Hello\\n",
+                "test.txt",
+                "Error"
+              ],
+              "answer": "Hello",
+              "explanation": "The file is written with 'Hello' (no newline), then read back. f.read() returns the full content: 'Hello'.",
+              "difficulty": "easy",
+              "concept": "file-io",
+              "misconceptions": [
+                {
+                  "concept": "file-io",
+                  "detection": "Learner selects 'Hello\\n' thinking write adds a newline",
+                  "explanation": "write() does NOT add a newline automatically. Only 'Hello' was written.",
+                  "hint": "The write() method writes exactly what you give it — no extra newline.",
+                  "remediationExerciseId": "ex-7-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-7-2-b",
+              "type": "write_code",
+              "prompt": "Open a file called 'greeting.txt' in write mode and write 'Good morning!\\n' to it. Then open it in read mode and print the contents.",
+              "starter_code": "with open('greeting.txt', 'w') as f:\n    f.write('Good morning!\\n')\n\nwith open('greeting.txt', 'r') as f:\n    print(f.read())",
+              "test_cases": [
+                {
+                  "expected_stdout": "Good morning!\n\n"
+                }
+              ],
+              "hints": [
+                "Use 'w' mode for writing.",
+                "Use 'r' mode for reading.",
+                "Always use the with statement."
+              ],
+              "difficulty": "medium",
+              "concept": "file-io"
+            },
+            {
+              "id": "ex-7-2-c",
+              "type": "write_code",
+              "prompt": "Append the line 'Another line\\n' to a file named 'mydata.txt', then read and print the entire file. Assume 'mydata.txt' does not exist yet.",
+              "starter_code": "with open('mydata.txt', 'w') as f:\n    f.write('First line\\n')\n\nwith open('mydata.txt', 'a') as f:\n    f.write('Another line\\n')\n\nwith open('mydata.txt', 'r') as f:\n    print(f.read())",
+              "test_cases": [
+                {
+                  "expected_stdout": "First line\nAnother line\n\n"
+                }
+              ],
+              "hints": [
+                "Use 'w' to write initially, then 'a' to append.",
+                "The with statement handles closing."
+              ],
+              "difficulty": "medium",
+              "concept": "file-io"
+            },
+            {
+              "id": "ex-7-2-d",
+              "type": "challenge",
+              "prompt": "Write a program that creates a file called 'numbers.txt' and writes the numbers 1 through 10, one per line. Then read the file back and print the sum of all numbers.",
+              "starter_code": "# Write numbers 1-10 to file\nwith open('numbers.txt', 'w') as f:\n    for n in range(1, 11):\n        f.write(f'{n}\\n')\n\n# Read and sum\ntotal = 0\nwith open('numbers.txt', 'r') as f:\n    for line in f:\n        total += int(line.strip())\n\nprint(total)",
+              "test_cases": [
+                {
+                  "expected_stdout": "55\n"
+                }
+              ],
+              "hints": [
+                "Write each number followed by \\n.",
+                "Read each line, strip whitespace, convert to int, and sum."
+              ],
+              "difficulty": "hard",
+              "concept": "file-io",
+              "misconceptions": [
+                {
+                  "concept": "file-io",
+                  "detection": "Code reads but forgets to strip/convert the line",
+                  "explanation": "f.readline() returns a string including the newline. You must strip it and convert to int.",
+                  "hint": "Use int(line.strip()) to convert each line to a number.",
+                  "remediationExerciseId": "ex-7-2-c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lesson-7-3",
+          "title": "Saving Structured Data with JSON",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Convert Python objects to JSON strings with json.dumps()\n2. Parse JSON strings back to Python objects with json.loads()\n3. Read and write JSON files with json.dump() and json.load()\n4. Understand which Python types map to JSON types",
+                "code": null
+              },
+              {
+                "heading": "What is JSON?",
+                "body": "JSON (JavaScript Object Notation) is a lightweight data interchange format. Python's json module makes it easy to save and load structured data like lists and dictionaries.",
+                "code": "Python      →  JSON\n------         ------\ndict          →  object\nlist, tuple   →  array\nstr           →  string\nint, float    →  number\nTrue/False    →  true/false\nNone          →  null"
+              },
+              {
+                "heading": "Serializing with json.dumps()",
+                "body": "Use json.dumps() to convert a Python object to a JSON string.",
+                "code": "import json\n\ndata = {\n    'name': 'Alice',\n    'scores': [90, 85, 92],\n    'active': True,\n    'grade': None\n}\n\njson_string = json.dumps(data, indent=2)\nprint(json_string)\n# {\n#   \"name\": \"Alice\",\n#   \"scores\": [90, 85, 92],\n#   \"active\": true,\n#   \"grade\": null\n# }"
+              },
+              {
+                "heading": "Deserializing with json.loads()",
+                "body": "Use json.loads() to parse a JSON string back into a Python object.",
+                "code": "json_string = '{\"name\": \"Bob\", \"age\": 25, \"grades\": [88, 76]}'\ndata = json.loads(json_string)\nprint(data['name'])    # Bob\nprint(data['grades'])  # [88, 76]\nprint(type(data))      # <class 'dict'>"
+              },
+              {
+                "heading": "Reading and Writing JSON Files",
+                "body": "Use json.dump() to write directly to a file, and json.load() to read from a file.",
+                "code": "import json\n\n# List of students\nstudents = [\n    {'name': 'Maria', 'grade': 90},\n    {'name': 'Juan', 'grade': 85},\n    {'name': 'Aliyah', 'grade': 95}\n]\n\n# Write to file\nwith open('students.json', 'w') as f:\n    json.dump(students, f, indent=2)\n\n# Read from file\nwith open('students.json', 'r') as f:\n    loaded = json.load(f)\n\nprint(loaded[0]['name'])  # Maria\n\n# Calculate average\ngrades = [s['grade'] for s in loaded]\nprint(f'Average: {sum(grades)/len(grades):.1f}')  # Average: 90.0"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-7-3-a",
+              "type": "predict_output",
+              "prompt": "What does json.dumps(True) return?",
+              "options": [
+                "'True'",
+                "'true'",
+                "true",
+                "True"
+              ],
+              "answer": "'true'",
+              "explanation": "json.dumps converts Python True to the JSON string 'true' (lowercase).",
+              "difficulty": "easy",
+              "concept": "json",
+              "misconceptions": [
+                {
+                  "concept": "json",
+                  "detection": "Learner selects 'True' thinking Python representation is kept",
+                  "explanation": "JSON uses lowercase true/false, unlike Python's capitalized True/False.",
+                  "hint": "JSON booleans are lowercase: true, false.",
+                  "remediationExerciseId": "ex-7-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-7-3-b",
+              "type": "write_code",
+              "prompt": "Convert the list [1, 2, 3] to a JSON string with indent=2 and print it.",
+              "starter_code": "import json\nprint(json.dumps([1, 2, 3], indent=2))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[\n  1,\n  2,\n  3\n]\n"
+                }
+              ],
+              "hints": [
+                "json.dumps() with indent=2 pretty-prints the output."
+              ],
+              "difficulty": "easy",
+              "concept": "json"
+            },
+            {
+              "id": "ex-7-3-c",
+              "type": "write_code",
+              "prompt": "Given the JSON string '{\"city\": \"Bongao\", \"province\": \"Tawi-Tawi\"}', parse it and print the value of 'city'.",
+              "starter_code": "import json\ndata = json.loads('{\"city\": \"Bongao\", \"province\": \"Tawi-Tawi\"}')\nprint(data['city'])",
+              "test_cases": [
+                {
+                  "expected_stdout": "Bongao\n"
+                }
+              ],
+              "hints": [
+                "Use json.loads() to parse the JSON string.",
+                "Then access the dictionary key."
+              ],
+              "difficulty": "easy",
+              "concept": "json"
+            },
+            {
+              "id": "ex-7-3-d",
+              "type": "challenge",
+              "prompt": "Create a list of dictionaries representing 3 people (each with 'name' and 'age'). Write it to 'people.json' using json.dump() with indent=2. Then read it back and print the name of the oldest person.",
+              "starter_code": "import json\n\npeople = [\n    {'name': 'Anna', 'age': 25},\n    {'name': 'Ben', 'age': 30},\n    {'name': 'Eli', 'age': 22}\n]\n\nwith open('people.json', 'w') as f:\n    json.dump(people, f, indent=2)\n\nwith open('people.json', 'r') as f:\n    loaded = json.load(f)\n\noldest = max(loaded, key=lambda p: p['age'])\nprint(oldest['name'])",
+              "test_cases": [
+                {
+                  "expected_stdout": "Ben\n"
+                }
+              ],
+              "hints": [
+                "Use json.dump() to write, json.load() to read.",
+                "Use max() with a key function to find the oldest."
+              ],
+              "difficulty": "medium",
+              "concept": "json",
+              "misconceptions": [
+                {
+                  "concept": "json",
+                  "detection": "Code reuses the variable 'people' after writing, confusing it with loaded data",
+                  "explanation": "After writing, the 'people' variable still holds the original list. But for clarity, load into a new variable.",
+                  "hint": "Use a different variable name for the loaded data.",
+                  "remediationExerciseId": "ex-7-3-c"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-8",
+      "title": "Errors and Exceptions",
+      "description": "Learn how to handle errors gracefully with try/except blocks, raise your own exceptions, and write cleanup code that always runs.",
+      "prerequisite": "module-7",
+      "lessons": [
+        {
+          "id": "lesson-8-1",
+          "title": "Syntax Errors and Exceptions",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Distinguish between syntax errors and runtime exceptions\n2. Identify common built-in exceptions (ZeroDivisionError, NameError, TypeError, ValueError)\n3. Read a traceback to find where an error occurred\n4. Predict when common exceptions will be raised",
+                "code": null
+              },
+              {
+                "heading": "Syntax Errors",
+                "body": "Syntax errors (parsing errors) are the most common kind of complaint when learning Python. The parser points to the offending line with arrows.",
+                "code": "# Syntax error — missing colon\nwhile True\n    print('Hello')\n\n# Syntax error — unclosed string\n# name = 'Alice\n\n# The parser shows the line and a ^ marker\n# File \"<stdin>\", line 1\n#   while True\n#            ^\n# SyntaxError: invalid syntax"
+              },
+              {
+                "heading": "Exceptions — Runtime Errors",
+                "body": "Even syntactically correct code can cause errors at runtime. These are called exceptions. Python provides many built-in exception types.",
+                "code": "# ZeroDivisionError\n# 10 * (1 / 0)\n# ZeroDivisionError: division by zero\n\n# NameError — using undefined variable\n# 4 + spam * 3\n# NameError: name 'spam' is not defined\n\n# TypeError — mixing incompatible types\n# '2' + 2\n# TypeError: can only concatenate str (not \"int\") to str\n\n# ValueError — wrong value for conversion\n# int('abc')\n# ValueError: invalid literal for int() with base 10: 'abc'"
+              },
+              {
+                "heading": "Reading a Traceback",
+                "body": "When an exception isn't handled, Python prints a traceback showing the call stack — the chain of function calls that led to the error.",
+                "code": "def divide(a, b):\n    return a / b\n\ndef calculate():\n    return divide(10, 0)\n\nprint(calculate())\n\n# Traceback (most recent call last):\n#   File \"test.py\", line 7, in <module>\n#     print(calculate())\n#           ^^^^^^^^^^^\n#   File \"test.py\", line 5, in calculate\n#     return divide(10, 0)\n#            ^^^^^^^^^^^^^\n#   File \"test.py\", line 2, in divide\n#     return a / b\n#            ~~^~~\n# ZeroDivisionError: division by zero"
+              },
+              {
+                "heading": "Worked Example: Debugging with Tracebacks",
+                "body": "Reading a traceback from bottom to top tells you the exact sequence of events that caused the error.",
+                "code": "# The bottom line tells you the exception type and message\n# ZeroDivisionError: division by zero\n\n# The lines above show the call stack:\n# - The file and line number\n# - The function name\n# - The actual line of code that failed\n\n# Fix by checking the deepest line first\n# divide(10, 0) → b is 0 → a / b fails\n# Fix: guard against b == 0"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-8-1-a",
+              "type": "predict_output",
+              "prompt": "What exception does int('hello') raise?",
+              "options": [
+                "ValueError",
+                "TypeError",
+                "NameError",
+                "SyntaxError"
+              ],
+              "answer": "ValueError",
+              "explanation": "int('hello') raises ValueError because 'hello' is a valid string but not a valid integer representation.",
+              "difficulty": "easy",
+              "concept": "exceptions",
+              "misconceptions": [
+                {
+                  "concept": "exceptions",
+                  "detection": "Learner selects TypeError confusing value with type",
+                  "explanation": "The string IS the right type (str can be passed to int()). The PROBLEM is the VALUE — 'hello' is not a valid number.",
+                  "hint": "The type is correct (str), but the value is invalid for conversion.",
+                  "remediationExerciseId": "ex-8-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-8-1-b",
+              "type": "fix_the_code",
+              "prompt": "This code raises an error. Identify which exception it raises and fix it by pre-checking.",
+              "buggy_code": "def safe_divide(a, b):\n    return a / b\n\nprint(safe_divide(10, 0))",
+              "solution_code": "def safe_divide(a, b):\n    if b == 0:\n        return 'Cannot divide by zero'\n    return a / b\n\nprint(safe_divide(10, 0))",
+              "hints": [
+                "What happens when you divide by zero?",
+                "Check if b is 0 before dividing."
+              ],
+              "difficulty": "easy",
+              "concept": "exceptions"
+            },
+            {
+              "id": "ex-8-1-c",
+              "type": "write_code",
+              "prompt": "Write a function called get_item that takes a list and an index. If the index is valid, return the item. Otherwise, return 'Invalid index'.",
+              "starter_code": "def get_item(lst, idx):\n    if 0 <= idx < len(lst):\n        return lst[idx]\n    return 'Invalid index'\n\nprint(get_item([10, 20, 30], 1))\nprint(get_item([10, 20, 30], 5))",
+              "test_cases": [
+                {
+                  "expected_stdout": "20\nInvalid index\n"
+                }
+              ],
+              "hints": [
+                "Check if idx is within bounds before accessing."
+              ],
+              "difficulty": "medium",
+              "concept": "exceptions"
+            }
+          ]
+        },
+        {
+          "id": "lesson-8-2",
+          "title": "Handling Exceptions with try/except",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Use try/except to catch and handle exceptions\n2. Catch specific exception types\n3. Use multiple except blocks for different errors\n4. Use else and finally clauses\n5. Handle exceptions without crashing the program",
+                "code": null
+              },
+              {
+                "heading": "Basic try/except",
+                "body": "Use try/except to catch exceptions and handle them gracefully instead of crashing.",
+                "code": "try:\n    result = 10 / 0\n    print(result)  # never reached\nexcept ZeroDivisionError:\n    print('You cannot divide by zero!')\n\nprint('Program continues...')\n\n# Output:\n# You cannot divide by zero!\n# Program continues..."
+              },
+              {
+                "heading": "Catching Specific Exceptions",
+                "body": "Always catch specific exception types. A bare except: catches everything (including KeyboardInterrupt!), which is dangerous.",
+                "code": "try:\n    num = int(input('Enter a number: '))\n    result = 100 / num\n    print(f'Result: {result}')\nexcept ValueError:\n    print('That was not a valid number!')\nexcept ZeroDivisionError:\n    print('Zero is not allowed!')\n\n# Each except block handles ONE type of error\n# The program continues after handling"
+              },
+              {
+                "heading": "Getting the Error Message",
+                "body": "Use except ExceptionType as e: to capture the error object and access its message.",
+                "code": "try:\n    num = int('abc')\nexcept ValueError as e:\n    print(f'Error: {e}')\n# Error: invalid literal for int() with base 10: 'abc'\n\n# The 'as e' gives you access to the exception object\n# str(e) gives the human-readable message"
+              },
+              {
+                "heading": "else and finally",
+                "body": "The else block runs if no exception occurred. The finally block ALWAYS runs — whether an exception happened or not.",
+                "code": "try:\n    f = open('data.txt', 'r')\n    content = f.read()\nexcept FileNotFoundError:\n    print('File not found!')\nelse:\n    print(f'Read {len(content)} characters')\n    print('No error occurred!')\nfinally:\n    print('This always runs.')\n    f.close()  # clean up resources"
+              },
+              {
+                "heading": "Worked Example: Robust Input",
+                "body": "Keep asking until the user enters a valid number — the standard pattern for robust user input.",
+                "code": "while True:\n    try:\n        age = int(input('Enter your age: '))\n        if age < 0:\n            print('Age cannot be negative.')\n            continue\n        break\n    except ValueError:\n        print('Please enter a valid number.')\n\nprint(f'You are {age} years old.')\n\n# This loop only exits when a valid non-negative integer is entered"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-8-2-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "try:\n    x = int('5')\n    print('Success')\nexcept ValueError:\n    print('Error')\nelse:\n    print('Done')",
+              "options": [
+                "Success\\nDone",
+                "Success",
+                "Error\\nSuccess",
+                "Error\\nDone"
+              ],
+              "answer": "Success\\nDone",
+              "explanation": "'5' is a valid integer string, so int('5') succeeds. The try block prints 'Success'. Since no exception, else runs and prints 'Done'.",
+              "difficulty": "medium",
+              "concept": "try-except",
+              "misconceptions": [
+                {
+                  "concept": "try-except",
+                  "detection": "Learner selects 'Success' only, forgetting the else clause",
+                  "explanation": "The else clause runs when no exception occurs in the try block.",
+                  "hint": "The else block runs AFTER the try block when there's no exception.",
+                  "remediationExerciseId": "ex-8-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-8-2-b",
+              "type": "fix_the_code",
+              "prompt": "Fix this code so it catches ONLY ZeroDivisionError and prints a friendly message instead of crashing.",
+              "buggy_code": "try:\n    result = 100 / 0\nexcept:\n    print('Error')\nprint(result)",
+              "solution_code": "try:\n    result = 100 / 0\nexcept ZeroDivisionError:\n    print('Cannot divide by zero!')\nelse:\n    print(result)",
+              "hints": [
+                "Replace bare except with except ZeroDivisionError.",
+                "Move the print(result) to an else block."
+              ],
+              "difficulty": "medium",
+              "concept": "try-except",
+              "misconceptions": [
+                {
+                  "concept": "try-except",
+                  "detection": "Fix uses bare except instead of specific exception",
+                  "explanation": "Bare except catches KeyboardInterrupt too, which is dangerous. Always specify the exception type.",
+                  "hint": "Use except ZeroDivisionError: to catch only division errors.",
+                  "remediationExerciseId": "ex-8-2-a"
+                }
+              ]
+            },
+            {
+              "id": "ex-8-2-c",
+              "type": "write_code",
+              "prompt": "Write a function safe_int that takes a value and returns it as an integer. If conversion fails, return 0.",
+              "starter_code": "def safe_int(value):\n    try:\n        return int(value)\n    except ValueError:\n        return 0\n\nprint(safe_int('42'))\nprint(safe_int('hello'))",
+              "test_cases": [
+                {
+                  "expected_stdout": "42\n0\n"
+                }
+              ],
+              "hints": [
+                "Use int(value) inside a try block.",
+                "Catch ValueError and return 0."
+              ],
+              "difficulty": "medium",
+              "concept": "try-except"
+            },
+            {
+              "id": "ex-8-2-d",
+              "type": "challenge",
+              "prompt": "Write a function divide_list that takes a list of numbers and a divisor. Return a new list where each element is divided by the divisor. If the divisor is 0, return an empty list. If any element can't be divided (not a number), skip it. Use try/except.",
+              "starter_code": "def divide_list(nums, divisor):\n    if divisor == 0:\n        return []\n    result = []\n    for n in nums:\n        try:\n            result.append(n / divisor)\n        except TypeError:\n            pass\n    return result\n\nprint(divide_list([10, 20, 30], 10))\nprint(divide_list([10, 'a', 30], 10))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[1.0, 2.0, 3.0]\n[1.0, 3.0]\n"
+                }
+              ],
+              "hints": [
+                "Check divisor == 0 first.",
+                "Use try/except TypeError to skip non-numeric values."
+              ],
+              "difficulty": "hard",
+              "concept": "try-except"
+            }
+          ]
+        },
+        {
+          "id": "lesson-8-3",
+          "title": "Raising Exceptions and Clean-up",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Raise exceptions intentionally with raise\n2. Create your own exception classes\n3. Define clean-up actions with finally\n4. Use the with statement for resource management",
+                "code": null
+              },
+              {
+                "heading": "Raising Exceptions",
+                "body": "Use raise to trigger an exception intentionally. You can raise built-in exceptions or your own.",
+                "code": "def set_age(age):\n    if age < 0:\n        raise ValueError('Age cannot be negative')\n    if age > 150:\n        raise ValueError('Age seems too high')\n    print(f'Age set to {age}')\n\n# set_age(-5)  # ValueError: Age cannot be negative\nset_age(25)  # Age set to 25"
+              },
+              {
+                "heading": "User-Defined Exceptions",
+                "body": "Create custom exception classes by inheriting from Exception. This lets you define specific error types for your program.",
+                "code": "class NegativeValueError(Exception):\n    \"\"\"Raised when a value should not be negative.\"\"\"\n    pass\n\nclass InsufficientFundsError(Exception):\n    \"\"\"Raised when account balance is too low.\"\"\"\n    def __init__(self, balance, amount):\n        self.balance = balance\n        self.amount = amount\n        super().__init__(f'Need ${amount} but only have ${balance}')\n\ndef withdraw(balance, amount):\n    if amount < 0:\n        raise NegativeValueError('Withdrawal amount cannot be negative')\n    if amount > balance:\n        raise InsufficientFundsError(balance, amount)\n    return balance - amount\n\n# try:\n#     withdraw(100, 200)\n# except InsufficientFundsError as e:\n#     print(e)  # Need $200 but only have $100"
+              },
+              {
+                "heading": "The finally Clause",
+                "body": "finally always runs — even if there's a return, a break, or an unhandled exception. Use it for clean-up like closing files.",
+                "code": "def read_first_line(filename):\n    try:\n        f = open(filename, 'r')\n        return f.readline().strip()\n    except FileNotFoundError:\n        return 'File not found'\n    finally:\n        print('Clean-up: closing file')\n        try:\n            f.close()\n        except NameError:\n            pass\n\n# Even if the function returns in try,\n# finally runs before the return value is delivered"
+              },
+              {
+                "heading": "Context Managers (with statement)",
+                "body": "The with statement is a clean alternative to try/finally for resource management. Many objects (files, locks) support it automatically.",
+                "code": "# Instead of:\n# f = open('file.txt', 'r')\n# try:\n#     data = f.read()\n# finally:\n#     f.close()\n\n# Do this:\nwith open('file.txt', 'r') as f:\n    data = f.read()\n# File is automatically closed when the block exits"
+              },
+              {
+                "heading": "Worked Example: Calculator with Error Handling",
+                "body": "Let's build a simple calculator that raises meaningful exceptions for edge cases.",
+                "code": "class CalculationError(Exception):\n    pass\n\ndef calculate(a, op, b):\n    if op == '+':\n        return a + b\n    elif op == '-':\n        return a - b\n    elif op == '*':\n        return a * b\n    elif op == '/':\n        if b == 0:\n            raise CalculationError('Division by zero')\n        return a / b\n    else:\n        raise CalculationError(f'Unknown operator: {op}')\n\ntry:\n    print(calculate(10, '+', 5))   # 15\n    print(calculate(10, '/', 0))   # raises\nexcept CalculationError as e:\n    print(f'Error: {e}')"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-8-3-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "try:\n    print('A')\n    raise ValueError('Oops')\nexcept ValueError:\n    print('B')\nfinally:\n    print('C')",
+              "options": [
+                "A\\nB\\nC",
+                "A\\nC",
+                "A\\nB",
+                "A\\nOops\\nB\\nC"
+              ],
+              "answer": "A\\nB\\nC",
+              "explanation": "'A' prints first. Then raise triggers the except which prints 'B'. Finally always runs and prints 'C'.",
+              "difficulty": "medium",
+              "concept": "raise-finally",
+              "misconceptions": [
+                {
+                  "concept": "raise-finally",
+                  "detection": "Learner selects 'A\\nB' forgetting the finally clause",
+                  "explanation": "The finally block always runs, even after an exception is caught.",
+                  "hint": "The finally block runs whether an exception occurs or not.",
+                  "remediationExerciseId": "ex-8-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-8-3-b",
+              "type": "write_code",
+              "prompt": "Write a function called check_positive that takes a number. If it's negative, raise a ValueError with the message 'Number must be positive'. If it's positive, return 'OK'.",
+              "starter_code": "def check_positive(n):\n    if n < 0:\n        raise ValueError('Number must be positive')\n    return 'OK'\n\nprint(check_positive(5))\nprint(check_positive(-3))",
+              "test_cases": [
+                {
+                  "expected_stdout": "OK\n"
+                }
+              ],
+              "hints": [
+                "Use if n < 0: raise ValueError(...)",
+                "The exception will be unhandled and crash with -3 (which is fine for this test)."
+              ],
+              "difficulty": "medium",
+              "concept": "raise"
+            },
+            {
+              "id": "ex-8-3-c",
+              "type": "write_code",
+              "prompt": "Define a custom exception class called TooYoungError. Write a function verify_age(age) that raises TooYoungError if age < 18, otherwise returns 'Access granted'.",
+              "starter_code": "class TooYoungError(Exception):\n    pass\n\ndef verify_age(age):\n    if age < 18:\n        raise TooYoungError('Must be 18 or older')\n    return 'Access granted'\n\ntry:\n    print(verify_age(20))\n    print(verify_age(15))\nexcept TooYoungError as e:\n    print(e)",
+              "test_cases": [
+                {
+                  "expected_stdout": "Access granted\nMust be 18 or older\n"
+                }
+              ],
+              "hints": [
+                "Create a class that inherits from Exception.",
+                "Use raise in the function when condition is met."
+              ],
+              "difficulty": "hard",
+              "concept": "custom-exceptions",
+              "misconceptions": [
+                {
+                  "concept": "custom-exceptions",
+                  "detection": "Code prints error message instead of raising an exception",
+                  "explanation": "Your function should raise an exception, not print a message. The user code handles the exception.",
+                  "hint": "Use 'raise TooYoungError(...)' inside the function.",
+                  "remediationExerciseId": "ex-8-3-b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "module-9",
+      "title": "Classes and Object-Oriented Programming",
+      "description": "Learn how to create your own types with classes, bundle data and behavior together, and design programs using object-oriented principles.",
+      "prerequisite": "module-8",
+      "lessons": [
+        {
+          "id": "lesson-9-1",
+          "title": "Class and Instance Basics",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Define a class using the class keyword\n2. Create an __init__ method to initialize instances\n3. Understand the self parameter\n4. Create instance variables and methods\n5. Instantiate objects from a class",
+                "code": null
+              },
+              {
+                "heading": "What is a Class?",
+                "body": "A class is a blueprint for creating objects. It bundles data (attributes) and functions (methods) together. Creating a new class creates a new type of object.",
+                "code": "# Define a class\nclass Student:\n    \"\"\"A simple Student class.\"\"\"\n    \n    def __init__(self, name, grade):\n        \"\"\"Initialize a new student.\"\"\"\n        self.name = name      # instance attribute\n        self.grade = grade    # instance attribute\n    \n    def introduce(self):\n        \"\"\"Return a greeting string.\"\"\"\n        return f'Hi, I am {self.name} and I am in grade {self.grade}'\n\n# Create instances (objects)\ns1 = Student('Maria', 10)\ns2 = Student('Juan', 9)\n\nprint(s1.introduce())  # Hi, I am Maria and I am in grade 10\nprint(s2.introduce())  # Hi, I am Juan and I am in grade 9"
+              },
+              {
+                "heading": "The __init__ Method",
+                "body": "The __init__ method is the constructor — it's called automatically when you create a new instance. The first parameter is always self.",
+                "code": "class Book:\n    def __init__(self, title, author, pages):\n        self.title = title\n        self.author = author\n        self.pages = pages\n        self.current_page = 0  # default value\n    \n    def read(self, pages):\n        self.current_page += pages\n        if self.current_page > self.pages:\n            self.current_page = self.pages\n        print(f'Read to page {self.current_page}')\n\nbook = Book('Python 101', 'Maria', 200)\nbook.read(50)   # Read to page 50\nbook.read(30)   # Read to page 80\nprint(book.title)  # Python 101"
+              },
+              {
+                "heading": "Instance Variables vs Class Variables",
+                "body": "Instance variables are unique to each object. Class variables are shared across all instances.",
+                "code": "class Dog:\n    # Class variable — shared by all dogs\n    species = 'Canis familiaris'\n    \n    def __init__(self, name, age):\n        # Instance variables — unique per dog\n        self.name = name\n        self.age = age\n    \n    def description(self):\n        return f'{self.name} is {self.age} years old'\n\nd1 = Dog('Buddy', 3)\nd2 = Dog('Luna', 5)\n\nprint(d1.species)  # Canis familiaris\nprint(d2.species)  # Canis familiaris (shared)\nprint(d1.description())  # Buddy is 3 years old\n\n# Override class variable on instance\nDog.species = 'Canis lupus'  # changes for ALL instances"
+              },
+              {
+                "heading": "Worked Example: Bank Account",
+                "body": "Let's model a bank account with deposits and withdrawals as a class.",
+                "code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n    \n    def deposit(self, amount):\n        self.balance += amount\n        return f'Deposited ${amount}. Balance: ${self.balance}'\n    \n    def withdraw(self, amount):\n        if amount > self.balance:\n            return 'Insufficient funds!'\n        self.balance -= amount\n        return f'Withdrew ${amount}. Balance: ${self.balance}'\n    \n    def __str__(self):\n        return f'Account of {self.owner}: ${self.balance}'\n\nacc = BankAccount('Alice', 100)\nprint(acc.deposit(50))     # Deposited $50. Balance: $150\nprint(acc.withdraw(30))    # Withdrew $30. Balance: $120\nprint(acc.withdraw(200))   # Insufficient funds!\nprint(acc)                 # Account of Alice: $120"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-9-1-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "class Cat:\n    def __init__(self, name):\n        self.name = name\n    \n    def speak(self):\n        return f'{self.name} says meow'\n\nc = Cat('Whiskers')\nprint(c.speak())",
+              "options": [
+                "Whiskers says meow",
+                "Cat says meow",
+                "meow",
+                "{self.name} says meow"
+              ],
+              "answer": "Whiskers says meow",
+              "explanation": "c = Cat('Whiskers') creates an instance with self.name = 'Whiskers'. c.speak() returns the formatted string.",
+              "difficulty": "easy",
+              "concept": "classes",
+              "misconceptions": [
+                {
+                  "concept": "classes",
+                  "detection": "Learner selects 'Cat says meow' confusing class name with instance attribute",
+                  "explanation": "The instance name is 'Whiskers' (passed to __init__), not 'Cat' (the class name).",
+                  "hint": "self.name gets the value passed when creating the Cat object.",
+                  "remediationExerciseId": "ex-9-1-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-9-1-b",
+              "type": "write_code",
+              "prompt": "Define a class called Person with __init__ that sets name and age. Add a method greet that returns 'Hello, my name is name'.",
+              "starter_code": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        return f'Hello, my name is {self.name}'\n\np = Person('Ali', 25)\nprint(p.greet())",
+              "test_cases": [
+                {
+                  "expected_stdout": "Hello, my name is Ali\n"
+                }
+              ],
+              "hints": [
+                "__init__ takes self, name, age.",
+                "greet returns an f-string using self.name."
+              ],
+              "difficulty": "easy",
+              "concept": "classes"
+            },
+            {
+              "id": "ex-9-1-c",
+              "type": "write_code",
+              "prompt": "Add a method called birthday to your Person class that increases age by 1 and returns the new age.",
+              "starter_code": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        return f'Hello, my name is {self.name}'\n    \n    def birthday(self):\n        self.age += 1\n        return self.age\n\np = Person('Beth', 30)\nprint(p.birthday())\nprint(p.birthday())",
+              "test_cases": [
+                {
+                  "expected_stdout": "31\n32\n"
+                }
+              ],
+              "hints": [
+                "Increment self.age by 1.",
+                "Return the new value."
+              ],
+              "difficulty": "medium",
+              "concept": "methods"
+            },
+            {
+              "id": "ex-9-1-d",
+              "type": "challenge",
+              "prompt": "Define a class called Rectangle with __init__(self, width, height). Add methods: area() returns width * height, and __str__ returns 'Rectangle: width x height'. Create a 4x5 rectangle, print its area, then print the rectangle itself.",
+              "starter_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    \n    def area(self):\n        return self.width * self.height\n    \n    def __str__(self):\n        return f'Rectangle: {self.width} x {self.height}'\n\nr = Rectangle(4, 5)\nprint(r.area())\nprint(r)",
+              "test_cases": [
+                {
+                  "expected_stdout": "20\nRectangle: 4 x 5\n"
+                }
+              ],
+              "hints": [
+                "area() returns self.width * self.height.",
+                "__str__ returns a formatted string."
+              ],
+              "difficulty": "medium",
+              "concept": "classes"
+            }
+          ]
+        },
+        {
+          "id": "lesson-9-2",
+          "title": "Inheritance",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Create a subclass that inherits from a parent class\n2. Override methods in the subclass\n3. Use super() to call the parent's methods\n4. Understand isinstance() checks\n5. Explain the concept of inheritance",
+                "code": null
+              },
+              {
+                "heading": "Basic Inheritance",
+                "body": "Inheritance lets you define a new class that reuses, extends, or modifies the behavior of an existing class.",
+                "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    \n    def speak(self):\n        return '...'\n\nclass Dog(Animal):  # Dog inherits from Animal\n    def speak(self):\n        return f'{self.name} says Woof!'\n\nclass Cat(Animal):  # Cat inherits from Animal\n    def speak(self):\n        return f'{self.name} says Meow!'\n\nanimals = [Dog('Buddy'), Cat('Whiskers')]\nfor a in animals:\n    print(a.speak())\n# Buddy says Woof!\n# Whiskers says Meow!"
+              },
+              {
+                "heading": "Using super()",
+                "body": "Use super() to call the parent class's methods, especially in __init__ to set up inherited attributes.",
+                "code": "class Vehicle:\n    def __init__(self, brand, year):\n        self.brand = brand\n        self.year = year\n    \n    def info(self):\n        return f'{self.brand} ({self.year})'\n\nclass Car(Vehicle):\n    def __init__(self, brand, year, doors):\n        super().__init__(brand, year)  # call parent's __init__\n        self.doors = doors\n    \n    def info(self):\n        return f'{super().info()} - {self.doors} doors'\n\ncar = Car('Toyota', 2020, 4)\nprint(car.info())  # Toyota (2020) - 4 doors"
+              },
+              {
+                "heading": "Checking Types with isinstance()",
+                "body": "Use isinstance() to check whether an object is an instance of a particular class (or its subclasses).",
+                "code": "class Animal: pass\nclass Dog(Animal): pass\nclass Cat(Animal): pass\n\nd = Dog()\nc = Cat()\n\nprint(isinstance(d, Dog))     # True\nprint(isinstance(d, Animal))  # True (Dog IS an Animal)\nprint(isinstance(c, Dog))     # False\nprint(type(d) == Dog)         # True (but doesn't check inheritance)"
+              },
+              {
+                "heading": "Worked Example: Shape Hierarchy",
+                "body": "Let's build a shape hierarchy with an abstract base class and concrete subclasses.",
+                "code": "class Shape:\n    def __init__(self, color='black'):\n        self.color = color\n    \n    def area(self):\n        \"\"\"Must be overridden by subclasses.\"\"\"\n        raise NotImplementedError\n    \n    def __str__(self):\n        return f'{self.color} shape'\n\nclass Circle(Shape):\n    def __init__(self, radius, color='black'):\n        super().__init__(color)\n        self.radius = radius\n    \n    def area(self):\n        return 3.14159 * self.radius ** 2\n    \n    def __str__(self):\n        return f'{self.color} circle (r={self.radius})'\n\nclass Rectangle(Shape):\n    def __init__(self, w, h, color='black'):\n        super().__init__(color)\n        self.w = w\n        self.h = h\n    \n    def area(self):\n        return self.w * self.h\n\nshapes = [Circle(5, 'red'), Rectangle(4, 3, 'blue')]\nfor s in shapes:\n    print(f'{s} has area {s.area()}')\n# red circle (r=5) has area 78.53975\n# blue shape has area 12"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-9-2-a",
+              "type": "predict_output",
+              "prompt": "What does this code print?",
+              "code": "class A:\n    def greet(self):\n        return 'Hello from A'\n\nclass B(A):\n    def greet(self):\n        return 'Hello from B'\n\nb = B()\nprint(b.greet())",
+              "options": [
+                "Hello from B",
+                "Hello from A",
+                "Error",
+                "Hello from A\\nHello from B"
+              ],
+              "answer": "Hello from B",
+              "explanation": "B inherits from A but overrides the greet() method, so B's version is called.",
+              "difficulty": "easy",
+              "concept": "inheritance",
+              "misconceptions": [
+                {
+                  "concept": "inheritance",
+                  "detection": "Learner selects 'Hello from A' not understanding method override",
+                  "explanation": "When a subclass defines a method with the same name, it overrides the parent's version.",
+                  "hint": "B overrides greet(), so calling b.greet() uses B's version.",
+                  "remediationExerciseId": "ex-9-2-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-9-2-b",
+              "type": "write_code",
+              "prompt": "Define a base class Animal with __init__(self, name) and a method speak that returns '...'. Define a subclass Duck that overrides speak to return 'Quack! Quack!'. Create a Duck and call speak.",
+              "starter_code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return '...'\n\nclass Duck(Animal):\n    def speak(self):\n        return 'Quack! Quack!'\n\nd = Duck('Donald')\nprint(d.speak())",
+              "test_cases": [
+                {
+                  "expected_stdout": "Quack! Quack!\n"
+                }
+              ],
+              "hints": [
+                "Duck(Animal) makes Duck inherit from Animal.",
+                "Override speak in Duck."
+              ],
+              "difficulty": "easy",
+              "concept": "inheritance"
+            },
+            {
+              "id": "ex-9-2-c",
+              "type": "write_code",
+              "prompt": "Create a base class Employee with __init__(self, name, salary). Create a subclass Manager that adds a bonus parameter and uses super() to call Employee's __init__. Add a method get_total that returns salary + bonus.",
+              "starter_code": "class Employee:\n    def __init__(self, name, salary):\n        self.name = name\n        self.salary = salary\n\nclass Manager(Employee):\n    def __init__(self, name, salary, bonus):\n        super().__init__(name, salary)\n        self.bonus = bonus\n    \n    def get_total(self):\n        return self.salary + self.bonus\n\nm = Manager('Alice', 50000, 10000)\nprint(m.get_total())",
+              "test_cases": [
+                {
+                  "expected_stdout": "60000\n"
+                }
+              ],
+              "hints": [
+                "Use super().__init__(name, salary) in Manager's __init__.",
+                "get_total adds salary and bonus."
+              ],
+              "difficulty": "medium",
+              "concept": "super"
+            },
+            {
+              "id": "ex-9-2-d",
+              "type": "challenge",
+              "prompt": "Build a class hierarchy: Device (brand), Phone(Device) with battery_level, Laptop(Device) with battery_level. Both override a method status() that uses super() to include brand info. Create one of each and print their status.",
+              "starter_code": "class Device:\n    def __init__(self, brand):\n        self.brand = brand\n    def status(self):\n        return f'Device: {self.brand}'\n\nclass Phone(Device):\n    def __init__(self, brand, battery):\n        super().__init__(brand)\n        self.battery = battery\n    def status(self):\n        return f'{super().status()} | Battery: {self.battery}%'\n\nclass Laptop(Device):\n    def __init__(self, brand, battery):\n        super().__init__(brand)\n        self.battery = battery\n    def status(self):\n        return f'{super().status()} | Battery: {self.battery}%'\n\np = Phone('Samsung', 80)\nl = Laptop('Dell', 60)\nprint(p.status())\nprint(l.status())",
+              "test_cases": [
+                {
+                  "expected_stdout": "Device: Samsung | Battery: 80%\nDevice: Dell | Battery: 60%\n"
+                }
+              ],
+              "hints": [
+                "Use super().__init__() to set the brand.",
+                "Use super().status() in the override to include brand info."
+              ],
+              "difficulty": "hard",
+              "concept": "super-inheritance"
+            }
+          ]
+        },
+        {
+          "id": "lesson-9-3",
+          "title": "Iterators and Generators",
+          "duration": "20 min",
+          "video": null,
+          "content": {
+            "sections": [
+              {
+                "heading": "Learning Objectives",
+                "body": "By the end of this lesson, you will be able to:\n1. Understand Python's iterator protocol (__iter__, __next__)\n2. Create custom iterators by implementing the protocol\n3. Write generator functions using yield\n4. Use generator expressions\n5. Explain how for loops work under the hood",
+                "code": null
+              },
+              {
+                "heading": "The Iterator Protocol",
+                "body": "Python's for loop works by calling iter() on an object to get an iterator, then calling next() repeatedly until StopIteration is raised.",
+                "code": "# Behind every for loop:\nfor x in [1, 2, 3]:\n    print(x)\n\n# Is equivalent to:\nit = iter([1, 2, 3])\nwhile True:\n    try:\n        x = next(it)\n        print(x)\n    except StopIteration:\n        break"
+              },
+              {
+                "heading": "Creating a Custom Iterator",
+                "body": "Any class with __iter__() and __next__() methods is an iterator. __iter__() returns self. __next__() either returns the next value or raises StopIteration.",
+                "code": "class Countdown:\n    \"\"\"Iterate from n down to 1.\"\"\"\n    def __init__(self, start):\n        self.current = start\n    \n    def __iter__(self):\n        return self  # iterator returns itself\n    \n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        val = self.current\n        self.current -= 1\n        return val\n\nfor n in Countdown(5):\n    print(n, end=' ')  # 5 4 3 2 1"
+              },
+              {
+                "heading": "Generator Functions",
+                "body": "A generator is a function that uses yield instead of return. Each time yield is reached, the function pauses and resumes from that point on the next call.",
+                "code": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\n# Using the generator\nfor num in countdown(5):\n    print(num, end=' ')  # 5 4 3 2 1\n\nprint()\n\n# Convert to list\nprint(list(countdown(3)))  # [3, 2, 1]\n\n# Generators are memory-efficient for large sequences\n# because they yield one item at a time"
+              },
+              {
+                "heading": "Generator Expressions",
+                "body": "Generator expressions are like list comprehensions but with parentheses instead of brackets. They produce values on demand rather than building the entire list.",
+                "code": "# Generator expression for filtering\n# Find first 5 even squares\ngen = (x**2 for x in range(100) if x**2 % 2 == 0)\nfirst_5 = [next(gen) for _ in range(5)]\nprint(first_5)  # [0, 4, 16, 36, 64]"
+              }
+            ]
+          },
+          "exercises": [
+            {
+              "id": "ex-9-3-a",
+              "type": "predict_output",
+              "prompt": "What does this generator produce?",
+              "code": "def my_gen():\n    yield 1\n    yield 2\n    yield 3\n\nprint(list(my_gen()))",
+              "options": [
+                "[1, 2, 3]",
+                "1 2 3",
+                "[3, 2, 1]",
+                "[1]"
+              ],
+              "answer": "[1, 2, 3]",
+              "explanation": "The generator yields 1, then 2, then 3 in sequence. list() consumes all values.",
+              "difficulty": "easy",
+              "concept": "generators",
+              "misconceptions": [
+                {
+                  "concept": "generators",
+                  "detection": "Learner selects '1 2 3' thinking print() shows them directly",
+                  "explanation": "list() is needed to collect all yielded values into a list for printing.",
+                  "hint": "list() collects all values a generator produces. Each yield adds one value.",
+                  "remediationExerciseId": "ex-9-3-b"
+                }
+              ]
+            },
+            {
+              "id": "ex-9-3-b",
+              "type": "write_code",
+              "prompt": "Write a generator function called even_numbers that takes a max value n and yields even numbers from 0 up to n (inclusive).",
+              "starter_code": "def even_numbers(n):\n    for i in range(0, n + 1, 2):\n        yield i\n\nprint(list(even_numbers(10)))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[0, 2, 4, 6, 8, 10]\n"
+                }
+              ],
+              "hints": [
+                "Use range(0, n+1, 2) to get even numbers.",
+                "yield each value inside the loop."
+              ],
+              "difficulty": "medium",
+              "concept": "generators"
+            },
+            {
+              "id": "ex-9-3-c",
+              "type": "challenge",
+              "prompt": "Write a class called Fibonacci that implements an iterator to generate Fibonacci numbers up to a limit. The sequence starts 0, 1, 1, 2, 3, 5, 8... Test by printing the first 8 numbers.",
+              "starter_code": "class Fibonacci:\n    def __init__(self, limit):\n        self.limit = limit\n        self.a, self.b = 0, 1\n        self.count = 0\n    \n    def __iter__(self):\n        return self\n    \n    def __next__(self):\n        if self.count >= self.limit:\n            raise StopIteration\n        val = self.a\n        self.a, self.b = self.b, self.a + self.b\n        self.count += 1\n        return val\n\nprint(list(Fibonacci(8)))",
+              "test_cases": [
+                {
+                  "expected_stdout": "[0, 1, 1, 2, 3, 5, 8, 13]\n"
+                }
+              ],
+              "hints": [
+                "Keep __iter__ returning self.",
+                "Update a, b = b, a+b on each call to __next__.",
+                "Raise StopIteration when the limit is reached."
+              ],
+              "difficulty": "hard",
+              "concept": "custom-iterators",
+              "misconceptions": [
+                {
+                  "concept": "custom-iterators",
+                  "detection": "Code forgets to track position (self.count)",
+                  "explanation": "You need a counter to know when to stop. Initialize in __init__ and increment in __next__.",
+                  "hint": "Add a self.count attribute that increments each call.",
+                  "remediationExerciseId": "ex-9-3-b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

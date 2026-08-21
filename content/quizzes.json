@@ -518,6 +518,657 @@
           ]
         }
       ]
+    },
+    {
+      "id": "lesson-5-1",
+      "title": "Quiz: List Methods",
+      "lessonId": "lesson-5-1",
+      "questions": [
+        {
+          "id": "lesson-5-1-q1",
+          "type": "multiple-choice",
+          "question": "What does append() do to a list?",
+          "options": [
+            "Adds an item at the beginning",
+            "Adds an item at the end",
+            "Removes the last item",
+            "Sorts the list"
+          ],
+          "correctAnswer": 1,
+          "concept": "list-methods"
+        },
+        {
+          "id": "lesson-5-1-q2",
+          "type": "multiple-choice",
+          "question": "Which method removes the first occurrence of a specific value?",
+          "options": [
+            "pop()",
+            "delete()",
+            "remove()",
+            "discard()"
+          ],
+          "correctAnswer": 2,
+          "concept": "list-methods"
+        },
+        {
+          "id": "lesson-5-1-q3",
+          "type": "true-false",
+          "question": "The pop() method returns the removed item from a list.",
+          "correctAnswer": true,
+          "concept": "list-methods"
+        }
+      ]
+    },
+    {
+      "id": "lesson-5-2",
+      "title": "Quiz: List Comprehensions",
+      "lessonId": "lesson-5-2",
+      "questions": [
+        {
+          "id": "lesson-5-2-q1",
+          "type": "multiple-choice",
+          "question": "What does [x*2 for x in range(4)] produce?",
+          "options": [
+            "[0, 2, 4, 6]",
+            "[2, 4, 6, 8]",
+            "[0, 1, 2, 3]",
+            "[1, 2, 3, 4]"
+          ],
+          "correctAnswer": 0,
+          "concept": "list-comprehensions"
+        },
+        {
+          "id": "lesson-5-2-q2",
+          "type": "multiple-choice",
+          "question": "Where does the if condition go in a list comprehension?",
+          "options": [
+            "Before the for clause",
+            "After the for clause",
+            "Outside the brackets",
+            "It's not allowed"
+          ],
+          "correctAnswer": 1,
+          "concept": "list-comprehensions"
+        },
+        {
+          "id": "lesson-5-2-q3",
+          "type": "fill-blank",
+          "question": "From memory: what is the syntax for a list comprehension that creates a list of squares of numbers 0-9?",
+          "concept": "list-comprehensions",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "[x**2 for x in range(10)]",
+            "[n**2 for n in range(10)]"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-5-3",
+      "title": "Quiz: Tuples, Sets, and Dictionaries",
+      "lessonId": "lesson-5-3",
+      "questions": [
+        {
+          "id": "lesson-5-3-q1",
+          "type": "multiple-choice",
+          "question": "Which of these can be used as a dictionary key?",
+          "options": [
+            "A list",
+            "A tuple",
+            "A dictionary",
+            "Any of the above"
+          ],
+          "correctAnswer": 1,
+          "concept": "dictionaries"
+        },
+        {
+          "id": "lesson-5-3-q2",
+          "type": "multiple-choice",
+          "question": "The set operator & performs:",
+          "options": [
+            "Union",
+            "Intersection",
+            "Difference",
+            "Symmetric difference"
+          ],
+          "correctAnswer": 1,
+          "concept": "sets"
+        },
+        {
+          "id": "lesson-5-3-q3",
+          "type": "true-false",
+          "question": "Tuples are immutable and can be used as dictionary keys.",
+          "correctAnswer": true,
+          "concept": "tuples"
+        },
+        {
+          "id": "lesson-5-3-q4",
+          "type": "fill-blank",
+          "question": "From memory: what is the difference between a list and a set?",
+          "concept": "sets",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "A list is ordered and allows duplicates; a set is unordered with no duplicates",
+            "Lists keep order and duplicates; sets do not"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-5-4",
+      "title": "Quiz: Looping Techniques",
+      "lessonId": "lesson-5-4",
+      "questions": [
+        {
+          "id": "lesson-5-4-q1",
+          "type": "multiple-choice",
+          "question": "What function pairs each element of a list with its index?",
+          "options": [
+            "zip()",
+            "enumerate()",
+            "range()",
+            "items()"
+          ],
+          "correctAnswer": 1,
+          "concept": "enumerate"
+        },
+        {
+          "id": "lesson-5-4-q2",
+          "type": "multiple-choice",
+          "question": "What function lets you loop over two lists at the same time?",
+          "options": [
+            "enumerate()",
+            "chain()",
+            "zip()",
+            "merge()"
+          ],
+          "correctAnswer": 2,
+          "concept": "zip"
+        },
+        {
+          "id": "lesson-5-4-q3",
+          "type": "true-false",
+          "question": "The sorted() function modifies the original list.",
+          "correctAnswer": false,
+          "concept": "sorted"
+        }
+      ]
+    },
+    {
+      "id": "lesson-6-1",
+      "title": "Quiz: Creating and Importing Modules",
+      "lessonId": "lesson-6-1",
+      "questions": [
+        {
+          "id": "lesson-6-1-q1",
+          "type": "multiple-choice",
+          "question": "How do you import a module called 'mymod'?",
+          "options": [
+            "include mymod",
+            "import mymod",
+            "from mymod",
+            "use mymod"
+          ],
+          "correctAnswer": 1,
+          "concept": "imports"
+        },
+        {
+          "id": "lesson-6-1-q2",
+          "type": "true-false",
+          "question": "The expression import math puts all math names into your global namespace.",
+          "correctAnswer": false,
+          "concept": "imports"
+        },
+        {
+          "id": "lesson-6-1-q3",
+          "type": "fill-blank",
+          "question": "From memory: what is the difference between import math and from math import sqrt?",
+          "concept": "imports",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "import math requires math.sqrt(); from math import sqrt lets you use sqrt() directly"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-6-2",
+      "title": "Quiz: Packages and Organization",
+      "lessonId": "lesson-6-2",
+      "questions": [
+        {
+          "id": "lesson-6-2-q1",
+          "type": "multiple-choice",
+          "question": "What file marks a directory as a Python package?",
+          "options": [
+            "package.py",
+            "__init__.py",
+            "__main__.py",
+            "setup.py"
+          ],
+          "correctAnswer": 1,
+          "concept": "packages"
+        },
+        {
+          "id": "lesson-6-2-q2",
+          "type": "true-false",
+          "question": "When executed directly, a Python file's __name__ is set to '__main__'.",
+          "correctAnswer": true,
+          "concept": "name-main"
+        }
+      ]
+    },
+    {
+      "id": "lesson-6-3",
+      "title": "Quiz: Standard Library",
+      "lessonId": "lesson-6-3",
+      "questions": [
+        {
+          "id": "lesson-6-3-q1",
+          "type": "multiple-choice",
+          "question": "Which module would you import to use the sqrt() function?",
+          "options": [
+            "sys",
+            "math",
+            "random",
+            "os"
+          ],
+          "correctAnswer": 1,
+          "concept": "math"
+        },
+        {
+          "id": "lesson-6-3-q2",
+          "type": "multiple-choice",
+          "question": "Which function returns a random integer between a and b inclusive?",
+          "options": [
+            "random.randint(a, b)",
+            "random.randrange(a, b)",
+            "random.choice(range(a, b))",
+            "random.random(a, b)"
+          ],
+          "correctAnswer": 0,
+          "concept": "random"
+        },
+        {
+          "id": "lesson-6-3-q3",
+          "type": "fill-blank",
+          "question": "From memory: name one function from the statistics module and what it does.",
+          "concept": "statistics",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "mean() calculates the average",
+            "median() finds the middle value",
+            "stdev() calculates standard deviation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-7-1",
+      "title": "Quiz: Fancier Output",
+      "lessonId": "lesson-7-1",
+      "questions": [
+        {
+          "id": "lesson-7-1-q1",
+          "type": "multiple-choice",
+          "question": "How do you format a float to 2 decimal places with an f-string?",
+          "options": [
+            "f'{x:2f}'",
+            "f'{x:.2f}'",
+            "f'{x:2}'",
+            "f'{x:.2}'"
+          ],
+          "correctAnswer": 1,
+          "concept": "f-strings"
+        },
+        {
+          "id": "lesson-7-1-q2",
+          "type": "true-false",
+          "question": "The format specifier :>10 right-aligns a value in a 10-character field.",
+          "correctAnswer": true,
+          "concept": "f-strings"
+        },
+        {
+          "id": "lesson-7-1-q3",
+          "type": "fill-blank",
+          "question": "From memory: what is the difference between str() and repr()?",
+          "concept": "str-repr",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "str() returns a human-readable form; repr() returns an unambiguous form that Python can read",
+            "str() is for humans; repr() is for Python"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-7-2",
+      "title": "Quiz: File I/O",
+      "lessonId": "lesson-7-2",
+      "questions": [
+        {
+          "id": "lesson-7-2-q1",
+          "type": "multiple-choice",
+          "question": "Which mode opens a file for writing and overwrites existing content?",
+          "options": [
+            "'r'",
+            "'w'",
+            "'a'",
+            "'x'"
+          ],
+          "correctAnswer": 1,
+          "concept": "file-io"
+        },
+        {
+          "id": "lesson-7-2-q2",
+          "type": "multiple-choice",
+          "question": "What does the with statement guarantee?",
+          "options": [
+            "Faster file access",
+            "The file is automatically closed",
+            "No errors can occur",
+            "The file is deleted on exit"
+          ],
+          "correctAnswer": 1,
+          "concept": "with-statement"
+        },
+        {
+          "id": "lesson-7-2-q3",
+          "type": "true-false",
+          "question": "The write() method automatically adds a newline character.",
+          "correctAnswer": false,
+          "concept": "file-io"
+        }
+      ]
+    },
+    {
+      "id": "lesson-7-3",
+      "title": "Quiz: JSON",
+      "lessonId": "lesson-7-3",
+      "questions": [
+        {
+          "id": "lesson-7-3-q1",
+          "type": "multiple-choice",
+          "question": "Which function converts a Python object to a JSON string?",
+          "options": [
+            "json.loads()",
+            "json.dumps()",
+            "json.stringify()",
+            "json.encode()"
+          ],
+          "correctAnswer": 1,
+          "concept": "json"
+        },
+        {
+          "id": "lesson-7-3-q2",
+          "type": "true-false",
+          "question": "The json.dumps() function can optionally pretty-print with an indent parameter.",
+          "correctAnswer": true,
+          "concept": "json"
+        },
+        {
+          "id": "lesson-7-3-q3",
+          "type": "fill-blank",
+          "question": "From memory: what Python type does a JSON array become when loaded?",
+          "concept": "json",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "A list",
+            "list"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-8-1",
+      "title": "Quiz: Syntax Errors and Exceptions",
+      "lessonId": "lesson-8-1",
+      "questions": [
+        {
+          "id": "lesson-8-1-q1",
+          "type": "multiple-choice",
+          "question": "What kind of error is detected by the parser before the program runs?",
+          "options": [
+            "Runtime error",
+            "Syntax error",
+            "Logic error",
+            "ValueError"
+          ],
+          "correctAnswer": 1,
+          "concept": "syntax-errors"
+        },
+        {
+          "id": "lesson-8-1-q2",
+          "type": "multiple-choice",
+          "question": "What exception occurs when you try to use an undefined variable?",
+          "options": [
+            "ValueError",
+            "TypeError",
+            "NameError",
+            "IndexError"
+          ],
+          "correctAnswer": 2,
+          "concept": "exceptions"
+        },
+        {
+          "id": "lesson-8-1-q3",
+          "type": "true-false",
+          "question": "The last line of a traceback shows the exception type and message.",
+          "correctAnswer": true,
+          "concept": "tracebacks"
+        }
+      ]
+    },
+    {
+      "id": "lesson-8-2",
+      "title": "Quiz: Handling Exceptions",
+      "lessonId": "lesson-8-2",
+      "questions": [
+        {
+          "id": "lesson-8-2-q1",
+          "type": "multiple-choice",
+          "question": "What keyword starts a block that might raise an exception?",
+          "options": [
+            "try",
+            "catch",
+            "except",
+            "throw"
+          ],
+          "correctAnswer": 0,
+          "concept": "try-except"
+        },
+        {
+          "id": "lesson-8-2-q2",
+          "type": "multiple-choice",
+          "question": "When does the else block in a try/except run?",
+          "options": [
+            "When an exception occurs",
+            "When no exception occurs",
+            "Always",
+            "Never"
+          ],
+          "correctAnswer": 1,
+          "concept": "try-except"
+        },
+        {
+          "id": "lesson-8-2-q3",
+          "type": "true-false",
+          "question": "A bare except: clause catches all exceptions including keyboard interrupts.",
+          "correctAnswer": true,
+          "concept": "try-except"
+        }
+      ]
+    },
+    {
+      "id": "lesson-8-3",
+      "title": "Quiz: Raising Exceptions",
+      "lessonId": "lesson-8-3",
+      "questions": [
+        {
+          "id": "lesson-8-3-q1",
+          "type": "multiple-choice",
+          "question": "What keyword triggers an exception?",
+          "options": [
+            "throw",
+            "raise",
+            "error",
+            "exception"
+          ],
+          "correctAnswer": 1,
+          "concept": "raise"
+        },
+        {
+          "id": "lesson-8-3-q2",
+          "type": "multiple-choice",
+          "question": "When does the finally block execute?",
+          "options": [
+            "Only on error",
+            "Only on success",
+            "Always",
+            "Only if there's no except block"
+          ],
+          "correctAnswer": 2,
+          "concept": "finally"
+        },
+        {
+          "id": "lesson-8-3-q3",
+          "type": "true-false",
+          "question": "Custom exception classes should inherit from the Exception class.",
+          "correctAnswer": true,
+          "concept": "custom-exceptions"
+        }
+      ]
+    },
+    {
+      "id": "lesson-9-1",
+      "title": "Quiz: Class and Instance Basics",
+      "lessonId": "lesson-9-1",
+      "questions": [
+        {
+          "id": "lesson-9-1-q1",
+          "type": "multiple-choice",
+          "question": "What keyword defines a class in Python?",
+          "options": [
+            "class",
+            "def",
+            "object",
+            "struct"
+          ],
+          "correctAnswer": 0,
+          "concept": "classes"
+        },
+        {
+          "id": "lesson-9-1-q2",
+          "type": "multiple-choice",
+          "question": "What is the first parameter of every instance method?",
+          "options": [
+            "this",
+            "me",
+            "self",
+            "instance"
+          ],
+          "correctAnswer": 2,
+          "concept": "self"
+        },
+        {
+          "id": "lesson-9-1-q3",
+          "type": "true-false",
+          "question": "Class variables are shared across all instances of a class.",
+          "correctAnswer": true,
+          "concept": "classes"
+        }
+      ]
+    },
+    {
+      "id": "lesson-9-2",
+      "title": "Quiz: Inheritance",
+      "lessonId": "lesson-9-2",
+      "questions": [
+        {
+          "id": "lesson-9-2-q1",
+          "type": "multiple-choice",
+          "question": "Which function checks if an object is an instance of a class?",
+          "options": [
+            "type()",
+            "isinstance()",
+            "issubclass()",
+            "isinstanceof()"
+          ],
+          "correctAnswer": 1,
+          "concept": "inheritance"
+        },
+        {
+          "id": "lesson-9-2-q2",
+          "type": "multiple-choice",
+          "question": "How do you call a parent class's method from a subclass?",
+          "options": [
+            "parent.method()",
+            "super().method()",
+            "base.method()",
+            "this.method()"
+          ],
+          "correctAnswer": 1,
+          "concept": "inheritance"
+        },
+        {
+          "id": "lesson-9-2-q3",
+          "type": "true-false",
+          "question": "A subclass can override methods from its parent class.",
+          "correctAnswer": true,
+          "concept": "inheritance"
+        },
+        {
+          "id": "lesson-9-2-q4",
+          "type": "fill-blank",
+          "question": "From memory: why is inheritance useful?",
+          "concept": "inheritance",
+          "reviewPrompt": true,
+          "correctAnswer": [
+            "It lets you reuse and extend existing code",
+            "It avoids duplicating code by sharing behavior between related classes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lesson-9-3",
+      "title": "Quiz: Iterators and Generators",
+      "lessonId": "lesson-9-3",
+      "questions": [
+        {
+          "id": "lesson-9-3-q1",
+          "type": "multiple-choice",
+          "question": "What keyword in a function makes it a generator?",
+          "options": [
+            "return",
+            "yield",
+            "generate",
+            "await"
+          ],
+          "correctAnswer": 1,
+          "concept": "generators"
+        },
+        {
+          "id": "lesson-9-3-q2",
+          "type": "multiple-choice",
+          "question": "What exception does an iterator raise when it has no more items?",
+          "options": [
+            "EndIteration",
+            "StopIteration",
+            "IterationError",
+            "Exit"
+          ],
+          "correctAnswer": 1,
+          "concept": "iterators"
+        },
+        {
+          "id": "lesson-9-3-q3",
+          "type": "true-false",
+          "question": "Generator expressions use less memory than list comprehensions.",
+          "correctAnswer": true,
+          "concept": "generators"
+        }
+      ]
     }
   ]
 }
