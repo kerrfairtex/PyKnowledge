@@ -75,4 +75,6 @@ Thumbs.db
 *.swp
 *.swo
 fcc-reference/
+# Third-party educational resources (D3 viz scripts, external tutorials)
+educational_resources/
 .vercel
