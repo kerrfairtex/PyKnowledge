@@ -1,0 +1,64 @@
+# Render Blueprint — PyKnowledge v0.5.0
+# Deploys: static frontend + Node API server + PostgreSQL
+#
+# After first deploy:
+#   1. Set CORS_ORIGIN on the API service to your static site URL
+#      (e.g. https://pyknowledge-client.onrender.com)
+#   2. If using Supabase instead of Render Postgres, update DATABASE_URL
+#      on the API service via Render dashboard
+
+services:
+  # ── Static frontend ─────────────────────────────────────────────
+  # Serves the root directory as-is (plain HTML/CSS/JS, no build).
+  # Hash-based routing (#/dashboard, #/lesson) works without rewrites.
+  - type: static_site
+    name: pyknowledge-client
+    repo: https://github.com/kerrfairtex/PyKnowledge
+    branch: main
+    buildCommand: ""
+    publishDir: .
+    headers:
+      - path: /core/service-worker.js
+        name: Cache-Control
+        value: "no-cache"
+      - path: /manifest.json
+        name: Cache-Control
+        value: "public, max-age=86400"
+      - path: /ui/assets/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /ui/themes/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+
+  # ── API server ──────────────────────────────────────────────────
+  # Express + Prisma backend for auth, content sync, and progress
+  - type: web
+    name: pyknowledge-api
+    runtime: node
+    repo: https://github.com/kerrfairtex/PyKnowledge
+    branch: main
+    buildCommand: npm ci && npm run db:generate -w pyknowledge-server
+    startCommand: npm run start:server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pyknowledge-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        value: "" # ← set to your static site URL after deploy
+
+databases:
+  # ── PostgreSQL ──────────────────────────────────────────────────
+  - name: pyknowledge-db
+    plan: free
+    ipAllowList: [] # disallow external access (API-only via private network)
