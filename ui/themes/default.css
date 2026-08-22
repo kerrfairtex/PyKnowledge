@@ -1114,3 +1114,50 @@ body {
   gap: var(--space-sm);
   margin-top: var(--space-md);
 }
+
+/* ------------------------------------------------------------------
+   Auth screens: Download App button + install guide (WCAG AA on
+   --color-surface dark background)
+   ------------------------------------------------------------------ */
+.install-guide {
+  margin-top: var(--space-md);
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.install-guide summary {
+  color: #CBD5E1;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.install-guide summary:hover,
+.install-guide summary:focus-visible {
+  color: #E2E8F0;
+}
+
+.install-guide-steps {
+  margin: var(--space-sm) 0 var(--space-xs);
+  padding-left: 1.25rem;
+  color: #E2E8F0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.install-guide-steps kbd {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-family: inherit;
+}
+
+.install-guide-note {
+  color: #94A3B8;
+  font-size: 0.78rem;
+  margin: 0;
+}

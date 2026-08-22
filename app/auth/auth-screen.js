@@ -8,6 +8,20 @@ import {
 } from '../../storage/auth.js';
 import { showSuccess } from '../../ui/components/toast.js';
 import { animatePageEnter, staggerChildren } from '../../ui/components/animations.js';
+import { initInstallPrompt } from '../../ui/components/install-prompt.js';
+
+const DOWNLOAD_BTN = `
+  <button type="button" class="btn btn-ghost btn-sm" id="authDownloadButton" hidden>Download App</button>`;
+
+function bindAuthExtras() {
+  initInstallPrompt('authDownloadButton');
+  const homeLink = document.getElementById('btn-back-home');
+  if (homeLink) {
+    homeLink.addEventListener('click', () => {
+      window.location.hash = '#top';
+    });
+  }
+}
 
 export function renderAuthGate(main, onAuthenticated) {
   if (isAuthenticated()) {
@@ -31,14 +45,35 @@ function renderWelcome(main, onAuthenticated) {
         <p class="auth-subtitle">Create your student profile to save progress on this device.</p>
         <p class="auth-note">Works fully offline. No internet or account required.</p>
         <button type="button" class="btn btn-primary btn-lg" id="btn-create-profile">Create Profile</button>
+        ${DOWNLOAD_BTN}
         <button type="button" class="btn btn-ghost" id="btn-guest">Continue as Guest</button>
         <p class="auth-note">Guest progress is saved on this device and can be moved
         into a profile later.</p>
-        <a class="auth-about-link" href="#/about">What is PyKnowledge? About this app →</a>
+
+        <details class="install-guide">
+          <summary>How to download &amp; install this app</summary>
+          <ol class="install-guide-steps">
+            <li><strong>Tap "Download App"</strong> above. Chrome shows an
+              <em>Install app</em> confirmation — tap it, and PyKnowledge is added
+              to your home screen like a normal app.</li>
+            <li><strong>No button visible?</strong> On Android Chrome: tap the
+              <kbd>⋮</kbd> menu (top-right) → <strong>Add to Home screen</strong> →
+              <strong>Install</strong>. On iPhone Safari: tap <strong>Share</strong>
+              → <strong>Add to Home Screen</strong>.</li>
+            <li><strong>Open it anytime</strong> from your home screen — it launches
+              full-screen, loads instantly, and works with
+              <strong>zero internet connection</strong> once installed.</li>
+          </ol>
+          <p class="install-guide-note">Installing also saves all lessons to your
+          device, so you can study offline anywhere.</p>
+        </details>
+
+        <a class="auth-about-link" id="btn-back-home" href="#top">&larr; Back to home</a>
       </div>
     </section>`;
 
   animatePageEnter(main);
+  bindAuthExtras();
   document.getElementById('btn-create-profile').addEventListener('click', () => {
     renderRegister(main, onAuthenticated);
   });
@@ -69,11 +104,13 @@ export function renderProfilePicker(main, onAuthenticated) {
           </button>
         </div>
         <button type="button" class="btn btn-ghost" id="btn-guest-picker">Continue as Guest</button>
+        ${DOWNLOAD_BTN}
       </div>
     </section>`;
 
   animatePageEnter(main);
   staggerChildren(main, '.animate-item');
+  bindAuthExtras();
 
   main.querySelectorAll('.profile-card[data-user-id]').forEach((btn) => {
     btn.addEventListener('click', () => {
