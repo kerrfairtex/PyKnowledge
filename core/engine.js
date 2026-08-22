@@ -11,6 +11,7 @@ import { renderDashboard } from '../app/dashboard/dashboard.js';
 import { renderLessonViewer } from '../app/lessons/lesson-viewer.js';
 import { renderQuiz } from '../app/quizzes/quiz-engine.js';
 import { renderProgressDashboard } from '../app/progress/progress-dashboard.js';
+import { renderLibrary } from '../app/library/reference-library.js';
 import { renderNavbar, updateNavbarActiveState } from '../ui/components/navbar.js';
 import { initOfflineIndicator } from '../ui/components/offline-indicator.js';
 import { initUpdateNotifier, checkForUpdates } from '../ui/components/update-notifier.js';
@@ -131,6 +132,11 @@ async function initApp() {
 
     registerRoute('/progress', (m) => {
       renderProgressDashboard(m, lessonsData);
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/library', async (m, params) => {
+      await withErrorHandling(m, () => renderLibrary(m, params));
       updateNavbarActiveState();
     });
 

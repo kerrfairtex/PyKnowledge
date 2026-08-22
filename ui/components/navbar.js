@@ -40,6 +40,9 @@ export function renderNavbar(container) {
       <li role="listitem">
         <a href="#/progress" class="nav-link ${isActive(route, '/progress') ? 'active' : ''}" ${route === '/progress' ? 'aria-current="page"' : ''}>Progress</a>
       </li>
+      <li role="listitem">
+        <a href="#/library" class="nav-link ${isActive(route, '/library') ? 'active' : ''}" ${route.startsWith('/library') ? 'aria-current="page"' : ''}>Library</a>
+      </li>
       ${userMenu}
     </ul>`;
 

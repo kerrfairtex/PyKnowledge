@@ -90,7 +90,12 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
 
 function renderExercises(exercises) {
   return exercises.map((exercise) => {
-    const typeLabel = exercise.type.replace('_', ' ');
+    const typeLabel = exercise.type ? String(exercise.type).replace('_', ' ') : 'unknown';
+    if (!['predict_output', 'fix_the_code', 'parsons', 'write_code', 'challenge'].includes(exercise.type)) {
+      console.warn(`[lesson-viewer] Unknown exercise type "${exercise.type}" (id: ${exercise.id}) — skipped.`);
+      return '';
+    }
+
     let contentHtml = '';
 
     switch (exercise.type) {
@@ -106,7 +111,7 @@ function renderExercises(exercises) {
               </label>
             `).join('')}
           </fieldset>
-          <button type="button" class="btn btn-primary check-predict-btn" data-exercise-id="${exercise.id}" data-answer="${exercise.answer}">Check Answer</button>
+          <button type="button" class="btn btn-primary check-predict-btn" data-exercise-id="${exercise.id}">Check Answer</button>
           <div class="exercise-feedback" hidden></div>
         `;
         break;
@@ -146,6 +151,21 @@ function renderExercises(exercises) {
         `;
         break;
 
+      case 'challenge':
+        contentHtml = `
+          <div class="exercise-prompt">${escapeHtml(exercise.prompt)}</div>
+          ${exercise.difficulty ? `<span class="exercise-difficulty">${escapeHtml(exercise.difficulty)}</span>` : ''}
+          <div id="code-editor-${exercise.id}"></div>
+          ${exercise.hints && exercise.hints.length > 0 ? `
+            <details class="exercise-hints">
+              <summary>Show Hints</summary>
+              <ul>${exercise.hints.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
+            </details>
+          ` : ''}
+          <div class="exercise-feedback" hidden></div>
+        `;
+        break;
+
       case 'write_code':
         contentHtml = `
           <div class="exercise-prompt">${escapeHtml(exercise.prompt)}</div>
@@ -175,8 +195,8 @@ function renderExercises(exercises) {
 function initializeCodeEditors(exercises) {
   if (!exercises) return;
 
-  exercises.forEach((exercise) => {
-    if (exercise.type !== 'write_code') return;
+    exercises.forEach((exercise) => {
+      if (exercise.type !== 'write_code' && exercise.type !== 'challenge') return;
 
     const container = document.getElementById(`code-editor-${exercise.id}`);
     if (!container) return;
@@ -204,7 +224,10 @@ function initializeCodeEditors(exercises) {
 
             if (normalizedActual === normalizedExpected) {
               callback(actualOutput, null);
-              showExerciseFeedback(exercise.id, 'success', '✓ All test cases passed!');
+              const passed = testCases.length > 1
+                ? `✓ Test case 1 of ${testCases.length} passed!`
+                : '✓ Test passed!';
+              showExerciseFeedback(exercise.id, 'success', passed);
             } else {
               callback(actualOutput, `Expected:\n${expectedStdout}\n\nGot:\n${actualOutput}`);
               showExerciseFeedback(exercise.id, 'error', '✗ Output does not match expected. See output panel.');
@@ -217,11 +240,14 @@ function initializeCodeEditors(exercises) {
     });
   });
 
-  // Initialize predict_output check buttons
+  // Initialize predict_output check buttons (answer kept out of the DOM;
+  // looked up from the in-memory exercise data instead)
   document.querySelectorAll('.check-predict-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const exerciseId = btn.dataset.exerciseId;
-      const correctAnswer = btn.dataset.answer;
+      const exercise = exercises.find(e => String(e.id) === exerciseId);
+      if (!exercise) return;
+      const correctAnswer = exercise.answer;
       const selected = document.querySelector(`input[name="ex-${exerciseId}"]:checked`);
 
       if (!selected) {
@@ -229,7 +255,8 @@ function initializeCodeEditors(exercises) {
         return;
       }
 
-      if (selected.value === correctAnswer || selected.nextSibling.textContent.trim() === correctAnswer) {
+      const selectedText = selected.closest('label')?.textContent.trim() ?? '';
+      if (selected.value === String(correctAnswer) || selectedText === correctAnswer) {
         showExerciseFeedback(exerciseId, 'success', '✓ Correct!');
       } else {
         showExerciseFeedback(exerciseId, 'error', '✗ Incorrect. Try again.');
@@ -284,13 +311,10 @@ function initializeParsons(exercises) {
       targetEl.classList.remove('active');
 
       if (draggedItem && draggedItem.parentElement === sourceEl) {
-        // Clone the block and add to target
-        const clone = draggedItem.cloneNode(true);
-        clone.draggable = true;
-        clone.classList.remove('dragging');
-        targetEl.appendChild(clone);
-        // Remove from source (or keep for reset)
-        // We'll keep in source for reset functionality
+        // Move the block into the target (no clone — prevents duplicates)
+        draggedItem.classList.remove('dragging');
+        targetEl.appendChild(draggedItem);
+        draggedItem = null;
       }
     });
 
@@ -357,6 +381,11 @@ function initializeParsons(exercises) {
     // Reset button
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
+        // Clear target and return every block to the source container
+        targetEl.querySelectorAll('.parsons-block').forEach(b => {
+          b.classList.remove('dragging');
+          sourceEl.appendChild(b);
+        });
         targetEl.innerHTML = '';
         const feedback = document.querySelector(`#exercise-${exercise.id} .exercise-feedback`);
         feedback.hidden = true;

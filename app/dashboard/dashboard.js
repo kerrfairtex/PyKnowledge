@@ -22,8 +22,8 @@
  * below needs adjusting — nothing else touches it directly.
  */
 
-import { getProgress } from '../../core/storage.js';
-import { checkPrerequisite } from '../../storage/progress.js';
+import { checkPrerequisite, validateProgressIntegrity } from '../../storage/progress.js';
+import { escapeHtml } from '../../utils/sanitize.js';
 
 // ---- Prerequisite / completion state -----------------------------------
 
@@ -86,6 +86,11 @@ const MODULE_ICONS = [ICONS.book, ICONS.branch, ICONS.loop, ICONS.func, ICONS.st
 // ---- Render --------------------------------------------------------------
 
 export async function renderDashboard(main, _params, _route, lessonsData) {
+  // Stale-render guard: only the latest invocation may paint.
+  const renderId = Symbol('dashboard-render');
+  renderDashboard._latest = renderId;
+  const isLatest = () => renderDashboard._latest === renderId;
+
   main.innerHTML = `<div class="dash page-content"><p class="dash-loading">Loading your dashboard…</p></div>`;
 
   if (!lessonsData || !Array.isArray(lessonsData.modules)) {
@@ -93,14 +98,17 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
     return;
   }
 
-  const progress = await getProgress();
+  const { progress } = validateProgressIntegrity(lessonsData);
   const modules = lessonsData.modules;
   const totalLessons = modules.reduce((n, m) => n + m.lessons.length, 0);
   const totalDone = progress.completedLessons.length;
 
+  // Resolve ALL module cards before painting once — no out-of-order flicker.
   const cardsHtml = (await Promise.all(
     modules.map((m, i) => moduleCardHtml(m, lessonsData, progress, MODULE_ICONS[i % MODULE_ICONS.length]))
   )).join('');
+
+  if (!isLatest()) return; // a newer navigation superseded this render
 
   const flash = readFlash();
 
@@ -145,10 +153,10 @@ async function moduleCardHtml(module, lessonsData, progress, icon) {
   let action;
   if (state === 'locked') {
     const prereq = lessonsData.modules.find(m => m.id === module.prerequisite);
-    action = `<p class="dash-card-locked-note">Complete all lessons in "${prereq ? prereq.title : 'the previous module'}" first</p>`;
+    action = `<p class="dash-card-locked-note">Complete all lessons in &quot;${prereq ? escapeHtml(prereq.title) : 'the previous module'}&quot; first</p>`;
   } else {
     const label = state === 'done' ? 'Review module' : (done > 0 ? 'Continue module' : 'Start module');
-    action = `<a class="dash-card-btn" href="#/module/${module.id}">${label}</a>`;
+    action = `<a class="dash-card-btn" href="#/module/${encodeURIComponent(module.id)}">${label}</a>`;
   }
 
   return `
@@ -156,11 +164,11 @@ async function moduleCardHtml(module, lessonsData, progress, icon) {
       <div class="dash-card-icon" aria-hidden="true">${icon}</div>
       <div class="dash-card-body">
         <div class="dash-card-title-row">
-          <h3>${module.title}</h3>
+          <h3>${escapeHtml(module.title)}</h3>
           ${state === 'locked' ? `<span class="dash-card-badge">${ICONS.lock}</span>` : ''}
           ${state === 'done' ? `<span class="dash-card-badge dash-card-badge--done">${ICONS.check}</span>` : ''}
         </div>
-        <p class="dash-card-desc">${module.description || ''}</p>
+        <p class="dash-card-desc">${escapeHtml(module.description || '')}</p>
         <div class="dash-bar dash-bar--small"><div class="dash-bar-fill" style="width:${pct}%"></div></div>
         <div class="dash-card-count">${done}/${total} lessons</div>
         ${action}

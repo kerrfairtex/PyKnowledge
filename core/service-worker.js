@@ -10,12 +10,14 @@ const CACHE_NAME = `pyknowledge-v${SW_VERSION}`;
 const STATIC_ASSETS = [
   '/',
   '/app-shell.html',
+  '/privacy.html',
   '/manifest.json',
   '/core/engine.js',
   '/core/api.js',
   '/core/loader.js',
   '/core/router.js',
   '/core/storage.js',
+  '/core/idb.js',
   '/core/errors.js',
   '/core/version.js',
   '/app/dashboard/dashboard.js',
@@ -35,6 +37,7 @@ const STATIC_ASSETS = [
   '/ui/themes/default.css',
   '/ui/themes/animations.css',
   '/ui/themes/landing.css',
+  '/ui/themes/library.css',
   '/ui/components/navbar.js',
   '/ui/components/progress-bar.js',
   '/ui/components/video-player.js',
@@ -51,15 +54,28 @@ const STATIC_ASSETS = [
   '/index.css',
   '/content/lessons.json',
   '/content/quizzes.json',
+  '/content/reference.json',
+  '/app/library/reference-library.js',
   '/ui/assets/icon-192.png',
   '/ui/assets/icon-512.png',
+  '/ui/assets/maskable-icon-192.png',
+  '/ui/assets/maskable-icon-512.png',
   '/ui/assets/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then((cache) =>
+        // Per-file caching: one missing/404 asset must not fail the whole
+        // install (cache.addAll is all-or-nothing and would leave the app
+        // with no offline support at all).
+        Promise.allSettled(
+          STATIC_ASSETS.map((asset) => cache.add(asset).catch((err) => {
+            console.warn(`[SW] Failed to cache ${asset}:`, err);
+          }))
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -99,7 +115,10 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => {
         if (event.request.destination === 'document') {
-          return caches.match('/app-shell.html');
+          // Serve the shell from the CURRENT cache only, not stale versions.
+          return caches.open(CACHE_NAME)
+            .then((cache) => cache.match('/app-shell.html'))
+            .then((shell) => shell || new Response('Offline', { status: 503 }));
         }
         return new Response('Offline — content not cached', {
           status: 503,

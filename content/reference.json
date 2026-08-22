@@ -1,0 +1,293 @@
+{
+  "version": "1.0.0",
+  "sheets": [
+    {
+      "id": "ref-basics",
+      "title": "Python Basics",
+      "module": "module-1",
+      "summary": "Variables, data types, input and output — the everyday essentials.",
+      "sections": [
+        {
+          "heading": "Variables",
+          "body": "A variable stores a value under a name. No declaration keyword needed — just assign with =. Names are case-sensitive and use snake_case by convention.",
+          "code": "age = 16\nname = \"Kerr\"\nis_student = True\nprint(name, age, is_student)"
+        },
+        {
+          "heading": "Core Data Types",
+          "body": "int (whole numbers), float (decimals), str (text in quotes), bool (True/False), and None (no value). Use type(x) to check, int() / float() / str() to convert.",
+          "code": "x = 10        # int\ny = 3.14      # float\ntext = \"hi\"   # str\nflag = False  # bool\n\nprint(type(y))          # <class 'float'>\nnum = int(\"42\") + 1     # convert str -> int -> 43"
+        },
+        {
+          "heading": "Arithmetic Operators",
+          "body": "+ - * / as usual. Special ones: // floor division, % remainder, ** power.",
+          "code": "print(7 / 2)    # 3.5  (true division)\nprint(7 // 2)   # 3    (floor division)\nprint(7 % 2)    # 1    (remainder)\nprint(2 ** 10)  # 1024 (power)"
+        },
+        {
+          "heading": "Input and Output",
+          "body": "input() always returns a string — convert it if you need a number. print() can take several values separated by commas.",
+          "code": "name = input(\"Your name: \")\nage = int(input(\"Your age: \"))\nprint(\"Hello\", name, \"— next year you'll be\", age + 1)"
+        },
+        {
+          "heading": "String Basics",
+          "body": "Strings are sequences of characters. Concatenate with +, repeat with *, get length with len(), access single characters with [index] starting at 0.",
+          "code": "s = \"Python\"\nprint(len(s))     # 6\nprint(s[0])       # 'P'\nprint(s * 2)      # PythonPython\nprint(\"Py\" + \"!\") # Py!"
+        }
+      ]
+    },
+    {
+      "id": "ref-conditionals",
+      "title": "If-Else Statements",
+      "module": "module-2",
+      "summary": "Making decisions: if, elif, else, and comparison operators.",
+      "sections": [
+        {
+          "heading": "Comparison Operators",
+          "body": "== equal, != not equal, < less, > greater, <= and >=. Note: = assigns, == compares. Chained comparisons work: 0 <= x <= 100.",
+          "code": "score = 85\nprint(score == 100)   # False\nprint(score >= 75)    # True"
+        },
+        {
+          "heading": "if / elif / else",
+          "body": "Only the first true branch runs. Indentation (4 spaces) defines the block — this is required syntax in Python, not style.",
+          "code": "grade = 88\n\nif grade >= 90:\n    print(\"A\")\nelif grade >= 80:\n    print(\"B\")\nelse:\n    print(\"Keep going\")"
+        },
+        {
+          "heading": "Logical Operators",
+          "body": "Combine conditions with and (both must be true), or (at least one), not (flips).",
+          "code": "age = 17\nhas_id = True\n\nif age >= 13 and age <= 19:\n    print(\"Teenager\")\nif not has_id or age >= 18:\n    print(\"Allowed\")"
+        },
+        {
+          "heading": "Truthiness",
+          "body": "Empty values count as False: 0, \"\", [], {}, None. Everything else is True — so `if my_list:` means \"if the list has items\".",
+          "code": "items = []\nif items:\n    print(\"Has items\")\nelse:\n    print(\"Empty list is falsy\")"
+        }
+      ]
+    },
+    {
+      "id": "ref-loops",
+      "title": "Loops",
+      "module": "module-3",
+      "summary": "for loops, while loops, range(), break and continue.",
+      "sections": [
+        {
+          "heading": "for Loops and range()",
+          "body": "Loop over a sequence. range(n) counts 0..n-1; range(start, stop, step) for custom ranges.",
+          "code": "for i in range(5):\n    print(i)            # 0 1 2 3 4\n\nfor i in range(2, 11, 2):\n    print(i)            # 2 4 6 8 10"
+        },
+        {
+          "heading": "while Loops",
+          "body": "Repeats while the condition stays True. Always change something inside the loop or it runs forever.",
+          "code": "count = 3\nwhile count > 0:\n    print(count)\n    count -= 1     # countdown: 3 2 1\nprint(\"Lift off!\")"
+        },
+        {
+          "heading": "break and continue",
+          "body": "break exits the loop immediately; continue skips to the next iteration.",
+          "code": "for n in range(1, 10):\n    if n % 2 == 0:\n        continue   # skip evens\n    if n > 7:\n        break      # stop past 7\n    print(n)       # 1 3 5 7"
+        },
+        {
+          "heading": "Nested Loops",
+          "body": "A loop inside a loop — the inner one completes fully for every outer step.",
+          "code": "for row in range(1, 4):\n    for col in range(row):\n        print(\"*\", end=\"\")\n    print()    # prints a triangle"
+        }
+      ]
+    },
+    {
+      "id": "ref-functions",
+      "title": "Functions",
+      "module": "module-4",
+      "summary": "Defining functions, parameters, return values, and scope.",
+      "sections": [
+        {
+          "heading": "Defining and Calling",
+          "body": "def name(parameters): creates a function; call it with name(arguments). The body runs only when called.",
+          "code": "def greet():\n    print(\"Hello!\")\n\ngreet()   # Hello!"
+        },
+        {
+          "heading": "Parameters & Arguments",
+          "body": "Parameters are placeholders; arguments are the real values. You can give defaults, and pass keyword arguments out of order.",
+          "code": "def intro(name, greeting=\"Hi\"):\n    print(f\"{greeting}, {name}!\")\n\nintro(\"Ana\")                    # Hi, Ana!\nintro(\"Ben\", greeting=\"Welcome\")  # Welcome, Ben!"
+        },
+        {
+          "heading": "Return Values",
+          "body": "return sends a result back to the caller and ends the function. A function with no return gives back None.",
+          "code": "def area(w, h):\n    return w * h\n\na = area(3, 4)\nprint(a)          # 12"
+        },
+        {
+          "heading": "Scope",
+          "body": "Variables created inside a function are local — they disappear after it ends. Functions read outer variables but shouldn't modify them without global (avoid that).",
+          "code": "total = 0\n\ndef add(points):\n    local = points * 2   # local only\n    return local\n\nprint(add(5))   # 10\n# print(local)  # NameError — doesn't exist here"
+        },
+        {
+          "heading": "Docstrings",
+          "body": "A triple-quoted string on the first line documents what the function does. Read it with help(func).",
+          "code": "def celsius_to_f(c):\n    \"\"\"Convert Celsius to Fahrenheit.\"\"\"\n    return c * 9 / 5 + 32"
+        }
+      ]
+    },
+    {
+      "id": "ref-datastructures",
+      "title": "Lists, Tuples, Sets & Dictionaries",
+      "module": "module-5",
+      "summary": "Python's built-in collections and when to use each.",
+      "sections": [
+        {
+          "heading": "Lists",
+          "body": "Ordered, changeable collections. Index from 0, slice with [start:stop], append/remove/insert to modify.",
+          "code": "scores = [90, 85, 77]\nscores.append(100)\nscores[0] = 95\nprint(scores[:2])   # first two: [95, 85]\nprint(len(scores))  # 4"
+        },
+        {
+          "heading": "Useful List Methods",
+          "body": "append(x) adds to end, insert(i, x), remove(x) deletes by value, sort() orders in place, sum()/max()/min() reduce.",
+          "code": "nums = [3, 1, 4]\nnums.sort()\nprint(nums)          # [1, 3, 4]\nnums.remove(3)\nprint(sum(nums))     # 5"
+        },
+        {
+          "heading": "List Comprehensions",
+          "body": "Build a list in one line: [expression for item in sequence if condition].",
+          "code": "squares = [n**2 for n in range(5)]\nprint(squares)               # [0, 1, 4, 9, 16]\nevens = [n for n in squares if n % 2 == 0]\nprint(evens)                 # [0, 4, 16]"
+        },
+        {
+          "heading": "Tuples",
+          "body": "Like lists but immutable — cannot be changed after creation. Use for fixed groups of values.",
+          "code": "point = (3, 4)\nx, y = point       # unpacking\nprint(x + y)       # 7\n# point[0] = 9     # TypeError!"
+        },
+        {
+          "heading": "Sets",
+          "body": "Unordered collection with NO duplicates — great for deduplicating and membership tests.",
+          "code": "tags = [\"py\", \"web\", \"py\"]\nunique = set(tags)\nprint(unique)         # {'py', 'web'}\nprint(\"py\" in unique) # True (fast lookup)"
+        },
+        {
+          "heading": "Dictionaries",
+          "body": "Key → value pairs. Access by key, .get() won't crash on missing keys, loop over .items().",
+          "code": "student = {\"name\": \"Ana\", \"grade\": 91}\nprint(student[\"name\"])           # Ana\nprint(student.get(\"age\", \"N/A\")) # N/A\n\nfor key, value in student.items():\n    print(key, \"=\", value)"
+        }
+      ]
+    },
+    {
+      "id": "ref-modules",
+      "title": "Modules & Imports",
+      "module": "module-6",
+      "summary": "Using the standard library and organizing code into modules.",
+      "sections": [
+        {
+          "heading": "Importing Modules",
+          "body": "import module uses dot notation; from module import name imports directly; import x as y renames.",
+          "code": "import math\nprint(math.sqrt(16))    # 4.0\n\nfrom random import randint\nprint(randint(1, 6))    # dice roll\n\nimport datetime as dt\nprint(dt.date.today())"
+        },
+        {
+          "heading": "Handy Standard Library",
+          "body": "math (numbers), random (chance), datetime (dates/times), os (files/system), json (data files). These ship with Python — nothing to install.",
+          "code": "from math import pi, ceil\nprint(pi)          # 3.14159...\nprint(ceil(2.1))   # 3"
+        },
+        {
+          "heading": "Creating Your Own Module",
+          "body": "Any .py file is a module. Import your own file by its name (must be in the same folder). Code under `if __name__ == \"__main__\":` runs only when the file itself is run, not when imported.",
+          "code": "# utils.py\ndef double(n):\n    return n * 2\n\nif __name__ == \"__main__\":\n    print(double(4))   # runs only via: python utils.py"
+        }
+      ]
+    },
+    {
+      "id": "ref-io-formatting",
+      "title": "Output Formatting, Files & JSON",
+      "module": "module-7",
+      "summary": "f-strings, alignment, reading/writing files, saving data as JSON.",
+      "sections": [
+        {
+          "heading": "f-Strings",
+          "body": "Put f before the quotes and drop variables or expressions right inside {}.",
+          "code": "name = \"Ana\"\nscore = 91.567\nprint(f\"{name} scored {score:.1f}%\")  # Ana scored 91.6%\nprint(f\"{score=}\")                    # score=91.567 (debug form)"
+        },
+        {
+          "heading": "Alignment and Padding",
+          "body": "Inside f-string braces: :>N right-align, :<N left-align, :^N center, :.Nf decimal places.",
+          "code": "items = [(\"pen\", 12), (\"notebook\", 45)]\nfor item, price in items:\n    print(f\"{item:<10}| {price:>4} PHP\")"
+        },
+        {
+          "heading": "Reading & Writing Files",
+          "body": "with open(...) as f handles closing automatically. Modes: \"w\" write (overwrites!), \"a\" append, \"r\" read.",
+          "code": "with open(\"notes.txt\", \"w\") as f:\n    f.write(\"Line one\\n\")\n\nwith open(\"notes.txt\", \"r\") as f:\n    for line in f:\n        print(line.strip())"
+        },
+        {
+          "heading": "JSON — Saving Structured Data",
+          "body": "json.dumps/loads convert between Python objects and JSON strings; json.dump/load do it straight to/from files.",
+          "code": "import json\n\nprogress = {\"completed\": [\"lesson-1-1\"], \"streak\": 3}\n\nwith open(\"save.json\", \"w\") as f:\n    json.dump(progress, f)\n\nwith open(\"save.json\") as f:\n    loaded = json.load(f)\nprint(loaded[\"streak\"])   # 3"
+        }
+      ]
+    },
+    {
+      "id": "ref-errors",
+      "title": "Errors & Exceptions",
+      "module": "module-8",
+      "summary": "Why programs crash, try/except, raising errors, and finally.",
+      "sections": [
+        {
+          "heading": "Common Exceptions",
+          "body": "SyntaxError — code isn't valid Python. Others happen at runtime: ValueError (right type, bad value), TypeError (wrong type), ZeroDivisionError, IndexError, KeyError, FileNotFoundError.",
+          "code": "# int(\"abc\")      -> ValueError\n# 10 / 0           -> ZeroDivisionError\n# [1,2][5]         -> IndexError\n# d[\"missing\"]     -> KeyError"
+        },
+        {
+          "heading": "try / except",
+          "body": "Wrap risky code in try; the except block runs only if that specific error happens. Catch specific types — bare except hides real bugs.",
+          "code": "try:\n    age = int(input(\"Age: \"))\nexcept ValueError:\n    print(\"Please type digits only.\")"
+        },
+        {
+          "heading": "Multiple except Blocks & else",
+          "body": "Different errors, different handling. else runs when no error happened.",
+          "code": "try:\n    n = int(input(\"Number: \"))\n    result = 100 / n\nexcept ValueError:\n    print(\"Not a number\")\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero\")\nelse:\n    print(\"Result:\", result)"
+        },
+        {
+          "heading": "raise and finally",
+          "body": "raise creates an error deliberately with a message. finally runs no matter what — good for clean-up.",
+          "code": "def set_age(age):\n    if age < 0:\n        raise ValueError(\"Age cannot be negative\")\n    return age\n\ntry:\n    set_age(-3)\nexcept ValueError as e:\n    print(\"Rejected:\", e)\nfinally:\n    print(\"Done checking\")"
+        }
+      ]
+    },
+    {
+      "id": "ref-oop",
+      "title": "Classes & OOP (+ Generators)",
+      "module": "module-9",
+      "summary": "Classes, objects, inheritance, iterators and generators.",
+      "sections": [
+        {
+          "heading": "Class Basics",
+          "body": "A class is a blueprint; each object made from it is an instance. __init__ sets up new instances; self refers to the current one.",
+          "code": "class Student:\n    def __init__(self, name, grade):\n        self.name = name\n        self.grade = grade\n\n    def info(self):\n        return f\"{self.name}: {self.grade}\"\n\ns = Student(\"Ana\", 92)\nprint(s.info())   # Ana: 92"
+        },
+        {
+          "heading": "Inheritance",
+          "body": "A child class reuses and extends a parent class. Call super().__init__() to run the parent's setup.",
+          "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def speak(self):\n        return \"Woof!\"\n\nd = Dog(\"Bantay\")\nprint(d.name, \"says\", d.speak())  # Bantay says Woof!"
+        },
+        {
+          "heading": "Iterators & Generators",
+          "body": "Generators produce values one at a time with yield — memory-friendly for big sequences. Each next() resumes where it left off.",
+          "code": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nfor num in countdown(3):\n    print(num)     # 3 2 1"
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {"term": "Argument", "definition": "The actual value you pass into a function when calling it."},
+    {"term": "Boolean", "definition": "A value that is either True or False."},
+    {"term": "Bug", "definition": "An error in a program that makes it behave incorrectly."},
+    {"term": "Class", "definition": "A blueprint for creating objects that bundle data and behavior."},
+    {"term": "Dictionary", "definition": "A collection of key → value pairs, written with curly braces."},
+    {"term": "Exception", "definition": "An error detected during execution that can be caught with try/except."},
+    {"term": "Float", "definition": "A number with a decimal point, e.g. 3.14."},
+    {"term": "Function", "definition": "A named, reusable block of code defined with def."},
+    {"term": "Index", "definition": "The position of an item in a sequence; counting starts at 0."},
+    {"term": "Int", "definition": "A whole number, e.g. 42."},
+    {"term": "Interpreter", "definition": "The program that reads and executes Python code line by line."},
+    {"term": "Iterable", "definition": "Anything you can loop over with for: lists, strings, ranges, generators."},
+    {"term": "JSON", "definition": "A text format for structured data; Python converts to/from it with the json module."},
+    {"term": "List", "definition": "An ordered, changeable collection written with square brackets [ ]."},
+    {"term": "Loop", "definition": "Code that repeats — with for (known count/sequence) or while (condition)."},
+    {"term": "Module", "definition": "A file of reusable Python code that you can import."},
+    {"term": "Object", "definition": "A single instance of a class, holding its own data."},
+    {"term": "Parameter", "definition": "The placeholder variable in a function definition."},
+    {"term": "Return", "definition": "Sends a value back from a function to wherever it was called."},
+    {"term": "Set", "definition": "An unordered collection with no duplicate items."},
+    {"term": "String", "definition": "Text, written inside quotes: \"hello\"."},
+    {"term": "Tuple", "definition": "An ordered collection that cannot be changed after creation, written ( )."},
+    {"term": "Variable", "definition": "A named container for a value, created by assignment (=)."},
+    {"term": "Yield", "definition": "Used in a generator function to output one value at a time."}
+  ]
+}
