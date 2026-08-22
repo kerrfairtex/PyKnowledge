@@ -16,8 +16,13 @@ export function renderNavbar(container) {
 
   const route = getCurrentRoute();
   const user = getActiveUser();
+  const isRealUser = user && !user.isGuest;
+  const isGuest = user && user.isGuest;
 
-  const userMenu = user
+  // Real user: avatar circle + name + sign out
+  // Guest: plain "Guest" text pill + sign out (no avatar, no initial)
+  // No one: show "Sign In" if profiles exist, else nothing
+  const userMenu = isRealUser
     ? `<li role="listitem" class="nav-user">
         <span class="nav-avatar" style="--avatar-color: ${escapeHtml(user.avatar)}" aria-hidden="true">
           ${escapeHtml(user.displayName.charAt(0).toUpperCase())}
@@ -25,9 +30,12 @@ export function renderNavbar(container) {
         <span class="nav-username">${escapeHtml(user.displayName)}</span>
         <button type="button" class="btn btn-ghost btn-sm" id="btn-logout" aria-label="Sign out">Sign out</button>
       </li>`
-    : hasProfiles()
-      ? `<li role="listitem"><a href="#/login" class="nav-link">Sign In</a></li>`
-      : '';
+    : isGuest
+      ? `<li role="listitem"><span class="nav-username">Guest</span></li>
+         <li role="listitem"><button type="button" class="btn btn-ghost btn-sm" id="btn-logout" aria-label="Sign out">Sign out</button></li>`
+      : hasProfiles()
+        ? `<li role="listitem"><a href="#/login" class="nav-link">Sign In</a></li>`
+        : '';
 
   container.innerHTML = `
     <ul class="nav-list" role="list">
