@@ -27,7 +27,7 @@ body.front-page-active .app-header {
   left: 10%;
   width: 60%;
   height: 60%;
-  background: radial-gradient(circle, rgba(233, 69, 96, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(242, 84, 109, 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -46,7 +46,7 @@ body.front-page-active .app-header {
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  border: 1px solid rgba(233, 69, 96, 0.25);
+  border: 1px solid rgba(242, 84, 109, 0.25);
 }
 
 .fp-hero-title {
@@ -85,7 +85,7 @@ body.front-page-active .app-header {
 }
 
 .fp-cta {
-  box-shadow: 0 4px 20px rgba(233, 69, 96, 0.35);
+  box-shadow: 0 4px 20px rgba(242, 84, 109, 0.35);
 }
 
 .fp-hero-progress {
@@ -459,7 +459,7 @@ body.front-page-active .app-header {
   background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-primary) 100%);
   border-radius: var(--radius-lg);
   margin: 2rem 0;
-  border: 1px solid rgba(233, 69, 96, 0.2);
+  border: 1px solid rgba(242, 84, 109, 0.2);
 }
 
 .fp-cta h2 {

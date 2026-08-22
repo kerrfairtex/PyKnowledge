@@ -24,6 +24,7 @@
 
 import { checkPrerequisite, validateProgressIntegrity } from '../../storage/progress.js';
 import { escapeHtml } from '../../utils/sanitize.js';
+import { getActiveUser } from '../../storage/auth.js';
 
 // ---- Prerequisite / completion state -----------------------------------
 
@@ -83,6 +84,16 @@ const ICONS = {
 };
 const MODULE_ICONS = [ICONS.book, ICONS.branch, ICONS.loop, ICONS.func, ICONS.stack, ICONS.stack, ICONS.flag];
 
+// ---- Greeting (time-aware, uses the signed-in user's name) ----------------
+
+function greetUser() {
+  const user = getActiveUser();
+  const first = user && user.displayName ? escapeHtml(user.displayName.split(' ')[0]) : null;
+  const h = new Date().getHours();
+  const timeGreeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  return first ? `${timeGreeting}, ${first}` : 'Welcome back';
+}
+
 // ---- Render --------------------------------------------------------------
 
 export async function renderDashboard(main, _params, _route, lessonsData) {
@@ -121,14 +132,14 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         </div>` : ''}
 
       <header class="dash-head">
-        <h1>Welcome back</h1>
+        <h1 id="dash-greeting">${greetUser()}</h1>
         <p>Continue your Python learning journey.</p>
       </header>
 
       <section class="dash-overall" aria-label="Overall progress">
         <div class="dash-overall-row">
           <span>Overall progress</span>
-          <span class="dash-overall-count">${totalDone}/${totalLessons} lessons</span>
+          <span class="dash-overall-count">${totalDone}/${totalLessons} lessons · ${totalLessons ? Math.round((totalDone / totalLessons) * 100) : 0}%</span>
         </div>
         <div class="dash-bar"><div class="dash-bar-fill" style="width:${totalLessons ? (totalDone / totalLessons) * 100 : 0}%"></div></div>
       </section>

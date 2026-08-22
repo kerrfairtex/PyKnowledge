@@ -5,8 +5,8 @@
   --color-surface: #16213e;
   --color-surface-raised: #1c2a4a;
   --color-primary: #0f3460;
-  --color-accent: #e94560;
-  --color-accent-soft: rgba(233, 69, 96, 0.15);
+  --color-accent: #f2546d;
+  --color-accent-soft: rgba(242, 84, 109, 0.15);
   --color-text: #eaeaea;
   --color-text-muted: #a0a0b0;
   --color-success: #4ecca3;
@@ -36,7 +36,7 @@ body {
   font-family: var(--font-sans);
   background: var(--color-bg);
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(233, 69, 96, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 0%, rgba(242, 84, 109, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, rgba(78, 204, 163, 0.06) 0%, transparent 50%);
   color: var(--color-text);
   line-height: 1.6;
@@ -398,7 +398,7 @@ body {
 }
 
 .module-card:not(.locked) {
-  background: linear-gradient(135deg, rgba(78, 204, 163, 0.12) 0%, rgba(233, 69, 96, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(78, 204, 163, 0.12) 0%, rgba(242, 84, 109, 0.08) 100%);
 }
 
 .module-card h3 {
@@ -595,7 +595,7 @@ body {
 }
 
 .quiz-result.failed {
-  background: rgba(233, 69, 96, 0.15);
+  background: rgba(242, 84, 109, 0.15);
   border: 1px solid var(--color-accent);
 }
 
