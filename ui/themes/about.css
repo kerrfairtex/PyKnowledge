@@ -48,6 +48,28 @@
 
 .about-card strong { color: #F8FAFC; }
 
+.about-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+}
+
+.about-feature-list li {
+  padding: 6px 0;
+  padding-left: 14px;
+  position: relative;
+  color: #CBD5E1;
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.about-feature-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #7FB2FF;
+}
+
 .about-modules {
   list-style: none;
   padding: 0;
