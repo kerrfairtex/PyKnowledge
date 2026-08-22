@@ -79,10 +79,25 @@ const ICONS = {
   func: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4h1c-2 0-3 1-3 3v3H5v2h2v3c0 2-1 3-3 3h1"/><path d="M14 11l4 4m0-4-4 4"/></svg>',
   stack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg>',
   flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg>',
+  box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>',
+  term: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg>',
+  classes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>',
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 13 4 4 10-10"/></svg>'
 };
-const MODULE_ICONS = [ICONS.book, ICONS.branch, ICONS.loop, ICONS.func, ICONS.stack, ICONS.stack, ICONS.flag];
+// One icon per module, keyed by module id — no modulo wraparound, so no
+// duplicates. Falls back to the book icon for unknown ids.
+const MODULE_ICON_MAP = {
+  'module-1': ICONS.book,
+  'module-2': ICONS.branch,
+  'module-3': ICONS.loop,
+  'module-4': ICONS.func,
+  'module-5': ICONS.stack,
+  'module-6': ICONS.box,
+  'module-7': ICONS.term,
+  'module-8': ICONS.flag,
+  'module-9': ICONS.classes
+};
 
 // ---- Curriculum facts (grounded: computed from content/lessons.json) ------
 // These numbers are derived from the real content data at render time —
@@ -152,7 +167,7 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
 
   // Resolve ALL module cards before painting once — no out-of-order flicker.
   const cardsHtml = (await Promise.all(
-    modules.map((m, i) => moduleCardHtml(m, lessonsData, progress, MODULE_ICONS[i % MODULE_ICONS.length]))
+    modules.map((m) => moduleCardHtml(m, lessonsData, progress, MODULE_ICON_MAP[m.id] || ICONS.book))
   )).join('');
 
   if (!isLatest()) return; // a newer navigation superseded this render

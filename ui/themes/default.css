@@ -1305,3 +1305,125 @@ body {
   line-height: 1.55;
   margin-bottom: 18px;
 }
+
+/* ------------------------------------------------------------------
+   Avatar-triggered user dropdown (LearnHouse DashLeftMenu pattern)
+   ------------------------------------------------------------------ */
+.nav-avatar-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.nav-avatar-trigger:hover,
+.nav-avatar-trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-caret {
+  width: 14px;
+  height: 14px;
+  color: #94A3B8;
+  transition: transform 0.15s ease;
+}
+
+.nav-avatar-trigger[aria-expanded="true"] .nav-caret {
+  transform: rotate(180deg);
+}
+
+/* Compact the avatar inside the trigger (was oversized next to nav links) */
+.nav-avatar-trigger .nav-avatar {
+  width: 26px;
+  height: 26px;
+  font-size: 0.7rem;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 224px;
+  background: #142640;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  z-index: 1000;
+}
+
+.nav-dropdown-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 6px;
+}
+
+.nav-dropdown-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+
+.nav-dropdown-meta {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #E2E8F0;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav-dropdown-item svg {
+  width: 16px;
+  height: 16px;
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.nav-dropdown-item:hover,
+.nav-dropdown-item:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  color: #F8FAFC;
+}
+
+.nav-dropdown-item:hover svg,
+.nav-dropdown-item:focus-visible svg {
+  color: #CBD5E1;
+}
+
+.nav-dropdown-danger {
+  color: #f66b84; /* AA on #142640 */
+}
+
+.nav-dropdown-danger:hover,
+.nav-dropdown-danger:focus-visible {
+  background: rgba(242, 84, 109, 0.12);
+  color: #f8768e;
+}
+
+.nav-user {
+  position: relative;
+}
+
+/* Header must anchor the avatar dropdown */
+.app-header {
+  position: relative;
+  z-index: 100;
+}
