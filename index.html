@@ -359,6 +359,12 @@
   }
 </script>
 
+<script type="module">
+  // Offline download progress indicator (real cache counts, verified 100%)
+  import { initCacheProgress } from './ui/components/cache-progress.js';
+  initCacheProgress();
+</script>
+
 <script src="api-config.js"></script>
 <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
 

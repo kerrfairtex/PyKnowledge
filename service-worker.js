@@ -78,16 +78,36 @@ self.addEventListener('install', (event) => {
       .then((cache) =>
         // Per-file caching: one missing/404 asset must not fail the whole
         // install (cache.addAll is all-or-nothing and would leave the app
-        // with no offline support at all).
+        // with no offline support at all). Progress is posted to clients
+        // after each file so the UI can show a real 0-100% indicator.
         Promise.allSettled(
-          STATIC_ASSETS.map((asset) => cache.add(asset).catch((err) => {
+          STATIC_ASSETS.map((asset, index) => cache.add(asset).catch((err) => {
             console.warn(`[SW] Failed to cache ${asset}:`, err);
+          })).map((p, index) => p.then(() => {
+            broadcastProgress(index + 1, STATIC_ASSETS.length, false);
           }))
         )
       )
+      .then(async () => {
+        // Grounded completion check: 100% only when Cache Storage verifiably
+        // holds every expected asset.
+        const fresh = await caches.open(CACHE_NAME);
+        const keys = await fresh.keys();
+        const done = keys.length;
+        const verified = done >= STATIC_ASSETS.length;
+        broadcastProgress(done, STATIC_ASSETS.length, verified);
+      })
       .then(() => self.skipWaiting())
   );
 });
+
+function broadcastProgress(done, total, verified) {
+  self.clients.matchAll({ includeUncontrolled: true }).then((clients) => {
+    clients.forEach((client) => {
+      client.postMessage({ type: 'CACHE_PROGRESS', done, total, verified });
+    });
+  });
+}
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -161,5 +181,12 @@ async function networkFirst(request) {
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'GET_CACHE_PROGRESS') {
+    caches.open(CACHE_NAME).then((cache) => cache.keys()).then((keys) => {
+      const done = keys.length;
+      const verified = done >= STATIC_ASSETS.length;
+      broadcastProgress(done, STATIC_ASSETS.length, verified);
+    });
   }
 });
