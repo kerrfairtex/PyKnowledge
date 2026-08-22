@@ -253,4 +253,9 @@ async function registerServiceWorker() {
 
 export { calculateScore, checkPrerequisite, lessonsData, quizzesData, APP_VERSION, appReady };
 
-document.addEventListener('DOMContentLoaded', initApp);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  // DOM already ready — engine was loaded dynamically after page load
+  initApp();
+}

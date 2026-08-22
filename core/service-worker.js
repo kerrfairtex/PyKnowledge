@@ -9,7 +9,7 @@ const CACHE_NAME = `pyknowledge-v${SW_VERSION}`;
 
 const STATIC_ASSETS = [
   '/',
-  '/app-shell.html',
+  '/index.html',
   '/privacy.html',
   '/manifest.json',
   '/core/engine.js',
@@ -120,7 +120,7 @@ self.addEventListener('fetch', (event) => {
         if (event.request.destination === 'document') {
           // Serve the shell from the CURRENT cache only, not stale versions.
           return caches.open(CACHE_NAME)
-            .then((cache) => cache.match('/app-shell.html'))
+            .then((cache) => cache.match('/index.html'))
             .then((shell) => shell || new Response('Offline', { status: 503 }));
         }
         return new Response('Offline — content not cached', {

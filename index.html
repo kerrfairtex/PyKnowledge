@@ -9,6 +9,18 @@
   <link rel="icon" href="ui/assets/icon-192.png" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="index.css" />
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="ui/themes/default.css">
+<link rel="stylesheet" href="ui/themes/animations.css">
+<link rel="stylesheet" href="ui/themes/landing.css">
+<link rel="stylesheet" href="ui/themes/dashboard.css">
+<link rel="stylesheet" href="ui/themes/library.css">
+<link rel="stylesheet" href="ui/themes/about.css">
+  <script>
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
+  </script>
 </head>
 <body>
 
@@ -22,7 +34,7 @@
         <a href="#curriculum">Curriculum</a>
         <a href="#offline">How it works</a>
         <a href="#about">About</a>
-        <a class="btn-cta-small" href="app-shell.html#/login">Open the app</a>
+        <a class="btn-cta-small" href="#/login">Open the app</a>
       </nav>
     </div>
   </header>
@@ -39,7 +51,7 @@
           keeps working — connection or not.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="app-shell.html#/login">Start learning</a>
+          <a class="btn btn-primary" href="#/login">Start learning</a>
           <a class="btn btn-ghost" href="#curriculum">See the curriculum</a>
         </div>
         <div class="hero-stats">
@@ -65,7 +77,7 @@
               <h3>Introduction to Python</h3>
               <p>Learn the fundamentals of Python programming including syntax, variables, and basic data types.</p>
             </div>
-            <a class="path-start" href="app-shell.html#/login">Start here →</a>
+            <a class="path-start" href="#/login">Start here →</a>
           </li>
           <li class="path-item is-locked">
             <span class="path-num">2</span>
@@ -278,5 +290,176 @@
     import { initInstallPrompt } from './ui/components/install-prompt.js';
     initInstallPrompt();
   </script>
+
+
+  <!-- SPA app shell (hidden until user enters the app) -->
+  <div id="spa-root" style="display:none">
+  <div id="app">
+    <header class="app-header" role="banner">
+      <h1>PyKnowledge</h1>
+      <p class="tagline">Offline Python Learning Platform</p>
+      <nav id="main-nav" aria-label="Main navigation"></nav>
+    </header>
+    <main id="main-content" role="main" tabindex="-1">
+      <div id="loading" class="loading" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p>Loading PyKnowledge...</p>
+      </div>
+    </main>
+    <footer class="app-footer" role="contentinfo">
+      <p>CHED-aligned curriculum &middot; Works offline after first install</p>
+    </footer>
+  </div>
+
+  <footer class="pk-footer">
+    <p>
+      PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi —
+      designed to run fully offline for areas with intermittent signal
+      and limited data. All lessons work without an internet connection
+      once loaded.
+    </p>
+
+    <p style="margin-top:10px;">
+      <span class="sync-status" id="syncStatus">Checking connection…</span>
+    </p>
+
+    <p style="margin-top:14px;">
+      <a href="/privacy.html">Privacy Policy</a> · Maintained by Kerr Fairtex
+    </p>
+    <div class="contact-links">
+      <a href="tel:+639637130812">09637130812</a>
+      <a href="mailto:kerrfairtex@gmail.com">kerrfairtex@gmail.com</a>
+      <a href="https://facebook.com/kerrfairtex" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://github.com/kerrfairtex" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.com/users/kerrfairtex" target="_blank" rel="noopener">Discord</a>
+      <a href="https://twitter.com/kerrfairtex" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://tiktok.com/@kerrfairtex" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://youtube.com/@kerrfairtex" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://linkedin.com/in/kerrfairtex" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com/kerrfairtex" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://kerrfairtex.tumblr.com" target="_blank" rel="noopener">Tumblr</a>
+    </div>
+  </footer>
+
+  <script>
+    function updateSyncChip() {
+      const el = document.getElementById('syncStatus');
+      if (!el) return;
+      const status = navigator.onLine ? 'is-synced' : 'is-offline';
+      el.classList.remove('is-synced', 'is-offline');
+      el.classList.add(status);
+      el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+    }
+
+    updateSyncChip();
+    window.addEventListener('online', updateSyncChip);
+    window.addEventListener('offline', updateSyncChip);
+  </script>
+
+  <noscript>
+    <div class="noscript-warning">
+      <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
+    </div>
+  </noscript>
+  <script src="api-config.js"></script>
+  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
+  <script>
+    window.addEventListener('error', (e) => {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">JS ERROR:\n' +
+          e.message + '\n' + (e.filename || '') + ':' + e.lineno + '</p>';
+      }
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">PROMISE ERROR:\n' +
+          (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</p>';
+      }
+    });
+  </script>
+  <script type="module" src="core/engine.js"></script>
+  </div>
+  <script src="api-config.js"></script>
+  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
+
+  <!-- Page controller: swap between landing page and SPA -->
+  <script>
+    (function() {
+      var landing = document.getElementById('landing-root') || document.body;
+      // Wrap landing content so we can hide it cleanly
+      var wrap = document.createElement('div');
+      wrap.id = 'landing-root';
+      while (document.body.firstChild && document.body.firstChild.id !== 'spa-root') {
+        var el = document.body.firstChild;
+        if (el.id === 'spa-root') break;
+        wrap.appendChild(el);
+      }
+      document.body.insertBefore(wrap, document.body.firstChild);
+
+      var spaRoot = document.getElementById('spa-root');
+      var engineLoaded = false;
+      var enginePromise = null;
+
+      function loadEngine() {
+        if (engineLoaded) return Promise.resolve();
+        if (enginePromise) return enginePromise;
+        enginePromise = new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          s.type = 'module';
+          s.src = 'core/engine.js';
+          s.onload = function() { engineLoaded = true; resolve(); };
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+        return enginePromise;
+      }
+
+      function showApp() {
+        wrap.style.display = 'none';
+        spaRoot.style.display = '';
+        return loadEngine();
+      }
+
+      function showLanding() {
+        wrap.style.display = '';
+        spaRoot.style.display = 'none';
+        // Clear hash to let landing links work
+        if (window.location.hash && window.location.hash !== '#top' && !window.location.hash.startsWith('#curriculum') && !window.location.hash.startsWith('#offline') && window.location.hash !== '#about') {
+          history.replaceState(null, '', window.location.pathname);
+        }
+      }
+
+      function onHashChange() {
+        var h = window.location.hash;
+        if (!h || h === '#top' || h.startsWith('#curriculum') || h.startsWith('#offline') || h === '#about') {
+          showLanding();
+        } else {
+          showApp();
+        }
+      }
+
+      // Auto-launch app for returning users (installed app or profiles exist)
+      function isPwaInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+               window.navigator.standalone === true;
+      }
+      function hasExistingProfiles() {
+        try {
+          var p = localStorage.getItem('pyknowledge_profiles');
+          return p && JSON.parse(p).length > 0;
+        } catch (e) { return false; }
+      }
+      if (isPwaInstalled() || hasExistingProfiles()) {
+        window.location.hash = '#/';
+      }
+
+      // Initial state
+      onHashChange();
+      window.addEventListener('hashchange', onHashChange);
+    })();
+  </script>
+
 </body>
 </html>

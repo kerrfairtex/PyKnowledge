@@ -3,7 +3,7 @@
   "name": "PyKnowledge",
   "short_name": "PyKnowledge",
   "description": "Offline-first Python learning platform",
-  "start_url": "/app-shell.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#16213e",
