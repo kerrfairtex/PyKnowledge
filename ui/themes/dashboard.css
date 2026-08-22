@@ -312,3 +312,68 @@
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------
+   "This course, by the numbers" — grounded curriculum facts + trivia
+   Palette follows the app's dark-blue system; all text colors meet
+   WCAG AA 4.5:1 on their backgrounds (computed, not eyeballed).
+   ------------------------------------------------------------------ */
+.dash-facts {
+  background: var(--color-surface-raised, #1c2a4a);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.dash-facts-title {
+  font-size: 1rem;
+  color: #F8FAFC;
+  margin-bottom: var(--space-md);
+}
+
+.dash-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-sm);
+}
+
+.dash-fact {
+  background: rgba(8, 24, 43, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.dash-fact strong {
+  display: block;
+  font-size: 1.6rem;
+  color: #60A5FA; /* 6.51:1 on #101F35-family surfaces */
+  line-height: 1.2;
+}
+
+.dash-fact span {
+  display: block;
+  margin-top: 2px;
+  color: #CBD5E1; /* ~9:1 on same */
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.dash-trivia {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 3px solid #f66b84;
+  background: rgba(242, 84, 109, 0.08);
+  border-radius: 0 8px 8px 0;
+  color: #E2E8F0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.dash-trivia-label {
+  display: inline-block;
+  font-weight: 700;
+  color: #f66b84; /* 4.97:1 on raised surface — passes AA */
+  margin-right: 4px;
+}

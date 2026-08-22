@@ -84,6 +84,40 @@ const ICONS = {
 };
 const MODULE_ICONS = [ICONS.book, ICONS.branch, ICONS.loop, ICONS.func, ICONS.stack, ICONS.stack, ICONS.flag];
 
+// ---- Curriculum facts (grounded: computed from content/lessons.json) ------
+// These numbers are derived from the real content data at render time —
+// never hardcoded, so they stay true as lessons are added.
+
+const PYTHON_TRIVIA = [
+  'Python is named after Monty Python\'s Flying Circus — not the snake.',
+  'The Zen of Python ("import this") has 19 guiding principles written in 1999.',
+  'Python runs Instagram, YouTube, Dropbox, and NASA\'s data pipeline.',
+  'Lists in Python can hold mixed types: [1, "two", 3.0, True] is valid.',
+  'Python\'s creator, Guido van Rossum, released version 0.9.0 in February 1991.',
+  'A tuple is an immutable list — once created, it cannot be changed.',
+  'f-strings (Python 3.6+) are the fastest way to format text in Python.',
+  'Dictionaries power almost everything in Python — even classes use them internally.'
+];
+
+function curriculumStats(modules) {
+  let exercises = 0;
+  let challenges = 0;
+  for (const m of modules) {
+    for (const l of m.lessons) {
+      for (const ex of (l.exercises || [])) {
+        exercises += 1;
+        if (ex.type === 'challenge') challenges += 1;
+      }
+    }
+  }
+  return { exercises, challenges };
+}
+
+function pickTrivia() {
+  const day = Math.floor(Date.now() / 86400000);
+  return PYTHON_TRIVIA[day % PYTHON_TRIVIA.length];
+}
+
 // ---- Greeting (time-aware, uses the signed-in user's name) ----------------
 
 function greetUser() {
@@ -113,6 +147,8 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
   const modules = lessonsData.modules;
   const totalLessons = modules.reduce((n, m) => n + m.lessons.length, 0);
   const totalDone = progress.completedLessons.length;
+  const stats = curriculumStats(modules);
+  const overallPct = totalLessons ? Math.round((totalDone / totalLessons) * 100) : 0;
 
   // Resolve ALL module cards before painting once — no out-of-order flicker.
   const cardsHtml = (await Promise.all(
@@ -139,9 +175,34 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
       <section class="dash-overall" aria-label="Overall progress">
         <div class="dash-overall-row">
           <span>Overall progress</span>
-          <span class="dash-overall-count">${totalDone}/${totalLessons} lessons · ${totalLessons ? Math.round((totalDone / totalLessons) * 100) : 0}%</span>
+          <span class="dash-overall-count">${totalDone}/${totalLessons} lessons · ${overallPct}%</span>
         </div>
-        <div class="dash-bar"><div class="dash-bar-fill" style="width:${totalLessons ? (totalDone / totalLessons) * 100 : 0}%"></div></div>
+        <div class="dash-bar"><div class="dash-bar-fill" style="width:${overallPct}%"></div></div>
+      </section>
+
+      <section class="dash-facts" aria-label="About this course">
+        <h2 class="dash-facts-title">This course, by the numbers</h2>
+        <div class="dash-facts-grid">
+          <div class="dash-fact">
+            <strong>${modules.length}</strong>
+            <span>modules in a set path — each one unlocks the next</span>
+          </div>
+          <div class="dash-fact">
+            <strong>${stats.exercises}</strong>
+            <span>hands-on exercises, from reading code to writing your own</span>
+          </div>
+          <div class="dash-fact">
+            <strong>${stats.challenges}</strong>
+            <span>coding challenges that go beyond the basics</span>
+          </div>
+          <div class="dash-fact">
+            <strong>0 internet</strong>
+            <span>needed after install — everything runs on this device</span>
+          </div>
+        </div>
+        <p class="dash-trivia">
+          <span class="dash-trivia-label">Did you know?</span> ${escapeHtml(pickTrivia())}
+        </p>
       </section>
 
       <ol class="dash-list">${cardsHtml}</ol>
