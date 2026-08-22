@@ -136,3 +136,98 @@ export function markLessonComplete(lessonId, score = null) {
 export function isLessonComplete(lessonId) {
   return getProgress().completedLessons.includes(lessonId);
 }
+
+/**
+ * Guest → profile progress migration.
+ *
+ * Guests save progress under a persistent guest_* key. When they later
+ * create a real profile, carry that progress over so nothing appears lost,
+ * then clear the guest entries. Merges: completed lessons unioned, quiz
+ * scores and achievements merged, unlocked modules unioned — profile data
+ * wins on conflicts.
+ *
+ * Returns true if any guest progress existed and was migrated.
+ */
+export function migrateGuestProgress(newUserId) {
+  const GUEST_KEY = 'pyknowledge_guest_id';
+  let guestId;
+  try {
+    const stored = localStorage.getItem(GUEST_KEY);
+    if (!stored) return false;
+    guestId = stored;
+  } catch { return false; }
+  if (guestId === newUserId) return false;
+
+  const guestKey = getProgressKey(guestId);
+  const profileKey = getProgressKey(newUserId);
+
+  // Read guest progress from both stores (IndexedDB preferred).
+  const readGuest = async () => {
+    const idbRecord = await load(STORE, guestKey);
+    if (idbRecord !== undefined) return idbRecord;
+    try {
+      const raw = localStorage.getItem(guestKey);
+      if (raw) return JSON.parse(raw);
+    } catch { /* ignore */ }
+    return null;
+  };
+
+  const hasMeaningful = (p) => p && (
+    (p.completedLessons && p.completedLessons.length > 0) ||
+    (p.quizScores && Object.keys(p.quizScores).length > 0) ||
+    (p.achievements && p.achievements.length > 0)
+  );
+
+  return (async () => {
+    const guest = await readGuest();
+    if (!hasMeaningful(guest)) {
+      // Nothing worth migrating; just tidy up the guest id marker.
+      try { localStorage.removeItem(GUEST_KEY); } catch { /* ignore */ }
+      remove(STORE, guestKey).catch(() => {});
+      try { localStorage.removeItem(guestKey); } catch { /* ignore */ }
+      return false;
+    }
+
+    const existing = await load(STORE, profileKey)
+      // Also check the legacy mirror key (getProgressKey format) — profiles
+      // that have never written via IndexedDB store there.
+      .then((v) => v !== undefined ? v : (() => {
+        try {
+          const raw = localStorage.getItem(profileKey);
+          return raw ? JSON.parse(raw) : undefined;
+        } catch { return undefined; }
+      })());
+    const merged = {
+      ...cloneProgress(DEFAULT_PROGRESS),
+      ...cloneProgress(existing || {}),
+      completedLessons: [...new Set([
+        ...((existing && existing.completedLessons) || []),
+        ...(guest.completedLessons || [])
+      ])],
+      quizScores: {
+        ...(guest.quizScores || {}),
+        ...((existing && existing.quizScores) || {})
+      },
+      achievements: [...new Set([
+        ...((existing && existing.achievements) || []),
+        ...(guest.achievements || [])
+      ])],
+      unlockedModules: [...new Set([
+        ...((existing && existing.unlockedModules) || ['module-1']),
+        ...(guest.unlockedModules || [])
+      ])]
+    };
+
+    await persist(STORE, profileKey, merged);
+    try {
+      localStorage.setItem(profileKey, JSON.stringify(merged));
+    } catch { /* ignore */ }
+
+    // Clear guest entries after successful migration.
+    try { localStorage.removeItem(GUEST_KEY); } catch { /* ignore */ }
+    remove(STORE, guestKey).catch(() => {});
+    try { localStorage.removeItem(guestKey); } catch { /* ignore */ }
+
+    return true;
+  })();
+}

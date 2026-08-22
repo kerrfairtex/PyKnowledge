@@ -43,6 +43,9 @@ export function renderNavbar(container) {
       <li role="listitem">
         <a href="#/library" class="nav-link ${isActive(route, '/library') ? 'active' : ''}" ${route.startsWith('/library') ? 'aria-current="page"' : ''}>Library</a>
       </li>
+      <li role="listitem">
+        <a href="#/about" class="nav-link ${route.startsWith('/about') ? 'active' : ''}" ${route.startsWith('/about') ? 'aria-current="page"' : ''}>About</a>
+      </li>
       ${userMenu}
     </ul>`;
 

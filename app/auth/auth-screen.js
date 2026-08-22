@@ -32,6 +32,9 @@ function renderWelcome(main, onAuthenticated) {
         <p class="auth-note">Works fully offline. No internet or account required.</p>
         <button type="button" class="btn btn-primary btn-lg" id="btn-create-profile">Create Profile</button>
         <button type="button" class="btn btn-ghost" id="btn-guest">Continue as Guest</button>
+        <p class="auth-note">Guest progress is saved on this device and can be moved
+        into a profile later.</p>
+        <a class="auth-about-link" href="#/about">What is PyKnowledge? About this app →</a>
       </div>
     </section>`;
 
@@ -198,7 +201,18 @@ function renderRegister(main, onAuthenticated) {
       const profile = await createProfile(name, pin);
       const { startSession } = await import('../../storage/auth.js');
       startSession(profile.id);
-      showSuccess(`Profile created! Welcome, ${profile.displayName}`);
+      // Carry over any guest progress made before this profile existed.
+      try {
+        const { migrateGuestProgress } = await import('../../core/storage.js');
+        const migrated = await migrateGuestProgress(profile.id);
+        if (migrated) {
+          showSuccess(`Welcome, ${profile.displayName} — your guest progress was moved into this profile.`);
+        } else {
+          showSuccess(`Profile created! Welcome, ${profile.displayName}`);
+        }
+      } catch {
+        showSuccess(`Profile created! Welcome, ${profile.displayName}`);
+      }
       onAuthenticated();
     } catch (err) {
       errorEl.textContent = err.message;
