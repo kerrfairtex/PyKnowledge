@@ -56,14 +56,20 @@ const STATIC_ASSETS = [
   '/lib/skulpt.min.js',
   '/lib/skulpt-stdlib.js',
   '/index.css',
+  '/api-config.js',
+  '/progress-bar.js',
   '/content/lessons.json',
   '/content/quizzes.json',
   '/content/reference.json',
+  '/core/sw-version.js',
   '/ui/assets/icon-192.png',
   '/ui/assets/icon-512.png',
   '/ui/assets/maskable-icon-192.png',
   '/ui/assets/maskable-icon-512.png',
-  '/ui/assets/logo.png'
+  '/ui/assets/logo.png',
+  '/ui/assets/place/academic-building.jpg',
+  '/ui/assets/place/island-aerial-view.jpg',
+  '/ui/assets/place/street-festival-buntings.jpg'
 ];
 
 self.addEventListener('install', (event) => {
