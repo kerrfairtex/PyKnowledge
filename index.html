@@ -274,7 +274,10 @@
       </div>
     </main>
     <footer class="app-footer" role="contentinfo">
-      <p>CHED-aligned curriculum &middot; Works offline after first install</p>
+      <p>
+        <a href="#top" class="app-footer-home">&larr; Back to home</a>
+        &middot; CHED-aligned curriculum &middot; Works offline after first install
+      </p>
     </footer>
   </div>
 
@@ -386,12 +389,8 @@
   });
 </script>
 
-<!-- TEMP DEBUG: Eruda in-page console — REMOVE before production -->
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
-
 <script type="module">
-  // Install prompt — only fires on the landing footer button
+  // Install prompt — multi-button registry (landing footer + auth screens)
   import { initInstallPrompt } from './ui/components/install-prompt.js';
   initInstallPrompt();
 </script>
@@ -452,27 +451,10 @@
       }
     }
 
-    // Auto-launch app for installed PWA users or returning-users with profiles.
-    // Using a flag avoids a layout flash: the landing root starts visible (CSS
-    // default) but we immediately hide it if the app should take over.
-    function isPwaInstalled() {
-      return window.matchMedia('(display-mode: standalone)').matches ||
-             window.navigator.standalone === true;
-    }
-    function hasExistingProfiles() {
-      try {
-        var p = localStorage.getItem('pyknowledge_profiles');
-        return p && JSON.parse(p).length > 0;
-      } catch (e) { return false; }
-    }
-
-    if (isPwaInstalled() || hasExistingProfiles()) {
-      // Auto-launch the app: hide landing immediately to avoid visible flicker,
-      // then set hash so onHashChange below handles the swap cleanly.
-      landingRoot.style.display = 'none';
-      window.location.hash = '#/';
-    }
-
+    // Landing page is ALWAYS shown first (online or offline). The user
+    // reaches the app explicitly via "Open the app" / "Start learning"
+    // links (#/login), and can return anytime via the header logo or
+    // footer link (#top). No auto-launch hijack.
     // Initial state
     onHashChange();
     window.addEventListener('hashchange', onHashChange);

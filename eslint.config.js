@@ -3,7 +3,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'server/prisma/migrations/**', 'educational_resources/**', 'fcc-reference/**']
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'server/prisma/migrations/**', 'educational_resources/**', 'fcc-reference/**', 'lib/skulpt.min.js', 'lib/skulpt-stdlib.js'],
   },
   js.configs.recommended,
   {
@@ -35,7 +35,7 @@ export default [
     }
   },
   {
-    files: ['core/service-worker.js'],
+    files: ['service-worker.js'],
     languageOptions: {
       globals: {
         ...globals.serviceworker,

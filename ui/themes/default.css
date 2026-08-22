@@ -1214,3 +1214,18 @@ body {
   border-radius: 3px;
   transition: width 0.25s ease-out;
 }
+
+/* ------------------------------------------------------------------
+   Landing-page round trip: app footer "Back to home" link
+   ------------------------------------------------------------------ */
+.app-footer-home {
+  color: #93C5FD;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-footer-home:hover,
+.app-footer-home:focus-visible {
+  text-decoration: underline;
+  color: #BFDBFE;
+}

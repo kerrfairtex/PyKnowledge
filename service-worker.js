@@ -75,31 +75,68 @@ const STATIC_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) =>
-        // Per-file caching: one missing/404 asset must not fail the whole
-        // install (cache.addAll is all-or-nothing and would leave the app
-        // with no offline support at all). Progress is posted to clients
-        // after each file so the UI can show a real 0-100% indicator.
-        Promise.allSettled(
-          STATIC_ASSETS.map((asset, index) => cache.add(asset).catch((err) => {
-            console.warn(`[SW] Failed to cache ${asset}:`, err);
-          })).map((p, index) => p.then(() => {
-            broadcastProgress(index + 1, STATIC_ASSETS.length, false);
-          }))
-        )
-      )
-      .then(async () => {
-        // Grounded completion check: 100% only when Cache Storage verifiably
-        // holds every expected asset.
-        const fresh = await caches.open(CACHE_NAME);
-        const keys = await fresh.keys();
-        const done = keys.length;
-        const verified = done >= STATIC_ASSETS.length;
-        broadcastProgress(done, STATIC_ASSETS.length, verified);
-      })
+      .then((cache) => cacheAndReport(cache))
       .then(() => self.skipWaiting())
   );
 });
+
+/**
+ * Cache every asset with per-file progress reporting, one retry pass for
+ * transient failures, and a grounded verification at the end. Progress
+ * counts are derived from actual cache contents — never estimated.
+ */
+async function cacheAndReport(cache) {
+  const total = STATIC_ASSETS.length;
+  const failed = [];
+
+  // Pass 1
+  await Promise.all(STATIC_ASSETS.map(async (asset) => {
+    try {
+      await cache.add(asset);
+    } catch (err) {
+      console.warn(`[SW] Failed to cache ${asset}:`, err);
+      failed.push(asset);
+    }
+    broadcastCacheCount(cache, total, false);
+  }));
+
+  // Pass 2: retry transient failures (flaky mobile networks)
+  await Promise.all(failed.map(async (asset) => {
+    try {
+      await cache.add(asset);
+    } catch (err) {
+      console.warn(`[SW] Retry failed for ${asset}:`, err);
+    }
+    broadcastCacheCount(cache, total, false);
+  }));
+
+  // Grounded completion check: compare the ACTUAL cached key set against
+  // STATIC_ASSETS — not just counts. Duplicates or stray entries can't
+  // fake a verified 100%.
+  const keys = await cache.keys();
+  const cachedUrls = new Set(keys.map((k) => k.url));
+  const missing = STATIC_ASSETS.filter((asset) => {
+    try {
+      return !cachedUrls.has(new URL(asset, self.location.origin).href);
+    } catch {
+      return true;
+    }
+  });
+  const done = total - missing.length;
+  const verified = missing.length === 0;
+  broadcastProgress(done, total, verified);
+
+  if (!verified && missing.length > 0) {
+    console.warn(`[SW] ${missing.length} asset(s) could not be cached; ` +
+      'offline coverage incomplete:', missing);
+  }
+}
+
+function broadcastCacheCount(cache, total, verified) {
+  cache.keys().then((keys) => {
+    broadcastProgress(Math.min(keys.length, total), total, verified);
+  });
+}
 
 function broadcastProgress(done, total, verified) {
   self.clients.matchAll({ includeUncontrolled: true }).then((clients) => {

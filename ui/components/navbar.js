@@ -40,10 +40,10 @@ export function renderNavbar(container) {
   container.innerHTML = `
     <ul class="nav-list" role="list">
       <li role="listitem">
-        <a href="#/" class="nav-link ${isActive(route, '/') ? 'active' : ''}" ${route === '/' ? 'aria-current="page"' : ''}>Home</a>
+        <a href="#top" class="nav-link nav-home-link" aria-label="Back to landing page">Home</a>
       </li>
       <li role="listitem">
-        <a href="#/dashboard" class="nav-link ${isActive(route, '/dashboard') ? 'active' : ''}" ${route === '/dashboard' ? 'aria-current="page"' : ''}>Dashboard</a>
+        <a href="#/dashboard" class="nav-link ${isActive(route, '/dashboard') ? 'active' : ''}">Dashboard</a>
       </li>
       <li role="listitem">
         <a href="#/progress" class="nav-link ${isActive(route, '/progress') ? 'active' : ''}" ${route === '/progress' ? 'aria-current="page"' : ''}>Progress</a>
