@@ -33,6 +33,10 @@
                 "heading": "Worked Example: Your First Program",
                 "body": "Let us walk through a complete Python program step by step.",
                 "code": "# Step 1: Use the print() function to display text\nprint('Hello, World!')\n\n# Step 2: The text inside quotes is called a string\n# Step 3: When you run this, the output will be:\n# Hello, World!"
+              },
+              {
+                "heading": "Where Python Is Used Around You",
+                "body": "Python quietly powers much of the software you already use. Instagram and YouTube rely on it for their back-end systems. Scientists use it to study weather patterns and crop yields. Banks use it to detect fraud. Teachers use it to grade and analyse results automatically.\n\nFor students in the Philippines, Python is also one of the most in-demand skills in local tech hiring — from Manila start-ups to remote work for overseas companies.\n\nThe point: learning Python is not just a school subject. It is a tool you can use for real projects, freelance work, or a future career, and everything you learn here works the same way on a laptop in Tawi-Tawi as on a server in Singapore."
               }
             ]
           },
@@ -144,6 +148,10 @@
                 "heading": "Worked Example: Variable Assignment and Type Conversion",
                 "body": "Let us walk through a program that reads user input, converts it, and displays the result.",
                 "code": "# Step 1: Ask for the user's name (returns a string)\nname = input('What is your name? ')\n\n# Step 2: Ask for their age (also returns a string)\nage_text = input('How old are you? ')\n\n# Step 3: Convert the age to an integer so we can do math\nage = int(age_text)\n\n# Step 4: Use the variables in a print statement\nprint('Hello, ' + name + '! You are ' + str(age) + ' years old.')\n\n# Step 5: The output would be:\n# Hello, Maria! You are 20 years old."
+              },
+              {
+                "heading": "Naming Things Well",
+                "body": "Python lets you name variables almost anything, but good names make code readable. Compare:\n\nx = 90            # what is x?\nmath_score = 90   # instantly clear\n\nRules to remember: names can contain letters, numbers and underscores but must not START with a number. Spaces are not allowed — use underscores instead (first_name). Names are case-sensitive: Score and score are two different variables.\n\nPython style guide (PEP 8) recommends snake_case for variables: total_price, student_count, is_enrolled. Following this convention makes your code look professional and helps others read it instantly."
               }
             ]
           },
@@ -317,6 +325,10 @@
                 "heading": "Worked Example: Reading Input and Making Decisions",
                 "body": "Let us walk through a program that reads the user age and determines if they are a teenager.",
                 "code": "# Step 1: Ask for the age (input returns a string)\nage_text = input('How old are you? ')\n\n# Step 2: Convert to integer for comparison\nage = int(age_text)\n\n# Step 3: Check the condition\nif age >= 13 and age <= 19:\n    print('You are a teenager!')\nelse:\n    print('You are not a teenager.')\n\n# Step 4: With age=15, output is:\n# You are a teenager!"
+              },
+              {
+                "heading": "input() Always Gives You Text",
+                "body": "This trips up every new programmer: input() always returns a string, even when the user types digits. If you type 16 at the prompt, Python hands your program the text \"16\", not the number 16.\n\nWhy does this matter? \"16\" + 1 causes a TypeError, because you cannot add text to a number. Convert first with int():\n\nage = int(input(\"Age: \"))\nnext_year = age + 1   # works now\n\nIf the user types something that is not a number, int() raises an error. You will learn how to handle that safely with try/except in Module 8."
               }
             ]
           },
@@ -497,6 +509,10 @@
                 "heading": "Worked Example: Even or Odd Check",
                 "body": "Let us walk through a program that determines if a number is even or odd using the modulo operator.",
                 "code": "# Step 1: Get a number from the user\nnum = int(input('Enter a number: '))\n\n# Step 2: Use modulo to check remainder when divided by 2\nif num % 2 == 0:\n    print('Even')\nelse:\n    print('Odd')\n\n# Step 3: With num=4, output is: Even\n# Step 4: With num=7, output is: Odd"
+              },
+              {
+                "heading": "Common Mistakes to Avoid",
+                "body": "Two errors catch almost every beginner:\n\n1. Using = instead of ==. A single equals sign assigns a value; a double equals compares two values. Writing if x = 5: is a syntax error in Python.\n\n2. Forgetting the colon. The if line must end with : — if score >= 75:. Python will remind you with a SyntaxError, but it is faster to build the habit now.\n\nAlso remember that indentation is not decoration. Every line inside the if block must be indented by the same amount (4 spaces is standard)."
               }
             ]
           },
@@ -688,6 +704,10 @@
                 "heading": "Worked Example: Countdown Loop",
                 "body": "Let us walk through a while loop that counts down from 10 to 1.",
                 "code": "# Step 1: Start with a counter variable\ncount = 10\n\n# Step 2: Loop while count is greater than 0\nwhile count > 0:\n    print(count)\n    count = count - 1  # Decrement the counter\n\n# Step 3: Output is:\n# 10\n# 9\n# 8\n# 7\n# 6\n# 5\n# 4\n# 3\n# 2\n# 1"
+              },
+              {
+                "heading": "Choosing Between while and for",
+                "body": "Use a for loop when you know how many times to repeat, or when looping over a collection. Use a while loop when you are waiting for something to happen and cannot predict the count.\n\nClassic while uses:\n\n* Asking until the answer is valid (menus, password prompts)\n* Countdowns driven by a condition\n* Games and simulations that run until a win/lose state\n\nDanger to avoid: if nothing inside the loop changes the condition, the loop never ends — an infinite loop. If a loop hangs your program in the code editor, check whether your update line (like count -= 1) actually runs on every pass."
               }
             ]
           },
@@ -1427,6 +1447,30 @@
                   "remediationExerciseId": "ex-4-2-d"
                 }
               ]
+            },
+            {
+              "id": "ex-4-2-p",
+              "type": "parsons",
+              "prompt": "Arrange the lines into a function that greets a person with a custom title.",
+              "blocks": [
+                "def greet(title, name):",
+                "    full = title + \" \" + name",
+                "    return full",
+                "message = greet(\"Dr.\", \"Cruz\")",
+                "print(message)"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "distractor_blocks": [
+                "greet(\"Dr.\", \"Cruz\")"
+              ],
+              "difficulty": "medium",
+              "concept": "functions"
             }
           ]
         },
@@ -1565,6 +1609,27 @@
                   "remediationExerciseId": "ex-4-3-c"
                 }
               ]
+            },
+            {
+              "id": "ex-4-3-p",
+              "type": "parsons",
+              "prompt": "Build code that computes and returns the area of a rectangle, then uses it.",
+              "blocks": [
+                "def area(width, height):",
+                "    result = width * height",
+                "    return result",
+                "a = area(5, 4)",
+                "print(a)"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "difficulty": "easy",
+              "concept": "return-values"
             }
           ]
         },
@@ -1837,6 +1902,25 @@
                   "remediationExerciseId": "ex-5-1-c"
                 }
               ]
+            },
+            {
+              "id": "ex-5-1-p",
+              "type": "parsons",
+              "prompt": "Arrange the steps: create a list, add an item, sort it, then show it.",
+              "blocks": [
+                "fruits = [\"banana\", \"apple\"]",
+                "fruits.append(\"cherry\")",
+                "fruits.sort()",
+                "print(fruits)"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "difficulty": "easy",
+              "concept": "list-methods"
             }
           ]
         },
@@ -1871,6 +1955,10 @@
                 "heading": "The del Statement",
                 "body": "The del statement removes items from a list by index or slice, or clears the list entirely.",
                 "code": "a = [-1, 1, 66.25, 333, 333, 1234.5]\ndel a[0]       # remove first item\nprint(a)       # [1, 66.25, 333, 333, 1234.5]\ndel a[2:4]     # remove items at indices 2-3\nprint(a)       # [1, 66.25, 1234.5]\ndel a[:]       # clear the list\nprint(a)       # []"
+              },
+              {
+                "heading": "Reading Comprehensions Backwards",
+                "body": "Comprehensions are compact, but they take practice to read. The trick: read them as plain English from the for keyword.\n\n[n**2 for n in range(5)]\nmeans: \"give me n squared, for each n in 0..4\".\n\nAdd a filter at the end:\n\n[n**2 for n in range(5) if n % 2 == 0]\nmeans: \"n squared, for each n in 0..4, keeping only even n\".\n\nA good learning exercise: write a comprehension, then rewrite it as a regular for loop with append(). Both produce identical results — comprehensions are just shorthand. If a comprehension needs more than one if or a nested loop, experienced developers usually switch back to a normal loop because it becomes easier to read."
               }
             ]
           },
@@ -2082,6 +2170,28 @@
                   "remediationExerciseId": "ex-5-3-b"
                 }
               ]
+            },
+            {
+              "id": "ex-5-3-p",
+              "type": "parsons",
+              "prompt": "Arrange the lines to create a dictionary and look up a value safely.",
+              "blocks": [
+                "student = {\"name\": \"Ana\", \"grade\": 91}",
+                "name = student.get(\"name\")",
+                "print(name)",
+                "# prints: Ana"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "distractor_blocks": [
+                "student = [\"Ana\", 91]"
+              ],
+              "difficulty": "medium",
+              "concept": "dictionaries"
             }
           ]
         },
@@ -2330,6 +2440,26 @@
               ],
               "difficulty": "medium",
               "concept": "imports"
+            },
+            {
+              "id": "ex-6-1-p",
+              "type": "parsons",
+              "prompt": "Arrange these lines to import and use a function from the math module.",
+              "blocks": [
+                "import math",
+                "result = math.sqrt(25)",
+                "print(result)"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2
+              ],
+              "distractor_blocks": [
+                "result = sqrt(25)"
+              ],
+              "difficulty": "easy",
+              "concept": "imports"
             }
           ]
         },
@@ -2436,6 +2566,10 @@
                 "heading": "Worked Example: Math Quiz Game",
                 "body": "Let's combine random and math to create a simple multiplication quiz.",
                 "code": "import random\n\ndef quiz():\n    score = 0\n    for i in range(5):\n        a = random.randint(2, 12)\n        b = random.randint(2, 12)\n        answer = a * b\n        \n        print(f'Question {i+1}: {a} x {b} = ?')\n        guess = int(input('Your answer: '))\n        \n        if guess == answer:\n            print('Correct!')\n            score += 1\n        else:\n            print(f'Sorry, the answer is {answer}')\n    \n    print(f'Final score: {score}/5')\n\n# Run the quiz\nquiz()"
+              },
+              {
+                "heading": "How to Explore a New Module",
+                "body": "The standard library is huge — over 200 modules — so the real skill is exploring it, not memorising it. Two tools help:\n\nhelp(module) prints documentation right in your program: try help(math) to see every function math offers.\n\ndir(module) lists the names available inside it: dir(math) shows sqrt, pi, floor, and more. Then call help(math.floor) for details on one item.\n\nWhen you need something specific — random passwords, dates, file paths — search \"python <thing> standard library\" first. Chances are a built-in module already does it, well-tested and documented. Reaching for the standard library before writing your own code is a mark of an experienced developer."
               }
             ]
           },
@@ -2555,6 +2689,10 @@
                 "heading": "str() vs repr()",
                 "body": "str() returns a human-readable representation. repr() returns a representation that Python can read (or gives SyntaxError).",
                 "code": "s = 'Hello\\nWorld'\nprint(str(s))   # Hello\n                # World\nprint(repr(s))  # 'Hello\\nWorld'"
+              },
+              {
+                "heading": "Why Formatting Matters",
+                "body": "Raw output is fine for quick tests, but real programs present information neatly. Think of a receipt: items aligned in columns, totals right-aligned, prices to exactly two decimal places. Sloppy formatting makes programs harder to read even when they calculate correctly.\n\nf-strings solve this without clutter. The pattern f\"{value:>10}\" reserves 10 characters and pushes the value to the right — perfect for aligning numbers. Combining width and precision like f\"{price:8.2f}\" gives you fixed-width money columns.\n\nTry formatting the same data three ways in the editor below and compare which one a classmate could read fastest."
               }
             ]
           },
@@ -2755,6 +2893,25 @@
                   "remediationExerciseId": "ex-7-2-c"
                 }
               ]
+            },
+            {
+              "id": "ex-7-2-p",
+              "type": "parsons",
+              "prompt": "Arrange the lines to write two lines of text to a file.",
+              "blocks": [
+                "with open(\"notes.txt\", \"w\") as f:",
+                "    f.write(\"Line one\\n\")",
+                "    f.write(\"Line two\\n\")",
+                "print(\"Saved!\")"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "difficulty": "medium",
+              "concept": "files"
             }
           ]
         },
@@ -2789,6 +2946,10 @@
                 "heading": "Reading and Writing JSON Files",
                 "body": "Use json.dump() to write directly to a file, and json.load() to read from a file.",
                 "code": "import json\n\n# List of students\nstudents = [\n    {'name': 'Maria', 'grade': 90},\n    {'name': 'Juan', 'grade': 85},\n    {'name': 'Aliyah', 'grade': 95}\n]\n\n# Write to file\nwith open('students.json', 'w') as f:\n    json.dump(students, f, indent=2)\n\n# Read from file\nwith open('students.json', 'r') as f:\n    loaded = json.load(f)\n\nprint(loaded[0]['name'])  # Maria\n\n# Calculate average\ngrades = [s['grade'] for s in loaded]\nprint(f'Average: {sum(grades)/len(grades):.1f}')  # Average: 90.0"
+              },
+              {
+                "heading": "Why JSON Won",
+                "body": "JSON (JavaScript Object Notation) became the universal data format because it is short, readable, and maps cleanly onto Python dictionaries. Every major web service accepts it, and it is human-readable enough to debug in any text editor.\n\nThe mental model: json.dump() converts your dictionary into a string and writes it out; json.load() reads a file and converts the text back into a fresh dictionary. Changes made after saving are NOT stored — you must dump again to persist them.\n\nLimitations worth knowing: JSON keys are always strings, and it has no special type for dates (people store them as ISO text like \"2026-08-22\"). For this course, saving progress files and small records is exactly what JSON is made for."
               }
             ]
           },
@@ -3096,6 +3257,28 @@
               ],
               "difficulty": "hard",
               "concept": "try-except"
+            },
+            {
+              "id": "ex-8-2-p",
+              "type": "parsons",
+              "prompt": "Arrange a safe number-conversion with error handling.",
+              "blocks": [
+                "try:",
+                "    age = int(input(\"Age: \"))",
+                "except ValueError:",
+                "    print(\"Please type digits only.\")"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "distractor_blocks": [
+                "except:"
+              ],
+              "difficulty": "medium",
+              "concept": "exceptions"
             }
           ]
         },
@@ -3327,6 +3510,31 @@
               ],
               "difficulty": "medium",
               "concept": "classes"
+            },
+            {
+              "id": "ex-9-1-p",
+              "type": "parsons",
+              "prompt": "Build a class with an initializer and a method, then create an object.",
+              "blocks": [
+                "class Student:",
+                "    def __init__(self, name):",
+                "        self.name = name",
+                "    def say_hi(self):",
+                "        return f\"Hi, {self.name}!\"",
+                "s = Student(\"Ana\")",
+                "print(s.say_hi())"
+              ],
+              "correct_order": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "difficulty": "hard",
+              "concept": "oop"
             }
           ]
         },
@@ -3361,6 +3569,10 @@
                 "heading": "Worked Example: Shape Hierarchy",
                 "body": "Let's build a shape hierarchy with an abstract base class and concrete subclasses.",
                 "code": "class Shape:\n    def __init__(self, color='black'):\n        self.color = color\n    \n    def area(self):\n        \"\"\"Must be overridden by subclasses.\"\"\"\n        raise NotImplementedError\n    \n    def __str__(self):\n        return f'{self.color} shape'\n\nclass Circle(Shape):\n    def __init__(self, radius, color='black'):\n        super().__init__(color)\n        self.radius = radius\n    \n    def area(self):\n        return 3.14159 * self.radius ** 2\n    \n    def __str__(self):\n        return f'{self.color} circle (r={self.radius})'\n\nclass Rectangle(Shape):\n    def __init__(self, w, h, color='black'):\n        super().__init__(color)\n        self.w = w\n        self.h = h\n    \n    def area(self):\n        return self.w * self.h\n\nshapes = [Circle(5, 'red'), Rectangle(4, 3, 'blue')]\nfor s in shapes:\n    print(f'{s} has area {s.area()}')\n# red circle (r=5) has area 78.53975\n# blue shape has area 12"
+              },
+              {
+                "heading": "When to Use Inheritance",
+                "body": "Inheritance is powerful but easy to overuse. The test: is the child a true specialised version of the parent? Dog IS AN Animal, Circle IS A Shape — those work. But a Car HAS AN Engine: that is composition (the car stores an engine object), not inheritance. Confusing the two leads to tangled code.\n\nIn PyKnowledge-style apps, inheritance appears everywhere: a QuizQuestion parent with MultipleChoiceQuestion and FillBlank children; each child stores different data but shares the same checking logic.\n\nRule of thumb for beginners: inherit only when the child can stand in for the parent anywhere in your program. If you find yourself deleting or overriding most of the parent's behaviour, inheritance was probably the wrong choice."
               }
             ]
           },

@@ -45,6 +45,26 @@
           "correctAnswer": [
             "print(\"Hello, World!\")"
           ]
+        },
+        {
+          "id": "lesson-1-1-q5",
+          "type": "multiple-choice",
+          "question": "Which of these is NOT a reason Python is popular for beginners?",
+          "options": [
+            "Its syntax reads close to plain English",
+            "It runs on many operating systems",
+            "It requires declaring variable types before use",
+            "It has a huge standard library"
+          ],
+          "correctAnswer": 2,
+          "concept": "language-basics"
+        },
+        {
+          "id": "lesson-1-1-q6",
+          "type": "true-false",
+          "question": "The print() function displays text on the screen.",
+          "correctAnswer": true,
+          "concept": "output"
         }
       ]
     },
@@ -139,6 +159,29 @@
           "correctAnswer": [
             "input() always returns a string; int() converts it to a number"
           ]
+        },
+        {
+          "id": "lesson-1-3-q4",
+          "type": "fill-blank",
+          "question": "Complete the code so it prints the value of the variable score:  ___(score)",
+          "concept": "output",
+          "correctAnswer": [
+            "print",
+            "print()"
+          ]
+        },
+        {
+          "id": "lesson-1-3-q5",
+          "type": "multiple-choice",
+          "question": "What does input(\"Name: \") return when the user types Ana?",
+          "options": [
+            "Ana (a str)",
+            "Ana (an int)",
+            "An error, because no number was entered",
+            "None"
+          ],
+          "correctAnswer": 0,
+          "concept": "input"
         }
       ]
     },
@@ -176,6 +219,22 @@
           "correctAnswer": [
             "Returns remainder; num % 2 == 0 means even"
           ]
+        },
+        {
+          "id": "lesson-2-1-q4",
+          "type": "fill-blank",
+          "question": "Complete the condition so the message prints when points are 100 or more:  if points ___ 100:",
+          "concept": "conditionals",
+          "correctAnswer": [
+            ">="
+          ]
+        },
+        {
+          "id": "lesson-2-1-q5",
+          "type": "true-false",
+          "question": "In Python, the lines inside an if block must be indented.",
+          "correctAnswer": true,
+          "concept": "conditionals"
         }
       ]
     },
@@ -216,6 +275,28 @@
           "correctAnswer": [
             "for iterates over sequences; while repeats while condition is true"
           ]
+        },
+        {
+          "id": "lesson-2-2-q4",
+          "type": "multiple-choice",
+          "question": "What happens when a while loop's condition never becomes False?",
+          "options": [
+            "The loop runs forever (infinite loop)",
+            "Python stops it after 100 iterations",
+            "The program exits immediately",
+            "The loop body runs once"
+          ],
+          "correctAnswer": 0,
+          "concept": "while-loop"
+        },
+        {
+          "id": "lesson-2-2-q5",
+          "type": "fill-blank",
+          "question": "Which loop type is best when you know the exact number of repetitions: a ___ loop?",
+          "concept": "for-loop",
+          "correctAnswer": [
+            "for"
+          ]
         }
       ]
     },
@@ -252,6 +333,28 @@
             "range",
             "range()"
           ],
+          "concept": "for-loop"
+        },
+        {
+          "id": "lesson-3-1-q4",
+          "type": "fill-blank",
+          "question": "range(1, 6) produces the numbers 1 up to but not including ___.",
+          "concept": "for-loop",
+          "correctAnswer": [
+            "6"
+          ]
+        },
+        {
+          "id": "lesson-3-1-q5",
+          "type": "multiple-choice",
+          "question": "What does this loop print? for letter in \"hi\": print(letter)",
+          "options": [
+            "h then i",
+            "hi on one line",
+            "0 then 1",
+            "Nothing — strings cannot be looped"
+          ],
+          "correctAnswer": 0,
           "concept": "for-loop"
         }
       ]
@@ -297,6 +400,23 @@
             "When you don't know how many times to repeat in advance",
             "When you don't know the number of iterations beforehand"
           ]
+        },
+        {
+          "id": "lesson-3-2-q4",
+          "type": "fill-blank",
+          "question": "A countdown loop needs its counter to get smaller each time: count ___ 1",
+          "concept": "while-loop",
+          "correctAnswer": [
+            "-=",
+            "-= "
+          ]
+        },
+        {
+          "id": "lesson-3-2-q5",
+          "type": "true-false",
+          "question": "A while loop checks its condition before each iteration, including the very first one.",
+          "correctAnswer": true,
+          "concept": "while-loop"
         }
       ]
     },
@@ -348,6 +468,15 @@
             "break exits the loop entirely; continue skips only the current iteration",
             "break stops the loop; continue skips to the next iteration"
           ]
+        },
+        {
+          "id": "lesson-3-3-q5",
+          "type": "fill-blank",
+          "question": "To exit a loop immediately from inside its body, use the ___ statement.",
+          "concept": "loops",
+          "correctAnswer": [
+            "break"
+          ]
         }
       ]
     },
@@ -387,6 +516,22 @@
             "They make code reusable and organised",
             "They avoid repeating the same code multiple times"
           ]
+        },
+        {
+          "id": "lesson-4-1-q4",
+          "type": "fill-blank",
+          "question": "Which keyword defines a new function:  ___ greet(): ",
+          "concept": "functions",
+          "correctAnswer": [
+            "def"
+          ]
+        },
+        {
+          "id": "lesson-4-1-q5",
+          "type": "true-false",
+          "question": "A function's body runs when the function is defined, not when it is called.",
+          "correctAnswer": false,
+          "concept": "functions"
         }
       ]
     },
@@ -427,6 +572,30 @@
           "question": "A function can have any number of parameters.",
           "correctAnswer": true,
           "concept": "parameters"
+        },
+        {
+          "id": "lesson-4-2-q4",
+          "type": "fill-blank",
+          "question": "Values written in a function definition are ___, while the real values passed during a call are arguments.",
+          "concept": "functions",
+          "correctAnswer": [
+            "parameters",
+            "parameter",
+            "params"
+          ]
+        },
+        {
+          "id": "lesson-4-2-q5",
+          "type": "multiple-choice",
+          "question": "def order(item, qty=1): — what does qty=1 do?",
+          "options": [
+            "Gives qty a default value of 1",
+            "Makes qty optional AND default to 1",
+            "Both answers are correct",
+            "Forces the caller to always pass 1"
+          ],
+          "correctAnswer": 2,
+          "concept": "functions"
         }
       ]
     },
@@ -465,6 +634,22 @@
             "print() shows the value on screen but the caller cannot use it; return sends the value back to the caller",
             "print() displays it; return gives it to the caller to store in a variable"
           ]
+        },
+        {
+          "id": "lesson-4-3-q4",
+          "type": "fill-blank",
+          "question": "What keyword sends a result back to the caller:  ___ total",
+          "concept": "functions",
+          "correctAnswer": [
+            "return"
+          ]
+        },
+        {
+          "id": "lesson-4-3-q5",
+          "type": "true-false",
+          "question": "Code placed after a return statement inside the same function still runs.",
+          "correctAnswer": false,
+          "concept": "functions"
         }
       ]
     },
@@ -516,6 +701,15 @@
             "When a local variable has the same name as a global one, the local version is used inside the function",
             "Creating a local variable with the same name as a global, hiding the global inside the function"
           ]
+        },
+        {
+          "id": "lesson-4-4-q5",
+          "type": "fill-blank",
+          "question": "Variables created inside a function have ___ scope — they cannot be seen outside it.",
+          "concept": "scope",
+          "correctAnswer": [
+            "local"
+          ]
         }
       ]
     },
@@ -556,6 +750,29 @@
           "question": "The pop() method returns the removed item from a list.",
           "correctAnswer": true,
           "concept": "list-methods"
+        },
+        {
+          "id": "lesson-5-1-q4",
+          "type": "fill-blank",
+          "question": "Which list method adds an item to the END of a list: fruits.___(\"mango\")",
+          "concept": "lists",
+          "correctAnswer": [
+            "append",
+            "append()"
+          ]
+        },
+        {
+          "id": "lesson-5-1-q5",
+          "type": "multiple-choice",
+          "question": "nums = [4, 8, 15] — what is nums[1]?",
+          "options": [
+            "8",
+            "4",
+            "15",
+            "IndexError"
+          ],
+          "correctAnswer": 0,
+          "concept": "lists"
         }
       ]
     },
@@ -600,6 +817,22 @@
             "[x**2 for x in range(10)]",
             "[n**2 for n in range(10)]"
           ]
+        },
+        {
+          "id": "lesson-5-2-q4",
+          "type": "fill-blank",
+          "question": "Comprehensions use the keywords for and ___ to filter items.",
+          "concept": "list-comprehension",
+          "correctAnswer": [
+            "if"
+          ]
+        },
+        {
+          "id": "lesson-5-2-q5",
+          "type": "true-false",
+          "question": "[x * 2 for x in range(3)] produces [0, 2, 4].",
+          "correctAnswer": true,
+          "concept": "list-comprehension"
         }
       ]
     },
@@ -651,6 +884,19 @@
             "A list is ordered and allows duplicates; a set is unordered with no duplicates",
             "Lists keep order and duplicates; sets do not"
           ]
+        },
+        {
+          "id": "lesson-5-3-q5",
+          "type": "multiple-choice",
+          "question": "Which collection refuses duplicate values automatically?",
+          "options": [
+            "set",
+            "list",
+            "tuple",
+            "dictionary"
+          ],
+          "correctAnswer": 0,
+          "concept": "sets"
         }
       ]
     },
@@ -691,6 +937,29 @@
           "question": "The sorted() function modifies the original list.",
           "correctAnswer": false,
           "concept": "sorted"
+        },
+        {
+          "id": "lesson-5-4-q4",
+          "type": "fill-blank",
+          "question": "Loop over BOTH key and value in a dict using:  for k, v in d.___():",
+          "concept": "dictionaries",
+          "correctAnswer": [
+            "items",
+            "items()"
+          ]
+        },
+        {
+          "id": "lesson-5-4-q5",
+          "type": "multiple-choice",
+          "question": "Which is the cleanest way to get both index and value in a for loop?",
+          "options": [
+            "for i, v in enumerate(items):",
+            "for i in range(len(items)): then items[i]",
+            "Manually track a counter variable",
+            "Lists cannot give indexes"
+          ],
+          "correctAnswer": 0,
+          "concept": "looping-techniques"
         }
       ]
     },
@@ -728,6 +997,32 @@
           "correctAnswer": [
             "import math requires math.sqrt(); from math import sqrt lets you use sqrt() directly"
           ]
+        },
+        {
+          "id": "lesson-6-1-q5",
+          "type": "multiple-choice",
+          "question": "You wrote utils.py in the same folder as main.py. How do you use its double() function in main.py?",
+          "options": [
+            "from utils import double",
+            "include utils.py",
+            "require(\"utils\")",
+            "Python finds it automatically"
+          ],
+          "correctAnswer": 0,
+          "concept": "modules"
+        },
+        {
+          "id": "lesson-6-1-q5",
+          "type": "multiple-choice",
+          "question": "You wrote utils.py in the same folder as main.py. How do you use its double() function in main.py?",
+          "options": [
+            "from utils import double",
+            "include utils.py",
+            "require(\"utils\")",
+            "Python finds it automatically"
+          ],
+          "correctAnswer": 0,
+          "concept": "modules"
         }
       ]
     },
@@ -755,6 +1050,35 @@
           "question": "When executed directly, a Python file's __name__ is set to '__main__'.",
           "correctAnswer": true,
           "concept": "name-main"
+        },
+        {
+          "id": "lesson-6-2-q3",
+          "type": "fill-blank",
+          "question": "Any Python file can serve as a module and be brought in with the ___ statement.",
+          "concept": "modules",
+          "correctAnswer": [
+            "import"
+          ]
+        },
+        {
+          "id": "lesson-6-2-q4",
+          "type": "true-false",
+          "question": "Code under if __name__ == \"__main__\": runs when the file is imported by another module.",
+          "correctAnswer": false,
+          "concept": "modules"
+        },
+        {
+          "id": "lesson-6-2-q5",
+          "type": "multiple-choice",
+          "question": "What is a package in Python?",
+          "options": [
+            "A folder of modules that groups related code",
+            "Any single .py file",
+            "A compressed zip of programs",
+            "A special kind of function"
+          ],
+          "correctAnswer": 0,
+          "concept": "packages"
         }
       ]
     },
@@ -800,6 +1124,28 @@
             "median() finds the middle value",
             "stdev() calculates standard deviation"
           ]
+        },
+        {
+          "id": "lesson-6-3-q4",
+          "type": "multiple-choice",
+          "question": "Which function shows the list of names available inside a module?",
+          "options": [
+            "dir(module)",
+            "list(module)",
+            "module.show()",
+            "print(module)"
+          ],
+          "correctAnswer": 0,
+          "concept": "stdlib"
+        },
+        {
+          "id": "lesson-6-3-q5",
+          "type": "fill-blank",
+          "question": "Which standard library module would you use to roll a random dice: import ___",
+          "concept": "stdlib",
+          "correctAnswer": [
+            "random"
+          ]
         }
       ]
     },
@@ -838,6 +1184,29 @@
             "str() returns a human-readable form; repr() returns an unambiguous form that Python can read",
             "str() is for humans; repr() is for Python"
           ]
+        },
+        {
+          "id": "lesson-7-1-q4",
+          "type": "fill-blank",
+          "question": "Prefix the string with this single letter to enable brace substitution:  ___f\"Total: {total}\"",
+          "concept": "formatting",
+          "correctAnswer": [
+            "f",
+            "F"
+          ]
+        },
+        {
+          "id": "lesson-7-1-q5",
+          "type": "multiple-choice",
+          "question": "What does f\"{price:.2f}\" do to 3.14159?",
+          "options": [
+            "Prints 3.14",
+            "Prints 3.14159",
+            "Rounds the variable permanently",
+            "Raises ValueError"
+          ],
+          "correctAnswer": 0,
+          "concept": "formatting"
         }
       ]
     },
@@ -878,6 +1247,24 @@
           "question": "The write() method automatically adds a newline character.",
           "correctAnswer": false,
           "concept": "file-io"
+        },
+        {
+          "id": "lesson-7-2-q4",
+          "type": "fill-blank",
+          "question": "Open a file for writing with:  open(\"data.txt\", ___)",
+          "concept": "files",
+          "correctAnswer": [
+            "\"w\"",
+            "w",
+            "'w'"
+          ]
+        },
+        {
+          "id": "lesson-7-2-q5",
+          "type": "true-false",
+          "question": "Opening an existing file in \"w\" mode erases its previous contents.",
+          "correctAnswer": true,
+          "concept": "files"
         }
       ]
     },
@@ -916,6 +1303,28 @@
             "A list",
             "list"
           ]
+        },
+        {
+          "id": "lesson-7-3-q4",
+          "type": "fill-blank",
+          "question": "Which json function converts a JSON string back into a Python object: json.___(text)",
+          "concept": "json",
+          "correctAnswer": [
+            "loads"
+          ]
+        },
+        {
+          "id": "lesson-7-3-q5",
+          "type": "multiple-choice",
+          "question": "After json.dump(data, f), you change the data variable again. What is in the file?",
+          "options": [
+            "The old data — you must dump again",
+            "The new data automatically",
+            "Nothing; dump clears the file",
+            "The file updates continuously"
+          ],
+          "correctAnswer": 0,
+          "concept": "json"
         }
       ]
     },
@@ -956,6 +1365,23 @@
           "question": "The last line of a traceback shows the exception type and message.",
           "correctAnswer": true,
           "concept": "tracebacks"
+        },
+        {
+          "id": "lesson-8-1-q4",
+          "type": "fill-blank",
+          "question": "int(\"12x\") raises a ___Error.",
+          "concept": "exceptions",
+          "correctAnswer": [
+            "value",
+            "Value"
+          ]
+        },
+        {
+          "id": "lesson-8-1-q5",
+          "type": "true-false",
+          "question": "Syntax errors are detected before the program starts running.",
+          "correctAnswer": true,
+          "concept": "syntax-errors"
         }
       ]
     },
@@ -996,6 +1422,28 @@
           "question": "A bare except: clause catches all exceptions including keyboard interrupts.",
           "correctAnswer": true,
           "concept": "try-except"
+        },
+        {
+          "id": "lesson-8-2-q4",
+          "type": "multiple-choice",
+          "question": "Why prefer except ValueError over a bare except:?",
+          "options": [
+            "Bare except catches ALL errors, hiding real bugs",
+            "except ValueError runs faster",
+            "Bare except only works in functions",
+            "There is no difference"
+          ],
+          "correctAnswer": 0,
+          "concept": "exceptions"
+        },
+        {
+          "id": "lesson-8-2-q5",
+          "type": "fill-blank",
+          "question": "Only run cleanup no-matter-what code in a ___ block.",
+          "concept": "exceptions",
+          "correctAnswer": [
+            "finally"
+          ]
         }
       ]
     },
@@ -1036,6 +1484,22 @@
           "question": "Custom exception classes should inherit from the Exception class.",
           "correctAnswer": true,
           "concept": "custom-exceptions"
+        },
+        {
+          "id": "lesson-8-3-q4",
+          "type": "fill-blank",
+          "question": "Create your own error deliberately with the ___ statement.",
+          "concept": "exceptions",
+          "correctAnswer": [
+            "raise"
+          ]
+        },
+        {
+          "id": "lesson-8-3-q5",
+          "type": "true-false",
+          "question": "raise ValueError(\"bad input\") immediately stops normal flow of the function.",
+          "correctAnswer": true,
+          "concept": "exceptions"
         }
       ]
     },
@@ -1076,6 +1540,20 @@
           "question": "Class variables are shared across all instances of a class.",
           "correctAnswer": true,
           "concept": "classes"
+        },
+        {
+          "id": "lesson-9-1-q5",
+          "type": "true-false",
+          "question": "Each instance of a class keeps its own separate attribute values.",
+          "correctAnswer": true,
+          "concept": "oop"
+        },
+        {
+          "id": "lesson-9-1-q5",
+          "type": "true-false",
+          "question": "Each instance of a class keeps its own separate attribute values.",
+          "correctAnswer": true,
+          "concept": "oop"
         }
       ]
     },
@@ -1127,6 +1605,16 @@
             "It lets you reuse and extend existing code",
             "It avoids duplicating code by sharing behavior between related classes"
           ]
+        },
+        {
+          "id": "lesson-9-2-q5",
+          "type": "fill-blank",
+          "question": "Inside a child class, call the parent's initializer using super().__ ___()",
+          "concept": "inheritance",
+          "correctAnswer": [
+            "init__",
+            "__init__"
+          ]
         }
       ]
     },
@@ -1167,6 +1655,139 @@
           "question": "Generator expressions use less memory than list comprehensions.",
           "correctAnswer": true,
           "concept": "generators"
+        },
+        {
+          "id": "lesson-9-3-q4",
+          "type": "fill-blank",
+          "question": "A generator function produces values one at a time using the ___ keyword.",
+          "concept": "generators",
+          "correctAnswer": [
+            "yield"
+          ]
+        },
+        {
+          "id": "lesson-9-3-q5",
+          "type": "multiple-choice",
+          "question": "Why are generators memory-friendly?",
+          "options": [
+            "They yield one value at a time instead of building the whole list",
+            "They compress data automatically",
+            "They store values on disk",
+            "Python deletes them after use"
+          ],
+          "correctAnswer": 0,
+          "concept": "generators"
+        }
+      ]
+    },
+    {
+      "id": "capstone-final",
+      "title": "Final Capstone: Everything You've Learned",
+      "lessonId": "lesson-9-3",
+      "description": "A mixed review covering all nine modules. Aim for 80% or higher!",
+      "questions": [
+        {
+          "id": "cap-q1",
+          "type": "multiple-choice",
+          "question": "Which data type would you choose to store a student's name and grade together, looked up by name?",
+          "options": [
+            "A list",
+            "A tuple",
+            "A dictionary",
+            "A set"
+          ],
+          "correctAnswer": 2,
+          "concept": "dictionaries"
+        },
+        {
+          "id": "cap-q2",
+          "type": "fill-blank",
+          "question": "Write the missing word: scores = [80, 92, 77]; highest = ___(scores)",
+          "concept": "lists",
+          "correctAnswer": [
+            "max"
+          ]
+        },
+        {
+          "id": "cap-q3",
+          "type": "true-false",
+          "question": "A for loop can iterate directly over the characters of a string.",
+          "correctAnswer": true,
+          "concept": "for-loop"
+        },
+        {
+          "id": "cap-q4",
+          "type": "multiple-choice",
+          "question": "What will this print? def f(x): return x * 2; print(f(f(3)))",
+          "options": [
+            "12",
+            "6",
+            "9",
+            "36"
+          ],
+          "correctAnswer": 0,
+          "concept": "functions"
+        },
+        {
+          "id": "cap-q5",
+          "type": "fill-blank",
+          "question": "To read a number safely from user text you convert it: age = ___(input())",
+          "concept": "input",
+          "correctAnswer": [
+            "int",
+            "int()"
+          ]
+        },
+        {
+          "id": "cap-q6",
+          "type": "multiple-choice",
+          "question": "Which block runs whether or not an exception occurred?",
+          "options": [
+            "finally",
+            "else",
+            "except",
+            "raise"
+          ],
+          "correctAnswer": 0,
+          "concept": "exceptions"
+        },
+        {
+          "id": "cap-q7",
+          "type": "true-false",
+          "question": "Tuples can be modified after creation using append().",
+          "correctAnswer": false,
+          "concept": "tuples"
+        },
+        {
+          "id": "cap-q8",
+          "type": "fill-blank",
+          "question": "In a class, ___ refers to the current instance.",
+          "concept": "oop",
+          "correctAnswer": [
+            "self"
+          ]
+        },
+        {
+          "id": "cap-q9",
+          "type": "multiple-choice",
+          "question": "Which mode opens a file WITHOUT erasing existing content, adding to the end instead?",
+          "options": [
+            "\"a\"",
+            "\"w\"",
+            "\"r\"",
+            "\"x\""
+          ],
+          "correctAnswer": 0,
+          "concept": "files"
+        },
+        {
+          "id": "cap-q10",
+          "type": "fill-blank",
+          "question": "Convert a saved JSON file back into Python data: data = json.___(open('save.json'))",
+          "concept": "json",
+          "correctAnswer": [
+            "load"
+          ]
         }
       ]
     }
