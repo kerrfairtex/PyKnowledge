@@ -14,6 +14,17 @@
   <link rel="stylesheet" href="ui/themes/dashboard.css">
   <link rel="stylesheet" href="ui/themes/library.css">
   <link rel="stylesheet" href="ui/themes/about.css">
+  <script>
+    // Register the service worker as early as possible — independent of the
+    // module app boot — so install/offline detection tools and the browser
+    // see it immediately.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
+          .catch(function (err) { console.warn('SW registration failed:', err); });
+      });
+    }
+  </script>
   <link rel="icon" href="ui/assets/icon-192.png" type="image/png">
 </head>
 <body>
