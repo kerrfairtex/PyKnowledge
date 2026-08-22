@@ -3,8 +3,8 @@
  */
 
 import { validateQuizAnswers } from '../../utils/validator.js';
-import { markLessonComplete } from '../../core/storage.js';
-import { unlockNextModule } from '../../storage/progress.js';
+import { markLessonComplete, getProgress } from '../../core/storage.js';
+import { unlockNextModule, isModuleComplete } from '../../storage/progress.js';
 import { checkAchievements } from '../../storage/achievements.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';

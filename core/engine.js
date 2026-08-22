@@ -184,6 +184,29 @@ async function initApp() {
 
 function renderModuleLessons(main, module) {
   const progress = getProgress();
+
+  // Primary action: route to the first unlocked, incomplete lesson,
+  // respecting the sequential locking used for the list below.
+  const completedCount = module.lessons.filter((l) =>
+    progress.completedLessons.includes(l.id)
+  ).length;
+  const targetLesson =
+    module.lessons.find((l, i) => {
+      const prevUnlocked = i === 0 || progress.completedLessons.includes(module.lessons[i - 1].id);
+      return prevUnlocked && !progress.completedLessons.includes(l.id);
+    }) || null;
+  const reviewLesson = !targetLesson ? module.lessons[0] : null;
+
+  let actionLabel;
+  let actionHref;
+  if (targetLesson) {
+    actionLabel = completedCount > 0 ? 'Continue Lesson' : 'Start Lesson';
+    actionHref = `#/lesson/${escapeHtml(targetLesson.id)}`;
+  } else {
+    actionLabel = 'Review Lesson';
+    actionHref = `#/lesson/${escapeHtml(reviewLesson.id)}`;
+  }
+
   main.innerHTML = `
     <section class="module-detail page-content" aria-labelledby="module-title">
       <h2 id="module-title">${escapeHtml(module.title)}</h2>
@@ -202,7 +225,7 @@ function renderModuleLessons(main, module) {
             </li>`;
         }).join('')}
       </ul>
-      <a href="#/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+      <a href="${actionHref}" class="btn btn-primary">${actionLabel}</a>
     </section>`;
   animatePageEnter(main);
 }

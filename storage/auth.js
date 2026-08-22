@@ -8,9 +8,23 @@ import { remove } from '../core/idb.js';
 
 const PROFILES_KEY = 'pyknowledge_profiles';
 const SESSION_KEY = 'pyknowledge_session';
+const GUEST_KEY = 'pyknowledge_guest_id';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes idle
 
 let activeUserId = null;
+
+function getOrCreateGuestId() {
+  try {
+    let id = localStorage.getItem(GUEST_KEY);
+    if (!id) {
+      id = 'guest_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+      localStorage.setItem(GUEST_KEY, id);
+    }
+    return id;
+  } catch {
+    return 'guest_' + Date.now();
+  }
+}
 
 export function getProfiles() {
   try {
@@ -26,31 +40,40 @@ function saveProfiles(profiles) {
 }
 
 export function getActiveUser() {
+  // Check for authenticated profile first
   if (activeUserId) {
     const profiles = getProfiles();
-    return profiles.find((p) => p.id === activeUserId) || null;
+    const found = profiles.find((p) => p.id === activeUserId);
+    if (found) return found;
   }
 
-  if (typeof sessionStorage === 'undefined') return null;
+  if (typeof sessionStorage === 'undefined') {
+    // Return guest user if no session storage available
+    return { id: getOrCreateGuestId(), displayName: 'Guest', isGuest: true };
+  }
 
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const session = JSON.parse(raw);
-    if (Date.now() - session.lastActive > SESSION_TIMEOUT_MS) {
-      clearSession();
-      return null;
+    if (raw) {
+      const session = JSON.parse(raw);
+      if (Date.now() - session.lastActive <= SESSION_TIMEOUT_MS) {
+        activeUserId = session.userId;
+        const profiles = getProfiles();
+        const found = profiles.find((p) => p.id === session.userId);
+        if (found) return found;
+      } else {
+        clearSession();
+      }
     }
-    activeUserId = session.userId;
-    const profiles = getProfiles();
-    return profiles.find((p) => p.id === session.userId) || null;
-  } catch {
-    return null;
-  }
+  } catch { /* ignore */ }
+
+  // Fallback: persistent guest user
+  return { id: getOrCreateGuestId(), displayName: 'Guest', isGuest: true };
 }
 
 export function isAuthenticated() {
-  return getActiveUser() !== null;
+  const user = getActiveUser();
+  return user !== null && !user.isGuest;
 }
 
 export function hasProfiles() {
