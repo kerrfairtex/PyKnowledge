@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const versionFile = readFileSync(join(root, 'core/version.js'), 'utf8');
-const swFile = readFileSync(join(root, 'core/service-worker.js'), 'utf8');
+const swFile = readFileSync(join(root, 'service-worker.js'), 'utf8');
 
 const swVersionFile = readFileSync(join(root, 'core/sw-version.js'), 'utf8');
 

@@ -352,7 +352,7 @@
   // Service Worker — registers early on window load
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
+      navigator.serviceWorker.register('/service-worker.js')
         .then(function (r) { console.log('SW registered:', r.scope); })
         .catch(function (e) { console.warn('SW registration failed:', e); });
     });

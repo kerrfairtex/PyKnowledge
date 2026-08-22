@@ -245,7 +245,7 @@ function renderModuleLessons(main, module) {
 async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    await navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' });
+    await navigator.serviceWorker.register('/service-worker.js');
   } catch (err) {
     console.warn('Service Worker registration failed:', err);
   }
