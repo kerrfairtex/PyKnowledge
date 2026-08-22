@@ -4,13 +4,13 @@
 
 import { escapeHtml } from '../../utils/sanitize.js';
 import {
-  getProfiles, createProfile, loginWithPin, hasProfiles, getActiveUser
+  getProfiles, createProfile, loginWithPin, hasProfiles, isAuthenticated
 } from '../../storage/auth.js';
 import { showSuccess } from '../../ui/components/toast.js';
 import { animatePageEnter, staggerChildren } from '../../ui/components/animations.js';
 
 export function renderAuthGate(main, onAuthenticated) {
-  if (getActiveUser()) {
+  if (isAuthenticated()) {
     onAuthenticated();
     return;
   }

@@ -457,9 +457,9 @@
     }
 
     if (isPwaInstalled() || hasExistingProfiles()) {
-      // Flicker mitigation: hide landing immediately, then trigger app route
+      // Auto-launch the app: hide landing immediately to avoid visible flicker,
+      // then set hash so onHashChange below handles the swap cleanly.
       landingRoot.style.display = 'none';
-      spaRoot.style.display = '';
       window.location.hash = '#/';
     }
 
