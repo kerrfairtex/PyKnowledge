@@ -48,6 +48,7 @@ const STATIC_ASSETS = [
   '/ui/components/toast.js',
   '/ui/components/offline-indicator.js',
   '/ui/components/install-prompt.js',
+  '/ui/components/cache-progress.js',
   '/ui/components/loading.js',
   '/ui/components/update-notifier.js',
   '/ui/components/animations.js',

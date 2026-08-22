@@ -1229,3 +1229,79 @@ body {
   text-decoration: underline;
   color: #BFDBFE;
 }
+
+/* ------------------------------------------------------------------
+   Download countdown (above the progress bar)
+   ------------------------------------------------------------------ */
+.cache-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.cache-countdown-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #60A5FA; /* 6.51:1 on #101F35 */
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.cache-countdown-label {
+  color: #CBD5E1;
+  font-size: 0.8rem;
+}
+
+/* ------------------------------------------------------------------
+   Centered completion notification (Chrome-compatible modal-style)
+   Fixed overlay, centered card, focus-managed, Esc + button dismiss.
+   ------------------------------------------------------------------ */
+.cache-complete-banner {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 24, 43, 0.72); /* dim, doesn't fully block page */
+  padding: 16px;
+}
+
+.cache-complete-card {
+  background: #142640;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 28px 24px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.cache-complete-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: rgba(134, 239, 172, 0.14);
+  color: #86EFAC;
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cache-complete-card h2 {
+  font-size: 1.1rem;
+  color: #F8FAFC; /* 14.9:1 on #142640 */
+  margin-bottom: 8px;
+}
+
+.cache-complete-card p {
+  color: #CBD5E1; /* 9.2:1 on #142640 */
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}

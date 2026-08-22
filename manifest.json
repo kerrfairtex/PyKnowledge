@@ -1,6 +1,7 @@
 {
   "id": "/",
   "name": "PyKnowledge",
+  "version": "0.9.0",
   "short_name": "PyKnowledge",
   "description": "Offline-first Python learning platform",
   "start_url": "/",
