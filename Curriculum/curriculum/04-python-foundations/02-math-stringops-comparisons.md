@@ -63,7 +63,7 @@ You must be careful when dividing two numbers as the second number must not be e
 :::
 
 ### Floor Division
-Sometimes we may need to only get *whole number* from division and we dont care about the remainder. In that case we can use something called **floor (integer) division**. 
+Sometimes we may need to only get *whole number* from division and we don't care about the remainder. In that case we can use something called **floor (integer) division**. 
 
 **Floor division** is done with `//` operator.
 ```python interactive
@@ -76,14 +76,14 @@ print(a // b)
 ### Modulo Operator
 Sometimes we may need to know remainder of *division* but we do not care about the whole number, only the remainder. In that case we use **modulo** operator.
 
-**Modulo** in done with `%` operator.
+**Modulo** is done with `%` operator.
 ```python interactive
 a = 10
 b = 3
 
 print(a % b)
 ```
-> Result of this operation is 1 because 3 goes into 10 three times and whats left is 1.
+> Result of this operation is 1 because 3 goes into 10 three times and what's left is 1.
 
 ### Exponentiation
 Raises the left value to the power of the right value.
@@ -221,7 +221,7 @@ In the last assignment we have declared our shop variables and printed the inven
 4. Calculate the checkout price:
     * Create variable `total` by multiplying `item_price` and `item_quantity`
 5. Comparison checks:
-    * Create a boolean `is_large_order` that evaluates whether `item_quantity` is greater then or equal to `3`.
+    * Create a boolean `is_large_order` that evaluates whether `item_quantity` is greater than or equal to `3`.
 6. Update your output to use **f-string** :
     ```
     Welcome to MERLIN SHOP
@@ -241,4 +241,4 @@ In the last assignment we have declared our shop variables and printed the inven
 3. Read about [Comparisons](https://docs.python.org/3/library/stdtypes.html#comparisons) and [Boolean Operators - and, or and not](https://docs.python.org/3/library/stdtypes.html#boolean-operations-and-or-not) in official Python documentation.
 
 ## What's Next
-Now that we have learned how to do calculations and comparisons, its time for our program to change behavior based on those calculations or comparisons. Lets dive in **conditionals**.
+Now that we have learned how to do calculations and comparisons, it's time for our program to change behavior based on those calculations or comparisons. Let's dive into **conditionals**.

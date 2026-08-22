@@ -25,9 +25,9 @@ name = input("What is your name?" )
 
 :::info[`input()` always returns a string]
 
-`input()` function **always** returnes a *string*. This is something you need to watch for when you ask the user to enter some data. If you need numbers (integer or float) you will need to **type cast** it to some other type.
+`input()` function **always** returns a *string*. This is something you need to watch for when you ask the user to enter some data. If you need numbers (integer or float) you will need to **type cast** it to some other type.
 
-If you cannot remember how to do this, check out previus [Core Datatypes - Type Casting](./01-output-variable-datatypes.md#type-casting) lesson.
+If you cannot remember how to do this, check out the previous [Core Datatypes - Type Casting](./01-output-variable-datatypes.md#type-casting) lesson.
 
 :::
 
@@ -75,21 +75,21 @@ else:
 ```
 In this example, we check the value of variable `a`. Then based on conditions set, our program will execute specific branch.
 
-We use this branching logic to make our program do varius things based on these conditions. Each condition we have **always** evaluates to **boolean** - being **True** or **False**. We can also use logical operators (`and`, `or`, `not`) to chain multiple conditions for Python to check.
+We use this branching logic to make our program do various things based on these conditions. Each condition we have **always** evaluates to **boolean** - being **True** or **False**. We can also use logical operators (`and`, `or`, `not`) to chain multiple conditions for Python to check.
 ```python interactive
 age = 15
 name = "Bob"
 is_verified = True
 
 if age > 15 and is_verified:
-    print(f"{name} is allowed to enter.)
+    print(f"{name} is allowed to enter.")
 elif age > 15 and not is_verified:
-    print(f"{name} has correct age but not verified)
+    print(f"{name} has correct age but is not verified.")
 elif age <= 15:
-    print(f"{name} is not 15 years old")
+    print(f"{name} is not 16 or older.")
 ```
 
-## Assigment
+## Assignment
 Now that you know how to get user input and branch your program using conditional logic (`if`, `elif`, `else`) the code can move away from hardcoded values and become interactive. 
 
 **Goal:** use `input()` to collect user choices, cast strings to numbers, and use conditional logic to apply discounts and stock checks.
@@ -100,7 +100,7 @@ Now that you know how to get user input and branch your program using conditiona
     * Ask the user for desired `item_quantity` using `input()`. **Don't forget** to cast the string to integer !
 4. Stock & Availability Check
     * If `item_quantity` is less or equal to `0` print an error message: `Invalid quantity ordered`
-    * If `item_quantity` is greater then `item_stock` print `Sorry, we do not have enough stock.`
+    * If `item_quantity` is greater than `item_stock` print `Sorry, we do not have enough stock.`
 5. Dynamic discount (conditionals)
     * Calculate the total (you should have this from the last lesson)
     * If `total` is over `100` apply a **10%** discount (`total * 0.90`) and print: `Discount applied: 10%`
@@ -114,4 +114,4 @@ Now that you know how to get user input and branch your program using conditiona
 * Learn [The Importance of Indentation](https://medium.com/@duruprincewilluzochukwu/the-importance-of-indentation-in-python-a-beginners-guide-21cec5292519) from this **Medium** article.
 
 ## What's Next
-Now that our programs can take user input, calculate things and evaluate what to do on those calculations, we can jump into **loops**. These help us to run a peace of code multiple times without us repeating the code.
+Now that our programs can take user input, calculate things and evaluate what to do on those calculations, we can jump into **loops**. These help us to run a piece of code multiple times without us repeating the code.

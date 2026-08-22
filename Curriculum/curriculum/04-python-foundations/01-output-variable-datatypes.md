@@ -6,7 +6,7 @@ sidebar_position: 1
 lesson: true
 ---
 # Outputting, Storing and Representing Data
-Welcome to the first real python lesson. Our programs need a way to output information back to users and they also need to store varius data to perform operations on them. We will learn how to do these things in the following lesson.
+Welcome to the first real python lesson. Our programs need a way to output information back to users and they also need to store various data to perform operations on them. We will learn how to do these things in the following lesson.
 
 ## Lesson Overview
 At the end of the lesson you will:
@@ -151,14 +151,14 @@ print("c=", c, "type=", type(c))
 
 If Python cannot convert one type to another, it will raise **ValueError**. This usually happens when you try to convert some *text* into *number* or *float*.
 
-Error are very helpful as they tell us exactly **what** is the issue and **where** they happend. If the errors did not exists, your programs would just silently die, and you would have to randomly guess where the issue is.
+Errors are very helpful as they tell us exactly **what** is the issue and **where** they happened. If the errors did not exist, your programs would just silently die, and you would have to randomly guess where the issue is.
 
 We will learn how to read and deal with errors in later lessons.
 
 :::
 
 ## Assignment {#assignment}
-Try the following excercise to establish your knowlege. We will build a shop, starting with defining (declaring) diffrent variables in this lesson and progress with our little shop as we go further along.
+Try the following exercise to establish your knowledge. We will build a shop, starting with defining (declaring) different variables in this lesson and progress with our little shop as we go further along.
 
 You will need to do this assignment on your own machine.
 
@@ -182,10 +182,10 @@ You will need to do this assignment on your own machine.
     ```
 7. Make sure your program works as expected then create a repository and push your code to github
 
-## Deepen Your Knowlege
-Go through these articles to deepen your knowlege about the topics covered in this lesson.
+## Deepen Your Knowledge
+Go through these articles to deepen your knowledge about the topics covered in this lesson.
 1. Read more about `print()` function from [Your Guide to Python print Function](https://realpython.com/python-print/) from this **RealPython** article.
 2. Learn more about [Basic Datatypes in Python](https://realpython.com/python-data-types/) from this **RealPython** article.
 
 ## What's Next
-Now that you have basic knowlege of Python's core data types, we will see how we can use them to make useful output. In the next lesson, we learn about basic **math** and **comparisons**.
+Now that you have basic knowledge of Python's core data types, we will see how we can use them to make useful output. In the next lesson, we learn about basic **math** and **comparisons**.
