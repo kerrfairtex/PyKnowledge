@@ -1,370 +1,165 @@
 /* ==========================================================================
-   PyKnowledge Dashboard
-   Pattern adapted from freeCodeCamp/freeCodeCamp (client/src/components/Map,
-   Progress) — BSD-3-Clause. Rebuilt in plain CSS: no React, no JS animation
-   loop (native <details> + CSS transition replace their accordion/easing).
+   PyKnowledge — Dashboard styles (route: /dashboard)
+
+   HISTORY NOTE: the original dashboard.css (root, commit bf3486c) was
+   accidentally deleted in bde08f6 as "dead weight" and never migrated,
+   leaving .dash-card markup unstyled. This file restores that design
+   language, re-tokened onto the app's dark-blue system (#08182B family)
+   with computed WCAG AA contrast, and upgrades it:
+
+   - icon tiles with per-state color + interactive micro-motion
+   - unlocked/done/locked state treatments (gradient, check, hatch)
+   - "This course, by the numbers" facts grid + rotating trivia
+   - reduced-motion respected (prefers-reduced-motion)
    ========================================================================== */
 
-:root {
-  --pk-bg: #0f172a;
-  --pk-surface: #16213a;
-  --pk-surface-hover: #1c2b4a;
-  --pk-border: #26324a;
-  --pk-text: #e5e9f0;
-  --pk-text-dim: #93a1b8;
-  --pk-blue: #3776ab;
-  --pk-yellow: #ffd43b;
-  --pk-green: #2ecc71;
-  --pk-radius: 8px;
-}
-
-/* ---------- Module map (superblock list equivalent) ---------- */
-
-.map-ui {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.map-ui h2 {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--pk-text-dim);
-  margin: 20px 0 8px;
-}
-
-.map-ui ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.map-module-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  padding: 14px 16px;
-  background: var(--pk-surface);
-  border: 1px solid var(--pk-border);
-  border-radius: var(--pk-radius);
-  color: var(--pk-text);
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 150ms ease, border-color 150ms ease;
-}
-
-.map-module-link:hover,
-.map-module-link:focus-visible {
-  background: var(--pk-surface-hover);
-  border-color: var(--pk-blue);
-  outline: none;
-}
-
-.map-module-link:focus-visible {
-  box-shadow: 0 0 0 2px var(--pk-blue);
-}
-
-.map-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  color: var(--pk-yellow);
-}
-
-.map-module-title {
-  flex: 1;
-  font-size: 0.95rem;
-}
-
-/* ---------- Checkmark ---------- */
-
-.checkmark-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  border: 2px solid var(--pk-border);
-}
-
-.checkmark-wrap.is-completed {
-  background: var(--pk-green);
-  border-color: var(--pk-green);
-}
-
-.checkmark-wrap svg {
-  width: 12px;
-  height: 12px;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 150ms ease, transform 150ms ease;
-}
-
-.checkmark-wrap.is-completed svg {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* ---------- Accordion (native <details>, replaces SuperBlockAccordion) ---------- */
-
-.block-ui {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.block-accordion {
-  background: var(--pk-surface);
-  border: 1px solid var(--pk-border);
-  border-radius: var(--pk-radius);
-  overflow: hidden;
-}
-
-.block-accordion summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  list-style: none;
-}
-
-.block-accordion summary::-webkit-details-marker {
-  display: none;
-}
-
-.block-accordion summary::after {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid var(--pk-text-dim);
-  border-bottom: 2px solid var(--pk-text-dim);
-  transform: rotate(-45deg);
-  transition: transform 150ms ease;
-}
-
-.block-accordion[open] summary::after {
-  transform: rotate(45deg);
-}
-
-.block-accordion .lesson-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 16px 12px;
-  border-top: 1px solid var(--pk-border);
-}
-
-.block-accordion .lesson-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--pk-border);
-}
-
-.block-accordion .lesson-item:last-child {
-  border-bottom: none;
-}
-
-.block-accordion .lesson-item a {
-  color: var(--pk-text);
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.block-accordion .lesson-item a:hover {
-  color: var(--pk-yellow);
-}
-
-/* ---------- Progress bar ---------- */
-/* Replaces ProgressInner's setInterval + bezier-easing JS loop with a
-   single CSS transition using the same curve (0.2, 0.5, 0.4, 1). */
-
-.progress-header,
-.completion-block-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: var(--pk-text-dim);
-}
-
-.completion-block-name {
-  font-size: 0.9rem;
-  margin-bottom: 6px;
-}
-
-.progress-bar-wrap {
-  position: relative;
-  height: 8px;
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 6px 0;
-}
-
-.progress-bar-background {
-  position: absolute;
-  inset: 0;
-  background: var(--pk-border);
-}
-
-.progress-bar-percent {
-  position: absolute;
-  inset: 0;
-  width: 0%;
-  background: linear-gradient(90deg, var(--pk-blue), var(--pk-yellow));
-  border-radius: 999px;
-  transition: width 750ms cubic-bezier(0.2, 0.5, 0.4, 1);
-}
-
-/* ---------- Offline/sync status chip (PyKnowledge's own signature element) ---------- */
-
-.sync-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  border: 1px solid var(--pk-border);
-  color: var(--pk-text-dim);
-}
-
-.sync-status::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--pk-text-dim);
-}
-
-.sync-status.is-offline::before {
-  background: var(--pk-yellow);
-}
-
-.sync-status.is-synced::before {
-  background: var(--pk-green);
-}
-
-/* ---------- Layout shell ---------- */
-
-.dashboard {
-  min-height: 100vh;
-  background: var(--pk-bg);
-  color: var(--pk-text);
-  font-family: system-ui, -apple-system, sans-serif;
-  padding: 20px;
-  max-width: 720px;
+.dash {
+  max-width: 760px;
   margin: 0 auto;
+  padding: 8px 20px 64px;
+  color: #E2E8F0; /* 12.3:1 on #0f172a page bg */
 }
 
-.dashboard-header {
+.dash-loading,
+.dash-error {
+  color: #94A3B8;
+  padding: 40px 0;
+  text-align: center;
+}
+.dash-error { color: #f66b84; }
+
+/* ---------- Flash toast ---------- */
+.dash-toast {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 12px;
+  background: rgba(46, 204, 113, 0.10);
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  color: #86EFAC; /* AA on the tinted panel */
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  margin-bottom: 24px;
+  animation: dash-toast-in 180ms ease-out;
 }
+@keyframes dash-toast-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dash-toast-dismiss {
+  background: none;
+  border: none;
+  color: inherit;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.dash-toast-dismiss:hover { opacity: 1; }
+.dash-toast-dismiss svg { width: 100%; height: 100%; }
 
-.dashboard-header h1 {
-  font-size: 1.2rem;
+/* ---------- Header ---------- */
+.dash-head { margin-bottom: 24px; }
+.dash-head h1 {
+  font-size: 1.7rem;
+  margin: 0 0 4px;
+  color: #F8FAFC;
+}
+.dash-head p {
+  color: #94A3B8; /* 5.9:1 on page bg */
   margin: 0;
 }
 
-/* ---------- Footer / contact ---------- */
-
-.pk-footer {
-  margin-top: 32px;
-  padding-top: 16px;
-  border-top: 1px solid var(--pk-border);
-  font-size: 0.8rem;
-  color: var(--pk-text-dim);
-}
-
-.pk-footer .contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  margin-top: 8px;
-}
-
-.pk-footer a {
-  color: var(--pk-text-dim);
-  text-decoration: none;
-}
-
-.pk-footer a:hover {
-  color: var(--pk-yellow);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .progress-bar-percent,
-  .checkmark-wrap svg,
-  .map-module-link,
-  .block-accordion summary::after {
-    transition: none;
-  }
-}
-
-/* ------------------------------------------------------------------
-   "This course, by the numbers" — grounded curriculum facts + trivia
-   Palette follows the app's dark-blue system; all text colors meet
-   WCAG AA 4.5:1 on their backgrounds (computed, not eyeballed).
-   ------------------------------------------------------------------ */
-.dash-facts {
-  background: var(--color-surface-raised, #1c2a4a);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* ---------- Overall progress ---------- */
+.dash-overall {
+  background: #142640;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 12px;
-  padding: var(--space-lg);
-  margin-top: var(--space-lg);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+.dash-overall-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-size: 0.92rem;
+  color: #CBD5E1;
+}
+.dash-overall-count {
+  color: #60A5FA; /* 6.5:1 on #142640 */
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.dash-bar {
+  height: 8px;
+  background: rgba(8, 24, 43, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.dash-bar--small { height: 6px; margin: 10px 0 6px; }
+.dash-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2ecc71 0%, #37a6ff 100%);
+  border-radius: 999px;
+  transition: width 220ms ease-out;
+}
+
+/* ---------- Facts grid ("This course, by the numbers") ---------- */
+.dash-facts {
+  background: #142640;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: var(--space-lg, 20px);
+  margin-bottom: 28px;
 }
 
 .dash-facts-title {
   font-size: 1rem;
   color: #F8FAFC;
-  margin-bottom: var(--space-md);
+  margin: 0 0 var(--space-md, 14px);
 }
 
 .dash-facts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-sm);
+  gap: var(--space-sm, 10px);
 }
 
 .dash-fact {
   background: rgba(8, 24, 43, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm, 10px) var(--space-md, 14px);
+  transition: border-color 150ms ease-out;
 }
+.dash-fact:hover { border-color: rgba(96, 165, 250, 0.4); }
 
 .dash-fact strong {
   display: block;
-  font-size: 1.6rem;
-  color: #60A5FA; /* 6.51:1 on #101F35-family surfaces */
+  font-size: 1.55rem;
+  color: #60A5FA; /* 6.4:1 on fact-card blend */
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 
 .dash-fact span {
   display: block;
   margin-top: 2px;
-  color: #CBD5E1; /* ~9:1 on same */
+  color: #CBD5E1; /* ~11:1 on fact-card blend */
   font-size: 0.78rem;
   line-height: 1.45;
 }
 
 .dash-trivia {
-  margin-top: var(--space-md);
-  padding: var(--space-sm) var(--space-md);
-  border-left: 3px solid #f66b84;
-  background: rgba(242, 84, 109, 0.08);
+  margin: var(--space-md, 14px) 0 0;
+  padding: var(--space-sm, 10px) var(--space-md, 14px);
+  border-left: 3px solid #f66b84; /* 5.33:1 on #142640 */
+  background: rgba(242, 84, 109, 0.07);
   border-radius: 0 8px 8px 0;
   color: #E2E8F0;
   font-size: 0.85rem;
@@ -374,6 +169,165 @@
 .dash-trivia-label {
   display: inline-block;
   font-weight: 700;
-  color: #f66b84; /* 4.97:1 on raised surface — passes AA */
+  color: #f66b84;
   margin-right: 4px;
+}
+
+/* ---------- Module list ---------- */
+.dash-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dash-card {
+  display: flex;
+  gap: 16px;
+  background: #142640;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 150ms ease-out, transform 150ms ease-out;
+}
+.dash-card:hover {
+  border-color: rgba(96, 165, 250, 0.45);
+  transform: translateY(-2px);
+}
+
+/* Icon tile — compact (40px), tinted per state, subtle motion on hover */
+.dash-card-icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 24, 43, 0.65);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #60A5FA;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+.dash-card-icon svg { width: 20px; height: 20px; }
+
+.dash-card:hover .dash-card-icon {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.12);
+}
+
+.dash-card-body { flex: 1; min-width: 0; }
+
+.dash-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.dash-card-title-row h3 {
+  font-size: 1.05rem;
+  margin: 0;
+  color: #F8FAFC;
+}
+.dash-card-badge {
+  width: 18px;
+  height: 18px;
+  color: #64748B;
+  flex: none;
+}
+.dash-card-badge svg { width: 100%; height: 100%; }
+.dash-card-badge--done { color: #4ADE80; }
+
+.dash-card-desc {
+  color: #A9B4C8; /* ~7:1 on #142640 */
+  font-size: 0.88rem;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.dash-card-count {
+  font-size: 0.74rem;
+  color: #94A3B8;
+  margin-bottom: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-card-btn {
+  display: inline-block;
+  background: #2563EB;
+  color: #FFFFFF; /* 5.2:1 on #2563EB */
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 9px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 150ms ease-out, transform 120ms ease-out;
+}
+.dash-card-btn:hover { background: #2f6fe0; transform: translateY(-1px); }
+.dash-card-btn:active { transform: translateY(0); }
+
+.dash-card-locked-note {
+  font-size: 0.76rem;
+  color: #f66b84; /* 5.33:1 */
+  margin: 0;
+}
+
+/* Locked cards read as inactive — hatch pattern, dashed border, no button */
+.dash-card--locked {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,0.02) 12px 24px),
+    #101d33;
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+.dash-card--locked:hover { transform: none; border-color: rgba(148, 163, 184, 0.35); }
+.dash-card--locked .dash-card-icon {
+  color: #64748B;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+.dash-card--locked .dash-card-icon svg { color: inherit; }
+.dash-card--locked .dash-card-title-row h3 { color: #CBD5E1; }
+.dash-card--locked .dash-card-badge { color: #64748B; }
+
+/* Unlocked cards: blue-tinted gradient for easy visualization */
+.dash-card--unlocked {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.14) 0%, rgba(14, 116, 144, 0.10) 100%),
+              #142640;
+  border-color: rgba(96, 165, 250, 0.4);
+}
+.dash-card--unlocked .dash-card-icon {
+  border-color: rgba(96, 165, 250, 0.55);
+}
+
+/* Done cards: green accents */
+.dash-card--done .dash-card-icon {
+  color: #4ADE80;
+  border-color: rgba(74, 222, 128, 0.5);
+}
+.dash-card--done {
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .dash { padding: 8px 14px 48px; }
+  .dash-card { padding: 16px; gap: 12px; }
+  .dash-card-icon { width: 34px; height: 34px; border-radius: 8px; }
+  .dash-card-icon svg { width: 17px; height: 17px; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .dash-card,
+  .dash-card-icon,
+  .dash-card-btn,
+  .dash-bar-fill,
+  .dash-toast {
+    transition: none;
+    animation: none;
+  }
+  .dash-card:hover { transform: none; }
+  .dash-card:hover .dash-card-icon { transform: none; }
 }
