@@ -6,23 +6,23 @@
   <meta name="theme-color" content="#16213e" />
   <title>PyKnowledge — Learn Python offline</title>
   <meta name="description" content="A free, offline-first Python course built for TRAC, BARMM, and CHED students. Install once, learn anywhere, signal or not." />
+  <meta name="color-scheme" content="dark">
   <link rel="icon" href="ui/assets/icon-192.png" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="index.css" />
-<meta name="color-scheme" content="dark">
-<link rel="stylesheet" href="ui/themes/default.css">
-<link rel="stylesheet" href="ui/themes/animations.css">
-<link rel="stylesheet" href="ui/themes/landing.css">
-<link rel="stylesheet" href="ui/themes/dashboard.css">
-<link rel="stylesheet" href="ui/themes/library.css">
-<link rel="stylesheet" href="ui/themes/about.css">
-  <script>
-if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
-  </script>
+  <link rel="stylesheet" href="ui/themes/default.css">
+  <link rel="stylesheet" href="ui/themes/animations.css">
+  <link rel="stylesheet" href="ui/themes/landing.css">
+  <link rel="stylesheet" href="ui/themes/dashboard.css">
+  <link rel="stylesheet" href="ui/themes/library.css">
+  <link rel="stylesheet" href="ui/themes/about.css">
 </head>
 <body>
+
+<!-- ================================================================
+     LANDING PAGE (visible by default — hidden when user enters the app)
+     ================================================================ -->
+<div id="landing-root">
 
   <header class="topbar">
     <div class="wrap">
@@ -253,47 +253,14 @@ if ('serviceWorker' in navigator) {
     </div>
   </footer>
 
-  <script>
-    // (Module info "?" tooltips removed — locked cards now show a plain
-    // "Complete Module N to unlock" chip; the description is already visible.)
-  </script>
+</div><!-- /landing-root -->
 
-  <div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
-
-  <script>
-    // Offline / online indicator (Phase 3 — network detection)
-    function updateNetworkStatus() {
-      const indicator = document.getElementById('offlineIndicator');
-      if (!indicator) return;
-      indicator.hidden = navigator.onLine;
-    }
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-    updateNetworkStatus();
-  </script>
-
-  <script>
-    // Service Worker registration — separate system from PWA install (Phase 3)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          const registration = await navigator.serviceWorker.register('/core/service-worker.js');
-          console.log('PyKnowledge Service Worker registered:', registration.scope);
-        } catch (error) {
-          console.error('PyKnowledge Service Worker registration failed:', error);
-        }
-      });
-    }
-  </script>
-
-  <script type="module">
-    import { initInstallPrompt } from './ui/components/install-prompt.js';
-    initInstallPrompt();
-  </script>
-
-
-  <!-- SPA app shell (hidden until user enters the app) -->
-  <div id="spa-root" style="display:none">
+<!-- ================================================================
+     SPA APP SHELL (hidden by default — shown when user enters the app)
+     All content exactly matches the old app-shell.html body.
+     NO scripts that auto-execute — engine.js is loaded dynamically.
+     ================================================================ -->
+<div id="spa-root" style="display:none">
   <div id="app">
     <header class="app-header" role="banner">
       <h1>PyKnowledge</h1>
@@ -327,7 +294,7 @@ if ('serviceWorker' in navigator) {
       <a href="/privacy.html">Privacy Policy</a> · Maintained by <a href="https://www.facebook.com/share/18D34C7E4e/" target="_blank" rel="noopener">Kerr Fairtex</a>
     </p>
     <div class="contact-links">
-      <a href="tel:+639637130812">09637130812</a>
+      <a href="tel:+639****0812">09637130812</a>
       <a href="mailto:kerrfairtex@gmail.com">kerrfairtex@gmail.com</a>
       <a href="https://facebook.com/kerrfairtex" target="_blank" rel="noopener">Facebook</a>
       <a href="https://github.com/kerrfairtex" target="_blank" rel="noopener">GitHub</a>
@@ -340,126 +307,167 @@ if ('serviceWorker' in navigator) {
       <a href="https://kerrfairtex.tumblr.com" target="_blank" rel="noopener">Tumblr</a>
     </div>
   </footer>
+</div><!-- /spa-root -->
 
-  <script>
-    function updateSyncChip() {
-      const el = document.getElementById('syncStatus');
-      if (!el) return;
-      const status = navigator.onLine ? 'is-synced' : 'is-offline';
-      el.classList.remove('is-synced', 'is-offline');
-      el.classList.add(status);
-      el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+<!-- ================================================================
+     SHARED SCRIPTS — run once, outside both containers
+     ================================================================ -->
+
+<div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
+
+<noscript>
+  <div class="noscript-warning">
+    <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
+  </div>
+</noscript>
+
+<script>
+  // Offline indicator — works in both landing and app mode
+  function updateNetworkStatus() {
+    var indicator = document.getElementById('offlineIndicator');
+    if (!indicator) return;
+    indicator.hidden = navigator.onLine;
+  }
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+  updateNetworkStatus();
+</script>
+
+<script>
+  // Sync chip in the app footer — only runs when #syncStatus exists
+  function updateSyncChip() {
+    var el = document.getElementById('syncStatus');
+    if (!el) return;
+    var status = navigator.onLine ? 'is-synced' : 'is-offline';
+    el.classList.remove('is-synced', 'is-offline');
+    el.classList.add(status);
+    el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+  }
+  updateSyncChip();
+  window.addEventListener('online', updateSyncChip);
+  window.addEventListener('offline', updateSyncChip);
+</script>
+
+<script>
+  // Service Worker — registers early on window load
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
+        .then(function (r) { console.log('SW registered:', r.scope); })
+        .catch(function (e) { console.warn('SW registration failed:', e); });
+    });
+  }
+</script>
+
+<script src="api-config.js"></script>
+<script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
+
+<script>
+  // Global error display in the app loading area
+  window.addEventListener('error', function (e) {
+    var loading = document.getElementById('loading');
+    if (loading) {
+      loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">JS ERROR:\n' +
+        e.message + '\n' + (e.filename || '') + ':' + e.lineno + '</p>';
+    }
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var loading = document.getElementById('loading');
+    if (loading) {
+      loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">PROMISE ERROR:\n' +
+        (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</p>';
+    }
+  });
+</script>
+
+<script type="module">
+  // Install prompt — only fires on the landing footer button
+  import { initInstallPrompt } from './ui/components/install-prompt.js';
+  initInstallPrompt();
+</script>
+
+<!-- ================================================================
+     PAGE CONTROLLER — swaps between landing and SPA, loads engine once
+     ================================================================ -->
+<script>
+  (function () {
+    var landingRoot = document.getElementById('landing-root');
+    var spaRoot = document.getElementById('spa-root');
+
+    if (!landingRoot || !spaRoot) return;
+
+    var engineLoaded = false;
+    var enginePromise = null;
+
+    function loadEngine() {
+      if (engineLoaded) return Promise.resolve();
+      if (enginePromise) return enginePromise;
+      enginePromise = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'core/engine.js';
+        s.onload = function () { engineLoaded = true; resolve(); };
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+      return enginePromise;
     }
 
-    updateSyncChip();
-    window.addEventListener('online', updateSyncChip);
-    window.addEventListener('offline', updateSyncChip);
-  </script>
-
-  <noscript>
-    <div class="noscript-warning">
-      <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
-    </div>
-  </noscript>
-  <script src="api-config.js"></script>
-  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
-  <script>
-    window.addEventListener('error', (e) => {
-      const loading = document.getElementById('loading');
-      if (loading) {
-        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">JS ERROR:\n' +
-          e.message + '\n' + (e.filename || '') + ':' + e.lineno + '</p>';
-      }
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-      const loading = document.getElementById('loading');
-      if (loading) {
-        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">PROMISE ERROR:\n' +
-          (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</p>';
-      }
-    });
-  </script>
-  <script type="module" src="core/engine.js"></script>
-  </div>
-  <script src="api-config.js"></script>
-  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
-
-  <!-- Page controller: swap between landing page and SPA -->
-  <script>
-    (function() {
-      var landing = document.getElementById('landing-root') || document.body;
-      // Wrap landing content so we can hide it cleanly
-      var wrap = document.createElement('div');
-      wrap.id = 'landing-root';
-      while (document.body.firstChild && document.body.firstChild.id !== 'spa-root') {
-        var el = document.body.firstChild;
-        if (el.id === 'spa-root') break;
-        wrap.appendChild(el);
-      }
-      document.body.insertBefore(wrap, document.body.firstChild);
-
-      var spaRoot = document.getElementById('spa-root');
-      var engineLoaded = false;
-      var enginePromise = null;
-
-      function loadEngine() {
-        if (engineLoaded) return Promise.resolve();
-        if (enginePromise) return enginePromise;
-        enginePromise = new Promise(function(resolve, reject) {
-          var s = document.createElement('script');
-          s.type = 'module';
-          s.src = 'core/engine.js';
-          s.onload = function() { engineLoaded = true; resolve(); };
-          s.onerror = reject;
-          document.head.appendChild(s);
-        });
-        return enginePromise;
-      }
-
-      function showApp() {
-        wrap.style.display = 'none';
-        spaRoot.style.display = '';
-        return loadEngine();
-      }
-
-      function showLanding() {
-        wrap.style.display = '';
-        spaRoot.style.display = 'none';
-        // Clear hash to let landing links work
-        if (window.location.hash && window.location.hash !== '#top' && !window.location.hash.startsWith('#curriculum') && !window.location.hash.startsWith('#offline') && window.location.hash !== '#about') {
-          history.replaceState(null, '', window.location.pathname);
+    function showApp() {
+      landingRoot.style.display = 'none';
+      spaRoot.style.display = '';
+      loadEngine().catch(function (err) {
+        var loading = document.getElementById('loading');
+        if (loading) {
+          loading.innerHTML = '<p style="color:#ff6b6b;padding:10px;">Failed to load the app: ' +
+            (err.message || err) + '</p>';
         }
-      }
+      });
+    }
 
-      function onHashChange() {
-        var h = window.location.hash;
-        if (!h || h === '#top' || h.startsWith('#curriculum') || h.startsWith('#offline') || h === '#about') {
-          showLanding();
-        } else {
-          showApp();
-        }
-      }
+    function showLanding() {
+      landingRoot.style.display = '';
+      spaRoot.style.display = 'none';
+    }
 
-      // Auto-launch app for returning users (installed app or profiles exist)
-      function isPwaInstalled() {
-        return window.matchMedia('(display-mode: standalone)').matches ||
-               window.navigator.standalone === true;
+    function onHashChange() {
+      var h = window.location.hash;
+      // Landing anchors: no hash, #top, #curriculum, #offline, #about
+      // (hashchange also fires the initial load below)
+      if (!h || h === '#top' || h.startsWith('#curriculum') ||
+          h.startsWith('#offline') || h === '#about') {
+        showLanding();
+      } else {
+        showApp();
       }
-      function hasExistingProfiles() {
-        try {
-          var p = localStorage.getItem('pyknowledge_profiles');
-          return p && JSON.parse(p).length > 0;
-        } catch (e) { return false; }
-      }
-      if (isPwaInstalled() || hasExistingProfiles()) {
-        window.location.hash = '#/';
-      }
+    }
 
-      // Initial state
-      onHashChange();
-      window.addEventListener('hashchange', onHashChange);
-    })();
-  </script>
+    // Auto-launch app for installed PWA users or returning-users with profiles.
+    // Using a flag avoids a layout flash: the landing root starts visible (CSS
+    // default) but we immediately hide it if the app should take over.
+    function isPwaInstalled() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true;
+    }
+    function hasExistingProfiles() {
+      try {
+        var p = localStorage.getItem('pyknowledge_profiles');
+        return p && JSON.parse(p).length > 0;
+      } catch (e) { return false; }
+    }
+
+    if (isPwaInstalled() || hasExistingProfiles()) {
+      // Flicker mitigation: hide landing immediately, then trigger app route
+      landingRoot.style.display = 'none';
+      spaRoot.style.display = '';
+      window.location.hash = '#/';
+    }
+
+    // Initial state
+    onHashChange();
+    window.addEventListener('hashchange', onHashChange);
+  })();
+</script>
 
 </body>
 </html>
