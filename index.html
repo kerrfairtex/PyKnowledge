@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <meta name="theme-color" content="#16213e" />
-  <title>PyKnowledge — Learn Python offline</title>
+  <title>PyKnowledge - Learn Python offline</title>
   <meta name="description" content="A free, offline-first Python course built for TRAC, BARMM, and CHED students. Install once, learn anywhere, signal or not." />
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="ui/assets/icon-192.png" />
@@ -20,7 +20,7 @@
 <body>
 
 <!-- ================================================================
-     LANDING PAGE (visible by default — hidden when user enters the app)
+     LANDING PAGE (visible by default - hidden when user enters the app)
      ================================================================ -->
 <div id="landing-root">
 
@@ -48,7 +48,7 @@
         <p class="lede">
           PyKnowledge is a free course built for TRAC, BARMM, and CHED students. Install it
           once on a shared computer or your own phone, and every lesson, exercise, and quiz
-          keeps working — connection or not.
+          keeps working - connection or not.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#/login">Start learning</a>
@@ -67,7 +67,7 @@
         <div class="section-head">
           <span class="kicker">The path</span>
           <h2>Nine modules, in order</h2>
-          <p>Each module unlocks once you've finished the one before it — so you always know
+          <p>Each module unlocks once you've finished the one before it - so you always know
              exactly what's next, with no wrong turns.</p>
         </div>
         <ol class="path" style="list-style:none; padding:0; margin:0;">
@@ -113,7 +113,7 @@
             <span class="path-num">5</span>
             <div class="path-body">
               <h3>Data Structures</h3>
-              <p>Master Python's built-in data structures — lists, tuples, sets, and dictionaries — and learn powerful techniques like comprehensions and looping patterns.</p>
+              <p>Master Python's built-in data structures - lists, tuples, sets, and dictionaries - and learn powerful techniques like comprehensions and looping patterns.</p>
             </div>
             <div class="path-status-row">
               <span class="path-status">Complete Module 4 to unlock</span>
@@ -133,7 +133,7 @@
             <span class="path-num">7</span>
             <div class="path-body">
               <h3>Input and Output</h3>
-              <p>Go beyond basic print() — master f-strings, file I/O, and JSON serialization for real-world data handling.</p>
+              <p>Go beyond basic print() - master f-strings, file I/O, and JSON serialization for real-world data handling.</p>
             </div>
             <div class="path-status-row">
               <span class="path-status">Complete Module 6 to unlock</span>
@@ -188,7 +188,7 @@
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M4 19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
             <h3>Real code, real feedback</h3>
             <p>Write actual Python in the browser and get told exactly what's right, what's off,
-               and why — no waiting on a grader.</p>
+               and why - no waiting on a grader.</p>
           </div>
         </div>
       </div>
@@ -199,14 +199,14 @@
         <div class="section-head">
           <span class="kicker">About</span>
           <h2>A free Python course that works where the signal doesn't</h2>
-          <p>PyKnowledge is built for students in Tawi-Tawi and across BARMM — designed
+          <p>PyKnowledge is built for students in Tawi-Tawi and across BARMM - designed
              around real classroom constraints, not ideal conditions.</p>
         </div>
         <div class="grid-3">
           <div class="feature-card">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5V6.5"/></svg>
             <h3>What it is</h3>
-            <p>Nine CHED-aligned modules with lessons, exercises, and quizzes — from your
+            <p>Nine CHED-aligned modules with lessons, exercises, and quizzes - from your
                first print() to classes and object-oriented programming. Free, no ads.</p>
           </div>
           <div class="feature-card">
@@ -256,9 +256,9 @@
 </div><!-- /landing-root -->
 
 <!-- ================================================================
-     SPA APP SHELL (hidden by default — shown when user enters the app)
+     SPA APP SHELL (hidden by default - shown when user enters the app)
      All content exactly matches the old app-shell.html body.
-     NO scripts that auto-execute — engine.js is loaded dynamically.
+     NO scripts that auto-execute - engine.js is loaded dynamically.
      ================================================================ -->
 <div id="spa-root" style="display:none">
   <div id="app">
@@ -283,7 +283,7 @@
 
   <footer class="pk-footer">
     <p>
-      PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi —
+      PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi -
       designed to run fully offline for areas with intermittent signal
       and limited data. All lessons work without an internet connection
       once loaded.
@@ -313,7 +313,7 @@
 </div><!-- /spa-root -->
 
 <!-- ================================================================
-     SHARED SCRIPTS — run once, outside both containers
+     SHARED SCRIPTS - run once, outside both containers
      ================================================================ -->
 
 <div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
@@ -325,7 +325,7 @@
 </noscript>
 
 <script>
-  // Offline indicator — works in both landing and app mode
+  // Offline indicator - works in both landing and app mode
   function updateNetworkStatus() {
     var indicator = document.getElementById('offlineIndicator');
     if (!indicator) return;
@@ -337,7 +337,7 @@
 </script>
 
 <script>
-  // Sync chip in the app footer — only runs when #syncStatus exists
+  // Sync chip in the app footer - only runs when #syncStatus exists
   function updateSyncChip() {
     var el = document.getElementById('syncStatus');
     if (!el) return;
@@ -352,7 +352,7 @@
 </script>
 
 <script>
-  // Service Worker — registers early on window load
+  // Service Worker - registers early on window load
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/service-worker.js')
@@ -390,13 +390,13 @@
 </script>
 
 <script type="module">
-  // Install prompt — multi-button registry (landing footer + auth screens)
+  // Install prompt - multi-button registry (landing footer + auth screens)
   import { initInstallPrompt } from './ui/components/install-prompt.js';
   initInstallPrompt();
 </script>
 
 <!-- ================================================================
-     PAGE CONTROLLER — swaps between landing and SPA, loads engine once
+     PAGE CONTROLLER - swaps between landing and SPA, loads engine once
      ================================================================ -->
 <script>
   (function () {
