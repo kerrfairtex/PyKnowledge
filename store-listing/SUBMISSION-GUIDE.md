@@ -90,7 +90,7 @@ Store listing copy (paste into Console):
 > All your progress stays on YOUR device. No accounts on servers, no ads,
 > no tracking, no data collection.
 >
-> Free forever. Built by Kerr Fairtex for TRAC students in Bongao, Tawi-Tawi.
+> Free forever. Built for TRAC students in Bongao, Tawi-Tawi.
 
 **Category:** Education · **Tags:** education, programming
 

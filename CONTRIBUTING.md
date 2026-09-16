@@ -11,7 +11,7 @@ npm install
 npm start        # http://localhost:8080
 ```
 
-Requirements: Node.js 18+ (see `.nvmrc`).
+Requirements: Node.js 20+ (see `.nvmrc`).
 
 ## Project Structure
 
