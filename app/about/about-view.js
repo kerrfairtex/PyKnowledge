@@ -125,11 +125,11 @@ export function renderAbout(main) {
 
       <section class="about-card">
         <h2>Who built this</h2>
-        <p>PyKnowledge was designed, written, and maintained by <strong>Kerr Fairtex</strong>
-        — a developer and educator based in Tawi-Tawi who built the entire platform
-        (landing page, app shell, curriculum content, exercises, quizzes, reference
-        library, and Android deployment) over the course of several months as a
-        community project for TRAC students.</p>
+        <p>PyKnowledge was designed, written, and maintained by the PyKnowledge
+        development team — developers and educators based in Tawi-Tawi who built
+        the entire platform (landing page, app shell, curriculum content,
+        exercises, quizzes, reference library, and Android deployment) over the
+        course of several months as a community project for TRAC students.</p>
         <p>Technology: the app runs on vanilla JavaScript (no framework — just ES
         modules, a custom hash router, and the Skulpt Python interpreter). The
         service worker caches everything for offline use. It deploys to Render as
@@ -146,8 +146,7 @@ export function renderAbout(main) {
       </section>
 
       <footer class="about-footer">
-        <p>Maintained by <a href="https://www.facebook.com/share/18D34C7E4e/" target="_blank" rel="noopener">Kerr Fairtex</a> · MIT licensed ·
-        <a href="https://github.com/kerrfairtex/PyKnowledge" target="_blank" rel="noopener">Source code</a></p>
+        <p>MIT licensed · <a href="https://github.com/kerrfairtex/PyKnowledge" target="_blank" rel="noopener">Source code</a></p>
         <p class="about-privacy">Your data never leaves this device — see our
         privacy policy at pyknowledge.onrender.com/privacy.html when online.</p>
       </footer>
