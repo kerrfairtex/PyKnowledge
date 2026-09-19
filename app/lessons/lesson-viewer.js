@@ -73,7 +73,10 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
       </section>` : ''}
       <footer class="lesson-actions">
         <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
-        <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary">Take Quiz</a>
+        <div class="lesson-actions-right">
+          ${prevLesson ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>` : ''}
+          ${lessonIndex < mod.lessons.length - 1 ? `<a href="#/lesson/${escapeHtml(mod.lessons[lessonIndex + 1].id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(mod.lessons[lessonIndex + 1].id)}">Next Lesson →</a>` : `<a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary">Take Quiz</a>`}
+        </div>
       </footer>
     </article>`;
 
@@ -416,4 +419,9 @@ function showExerciseFeedback(exerciseId, type, message) {
   feedback.hidden = false;
   feedback.textContent = message;
   feedback.className = `exercise-feedback ${type}`;
+  
+  // Trigger animation
+  feedback.classList.remove('animate-item');
+  void feedback.offsetWidth; // force reflow
+  feedback.classList.add('animate-item');
 }

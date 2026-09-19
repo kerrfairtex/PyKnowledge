@@ -38,7 +38,6 @@ const STATIC_ASSETS = [
   '/utils/crypto.js',
   '/ui/themes/default.css',
   '/ui/themes/animations.css',
-  '/ui/themes/landing.css',
   '/ui/themes/dashboard.css',
   '/ui/themes/library.css',
   '/ui/themes/about.css',

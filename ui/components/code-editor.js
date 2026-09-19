@@ -117,10 +117,13 @@ export function createCodeEditor(container, options = {}) {
             updateOutput(error, true);
             outputStatus.textContent = 'Error';
             outputStatus.className = 'code-editor-output-status error';
+            errorEl.classList.add('is-visible');
           } else {
             updateOutput(output);
             outputStatus.textContent = 'Done';
             outputStatus.className = 'code-editor-output-status success';
+            outputEl.classList.add('is-success');
+            setTimeout(() => outputEl.classList.remove('is-success'), 400);
           }
         });
       }
@@ -129,6 +132,7 @@ export function createCodeEditor(container, options = {}) {
       updateOutput(err.message || String(err), true);
       outputStatus.textContent = 'Error';
       outputStatus.className = 'code-editor-output-status error';
+      errorEl.classList.add('is-visible');
     }
   });
 
@@ -148,8 +152,12 @@ export function createCodeEditor(container, options = {}) {
     if (onChange) onChange(currentCode);
   });
 
-  // Tab key support
+  // Keyboard: Ctrl+Enter to run
   textarea.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      runBtn.click();
+    }
     if (e.key === 'Tab') {
       e.preventDefault();
       const start = textarea.selectionStart;

@@ -176,6 +176,7 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
 
   main.innerHTML = `
     <div class="dash page-content">
+      <div class="dash-bg-grid" aria-hidden="true"></div>
       ${flash ? `
         <div class="dash-toast" role="status">
           <span>${flash.text}</span>
@@ -220,7 +221,7 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         </p>
       </section>
 
-      <ol class="dash-list">${cardsHtml}</ol>
+      <ol class="dash-list stagger-children">${cardsHtml}</ol>
     </div>
   `;
 

@@ -90,7 +90,7 @@ export function renderProfilePicker(main, onAuthenticated) {
       <div class="auth-card">
         <h2 id="picker-title">Who's learning today?</h2>
         <p class="auth-subtitle">Select your profile to continue</p>
-        <div class="profile-grid" role="list">
+        <div class="profile-grid stagger-children" role="list">
           ${profiles.map((p) => `
             <button type="button" class="profile-card animate-item" data-user-id="${escapeHtml(p.id)}" role="listitem"
               style="--avatar-color: ${escapeHtml(p.avatar)}">
@@ -109,7 +109,6 @@ export function renderProfilePicker(main, onAuthenticated) {
     </section>`;
 
   animatePageEnter(main);
-  staggerChildren(main, '.animate-item');
   bindAuthExtras();
 
   main.querySelectorAll('.profile-card[data-user-id]').forEach((btn) => {

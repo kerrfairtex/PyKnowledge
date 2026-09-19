@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova AI Chatbox — Built with Python</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ui/themes/default.css">
+  <script src="lib/skulpt.min.js"></script>
+  <script src="lib/skulpt-stdlib.js"></script>
+  <style>
+    :root {
+      --bg: #08182B;
+      --surface: #0f2238;
+      --surface-2: #142640;
+      --border: rgba(255, 255, 255, 0.10);
+      --text: #F8FAFC;
+      --text-2: #94A3B8;
+      --accent: #60A5FA;
+      --accent-2: #a78bfa;
+      --success: #2ecc71;
+      --danger: #f66b84;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layout */
+    .app {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .brand-orb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent));
+      animation: spin 4s linear infinite;
+      position: relative;
+    }
+
+    .brand-orb::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--surface);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .brand-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-tag {
+      font-size: 0.7rem;
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+
+    .sidebar-section {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-2);
+      margin: 16px 0 8px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .feature-list li {
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: var(--text-2);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+    }
+
+    .sidebar-foot {
+      font-size: 0.7rem;
+      color: var(--text-2);
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    /* Main */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 34, 56, 0.8);
+      backdrop-filter: blur(8px);
+    }
+
+    .header-orb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .header-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .header-status {
+      font-size: 0.75rem;
+      color: var(--text-2);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      animation: msgIn 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-user { justify-content: flex-end; }
+    .msg-bot { justify-content: flex-start; }
+
+    .bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+
+    .msg-user .bubble {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-bot .bubble {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble p { margin: 0 0 8px; }
+    .bubble p:last-child { margin-bottom: 0; }
+
+    .thinking {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px 0;
+    }
+
+    .thinking span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-2);
+      animation: bounce 1.1s infinite ease-in-out;
+    }
+
+    .thinking span:nth-child(2) { animation-delay: 0.15s; }
+    .thinking span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* Composer */
+    .composer-wrap {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .composer {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 8px 8px 8px 16px;
+      transition: border-color 200ms;
+    }
+
+    .composer:focus-within {
+      border-color: var(--accent);
+    }
+
+    .composer textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      resize: none;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      max-height: 120px;
+      padding: 8px 0;
+    }
+
+    .composer textarea::placeholder {
+      color: var(--text-2);
+    }
+
+    .send-btn {
+      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      transition: transform 150ms, opacity 150ms;
+    }
+
+    .send-btn:hover { transform: scale(1.05); }
+    .send-btn:active { transform: scale(0.95); }
+    .send-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Code Panel */
+    .code-panel {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 500px;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 100;
+      transition: right 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-panel.open {
+      right: 0;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+
+    .code-header-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-2);
+      cursor: pointer;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      transition: color 150ms, border-color 150ms;
+    }
+
+    .code-close:hover {
+      color: var(--text);
+      border-color: var(--text-2);
+    }
+
+    .code-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 18px;
+      font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.78rem;
+      line-height: 1.7;
+    }
+
+    .code-line {
+      display: block;
+      white-space: pre;
+    }
+
+    .code-comment { color: #8b949e; }
+    .code-keyword { color: #ff7b72; }
+    .code-string { color: #a5d6ff; }
+    .code-func { color: #d2a8ff; }
+    .code-plain { color: #e6edf3; }
+    .code-num { color: #79c0ff; }
+    .code-builtin { color: #ffa657; }
+
+    /* Toggle button */
+    .code-toggle {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      z-index: 50;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 150ms, border-color 150ms;
+    }
+
+    .code-toggle:hover {
+      background: var(--border);
+    }
+
+    .code-toggle svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-2); }
+
+    @media (max-width: 768px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .code-panel { width: 100%; right: -100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-orb"></span>
+        <div>
+          <div class="brand-name">Nova</div>
+          <div class="brand-tag">AI Chatbox Demo</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Features</div>
+        <ul class="feature-list">
+          <li>Pattern matching responses</li>
+          <li>Continuous conversation loop</li>
+          <li>Input validation</li>
+          <li>Random joke selection</li>
+          <li>Math calculations</li>
+          <li>Conversation history</li>
+          <li>Exit commands</li>
+        </ul>
+
+        <div class="sidebar-title">Try Saying</div>
+        <ul class="feature-list">
+          <li>"Hello" or "Hey"</li>
+          <li>"Tell me a joke"</li>
+          <li>"What modules?"</li>
+          <li>"How to install?"</li>
+          <li>"Calculate 5 + 3"</li>
+          <li>"Bye" to exit</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-foot">Built with Python · PyKnowledge</div>
+    </aside>
+
+    <!-- Main Chat -->
+    <main class="main">
+      <header class="chat-header">
+        <span class="header-orb"></span>
+        <span class="header-title">Nova AI Chatbox</span>
+        <span class="header-status">Powered by Python</span>
+      </header>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg msg-bot">
+          <div class="bubble">Hey there! I'm <strong>Nova</strong>, your AI learning assistant. I'm built entirely with Python — the same language you'll learn in PyKnowledge!<br><br>Try asking me about modules, Python, installation, or just say hello!</div>
+        </div>
+      </div>
+
+      <div class="composer-wrap">
+        <form class="composer" id="composer">
+          <textarea id="chatInput" rows="1" placeholder="Type a message… (try 'hello', 'joke', 'modules')"></textarea>
+          <button class="send-btn" type="submit" aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- Code Toggle -->
+  <button class="code-toggle" id="codeToggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+    View Source Code
+  </button>
+
+  <!-- Code Panel -->
+  <div class="code-panel" id="codePanel">
+    <div class="code-header">
+      <span class="code-header-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+        nova_chatbox.py
+      </span>
+      <button class="code-close" id="codeClose">Close</button>
+    </div>
+    <div class="code-body" id="codeBody"></div>
+  </div>
+
+<script>
+(function() {
+  "use strict";
+
+  // ===== NOVA AI CHATBOX - Full Python Implementation =====
+  const PYTHON_CODE = `#############################################
+#                                           #
+#   NOVA AI CHATBOX                         #
+#   A fully functional AI assistant built   #
+#   with Python — the same language you'll  #
+#   learn in PyKnowledge!                   #
+#                                           #
+#############################################
+
+import random
+
+# --- Knowledge Base ---
+def get_response(message):
+    """Generate a response based on user input."""
+    msg = message.lower().strip()
+
+    # Greetings
+    if any(word in msg for word in ["hi", "hello", "hey", "greetings"]):
+        greetings = [
+            "Hello there! What can I help you with?",
+            "Hey! Ready to learn some Python?",
+            "Hi! I'm Nova, your learning assistant."
+        ]
+        return random.choice(greetings)
+
+    # How are you
+    elif "how are you" in msg:
+        return "I'm running great on Python! How about you?"
+
+    # Name question
+    elif "your name" in msg or "who are you" in msg:
+        return "I'm Nova, your AI learning assistant! I was built with Python."
+
+    # Python questions
+    elif "python" in msg:
+        return ("Python is one of the world's most popular languages! "
+                "It's used at Google, NASA, Instagram, and Dropbox. "
+                "Want to learn it? Check out PyKnowledge's 9 modules!")
+
+    # Modules info
+    elif "modules" in msg or "curriculum" in msg:
+        return ("PyKnowledge has 9 CHED-aligned modules:\\n"
+                "1. Introduction to Python\\n"
+                "2. Control Structures\\n"
+                "3. Loops\\n"
+                "4. Functions\\n"
+                "5. Data Structures\\n"
+                "6. Modules and Imports\\n"
+                "7. Input and Output\\n"
+                "8. Errors and Exceptions\\n"
+                "9. Classes and OOP\\n"
+                "Each module unlocks when you finish the one before it!")
+
+    # Offline features
+    elif "offline" in msg:
+        return ("PyKnowledge works completely offline!\\n"
+                "• All lessons cached on your device\\n"
+                "• No internet needed for exercises\\n"
+                "• Progress saved locally\\n"
+                "• Perfect for areas with patchy signal")
+
+    # Installation
+    elif "install" in msg or "download" in msg:
+        return ("To install PyKnowledge:\\n"
+                "1. Tap 'Download App' on the landing page\\n"
+                "2. Chrome: ⋮ menu → Add to Home Screen\\n"
+                "3. iPhone: Share → Add to Home Screen\\n"
+                "After install, everything works offline!")
+
+    # Quiz info
+    elif "quiz" in msg or "test" in msg:
+        return ("Quizzes appear at the end of each module.\\n"
+                "You need 70% to pass. Don't worry — "
+                "you can retry as many times as needed!")
+
+    # Exercise types
+    elif "exercise" in msg:
+        return ("Exercise types in PyKnowledge:\\n"
+                "• Predict the Output\\n"
+                "• Fix the Code\\n"
+                "• Parsons Problems (drag-and-drop)\\n"
+                "• Write Code (live Python!)\\n"
+                "• Challenges (advanced)")
+
+    # Jokes
+    elif "joke" in msg or "funny" in msg:
+        jokes = [
+            "Why do Python programmers wear glasses? Because they can't C!",
+            "What's a snake's favorite programming language? Python!",
+            "Why was the function sad? It didn't get any calls back.",
+            "How do Python programmers party? They import the dance!",
+            "Why did the developer go broke? Because he used up all his cache!"
+        ]
+        return random.choice(jokes)
+
+    # Math calculations
+    elif "calculate" in msg or "math" in msg:
+        return "I can help with math! Try: calculate 5 + 3"
+
+    # Math evaluation
+    elif msg.startswith("calc ") or msg.startswith("math "):
+        expr = msg.split(" ", 1)[1] if " " in msg else ""
+        try:
+            # Safe evaluation with limited operations
+            allowed = set("0123456789+-*/(). ")
+            if all(c in allowed for c in expr):
+                result = eval(expr)
+                return f"{expr} = {result}"
+            else:
+                return "I can only do basic math (+, -, *, /)"
+        except:
+            return "Hmm, I couldn't calculate that. Try something like: 5 + 3"
+
+    # Farewell
+    elif any(word in msg for word in ["bye", "goodbye", "quit", "exit", "see you"]):
+        return "Goodbye! Happy coding! 🐍"
+
+    # Help
+    elif "help" in msg:
+        return ("I can help you with:\\n"
+                "• Modules & curriculum\\n"
+                "• Python basics\\n"
+                "• Offline features\\n"
+                "• Installation guide\\n"
+                "• Quiz & exercise info\\n"
+                "• Jokes! Just ask 'tell me a joke'\\n"
+                "• Math: try 'calc 5 + 3'")
+
+    # Default response
+    else:
+        return ("I'm not sure about that, but I can help with:\\n"
+                "• Modules, Python, offline, install\\n"
+                "• Quiz info, exercises, jokes\\n"
+                "• Math calculations\\n"
+                "Try asking 'help' for more options!")
+
+
+# --- Main Chat Loop ---
+def main():
+    """Run the Nova AI chatbox."""
+    print("=" * 50)
+    print("  NOVA AI CHATBOX - Your Python Learning Buddy")
+    print("=" * 50)
+    print("Type 'quit', 'bye', or 'exit' to end the chat.")
+    print("Try: hello, modules, python, joke, quiz, help")
+    print("-" * 50)
+
+    # Conversation history
+    history = []
+
+    # Continuous conversation loop
+    while True:
+        # Get user input
+        try:
+            user_input = input("\\nYou: ").strip()
+        except EOFError:
+            break
+
+        # Check for empty input
+        if not user_input:
+            print("Nova: Please type something!")
+            continue
+
+        # Get bot response
+        response = get_response(user_input)
+
+        # Display response
+        print(f"Nova: {response}")
+
+        # Store in history
+        history.append({"user": user_input, "bot": response})
+
+        # Check for exit
+        if user_input.lower() in ["quit", "bye", "exit"]:
+            print(f"\\nChat ended. You had {len(history)} exchanges.")
+            break
+
+    return history
+
+
+# --- Run the program ---
+if __name__ == "__main__":
+    conversation = main()`;
+
+  // ===== JavaScript Chat Implementation =====
+  const chatMessages = document.getElementById('chatMessages');
+  const composer = document.getElementById('composer');
+  const chatInput = document.getElementById('chatInput');
+  const codePanel = document.getElementById('codePanel');
+  const codeToggle = document.getElementById('codeToggle');
+  const codeClose = document.getElementById('codeClose');
+  const codeBody = document.getElementById('codeBody');
+
+  // Render Python code in code panel
+  function renderCode() {
+    const lines = PYTHON_CODE.split('\n');
+    let html = '';
+    lines.forEach(line => {
+      html += `<span class="code-line">${highlightLine(line)}</span>\n`;
+    });
+    codeBody.innerHTML = html;
+  }
+
+  function highlightLine(line) {
+    let escaped = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Comments
+    escaped = escaped.replace(/(#.*)$/, '<span class="code-comment">$1</span>');
+
+    // Strings
+    escaped = escaped.replace(/(".*?")/g, '<span class="code-string">$1</span>');
+    escaped = escaped.replace(/('.*?')/g, '<span class="code-string">$1</span>');
+
+    // Keywords
+    const keywords = ['def', 'if', 'elif', 'else', 'for', 'while', 'return', 'import', 'from', 'in', 'not', 'and', 'or', 'try', 'except', 'break', 'continue', 'True', 'False', 'None', 'class', 'as', 'with', 'raise', 'pass', 'yield', 'lambda', 'global', 'nonlocal', 'assert', 'del', 'finally', 'is'];
+    keywords.forEach(kw => {
+      const regex = new RegExp(`\\b(${kw})\\b`, 'g');
+      escaped = escaped.replace(regex, '<span class="code-keyword">$1</span>');
+    });
+
+    // Built-in functions
+    const builtins = ['print', 'input', 'len', 'range', 'str', 'int', 'float', 'list', 'dict', 'set', 'tuple', 'type', 'isinstance', 'any', 'all', 'sum', 'min', 'max', 'abs', 'round', 'sorted', 'reversed', 'enumerate', 'zip', 'map', 'filter', 'open', 'help', 'dir'];
+    builtins.forEach(fn => {
+      const regex = new RegExp(`\\b(${fn})(?=\\()`, 'g');
+      escaped = escaped.replace(regex, '<span class="code-builtin">$1</span>');
+    });
+
+    // Function definitions
+    escaped = escaped.replace(/(def\s+)(\w+)/g, '$1<span class="code-func">$2</span>');
+
+    // Numbers
+    escaped = escaped.replace(/\b(\d+)\b/g, '<span class="code-num">$1</span>');
+
+    return escaped;
+  }
+
+  // Python chatbot logic (mirrors the Python code)
+  function getResponse(message) {
+    const msg = message.toLowerCase().trim();
+
+    // Greetings
+    if (/\b(hi|hello|hey|greetings)\b/.test(msg)) {
+      return pickRandom([
+        "Hello there! What can I help you with?",
+        "Hey! Ready to learn some Python?",
+        "Hi! I'm Nova, your learning assistant."
+      ]);
+    }
+
+    // How are you
+    if (msg.includes('how are you')) {
+      return "I'm running great on Python! How about you?";
+    }
+
+    // Name
+    if (msg.includes('your name') || msg.includes('who are you')) {
+      return "I'm Nova, your AI learning assistant! I was built with Python.";
+    }
+
+    // Python
+    if (msg.includes('python')) {
+      return "Python is one of the world's most popular languages! It's used at Google, NASA, Instagram, and Dropbox. Want to learn it? Check out PyKnowledge's 9 modules!";
+    }
+
+    // Modules
+    if (/\b(modules|curriculum)\b/.test(msg)) {
+      return "PyKnowledge has 9 CHED-aligned modules:\n1. Introduction to Python\n2. Control Structures\n3. Loops\n4. Functions\n5. Data Structures\n6. Modules and Imports\n7. Input and Output\n8. Errors and Exceptions\n9. Classes and OOP\nEach module unlocks when you finish the one before it!";
+    }
+
+    // Offline
+    if (msg.includes('offline')) {
+      return "PyKnowledge works completely offline!\n• All lessons cached on your device\n• No internet needed for exercises\n• Progress saved locally\n• Perfect for areas with patchy signal";
+    }
+
+    // Install
+    if (/\b(install|download)\b/.test(msg)) {
+      return "To install PyKnowledge:\n1. Tap 'Download App' on the landing page\n2. Chrome: ⋮ menu → Add to Home Screen\n3. iPhone: Share → Add to Home Screen\nAfter install, everything works offline!";
+    }
+
+    // Quiz
+    if (/\b(quiz|test)\b/.test(msg)) {
+      return "Quizzes appear at the end of each module.\nYou need 70% to pass. Don't worry — you can retry as many times as needed!";
+    }
+
+    // Exercises
+    if (msg.includes('exercise')) {
+      return "Exercise types in PyKnowledge:\n• Predict the Output\n• Fix the Code\n• Parsons Problems (drag-and-drop)\n• Write Code (live Python!)\n• Challenges (advanced)";
+    }
+
+    // Jokes
+    if (/\b(joke|funny)\b/.test(msg)) {
+      return pickRandom([
+        "Why do Python programmers wear glasses? Because they can't C!",
+        "What's a snake's favorite programming language? Python!",
+        "Why was the function sad? It didn't get any calls back.",
+        "How do Python programmers party? They import the dance!",
+        "Why did the developer go broke? Because he used up all his cache!"
+      ]);
+    }
+
+    // Math
+    if (/\b(calculate|math)\b/.test(msg) && !msg.startsWith('calc ')) {
+      return "I can help with math! Try: calc 5 + 3";
+    }
+
+    if (msg.startsWith('calc ') || msg.startsWith('math ')) {
+      const expr = msg.split(' ', 1)[1] || msg.substring(5);
+      const allowed = /^[0-9+\-*/().\s]+$/;
+      if (allowed.test(expr)) {
+        try {
+          const result = Function('"use strict"; return (' + expr + ')')();
+          return `${expr} = ${result}`;
+        } catch {
+          return "Hmm, I couldn't calculate that. Try something like: 5 + 3";
+        }
+      }
+      return "I can only do basic math (+, -, *, /)";
+    }
+
+    // Farewell
+    if (/\b(bye|goodbye|quit|exit|see you)\b/.test(msg)) {
+      return "Goodbye! Happy coding! 🐍";
+    }
+
+    // Help
+    if (msg === 'help') {
+      return "I can help you with:\n• Modules & curriculum\n• Python basics\n• Offline features\n• Installation guide\n• Quiz & exercise info\n• Jokes! Just ask 'tell me a joke'\n• Math: try 'calc 5 + 3'";
+    }
+
+    // Default
+    return "I'm not sure about that, but I can help with:\n• Modules, Python, offline, install\n• Quiz info, exercises, jokes\n• Math calculations\nTry asking 'help' for more options!";
+  }
+
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function addMessage(text, isUser) {
+    const msg = document.createElement('div');
+    msg.className = 'msg ' + (isUser ? 'msg-user' : 'msg-bot');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    let html = escapeHtml(text);
+    html = html.replace(/\n/g, '<br>');
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    bubble.innerHTML = html;
+    msg.appendChild(bubble);
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addThinking() {
+    const msg = document.createElement('div');
+    msg.className = 'msg msg-bot';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = '<span class="thinking"><span></span><span></span><span></span></span>';
+    msg.appendChild(bubble);
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return msg;
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Auto-resize textarea
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // Send message
+  composer.addEventListener('submit', function(ev) {
+    ev.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, true);
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+
+    const thinking = addThinking();
+
+    setTimeout(function() {
+      thinking.remove();
+      const response = getResponse(text);
+      addMessage(response, false);
+    }, 500);
+  });
+
+  // Enter to send
+  chatInput.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter' && !ev.shiftKey) {
+      ev.preventDefault();
+      composer.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  // Code panel toggle
+  codeToggle.addEventListener('click', function() {
+    codePanel.classList.toggle('open');
+  });
+
+  codeClose.addEventListener('click', function() {
+    codePanel.classList.remove('open');
+  });
+
+  // Initialize
+  renderCode();
+})();
+</script>
+</body>
+</html>

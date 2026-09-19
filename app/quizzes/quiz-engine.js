@@ -147,7 +147,7 @@ function handleQuizSubmit(quiz, lessonsData) {
     }
 
     const achievementHtml = newAchievements.length > 0
-      ? `<div class="achievements">${newAchievements.map((a) => `<p class="achievement">🏆 ${escapeHtml(a.title)}: ${escapeHtml(a.description)}</p>`).join('')}</div>`
+      ? `<div class="achievements stagger-children">${newAchievements.map((a) => `<p class="achievement animate-item">🏆 ${escapeHtml(a.title)}: ${escapeHtml(a.description)}</p>`).join('')}</div>`
       : '';
 
     resultsEl.innerHTML = `
@@ -160,7 +160,7 @@ function handleQuizSubmit(quiz, lessonsData) {
       </div>`;
   } else {
     resultsEl.innerHTML = `
-      <div class="quiz-result failed" role="alert">
+      <div class="quiz-result failed animate-item" role="alert">
         <h3>Not quite — try again</h3>
         <p>Score: ${result.score}% (${result.correct}/${result.total}). You need 70% to pass.</p>
         <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
@@ -168,7 +168,7 @@ function handleQuizSubmit(quiz, lessonsData) {
       </div>`;
 
     document.getElementById('quiz-retry').addEventListener('click', () => {
-      window.location.reload();
+      showQuizQuestions(main, quiz, lessonsData);
     });
   }
 }

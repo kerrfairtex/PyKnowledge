@@ -20,10 +20,21 @@ function getContainer() {
 
 export function showToast(message, type = 'info', duration = 4000) {
   const el = getContainer();
+  
+  // Limit to 3 visible toasts
+  const visible = el.querySelectorAll('.toast:not(.toast-exit)');
+  if (visible.length >= 3) {
+    visible[0].remove();
+  }
+  
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.setAttribute('role', 'status');
-  toast.innerHTML = `<span>${escapeHtml(message)}</span><button class="toast-close" aria-label="Dismiss">&times;</button>`;
+  toast.innerHTML = `
+    <span>${escapeHtml(message)}</span>
+    <button class="toast-close" aria-label="Dismiss">&times;</button>
+    <div class="toast-progress"></div>
+  `;
 
   const remove = () => {
     toast.classList.add('toast-exit');
@@ -32,8 +43,14 @@ export function showToast(message, type = 'info', duration = 4000) {
 
   toast.querySelector('.toast-close').addEventListener('click', remove);
   el.appendChild(toast);
-
-  if (duration > 0) {
+  
+  // Animate progress bar
+  const progress = toast.querySelector('.toast-progress');
+  if (duration > 0 && progress) {
+    progress.style.transition = `width ${duration}ms linear`;
+    requestAnimationFrame(() => {
+      progress.style.width = '0%';
+    });
     setTimeout(remove, duration);
   }
 

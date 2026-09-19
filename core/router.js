@@ -5,6 +5,7 @@
 import { renderNotFound } from './errors.js';
 import { showSkeleton } from '../ui/components/loading.js';
 import { animatePageEnter } from '../ui/components/animations.js';
+import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
 
 const routes = new Map();
 let currentRoute = '/';
@@ -43,6 +44,13 @@ export async function handleRoute() {
     return;
   }
 
+  // Exit current content
+  const current = main.querySelector('.page-content');
+  if (current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    current.classList.add('view-exit');
+    await new Promise(r => setTimeout(r, 200));
+  }
+
   showSkeleton(main);
 
   const params = parts.slice(1);
@@ -52,7 +60,24 @@ export async function handleRoute() {
 
   const pageContent = main.querySelector('.page-content') || main.firstElementChild;
   if (pageContent && !pageContent.classList.contains('auth-screen')) {
-    animatePageEnter(pageContent);
+    // Enter new content
+    pageContent.classList.add('view-enter');
+    requestAnimationFrame(() => {
+      pageContent.classList.add('view-enter-active');
+      pageContent.addEventListener('transitionend', () => {
+        pageContent.classList.remove('view-enter', 'view-enter-active');
+      }, { once: true });
+    });
+    
+    // Stagger children
+    const items = pageContent.querySelectorAll('.animate-item');
+    items.forEach((item, i) => {
+      item.style.transitionDelay = `${i * 60}ms`;
+      requestAnimationFrame(() => item.classList.add('is-visible'));
+    });
+    
+    // Observe scroll animations
+    observeScrollAnimations(main);
   }
 }
 

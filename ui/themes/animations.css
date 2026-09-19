@@ -32,6 +32,48 @@
   animation: fadeSlideIn 0.4s ease both;
 }
 
+/* View transition system */
+.view-exit {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.view-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.view-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+/* Stagger children on view enter */
+.stagger-children > .animate-item {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+
+.stagger-children > .animate-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll-triggered entrance */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.scroll-animate.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Pulse */
 .pulse-once {
   animation: pulse 0.5s ease;
@@ -112,13 +154,13 @@
 .celebration-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 400ms ease;
   pointer-events: none;
 }
 
@@ -126,10 +168,16 @@
   opacity: 1;
 }
 
+.celebration-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .celebration-content {
   text-align: center;
   transform: scale(0.5);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .celebration-active .celebration-content {
@@ -194,8 +242,15 @@
   .lesson-item,
   .profile-card,
   .celebration-overlay,
-  .celebration-content {
-    transition: none;
+  .celebration-content,
+  .view-exit,
+  .view-enter,
+  .view-enter-active,
+  .stagger-children > .animate-item,
+  .scroll-animate {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .celebration-icon {

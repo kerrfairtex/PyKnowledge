@@ -23,6 +23,8 @@ import { renderAuthGate, renderProfilePicker } from '../app/auth/auth-screen.js'
 import { isAuthenticated, hasProfiles } from '../storage/auth.js';
 import { renderFrontPage, clearFrontPageLayout } from '../app/home/front-page.js';
 import { animatePageEnter } from '../ui/components/animations.js';
+import { initKeyboardShortcuts } from '../ui/components/keyboard-shortcuts.js';
+import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
 
 let lessonsData = null;
 let quizzesData = null;
@@ -52,10 +54,17 @@ function startApp() {
   appReady = true;
   const header = document.querySelector('.app-header');
   const footer = document.querySelector('.app-footer');
-  if (header) header.hidden = false;
-  if (footer) footer.hidden = false;
+  if (header) {
+    header.hidden = false;
+    header.classList.add('view-enter');
+    requestAnimationFrame(() => header.classList.add('view-enter-active'));
+  }
+  if (footer) {
+    footer.hidden = false;
+  }
   renderNavbar(document.getElementById('main-nav'));
   initRouter();
+  initKeyboardShortcuts(navigate, () => window.location.hash.slice(1));
 }
 
 function showAuthScreen() {
@@ -66,7 +75,20 @@ function showAuthScreen() {
   if (footer) footer.hidden = true;
 
   renderAuthGate(main, () => {
-    startApp();
+    // Fade out auth screen before transitioning
+    const authScreen = main.querySelector('.auth-screen');
+    if (authScreen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      authScreen.style.transition = 'opacity 200ms ease-out, transform 200ms ease-out';
+      authScreen.style.opacity = '0';
+      authScreen.style.transform = 'translateY(-8px)';
+      setTimeout(() => {
+        startApp();
+        navigate('/dashboard');
+      }, 200);
+    } else {
+      startApp();
+      navigate('/dashboard');
+    }
   });
 }
 
