@@ -1,0 +1,67 @@
+{
+  "version": 2,
+  "services": [
+    {
+      "type": "web",
+      "name": "pyknowledge-api",
+      "repo": "https://github.com/kerrfairtex/PyKnowledge",
+      "branch": "main",
+      "runtime": "node",
+      "buildCommand": "cd server && npm install && npx prisma generate",
+      "startCommand": "cd server && node src/index.js",
+      "envVars": [
+        {
+          "key": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "key": "PORT",
+          "value": "3000"
+        },
+        {
+          "key": "JWT_SECRET",
+          "generateValue": true
+        },
+        {
+          "key": "JWT_EXPIRES_IN",
+          "value": "7d"
+        },
+        {
+          "key": "DATABASE_URL",
+          "fromDatabase": {
+            "name": "pyknowledge-db",
+            "property": "connectionString"
+          }
+        },
+        {
+          "key": "CORS_ORIGIN",
+          "value": ""
+        }
+      ],
+      "healthCheckPath": "/api/health",
+      "numInstances": 1,
+      "env": "production"
+    },
+    {
+      "type": "static_site",
+      "name": "pyknowledge-client",
+      "repo": "https://github.com/kerrfairtex/PyKnowledge",
+      "branch": "main",
+      "buildCommand": "npm run build",
+      "publishPath": ".",
+      "envVars": [
+        {
+          "key": "API_URL",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "databases": [
+    {
+      "name": "pyknowledge-db",
+      "plan": "free",
+      "ipAllowList": []
+    }
+  ]
+}
