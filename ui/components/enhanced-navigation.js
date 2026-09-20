@@ -15,18 +15,18 @@
   function initSmoothScroll() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    var duration = 200; // ms — short, native feel
+    const duration = 200; // ms — short, native feel
 
     function easeInOutQuad(t) {
       return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
     function scrollTo(targetY, startTime, startY) {
-      var currentTime = 0;
-      var step = function () {
+      let currentTime = 0;
+      const step = function () {
         currentTime += 1000 / 60; // ~60fps
-        var progress = Math.min(currentTime / duration, 1);
-        var eased = easeInOutQuad(progress);
+        const progress = Math.min(currentTime / duration, 1);
+        const eased = easeInOutQuad(progress);
         window.scrollTo(0, Math.round(startY + (targetY - startY) * eased));
         if (progress < 1) {
           requestAnimationFrame(step);
@@ -36,25 +36,25 @@
     }
 
     function handleClick(e) {
-      var anchor = e.target;
+      const anchor = e.target;
       if (!(anchor.tagName === 'A' || anchor.tagName === 'BUTTON')) return;
-      var href = anchor.getAttribute('href');
+      const href = anchor.getAttribute('href');
       if (!href || href.charAt(0) !== '#') return;
 
-      var targetId = href.slice(1);
+      const targetId = href.slice(1);
       if (targetId === 'top') {
         e.preventDefault();
-        var startY = window.pageYOffset || document.documentElement.scrollTop;
+        const startY = window.pageYOffset || document.documentElement.scrollTop;
         scrollTo(0, 0, startY);
         return;
       }
 
-      var targetEl = document.getElementById(targetId);
+      const targetEl = document.getElementById(targetId);
       if (targetEl) {
         e.preventDefault();
-        var targetY = targetEl.getBoundingClientRect().top + window.pageYOffset;
-        var startY = window.pageYOffset || document.documentElement.scrollTop;
-        scrollTo(targetY, 0, startY);
+        const targetY = targetEl.getBoundingClientRect().top + window.pageYOffset;
+        const startY2 = window.pageYOffset || document.documentElement.scrollTop;
+        scrollTo(targetY, 0, startY2);
       }
     }
 
@@ -76,11 +76,11 @@
 
   // Skip-link focus management for keyboard users
   function initSkipLink() {
-    var skipLink = document.querySelector('.skip-link');
+    const skipLink = document.querySelector('.skip-link');
     if (!skipLink) return;
 
     skipLink.addEventListener('click', function (e) {
-      var target = document.getElementById('main-content') ||
+      const target = document.getElementById('main-content') ||
                    document.getElementById('spa-root');
       if (target) {
         target.focus();
