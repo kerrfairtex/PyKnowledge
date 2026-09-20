@@ -41,31 +41,34 @@ export async function renderLibrary(main, params) {
 async function renderIndex(main) {
   const data = await getReference();
 
-  const cards = data.sheets.map((sheet) => `
-    <a class="ref-card" href="#/library/${escapeAttr(sheet.id)}">
-      <h3>${escapeHtml(sheet.title)}</h3>
-      <p>${escapeHtml(sheet.summary)}</p>
-      <span class="ref-card-meta">${sheet.sections.length} sections</span>
-    </a>
-  `).join('');
-
   main.innerHTML = `
     <div class="library page-content">
       <header class="library-head">
+        <p class="os-boot-line" aria-hidden="true">$ ls ~/reference/</p>
         <h1>Reference Library</h1>
         <p>Read up on any Python topic — no locks, no quizzes. Works offline.</p>
       </header>
 
-      <section class="ref-glossary-entry" aria-label="Glossary">
-        <a class="ref-card ref-card--wide" href="#/library/glossary">
-          <h3>📖 Glossary</h3>
-          <p>${data.glossary.length} Python terms explained in one line each.</p>
-        </a>
-      </section>
-
-      <section class="ref-grid" aria-label="Cheat sheets">
-        ${cards}
-      </section>
+      <ul class="os-filetree" role="list">
+        <li class="os-filetree-dir" role="listitem">
+          <span class="os-filetree-row" aria-hidden="true">drwxr-xr-x reference/</span>
+          <ul role="list">
+            <li role="listitem">
+              <a class="os-filetree-file" href="#/library/glossary">
+                <span class="os-filetree-name">glossary.md</span>
+                <span class="os-filetree-meta">${data.glossary.length} terms</span>
+              </a>
+            </li>
+            ${data.sheets.map((sheet) => `
+            <li role="listitem">
+              <a class="os-filetree-file" href="#/library/${escapeAttr(sheet.id)}">
+                <span class="os-filetree-name">${escapeHtml(sheet.id)}.md</span>
+                <span class="os-filetree-meta">${escapeHtml(sheet.title)} · ${sheet.sections.length} sections</span>
+              </a>
+            </li>`).join('')}
+          </ul>
+        </li>
+      </ul>
     </div>`;
 
   animatePageEnter(main.querySelector('.page-content'));

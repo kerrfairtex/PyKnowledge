@@ -1,0 +1,60 @@
+/* ============================================================
+   PyKnowledge OS — design tokens (single source of truth)
+   Loaded by BOTH #landing-root and #spa-root (first <link>).
+   No hardcoded colors outside this file.
+   ============================================================ */
+:root {
+  /* surfaces */
+  --bg: #04090b;
+  --panel: #08131a;
+  --panel-2: #0b1b24;
+  --line: #12332b;
+  --text: #cfe8dc;
+  --dim: #6f8f84;
+  /* signal */
+  --ok: #3dff9a;
+  --warn: #ffb000;
+  --info: #29d3ff;
+  --err: #ff4d5e;
+  --glitch: #ff2bd6;
+  /* shape */
+  --radius: 2px;
+  --radius-lg: 4px;
+  /* spacing scale */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px;
+  /* motion */
+  --dur-1: 120ms; --dur-2: 240ms; --dur-3: 480ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  /* type */
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Themes: override signal+surface tokens only (<=10) */
+[data-theme="amber"] {
+  --bg: #0b0704; --panel: #130d06; --panel-2: #1a1208;
+  --line: #33290f; --text: #e8dccf; --dim: #8f7f64;
+  --ok: #ffc46b; --info: #ffd98a;
+}
+[data-theme="ice"] {
+  --bg: #03080c; --panel: #061018; --panel-2: #081720;
+  --line: #10303f; --text: #cfe4f0; --dim: #6d8c9c;
+  --ok: #62d8ff; --info: #9ae6ff;
+}
+
+/* Self-hosted JetBrains Mono (latin subset), swap = no invisible text */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/jetbrains-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/jetbrains-mono-700.woff2') format('woff2');
+}

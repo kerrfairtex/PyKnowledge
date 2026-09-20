@@ -10,6 +10,8 @@ import { renderNotFound } from '../../core/errors.js';
 import { animatePageEnter } from '../../ui/components/animations.js';
 import { createCodeEditor } from '../../ui/components/code-editor.js';
 import { executePython } from '../../lib/python-executor.js';
+import { isAuthenticated, getActiveUser } from '../../storage/auth.js';
+import { renderQuiz } from '../quizzes/quiz-engine.js';
 
 export function renderLessonViewer(main, lessonId, lessonsData) {
   let lesson = null;
@@ -24,11 +26,23 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
     }
   }
 
+  // Authentication check - prevent unauthorized access
+  if (!isAuthenticated()) {
+    main.innerHTML = `
+      <div class="error-card" role="alert">
+        <h2>Authentication Required</h2>
+        <p>Please sign in to access this lesson.</p>
+        <a href="#" class="btn btn-primary" onclick="window.location.hash = '#/login'; return false;">Sign In</a>
+      </div>`;
+    return;
+  }
+
   if (!lesson) {
     renderNotFound(main, 'Lesson');
     return;
   }
 
+  (lesson.exercises || []).forEach((ex) => { ex.__lessonId = lesson.id; });
   const parsed = parseLessonContent(lesson);
   const progress = getProgress();
   const mod = lessonsData.modules.find((m) => m.id === moduleId);
@@ -50,7 +64,7 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
     <div class="lesson-section">
       <h3>${escapeHtml(section.heading)}</h3>
       <div class="lesson-body">${escapeHtml(section.body)}</div>
-      ${section.code ? `<pre class="code-block" tabindex="0"><code>${escapeHtml(section.code)}</code></pre>` : ''}
+      ${section.code ? `<div class="os-code-pane"><div class="os-code-scroll-cue" aria-hidden="true">→ scroll</div><pre class="code-block os-code-block" tabindex="0"><code>${numberedCode(section.code)}</code></pre></div>` : ''}
     </div>
   `).join('');
 
@@ -91,7 +105,20 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
   animatePageEnter(main.querySelector('.page-content'));
 }
 
+// Line-numbered code with >>> prompt on line 1. Text stays selectable;
+// gutter is aria-hidden decoration.
+function numberedCode(code) {
+  const lines = code.replace(/\r\n/g, '\n').split('\n');
+  return lines.map((line, i) => {
+    const gutter = i === 0
+      ? `<span class="os-code-gutter" aria-hidden="true">&gt;&gt;&gt; </span>`
+      : `<span class="os-code-gutter" aria-hidden="true">${String(i + 1).padStart(2, ' ')} </span>`;
+    return `${gutter}<span class="os-code-text">${escapeHtml(line)}</span>`;
+  }).join('\n');
+}
+
 function renderExercises(exercises) {
+  const exerciseIndexMap = new Map(exercises.map((e, i) => [String(e.id), i]));
   return exercises.map((exercise) => {
     const typeLabel = exercise.type ? String(exercise.type).replace('_', ' ') : 'unknown';
     if (!['predict_output', 'fix_the_code', 'parsons', 'write_code', 'challenge'].includes(exercise.type)) {
@@ -122,15 +149,20 @@ function renderExercises(exercises) {
       case 'fix_the_code':
         contentHtml = `
           <div class="exercise-prompt">${escapeHtml(exercise.prompt)}</div>
-          <div class="exercise-code-display">${escapeHtml(exercise.buggy_code)}</div>
-          <details class="exercise-hints">
-            <summary>Show Hints</summary>
-            <ul>${exercise.hints.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
-          </details>
-          <details class="exercise-hints">
-            <summary>Show Solution</summary>
-            <div class="exercise-code-display">${escapeHtml(exercise.solution_code)}</div>
-          </details>
+          <div class="os-diff">
+            <div class="os-diff-side os-diff-buggy">
+              <span class="os-diff-label">[BUGGY]</span>
+              <div class="exercise-code-display">${numberedCode(exercise.buggy_code)}</div>
+            </div>
+            <div class="os-diff-side os-diff-fixed">
+              <span class="os-diff-label">[FIXED]</span>
+              <details class="exercise-hints os-diff-solution">
+                <summary>reveal fix</summary>
+                <div class="exercise-code-display">${numberedCode(exercise.solution_code)}</div>
+              </details>
+            </div>
+          </div>
+          ${renderHintLevels(exercise)}
         `;
         break;
 
@@ -159,12 +191,7 @@ function renderExercises(exercises) {
           <div class="exercise-prompt">${escapeHtml(exercise.prompt)}</div>
           ${exercise.difficulty ? `<span class="exercise-difficulty">${escapeHtml(exercise.difficulty)}</span>` : ''}
           <div id="code-editor-${exercise.id}"></div>
-          ${exercise.hints && exercise.hints.length > 0 ? `
-            <details class="exercise-hints">
-              <summary>Show Hints</summary>
-              <ul>${exercise.hints.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
-            </details>
-          ` : ''}
+          ${renderHintLevels(exercise)}
           <div class="exercise-feedback" hidden></div>
         `;
         break;
@@ -173,26 +200,70 @@ function renderExercises(exercises) {
         contentHtml = `
           <div class="exercise-prompt">${escapeHtml(exercise.prompt)}</div>
           <div id="code-editor-${exercise.id}"></div>
-          ${exercise.hints && exercise.hints.length > 0 ? `
-            <details class="exercise-hints">
-              <summary>Show Hints</summary>
-              <ul>${exercise.hints.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
-            </details>
-          ` : ''}
+          ${renderHintLevels(exercise)}
           <div class="exercise-feedback" hidden></div>
         `;
         break;
     }
 
+    const exIndex = (exerciseIndexMap.get(exercise.id) || 0) + 1;
     return `
-      <article class="exercise-card" id="exercise-${exercise.id}">
-        <header>
+      <article class="exercise-card" id="exercise-${exercise.id}" data-ex-type="${exercise.type}">
+        <header class="os-ex-head">
+          <span class="dash-chip dash-chip--open">EX ${String(exIndex).padStart(2, '0')}</span>
           <span class="exercise-type-badge">${typeLabel}</span>
+          ${exercise.difficulty ? `<span class="os-ex-diff" data-diff="${escapeHtml(exercise.difficulty)}">${escapeHtml(exercise.difficulty)}</span>` : ''}
         </header>
         ${contentHtml}
       </article>
     `;
   }).join('');
+}
+
+// Misconception matcher: builds a traceback-style explanation + a patch link
+// to the remediation exercise when the user's answer trips a known detection.
+function findRemediation(exercise, userSignal) {
+  const misconceptions = exercise.misconceptions || [];
+  const signal = String(userSignal || '').toLowerCase();
+  for (const m of misconceptions) {
+    const detection = String(m.detection || '').toLowerCase();
+    // heuristic: match key tokens from the detection description
+    const tokens = detection.replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(t => t.length > 3);
+    const hit = tokens.some((t) => signal.includes(t));
+    if (hit || misconceptions.length === 1) {
+      const patch = m.remediationExerciseId
+        ? `<a href="#/lesson/${lessonIdForExercise(exercise)}">#exercise-${m.remediationExerciseId}</a>`
+        : null;
+      return {
+        traceback: `Traceback (most recent call last):\n  ConceptError: ${m.explanation || detection}`,
+        patchHref: patch || 'review the hints above'
+      };
+    }
+  }
+  return null;
+}
+
+// Lesson lookup for patch links (module context comes from render scope;
+// falls back to plain anchor without lesson link).
+function lessonIdForExercise(exercise) {
+  return exercise.__lessonId || '';
+}
+
+// Progressive hints: "hint --level 1/2/3" — one button per level.
+function renderHintLevels(exercise) {
+  const hints = exercise.hints || [];
+  if (!hints.length) return '';
+  return `
+    <div class="os-hints" data-exercise-id="${escapeHtml(String(exercise.id))}">
+      <span class="os-hints-label" aria-hidden="true">$ hints --levels=${hints.length}</span>
+      ${hints.map((h, i) => `
+        <div class="os-hint-level" data-level="${i + 1}" hidden>
+          <span class="os-hint-prompt">hint --level ${i + 1}/${hints.length}</span>
+          <p>${escapeHtml(h)}</p>
+        </div>
+      `).join('')}
+      <button type="button" class="btn btn-ghost btn-sm os-hint-btn" data-next-level="1">hint --level 1</button>
+    </div>`;
 }
 
 function initializeCodeEditors(exercises) {
@@ -228,16 +299,39 @@ function initializeCodeEditors(exercises) {
             if (normalizedActual === normalizedExpected) {
               callback(actualOutput, null);
               const passed = testCases.length > 1
-                ? `✓ Test case 1 of ${testCases.length} passed!`
-                : '✓ Test passed!';
+                ? `[OK] Test case 1 of ${testCases.length} passed.`
+                : '[OK] Test passed.';
               showExerciseFeedback(exercise.id, 'success', passed);
             } else {
               callback(actualOutput, `Expected:\n${expectedStdout}\n\nGot:\n${actualOutput}`);
-              showExerciseFeedback(exercise.id, 'error', '✗ Output does not match expected. See output panel.');
+              const remediation = findRemediation(exercise, actualOutput);
+              showExerciseFeedback(exercise.id, 'error', remediation
+                ? `[FAIL] Output mismatch.\n${remediation.traceback}\n\nPATCH AVAILABLE: ${remediation.patchHref}`
+                : '[FAIL] Output does not match expected. See output panel.');
             }
           }
         } catch (err) {
           callback('', err.message);
+        }
+      }
+    });
+  });
+
+  // Progressive hint buttons: reveal one level at a time
+  document.querySelectorAll('.os-hints').forEach((hintsEl) => {
+    const btn = hintsEl.querySelector('.os-hint-btn');
+    if (!btn) return;
+    const levels = hintsEl.querySelectorAll('.os-hint-level');
+    btn.addEventListener('click', () => {
+      const next = parseInt(btn.dataset.nextLevel, 10);
+      const levelEl = hintsEl.querySelector(`.os-hint-level[data-level="${next}"]`);
+      if (levelEl) {
+        levelEl.hidden = false;
+        if (next >= levels.length) {
+          btn.hidden = true;
+        } else {
+          btn.dataset.nextLevel = String(next + 1);
+          btn.textContent = `hint --level ${next + 1}`;
         }
       }
     });
@@ -260,9 +354,12 @@ function initializeCodeEditors(exercises) {
 
       const selectedText = selected.closest('label')?.textContent.trim() ?? '';
       if (selected.value === String(correctAnswer) || selectedText === correctAnswer) {
-        showExerciseFeedback(exerciseId, 'success', '✓ Correct!');
+        showExerciseFeedback(exerciseId, 'success', `[OK] Correct. ${exercise.explanation || ''}`.trim());
       } else {
-        showExerciseFeedback(exerciseId, 'error', '✗ Incorrect. Try again.');
+        const remediation = findRemediation(exercise, selectedText);
+        showExerciseFeedback(exerciseId, 'error', remediation
+          ? `[FAIL] Incorrect.\n${remediation.traceback}\n\nPATCH AVAILABLE: ${remediation.patchHref}`
+          : `[FAIL] Incorrect. Try again.${exercise.explanation ? `\n${exercise.explanation}` : ''}`);
       }
     });
   });
@@ -359,6 +456,20 @@ function initializeParsons(exercises) {
       targetEl.classList.remove('active');
     });
 
+    // Tap-to-order: click moves a block to the other container (mobile-friendly,
+    // complements drag & drop). Click inserts at end of target / returns to source.
+    [sourceEl, targetEl].forEach((container) => {
+      container.addEventListener('click', (e) => {
+        const block = e.target.closest('.parsons-block');
+        if (!block) return;
+        if (block.parentElement === sourceEl) {
+          targetEl.appendChild(block);
+        } else {
+          sourceEl.appendChild(block);
+        }
+      });
+    });
+
     // Check button
     if (checkBtn) {
       checkBtn.addEventListener('click', () => {
@@ -374,9 +485,12 @@ function initializeParsons(exercises) {
         const isCorrect = userOrder.every((val, i) => val === correctOrder[i]);
 
         if (isCorrect) {
-          showExerciseFeedback(exercise.id, 'success', '✓ Correct order!');
+          showExerciseFeedback(exercise.id, 'success', '[OK] Correct order.');
         } else {
-          showExerciseFeedback(exercise.id, 'error', '✗ Incorrect order. Try again.');
+          const remediation = findRemediation(exercise, userOrder.join(','));
+          showExerciseFeedback(exercise.id, 'error', remediation
+            ? `[FAIL] Incorrect order.\n${remediation.traceback}\n\nPATCH AVAILABLE: ${remediation.patchHref}`
+            : '[FAIL] Incorrect order. Try again.');
         }
       });
     }

@@ -128,6 +128,33 @@ function curriculumStats(modules) {
   return { exercises, challenges };
 }
 
+// ---- Memory map: one cell per lesson, real completion state -------------
+// done = --ok fill, current = glow, locked = hatched --warn. Always renders
+// every lesson cell (acceptance test 5: 28 visible cells at 0%).
+
+function memoryMapHtml(modules, progress) {
+  const completed = new Set(progress.completedLessons);
+  let currentFound = false;
+  const cells = [];
+  for (const m of modules) {
+    const modDone = m.lessons.every((l) => completed.has(l.id));
+    for (const l of m.lessons) {
+      let state = 'locked';
+      if (completed.has(l.id)) {
+        state = 'done';
+      } else if (!currentFound && modDone !== null) {
+        // first incomplete lesson of the first module whose prereq chain is
+        // walkable — approximate "current" as first incomplete overall,
+        // which matches the sequential unlock model
+        state = 'current';
+        currentFound = true;
+      }
+      cells.push(`<span class="dash-memmap-cell is-${state}" title="${escapeHtml(l.id)}"></span>`);
+    }
+  }
+  return cells.join('');
+}
+
 function pickTrivia() {
   const day = Math.floor(Date.now() / 86400000);
   return PYTHON_TRIVIA[day % PYTHON_TRIVIA.length];
@@ -184,6 +211,7 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         </div>` : ''}
 
       <header class="dash-head">
+        <p class="os-boot-line" aria-hidden="true">$ whoami</p>
         <h1 id="dash-greeting">${greetUser()}</h1>
         <p>Continue your Python learning journey.</p>
       </header>
@@ -193,6 +221,10 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
           <span>Overall progress</span>
           <span class="dash-overall-count">${totalDone}/${totalLessons} lessons · ${overallPct}%</span>
         </div>
+        <div class="dash-memmap" role="img"
+          aria-label="Memory map: ${totalDone} of ${totalLessons} lessons complete">
+          ${memoryMapHtml(modules, progress)}
+        </div>
         <div class="dash-bar"><div class="dash-bar-fill" style="width:${overallPct}%"></div></div>
       </section>
 
@@ -200,24 +232,24 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         <h2 class="dash-facts-title">This course, by the numbers</h2>
         <div class="dash-facts-grid">
           <div class="dash-fact">
-            <strong>${modules.length}</strong>
+            <strong class="dash-fact-value"><span class="dash-fact-num">${modules.length}</span><span class="dash-fact-unit">MOD</span></strong>
             <span>modules in a set path — each one unlocks the next</span>
           </div>
           <div class="dash-fact">
-            <strong>${stats.exercises}</strong>
+            <strong class="dash-fact-value"><span class="dash-fact-num">${stats.exercises}</span><span class="dash-fact-unit">EX</span></strong>
             <span>hands-on exercises, from reading code to writing your own</span>
           </div>
           <div class="dash-fact">
-            <strong>${stats.challenges}</strong>
+            <strong class="dash-fact-value"><span class="dash-fact-num">${stats.challenges}</span><span class="dash-fact-unit">CH</span></strong>
             <span>coding challenges that go beyond the basics</span>
           </div>
           <div class="dash-fact">
-            <strong>0 internet</strong>
+            <strong class="dash-fact-value"><span class="dash-fact-num">0</span><span class="dash-fact-unit">KB NET</span></strong>
             <span>needed after install — everything runs on this device</span>
           </div>
         </div>
         <p class="dash-trivia">
-          <span class="dash-trivia-label">Did you know?</span> ${escapeHtml(pickTrivia())}
+          <span class="dash-trivia-label">$ fortune</span> ${escapeHtml(pickTrivia())}
         </p>
       </section>
 
@@ -231,6 +263,11 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
       main.querySelector('.dash-toast')?.remove();
     });
   }
+}
+
+function moduleNumber(module) {
+  const n = String(module.id || '').split('-')[1];
+  return n || '?';
 }
 
 async function moduleCardHtml(module, lessonsData, progress, icon) {
@@ -253,8 +290,9 @@ async function moduleCardHtml(module, lessonsData, progress, icon) {
       <div class="dash-card-body">
         <div class="dash-card-title-row">
           <h3>${escapeHtml(module.title)}</h3>
-          ${state === 'locked' ? `<span class="dash-card-badge">${ICONS.lock}</span>` : ''}
-          ${state === 'done' ? `<span class="dash-card-badge dash-card-badge--done">${ICONS.check}</span>` : ''}
+          ${state === 'locked' ? `<span class="dash-chip dash-chip--locked">${ICONS.lock} LOCKED: finish M${moduleNumber(module)}</span>` : ''}
+          ${state === 'done' ? `<span class="dash-chip dash-chip--done">${ICONS.check} DONE</span>` : ''}
+          ${state === 'unlocked' ? `<span class="dash-chip dash-chip--open">OPEN</span>` : ''}
         </div>
         <p class="dash-card-desc">${escapeHtml(module.description || '')}</p>
         <div class="dash-bar dash-bar--small"><div class="dash-bar-fill" style="width:${pct}%"></div></div>

@@ -50,6 +50,7 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
   // Show a Start splash before revealing questions
   main.innerHTML = `
     <section class="quiz-container quiz-intro" aria-labelledby="quiz-title">
+      <p class="os-boot-line" aria-hidden="true">$ quiz --start ${escapeHtml(quiz.id)}</p>
       <h2 id="quiz-title">${escapeHtml(quiz.title)}</h2>
       <p class="quiz-meta"><strong>${quiz.questions.length}</strong> questions &middot; Need 70% to pass</p>
       <p>Take your time — you can retry if you don't pass on the first attempt.</p>
@@ -65,7 +66,18 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
 }
 
 function showQuizQuestions(main, quiz, lessonsData) {
-  const questionsHtml = quiz.questions.map((q, i) => {
+  const total = quiz.questions.length;
+  const answers = new Array(total).fill(null);
+  let current = 0;
+
+  function segmentedProgress() {
+    return quiz.questions.map((_, i) => {
+      const cls = i < current ? 'is-done' : i === current ? 'is-current' : '';
+      return `<span class="os-quiz-seg ${cls}"></span>`;
+    }).join('');
+  }
+
+  function questionHtml(q, i) {
     if (q.type === 'multiple-choice') {
       const options = q.options.map((opt, j) => `
         <label class="quiz-option">
@@ -91,42 +103,86 @@ function showQuizQuestions(main, quiz, lessonsData) {
         </fieldset>`;
     }
     return '';
-  }).join('');
+  }
 
-  main.innerHTML = `
-    <section class="quiz-container" aria-labelledby="quiz-title">
-      <h2 id="quiz-title">${escapeHtml(quiz.title)}</h2>
-      <p class="quiz-meta">${quiz.questions.length} questions &middot; 70% to pass</p>
-      <form id="quiz-form" novalidate>
-        ${questionsHtml}
-        <button type="submit" class="btn btn-primary">Submit Quiz</button>
-      </form>
-      <div id="quiz-results" hidden></div>
-    </section>`;
+  function recordAnswer(i) {
+    const q = quiz.questions[i];
+    if (q.type === 'multiple-choice') {
+      const sel = document.querySelector(`input[name="q${i}"]:checked`);
+      answers[i] = sel ? parseInt(sel.value, 10) : null;
+    } else if (q.type === 'true-false') {
+      const sel = document.querySelector(`input[name="q${i}"]:checked`);
+      answers[i] = sel ? sel.value === 'true' : null;
+    } else if (q.type === 'fill-blank') {
+      const input = document.querySelector(`input[name="q${i}"]`);
+      answers[i] = input ? input.value : '';
+    }
+  }
 
-  document.getElementById('quiz-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    handleQuizSubmit(quiz, lessonsData);
-  });
+  function restoreAnswer(i) {
+    const q = quiz.questions[i];
+    const a = answers[i];
+    if (a === null || a === undefined) return;
+    if (q.type === 'multiple-choice') {
+      const sel = document.querySelector(`input[name="q${i}"][value="${a}"]`);
+      if (sel) sel.checked = true;
+    } else if (q.type === 'true-false') {
+      const sel = document.querySelector(`input[name="q${i}"][value="${a ? 'true' : 'false'}"]`);
+      if (sel) sel.checked = true;
+    } else if (q.type === 'fill-blank') {
+      const input = document.querySelector(`input[name="q${i}"]`);
+      if (input) input.value = a;
+    }
+  }
+
+  function renderCurrent() {
+    const q = quiz.questions[current];
+    const isLast = current === total - 1;
+    main.innerHTML = `
+      <section class="quiz-container os-quiz" aria-labelledby="quiz-title">
+        <h2 id="quiz-title">${escapeHtml(quiz.title)}</h2>
+        <p class="quiz-meta">Q${current + 1}/${total} &middot; 70% to pass</p>
+        <div class="os-quiz-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${total}"
+          aria-valuenow="${current + 1}" aria-label="Question ${current + 1} of ${total}">
+          ${segmentedProgress()}
+        </div>
+        <form id="quiz-form" novalidate>
+          ${questionHtml(q, current)}
+          <div class="os-quiz-nav">
+            ${current > 0 ? '<button type="button" id="quiz-prev" class="btn btn-ghost">&larr; Prev</button>' : ''}
+            <button type="submit" id="quiz-next" class="btn btn-primary">${isLast ? 'Submit Quiz' : 'Next →'}</button>
+          </div>
+        </form>
+        <div id="quiz-results" hidden></div>
+      </section>`;
+
+    restoreAnswer(current);
+
+    const prevBtn = document.getElementById('quiz-prev');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        recordAnswer(current);
+        current -= 1;
+        renderCurrent();
+      });
+    }
+
+    document.getElementById('quiz-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      recordAnswer(current);
+      if (current < total - 1) {
+        current += 1;
+        renderCurrent();
+      } else {
+        handleQuizSubmit(quiz, lessonsData, answers);
+      }
+    });
+  }
+
+  renderCurrent();
 }
 
-function handleQuizSubmit(quiz, lessonsData) {
-  const answers = quiz.questions.map((q, i) => {
-    if (q.type === 'multiple-choice') {
-      const selected = document.querySelector(`input[name="q${i}"]:checked`);
-      return selected ? parseInt(selected.value, 10) : null;
-    }
-    if (q.type === 'true-false') {
-      const selected = document.querySelector(`input[name="q${i}"]:checked`);
-      return selected ? selected.value === 'true' : null;
-    }
-    if (q.type === 'fill-blank') {
-      const input = document.querySelector(`input[name="q${i}"]`);
-      return input ? input.value : '';
-    }
-    return null;
-  });
-
+function handleQuizSubmit(quiz, lessonsData, answers) {
   const result = calculateScore(quiz.questions, answers);
   const resultsEl = document.getElementById('quiz-results');
   const form = document.getElementById('quiz-form');
@@ -150,21 +206,40 @@ function handleQuizSubmit(quiz, lessonsData) {
       ? `<div class="achievements stagger-children">${newAchievements.map((a) => `<p class="achievement animate-item">🏆 ${escapeHtml(a.title)}: ${escapeHtml(a.description)}</p>`).join('')}</div>`
       : '';
 
+    const moduleId = findModuleForLesson(quiz.id, lessonsData);
+    const moduleNum = parseInt(String(moduleId).split('-')[1], 10) || 0;
+    const nextModuleNum = moduleNum + 1;
+    const hasNext = lessonsData.modules.some((m) => m.id === `module-${nextModuleNum}`);
+    const unlockLine = hasNext
+      ? `<p class="os-quiz-unlock" role="status">[OK] MODULE ${nextModuleNum} UNLOCKED</p>`
+      : `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
+
     resultsEl.innerHTML = `
       <div class="quiz-result passed animate-item" role="status">
         <h3>Passed!</h3>
-        <p>Score: ${result.score}% (${result.correct}/${result.total})</p>
+        <p>Score: ${result.score}% (${result.correct}/${result.total}) &middot; needed 70%</p>
+        ${unlockLine}
         ${achievementHtml}
-        <a href="#/module/${escapeHtml(findModuleForLesson(quiz.id, lessonsData))}" class="btn btn-primary">Continue</a>
+        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-primary">Continue</a>
         <a href="#/dashboard" class="btn btn-secondary">Dashboard</a>
       </div>`;
   } else {
+    const weakSpots = result.details
+      .filter((d) => !d.correct)
+      .map((d) => {
+        const q = quiz.questions.find((x) => x.id === d.questionId);
+        return q ? `<span class="os-quiz-review-chip">${escapeHtml(q.concept || q.id)}</span>` : '';
+      })
+      .join('');
+
     resultsEl.innerHTML = `
       <div class="quiz-result failed animate-item" role="alert">
-        <h3>Not quite — try again</h3>
-        <p>Score: ${result.score}% (${result.correct}/${result.total}). You need 70% to pass.</p>
+        <h3>[FAIL] ${result.score}% — need 70%</h3>
+        <p>${result.correct}/${result.total} correct. You can retry as many times as you need.</p>
+        ${weakSpots ? `<div class="os-quiz-review"><span class="os-quiz-review-label">review:</span> ${weakSpots}</div>` : ''}
         <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
-        <a href="#/dashboard" class="btn btn-secondary">Dashboard</a>
+        <a href="#/lesson/${escapeHtml(quiz.id)}" class="btn btn-secondary">Review Lesson</a>
+        <a href="#/dashboard" class="btn btn-ghost">Dashboard</a>
       </div>`;
 
     document.getElementById('quiz-retry').addEventListener('click', () => {

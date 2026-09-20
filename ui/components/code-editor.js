@@ -23,7 +23,7 @@ export function createCodeEditor(container, options = {}) {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
-          Run
+          Run <kbd class="os-kbd">Ctrl+↵</kbd>
         </button>
         <button type="button" class="btn btn-secondary btn-sm code-reset-btn" ${readOnly ? 'disabled' : ''} aria-label="Reset to starter code">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -46,14 +46,14 @@ export function createCodeEditor(container, options = {}) {
       >${escapeHtml(starterCode)}</textarea>
       <div class="code-editor-output" hidden>
         <div class="code-editor-output-header">
-          <span class="code-editor-output-title">Output</span>
+          <span class="code-editor-output-title">&gt;&gt;&gt; stdout</span>
           <span class="code-editor-output-status"></span>
         </div>
         <pre class="code-editor-output-content"><code></code></pre>
       </div>
       <div class="code-editor-error" hidden>
         <div class="code-editor-error-header">
-          <span class="code-editor-error-title">Error</span>
+          <span class="code-editor-error-title">Traceback</span>
         </div>
         <pre class="code-editor-error-content"><code></code></pre>
       </div>

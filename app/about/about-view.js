@@ -35,6 +35,7 @@ export function renderAbout(main) {
   main.innerHTML = `
     <div class="about-view page-content">
       <header class="about-hero">
+        <p class="os-boot-line" aria-hidden="true">$ cat about.txt</p>
         <div class="auth-logo" aria-hidden="true">🐍</div>
         <h1>About PyKnowledge</h1>
         <p class="about-lede">A free Python course built for students in Tawi-Tawi

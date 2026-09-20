@@ -1,0 +1,184 @@
+/* ============================================================
+   PyKnowledge OS — shell chrome (status bar, tab bar, palette)
+   Flat CSS, tokens only. data-fx tiers gate all effects.
+   ============================================================ */
+html { font-variant-numeric: tabular-nums; }
+
+/* ---- Status bar: ONE row, <=48px, never wraps ---- */
+.os-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  height: 40px;
+  padding: 0 var(--sp-3);
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+.os-user {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.os-right { display: flex; align-items: center; gap: var(--sp-2); flex-shrink: 0; }
+.os-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+.os-pill.is-online { color: var(--ok); border-color: var(--ok); }
+.os-pill.is-offline { color: var(--warn); border-color: var(--warn); }
+
+/* ---- Mobile bottom tab bar (SPA only) ---- */
+.os-tab-bar {
+  display: none;
+}
+@media (max-width: 720px) {
+  .os-tab-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    z-index: 60;
+  }
+  .os-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    text-decoration: none;
+    border-top: 2px solid transparent;
+  }
+  .os-tab.is-active {
+    color: var(--ok);
+    border-top-color: var(--ok);
+    background: var(--panel-2);
+  }
+  body { padding-bottom: 52px; }
+}
+
+/* ---- Command palette ---- */
+.os-palette {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 9, 11, 0.82);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+}
+.os-palette-panel {
+  width: min(92vw, 480px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+.os-palette-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sp-3);
+  background: var(--panel-2);
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  outline: none;
+}
+.os-palette-list { max-height: 50vh; overflow-y: auto; }
+.os-palette-item {
+  display: block;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+.os-palette-item.is-active {
+  background: var(--panel-2);
+  border-left-color: var(--ok);
+  color: var(--ok);
+}
+.os-palette-empty {
+  padding: var(--sp-3);
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* ---- FX tiers ---- */
+/* OFF: flat static terminal, no effects */
+[data-fx="off"] .os-status-bar,
+[data-fx="off"] .os-tab-bar { box-shadow: none; }
+
+/* LITE: scanlines <=3% alpha + vignette + heading glow only */
+[data-fx="lite"] body::after,
+[data-fx="full"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(207, 232, 220, 0.03) 0px,
+    rgba(207, 232, 220, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 90;
+}
+[data-fx="lite"] .os-user,
+[data-fx="full"] .os-user {
+  text-shadow: 0 0 6px rgba(61, 255, 154, 0.25);
+}
+
+/* FULL: node pulse on the net pill only (transform/opacity only) */
+@keyframes os-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+[data-fx="full"] .os-pill.is-online {
+  animation: os-pulse 2.4s var(--ease) infinite;
+}
+
+/* Reduced motion kills ALL fx regardless of tier */
+@media (prefers-reduced-motion: reduce) {
+  [data-fx="full"] .os-pill.is-online { animation: none; }
+  [data-fx="lite"] body::after,
+  [data-fx="full"] body::after { content: none; }
+}
+
+/* Focus: visible to keyboard only, 2px --info, never yellow */
+:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 1px;
+}

@@ -9,6 +9,9 @@
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="ui/assets/icon-192.png" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="ui/themes/tokens.css" />
+  <link rel="stylesheet" href="ui/themes/os-shell.css" />
+  <link rel="stylesheet" href="ui/themes/os-auth.css" />
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="ui/themes/default.css">
   <link rel="stylesheet" href="ui/themes/animations.css">
@@ -16,6 +19,24 @@
   <link rel="stylesheet" href="ui/themes/library.css">
   <link rel="stylesheet" href="ui/themes/about.css">
 
+  <script type="module">
+    // FX tier detection runs first so no flash of unstyled effects
+    import { initFxTier } from './ui/components/fx-detector.js';
+    initFxTier().then(() => {
+      // FULL-tier effects (glitch + landing rain) — no-op at other tiers
+      import('./ui/components/os-fx.js').then((m) => m.initOsFx()).catch(() => {});
+    });
+    // Command palette works on landing too (Ctrl+K / >_ button)
+    import { initOsShell } from './ui/components/os-shell.js';
+    initOsShell();
+    // Restore persisted theme before first paint of dynamic content
+    (function () {
+      try {
+        var t = localStorage.getItem('pk-theme');
+        if (t && t !== 'green') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
   <script src="ui/components/enhanced-navigation.js" defer></script></head>
 <body>
 
@@ -34,19 +55,26 @@
         <a href="#curriculum">Curriculum</a>
         <a href="#offline">How it works</a>
         <a href="#about">About</a>
+        <button type="button" class="os-palette-trigger" data-os-palette aria-label="Open command palette (Ctrl+K)">&gt;_</button>
         <a class="btn-cta-small" href="#/login">Open the app</a>
       </nav>
     </div>
   </header>
 
   <main id="top">
+    <div class="os-bootlog" id="osBootlog" role="status" aria-live="polite" hidden>
+      <div class="os-bootlog-inner">
+        <pre class="os-bootlog-lines" id="osBootlogLines"></pre>
+        <button type="button" class="os-bootlog-skip" id="osBootlogSkip">skip [enter/tap]</button>
+      </div>
+    </div>
     <!-- HERO: split layout -->
     <section class="hero">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="wrap">
         <!-- Left: copy -->
         <span class="eyebrow">Works with zero signal, once installed</span>
-        <h1>Learn Python without <span class="hl">needing the internet</span>.</h1>
+        <h1 id="heroHeadline"><span class="hl">Learn Python without needing the internet.</span></h1>
         <p class="lede">
           PyKnowledge is a free course built for TRAC, BARMM, and CHED students. Install it
           once on a shared computer or your own phone, and every lesson, exercise, and quiz
@@ -56,10 +84,10 @@
           <a class="btn btn-primary" href="#/login">Start learning</a>
           <a class="btn btn-ghost" href="nova-chatbox.html">Try the AI Chatbox Demo</a>
         </div>
-        <div class="hero-stats">
-          <div><strong>9</strong><span>modules · 28 lessons</span></div>
-          <div><strong>0</strong><span>data needed after install</span></div>
-          <div><strong>&lt;500ms</strong><span>page load, even offline</span></div>
+        <div class="hero-stats os-telemetry">
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">9</span><span class="os-stat-unit">MOD</span></strong><span class="os-stat-label">28 lessons in set path</span></div>
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">0</span><span class="os-stat-unit">KB NET</span></strong><span class="os-stat-label">needed after install</span></div>
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">&lt;500</span><span class="os-stat-unit">MS</span></strong><span class="os-stat-label">page load, even offline</span></div>
         </div>
       </div>
       <!-- Right: Code Preview + AI Chatbot -->
@@ -167,7 +195,7 @@
                 <span class="code-line">                <span class="code-string">"• Python basics\n"</span></span>
                 <span class="code-line">                <span class="code-string">"• Offline features\n"</span></span>
                 <span class="code-line">                <span class="code-string">"• Installation guide\n"</span></span>
-                <span class="code-string">"• Quiz info\n"</span></span>
+                <span class="code-string">"• Quiz info\n"</span>
                 <span class="code-line">                <span class="code-string">"• Jokes! Just ask 'tell me a joke'"</span>)</span>
                 <span class="code-line">&nbsp;</span>
                 <span class="code-line">&nbsp;</span>
@@ -231,7 +259,8 @@
 
           <!-- Output View (Nova Chat) -->
           <div class="hero-view hero-view-output" id="viewOutput">
-            <div class="nova-chat" id="novaChat">
+            <div class="nova-chat" id="novaChat" data-simulated="true">
+              <p class="os-sim-note" aria-hidden="false">SIMULATED DEMO — Nova is a scripted keyword bot, not live AI</p>
               <div class="nova-messages" id="novaMessages">
                 <div class="nova-msg nova-assistant">
                   <div class="nova-bubble">Hey there! I'm Nova, your Python learning guide. Ask me anything about the curriculum, Python basics, or how to get started.</div>
@@ -256,6 +285,17 @@
           <h2>Nine modules, in order</h2>
           <p>Each module unlocks once you've finished the one before it — so you always know
              exactly what's next, with no wrong turns.</p>
+        </div>
+        <div class="os-nodegraph" aria-hidden="true">
+          <span class="os-node is-active">01</span><span class="os-link"></span>
+          <span class="os-node">02</span><span class="os-link"></span>
+          <span class="os-node">03</span><span class="os-link"></span>
+          <span class="os-node">04</span><span class="os-link"></span>
+          <span class="os-node">05</span><span class="os-link"></span>
+          <span class="os-node">06</span><span class="os-link"></span>
+          <span class="os-node">07</span><span class="os-link"></span>
+          <span class="os-node">08</span><span class="os-link"></span>
+          <span class="os-node">09</span>
         </div>
         <ol class="path" style="list-style:none; padding:0; margin:0;">
           <li class="path-item is-unlocked">
@@ -452,6 +492,7 @@
       <h1>PyKnowledge</h1>
       <p class="tagline">Offline Python Learning Platform</p>
       <nav id="main-nav" aria-label="Main navigation"></nav>
+      <button type="button" class="os-palette-trigger" data-os-palette aria-label="Open command palette (Ctrl+K)">&gt;_</button>
     </header>
     <main id="main-content" role="main" tabindex="-1">
       <div id="loading" class="loading" aria-live="polite">
@@ -552,6 +593,9 @@
   // Offline download progress indicator (real cache counts, verified 100%)
   import { initCacheProgress } from './ui/components/cache-progress.js';
   initCacheProgress();
+  // OS landing: boot log (real cache counts) + typed headline
+  import { initLandingFx } from './ui/components/os-landing.js';
+  initLandingFx();
 </script>
 
 <script src="api-config.js"></script>

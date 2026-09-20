@@ -834,3 +834,203 @@ section.band {
   .topbar nav { gap: 14px; }
   .topbar nav a:not(.btn-cta-small) { display: none; }
 }
+
+/* ============================================================
+   PyKnowledge OS — landing T4 additions (tokens only)
+   ============================================================ */
+
+/* ---- Boot log ---- */
+.os-bootlog {
+  position: relative;
+  max-width: 720px;
+  margin: var(--sp-3, 12px) auto 0;
+  padding: 0 var(--sp-4, 16px);
+  font-family: var(--font-mono);
+}
+.os-bootlog-inner {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+}
+.os-bootlog-lines {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ok);
+  white-space: pre-wrap;
+  min-height: 3em;
+}
+.os-bootlog-skip {
+  display: block;
+  margin-top: var(--sp-1, 4px);
+  background: none;
+  border: 1px dashed var(--line);
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 2px var(--sp-2, 8px);
+  cursor: pointer;
+}
+.os-bootlog-skip:hover { color: var(--text); border-color: var(--ok); }
+.os-bootlog.is-done .os-bootlog-inner { opacity: 0; transition: opacity var(--dur-2, 240ms) var(--ease); }
+
+/* ---- Telemetry stats (value+unit split, never wrap) ---- */
+.os-stat { min-width: 0; }
+.os-stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1, 4px);
+  white-space: nowrap;
+}
+.os-stat-num {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+.os-stat-unit {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+  letter-spacing: 0.06em;
+}
+.os-stat-label { display: block; }
+
+/* ---- Simulated demo note ---- */
+.os-sim-note {
+  margin: 0;
+  padding: var(--sp-1, 4px) var(--sp-2, 8px);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  color: var(--warn);
+  border-bottom: 1px dashed var(--line);
+}
+
+/* ---- Node graph rail (curriculum preview) ---- */
+.os-nodegraph {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1, 4px);
+  margin: var(--sp-4, 16px) 0 var(--sp-6, 24px);
+  overflow-x: auto;
+  padding-bottom: var(--sp-1, 4px);
+}
+.os-node {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 2px);
+  background: var(--panel);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+.os-node.is-active {
+  border-color: var(--ok);
+  color: var(--ok);
+  box-shadow: 0 0 8px rgba(61, 255, 154, 0.35);
+}
+.os-link {
+  flex: 1 1 16px;
+  min-width: 8px;
+  height: 1px;
+  background: var(--line);
+}
+
+/* fx tiers: LITE+ glows active node; FULL pulses it */
+[data-fx="lite"] .os-node.is-active { box-shadow: 0 0 10px rgba(61, 255, 154, 0.45); }
+[data-fx="full"] .os-node.is-active {
+  animation: os-node-pulse 2.4s var(--ease) infinite;
+}
+@keyframes os-node-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(61, 255, 154, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(61, 255, 154, 0.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-fx="full"] .os-node.is-active { animation: none; }
+}
+
+/* ============================================================
+   PyKnowledge OS — T8 FULL-tier FX (glitch + rain)
+   ============================================================ */
+
+/* RGB-split glitch: 2 pseudo layers, info/glitch colors, <=300ms */
+.os-glitch {
+  position: relative;
+  animation: os-glitch-shake 300ms var(--ease) 1;
+}
+.os-glitch::before,
+.os-glitch::after {
+  content: attr(data-os-label);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.8;
+}
+.os-glitch::before {
+  color: var(--info);
+  transform: translate(-2px, 0);
+  clip-path: inset(0 0 55% 0);
+  animation: os-glitch-a 300ms steps(3) 1;
+}
+.os-glitch::after {
+  color: var(--glitch);
+  transform: translate(2px, 0);
+  clip-path: inset(55% 0 0 0);
+  animation: os-glitch-b 300ms steps(3) 1;
+}
+@keyframes os-glitch-a {
+  0% { transform: translate(-2px, 0); }
+  50% { transform: translate(3px, -1px); }
+  100% { transform: translate(-1px, 1px); }
+}
+@keyframes os-glitch-b {
+  0% { transform: translate(2px, 0); }
+  50% { transform: translate(-3px, 1px); }
+  100% { transform: translate(1px, -1px); }
+}
+@keyframes os-glitch-shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(1px, 0); }
+  75% { transform: translate(-1px, 0); }
+}
+
+/* Token rain: hero-only overlay, <=15fps (steps), paused offscreen/hidden */
+.os-rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.16;
+}
+.os-rain-col {
+  position: absolute;
+  top: -100%;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.9;
+  color: var(--ok);
+  white-space: pre;
+  animation: os-rain-fall 9s linear infinite;
+  animation-timing-function: steps(45); /* ~5 col-heights over 9s ≈ slow, choppy, <=15fps feel */
+}
+.os-rain.is-paused .os-rain-col {
+  animation-play-state: paused;
+}
+@keyframes os-rain-fall {
+  from { transform: translateY(0); }
+  to { transform: translateY(200%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .os-rain { display: none; }
+  .os-glitch, .os-glitch::before, .os-glitch::after { animation: none; }
+}
+/* OFF/LITE tiers: no glitch, no rain */
+html:not([data-fx="full"]) .os-rain { display: none; }
+html:not([data-fx="full"]) .os-glitch::before,
+html:not([data-fx="full"]) .os-glitch::after { content: none; }

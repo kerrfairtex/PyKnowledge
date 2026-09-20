@@ -14,6 +14,7 @@ import { renderProgressDashboard } from '../app/progress/progress-dashboard.js';
 import { renderLibrary } from '../app/library/reference-library.js';
 import { renderAbout } from '../app/about/about-view.js';
 import { renderNavbar, updateNavbarActiveState } from '../ui/components/navbar.js';
+import { initOsShell } from '../ui/components/os-shell.js';
 import { initOfflineIndicator } from '../ui/components/offline-indicator.js';
 import { initUpdateNotifier, checkForUpdates } from '../ui/components/update-notifier.js';
 import { renderError, withErrorHandling } from './errors.js';
@@ -65,6 +66,7 @@ function startApp() {
   renderNavbar(document.getElementById('main-nav'));
   initRouter();
   initKeyboardShortcuts(navigate, () => window.location.hash.slice(1));
+  initOsShell();
 }
 
 function showAuthScreen() {

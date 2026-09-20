@@ -499,3 +499,96 @@
   .dash-card:hover .dash-card-icon { transform: none; box-shadow: none; }
   .dash-bg-grid { animation: none; }
 }
+
+/* ============================================================
+   PyKnowledge OS — dashboard T3 additions (tokens only)
+   ============================================================ */
+
+/* ---- Memory map: one cell per lesson (28 cells at 0%) ---- */
+.dash-memmap {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 3px;
+  margin: var(--sp-2, 8px) 0 var(--sp-3, 12px);
+}
+@media (max-width: 480px) {
+  .dash-memmap { grid-template-columns: repeat(9, 1fr); }
+}
+.dash-memmap-cell {
+  height: 14px;
+  border: 1px solid var(--line);
+  border-radius: 1px;
+  background: transparent;
+}
+.dash-memmap-cell.is-done {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+.dash-memmap-cell.is-current {
+  border-color: var(--ok);
+  background: var(--panel-2);
+  box-shadow: 0 0 6px rgba(61, 255, 154, 0.45);
+}
+.dash-memmap-cell.is-locked {
+  border-color: var(--warn);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 176, 0, 0.22) 3px,
+    rgba(255, 176, 0, 0.22) 4px
+  );
+}
+
+/* ---- Fact values: value+unit split, never wrap ---- */
+.dash-fact-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1, 4px);
+  white-space: nowrap;
+}
+.dash-fact-num {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  line-height: 1;
+}
+.dash-fact-unit {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+  letter-spacing: 0.06em;
+}
+
+/* ---- Module state chips ---- */
+.dash-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  padding: 2px var(--sp-1, 4px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 2px);
+  white-space: nowrap;
+}
+.dash-chip svg { width: 12px; height: 12px; }
+.dash-chip--done { color: var(--ok); border-color: var(--ok); }
+.dash-chip--open { color: var(--info); border-color: var(--info); }
+.dash-chip--locked { color: var(--warn); border-color: var(--warn); }
+
+/* fx LITE+: glow on current cell only */
+[data-fx="lite"] .dash-memmap-cell.is-current,
+[data-fx="full"] .dash-memmap-cell.is-current {
+  box-shadow: 0 0 8px rgba(61, 255, 154, 0.55);
+}
+[data-fx="full"] .dash-memmap-cell.is-current {
+  animation: dash-cell-pulse 2.4s var(--ease) infinite;
+}
+@keyframes dash-cell-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(61, 255, 154, 0.35); }
+  50% { box-shadow: 0 0 10px rgba(61, 255, 154, 0.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-fx="full"] .dash-memmap-cell.is-current { animation: none; }
+}

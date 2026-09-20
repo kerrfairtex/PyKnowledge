@@ -1,0 +1,127 @@
+/* ============================================================
+   PyKnowledge OS — auth screens (T2)
+   Terminal styling for welcome / picker / PIN keypad / register.
+   Tokens only; flat CSS; fx-tier gated.
+   ============================================================ */
+
+/* terminal boot line above card content */
+.os-boot-line {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ok);
+  text-align: center;
+  margin: 0 0 var(--sp-2);
+  letter-spacing: 0.02em;
+}
+
+/* empty-state note ("no profiles found") */
+.os-auth-empty {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--warn);
+  text-align: center;
+  border: 1px dashed var(--warn);
+  padding: var(--sp-1) var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+
+/* uid row under profile names */
+.profile-uid {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+  letter-spacing: 0.03em;
+}
+
+/* sudo prompt */
+.os-sudo-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--warn);
+}
+
+/* ---- PIN dots ---- */
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin: var(--sp-2) 0 var(--sp-3);
+}
+.pin-dot {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--dim);
+  border-radius: var(--radius);
+  background: transparent;
+}
+.pin-dot.is-filled {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+/* hidden readonly input keeps semantics + keyboard a11y but shows dots instead */
+#pin-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Keypad ---- */
+.os-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-1);
+  margin: 0 0 var(--sp-3);
+}
+.os-key {
+  padding: var(--sp-3) 0;
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.os-key:hover {
+  background: var(--panel);
+  border-color: var(--ok);
+}
+.os-key.is-pressed {
+  transform: scale(0.94);
+  background: var(--panel);
+  border-color: var(--ok);
+}
+.os-key-back { color: var(--warn); }
+.os-key-enter {
+  color: var(--ok);
+  border-color: var(--ok);
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+}
+
+/* ACCESS DENIED / GRANTED error styling */
+.form-error {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--err);
+  border-left: 2px solid var(--err);
+  padding-left: var(--sp-2);
+}
+
+/* shake already exists via .shake class (animations.css) — fx-gated there */
+
+/* fx LITE+: glow the sudo prompt */
+[data-fx="lite"] .os-sudo-prompt,
+[data-fx="full"] .os-sudo-prompt {
+  text-shadow: 0 0 6px rgba(255, 176, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .os-key { transition: none; }
+  .os-key.is-pressed { transform: none; }
+}

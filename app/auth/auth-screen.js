@@ -40,10 +40,12 @@ function renderWelcome(main, onAuthenticated) {
   main.innerHTML = `
     <section class="auth-screen auth-welcome" aria-labelledby="welcome-title">
       <div class="auth-card animate-item">
+        <p class="os-boot-line" aria-hidden="true">$ pyknowledge --first-run</p>
         <div class="auth-logo" aria-hidden="true">🐍</div>
         <h2 id="welcome-title">Welcome to PyKnowledge</h2>
         <p class="auth-subtitle">Create your student profile to save progress on this device.</p>
         <p class="auth-note">Works fully offline. No internet or account required.</p>
+        <p class="os-auth-empty" role="note">no profiles found on this device</p>
         <button type="button" class="btn btn-primary btn-lg" id="btn-create-profile">Create Profile</button>
         ${DOWNLOAD_BTN}
         <button type="button" class="btn btn-ghost" id="btn-guest">Continue as Guest</button>
@@ -88,14 +90,16 @@ export function renderProfilePicker(main, onAuthenticated) {
   main.innerHTML = `
     <section class="auth-screen" aria-labelledby="picker-title">
       <div class="auth-card">
+        <p class="os-boot-line" aria-hidden="true">$ pyknowledge --login</p>
         <h2 id="picker-title">Who's learning today?</h2>
         <p class="auth-subtitle">Select your profile to continue</p>
         <div class="profile-grid stagger-children" role="list">
-          ${profiles.map((p) => `
+          ${profiles.map((p, i) => `
             <button type="button" class="profile-card animate-item" data-user-id="${escapeHtml(p.id)}" role="listitem"
               style="--avatar-color: ${escapeHtml(p.avatar)}">
               <span class="profile-avatar" aria-hidden="true">${escapeHtml(p.displayName.charAt(0).toUpperCase())}</span>
               <span class="profile-name">${escapeHtml(p.displayName)}</span>
+              <span class="profile-uid" aria-hidden="true">uid=${String(1001 + i)}</span>
             </button>
           `).join('')}
           <button type="button" class="profile-card profile-card-add animate-item" id="btn-add-profile" role="listitem">
@@ -136,12 +140,28 @@ function renderPinEntry(main, userId, onAuthenticated) {
         <div class="profile-avatar profile-avatar-lg" style="--avatar-color: ${escapeHtml(profile.avatar)}"
           aria-hidden="true">${escapeHtml(profile.displayName.charAt(0).toUpperCase())}</div>
         <h2 id="pin-title">Hello, ${escapeHtml(profile.displayName)}</h2>
-        <p class="auth-subtitle">Enter your PIN to continue</p>
+        <p class="auth-subtitle os-sudo-prompt">[sudo] PIN for ${escapeHtml(profile.displayName)}:</p>
         <form id="pin-form" class="auth-form">
           <div class="pin-input-group">
-            <input type="password" id="pin-input" class="pin-input" inputmode="numeric"
-              pattern="[0-9]*" maxlength="8" placeholder="••••" required autocomplete="off"
-              aria-label="PIN">
+            <input type="password" id="pin-input" class="pin-input" inputmode="none"
+              readonly autocomplete="off" aria-label="PIN, use the keypad or your keyboard"
+              aria-describedby="pin-dots-status">
+            <div class="pin-dots" id="pin-dots" aria-hidden="true"></div>
+            <p class="visually-hidden" id="pin-dots-status" aria-live="polite"></p>
+          </div>
+          <div class="os-keypad" id="os-keypad" role="group" aria-label="PIN keypad">
+            <button type="button" class="os-key" data-key="1">1</button>
+            <button type="button" class="os-key" data-key="2">2</button>
+            <button type="button" class="os-key" data-key="3">3</button>
+            <button type="button" class="os-key" data-key="4">4</button>
+            <button type="button" class="os-key" data-key="5">5</button>
+            <button type="button" class="os-key" data-key="6">6</button>
+            <button type="button" class="os-key" data-key="7">7</button>
+            <button type="button" class="os-key" data-key="8">8</button>
+            <button type="button" class="os-key" data-key="9">9</button>
+            <button type="button" class="os-key os-key-back" data-key="backspace" aria-label="Backspace">⌫</button>
+            <button type="button" class="os-key" data-key="0">0</button>
+            <button type="button" class="os-key os-key-enter" data-key="enter" aria-label="Sign in">ENTER</button>
           </div>
           <p class="form-error" id="pin-error" hidden role="alert"></p>
           <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
@@ -151,26 +171,86 @@ function renderPinEntry(main, userId, onAuthenticated) {
 
   animatePageEnter(main);
   const pinInput = document.getElementById('pin-input');
-  pinInput.focus();
+  const pinDots = document.getElementById('pin-dots');
+  const pinStatus = document.getElementById('pin-dots-status');
+  let attemptsLeft = 5;
+
+  function renderDots() {
+    const len = pinInput.value.length;
+    pinDots.innerHTML = Array.from({ length: Math.max(4, len) }, (_, i) =>
+      `<span class="pin-dot ${i < len ? 'is-filled' : ''}"></span>`).join('');
+    pinStatus.textContent = len === 0 ? 'PIN empty' : `${len} digit${len > 1 ? 's' : ''} entered`;
+  }
+
+  function pressKey(key) {
+    errorEl.hidden = true;
+    if (key === 'backspace') {
+      pinInput.value = pinInput.value.slice(0, -1);
+    } else if (key === 'enter') {
+      pinInput.form.requestSubmit();
+      return;
+    } else if (pinInput.value.length < 8) {
+      pinInput.value += key;
+    }
+    renderDots();
+    if (navigator.vibrate) navigator.vibrate(8);
+  }
+
+  const errorEl = document.getElementById('pin-error');
+
+  document.getElementById('os-keypad').addEventListener('click', (e) => {
+    const btn = e.target.closest('.os-key');
+    if (!btn) return;
+    pressKey(btn.dataset.key);
+  });
+  // press feedback only on pointerdown; never preventDefault on touchstart
+  document.getElementById('os-keypad').addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('.os-key');
+    if (btn) btn.classList.add('is-pressed');
+  });
+  document.getElementById('os-keypad').addEventListener('pointerup', (e) => {
+    const btn = e.target.closest('.os-key');
+    if (btn) btn.classList.remove('is-pressed');
+  });
+  document.getElementById('os-keypad').addEventListener('pointercancel', (e) => {
+    const btn = e.target.closest('.os-key');
+    if (btn) btn.classList.remove('is-pressed');
+  });
+
+  // physical keyboard support (readonly input, so we capture keys ourselves)
+  document.addEventListener('keydown', pinKeyDown);
+  function pinKeyDown(e) {
+    if (!document.getElementById('pin-form')) { document.removeEventListener('keydown', pinKeyDown); return; }
+    if (/^[0-9]$/.test(e.key)) { pressKey(e.key); }
+    else if (e.key === 'Backspace') { pressKey('backspace'); }
+    else if (e.key === 'Enter') { pressKey('enter'); }
+  }
+
+  renderDots();
 
   document.getElementById('btn-back').addEventListener('click', () => {
+    document.removeEventListener('keydown', pinKeyDown);
     renderProfilePicker(main, onAuthenticated);
   });
 
   document.getElementById('pin-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const errorEl = document.getElementById('pin-error');
     errorEl.hidden = true;
 
     try {
       await loginWithPin(userId, pinInput.value);
+      document.removeEventListener('keydown', pinKeyDown);
+      showSuccess('ACCESS GRANTED');
       showSuccess(`Welcome back, ${profile.displayName}!`);
       onAuthenticated();
     } catch (err) {
-      errorEl.textContent = err.message;
+      attemptsLeft = Math.max(0, attemptsLeft - 1);
+      errorEl.textContent = attemptsLeft > 0
+        ? `ACCESS DENIED — ${err.message} (${attemptsLeft} left)`
+        : `ACCESS DENIED — ${err.message}`;
       errorEl.hidden = false;
       pinInput.value = '';
-      pinInput.focus();
+      renderDots();
       pinInput.classList.add('shake');
       setTimeout(() => pinInput.classList.remove('shake'), 500);
     }
@@ -182,8 +262,10 @@ function renderRegister(main, onAuthenticated) {
     <section class="auth-screen" aria-labelledby="register-title">
       <div class="auth-card animate-item">
         ${hasProfiles() ? '<button type="button" class="auth-back" id="btn-back" aria-label="Back">&larr;</button>' : ''}
+        <p class="os-boot-line" aria-hidden="true">$ pyknowledge --create-profile</p>
         <h2 id="register-title">Create Your Profile</h2>
         <p class="auth-subtitle">Set up your name and a 4-digit PIN</p>
+        <p class="os-auth-empty" role="note">uid will be assigned on creation</p>
         <form id="register-form" class="auth-form">
           <div class="form-group">
             <label for="reg-name">Your Name</label>

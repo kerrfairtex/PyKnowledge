@@ -6,6 +6,7 @@ import { renderNotFound } from './errors.js';
 import { showSkeleton } from '../ui/components/loading.js';
 import { animatePageEnter } from '../ui/components/animations.js';
 import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
+import { isAuthenticated } from '../storage/auth.js';
 
 const routes = new Map();
 let currentRoute = '/';
@@ -36,6 +37,16 @@ export async function handleRoute() {
 
   const { route, parts, base } = getRouteParts();
   currentRoute = route;
+
+  // Check route protection for private routes
+  const requiresAuth = ['/dashboard', '/module', '/lesson', '/quiz', '/progress', '/library', '/about'];
+  const requiresAccess = requiresAuth.includes(base);
+  
+  if (requiresAccess && !isAuthenticated()) {
+    // Redirect to login page if not authenticated
+    window.location.hash = '#/login';
+    return;
+  }
 
   const handler = routes.get(base);
   if (!handler) {
@@ -95,13 +106,6 @@ function updatePageTitle(base, _params) {
   document.title = `${section} — PyKnowledge`;
 }
 
-function focusMainContent() {
-  const main = document.getElementById('main-content');
-  if (main) {
-    main.setAttribute('tabindex', '-1');
-    main.focus({ preventScroll: true });
-  }
-}
 
 export function initRouter() {
   window.addEventListener('hashchange', () => handleRoute().catch(console.error));
@@ -113,6 +117,14 @@ export function initRouter() {
   });
 
   return handleRoute();
+}
+
+function focusMainContent() {
+  const main = document.getElementById('main-content');
+  if (main) {
+    main.setAttribute('tabindex', '-1');
+    main.focus();
+  }
 }
 
 export { currentRoute };
