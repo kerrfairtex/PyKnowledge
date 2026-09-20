@@ -41,6 +41,13 @@
       const href = anchor.getAttribute('href');
       if (!href || href.charAt(0) !== '#') return;
 
+      // Inside the SPA, #top means "back to the landing page" — let the
+      // page controller handle the hashchange. Only smooth-scroll when we
+      // are actually ON the landing page.
+      const onLanding = document.getElementById('landing-root') &&
+        getComputedStyle(document.getElementById('landing-root')).display !== 'none';
+      if (!onLanding) return;
+
       const targetId = href.slice(1);
       if (targetId === 'top') {
         e.preventDefault();
