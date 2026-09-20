@@ -138,12 +138,16 @@ a:focus-visible, button:focus-visible {
   overflow: hidden;
   border-bottom: 1px solid var(--panel-border);
 }
-/* Dark panel behind hero copy so text never sits on the photo + rain */
+/* Left-to-right scrim: dark where the text sits (left), fading to
+   transparent so the photo + rain show through on the right. */
 .hero .wrap {
-  background: rgba(4, 9, 11, 0.9);
-  border: 1px solid var(--panel-border);
-  border-radius: var(--radius);
-  padding: var(--sp-4);
+  background: linear-gradient(90deg,
+    rgba(4, 9, 11, 0.92) 0%,
+    rgba(4, 9, 11, 0.85) 40%,
+    rgba(4, 9, 11, 0.55) 70%,
+    transparent 100%);
+  padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
+  border-radius: 0;
 }
 .hero-bg {
   position: absolute;
