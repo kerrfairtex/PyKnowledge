@@ -1,14 +1,14 @@
-const fs = require('fs');
+import { readFileSync } from 'fs';
 
 describe('dashboard cards visibility (regression)', () => {
   it('dashboard OL must not have stagger-children class', () => {
-    const src = fs.readFileSync('app/dashboard/dashboard.js', 'utf8');
+    const src = readFileSync('app/dashboard/dashboard.js', 'utf8');
     expect(src).not.toContain('stagger-children');
     expect(src).toContain('<ol class="dash-list">');
   });
 
   it('Continue/Start button must be present in rendered HTML', () => {
-    const src = fs.readFileSync('app/dashboard/dashboard.js', 'utf8');
+    const src = readFileSync('app/dashboard/dashboard.js', 'utf8');
     expect(src).toContain('dash-card-btn');
     expect(src).toContain('Start module');
   });
@@ -16,14 +16,14 @@ describe('dashboard cards visibility (regression)', () => {
 
 describe('user menu dialog (regression)', () => {
   it('navbar renders a dialog element not a hidden div', () => {
-    const src = fs.readFileSync('ui/components/navbar.js', 'utf8');
+    const src = readFileSync('ui/components/navbar.js', 'utf8');
     expect(src).toContain('<dialog class="nav-dialog" id="user-menu-dialog"');
     expect(src).not.toContain('user-menu-dropdown');
   });
 });
 
 describe('dashboard primary button (spec step 7)', () => {
-  const src = fs.readFileSync('app/dashboard/dashboard.js', 'utf8');
+  const src = readFileSync('app/dashboard/dashboard.js', 'utf8');
   const renderFn = src.slice(src.indexOf('export async function renderDashboard'), src.indexOf('if (flash) {'));
 
   it('renders primary button before module list', () => {

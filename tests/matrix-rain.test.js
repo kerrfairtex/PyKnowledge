@@ -1,4 +1,4 @@
-const fs = require('fs');
+import { readFileSync } from 'fs';
 
 function makeProtector() {
   const drawTimes = new Float32Array(60);
@@ -53,7 +53,7 @@ describe('matrix-rain self-protect (mocked clock)', () => {
 });
 
 describe('matrix-rain self-protect (source checks)', () => {
-  const src = fs.readFileSync('ui/components/matrix-rain.js', 'utf8');
+  const src = readFileSync('ui/components/matrix-rain.js', 'utf8');
   const frameFn = src.slice(src.indexOf('function frame(t) {'), src.indexOf('function startLoop'));
 
   it('auto-drop uses local tier = (not setRainTier/writeFx)', () => {

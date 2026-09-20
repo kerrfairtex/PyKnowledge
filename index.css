@@ -139,16 +139,13 @@ a:focus-visible, button:focus-visible {
   overflow: hidden;
   border-bottom: 1px solid var(--panel-border);
 }
-/* Scrim: ::before on .hero covers full height on all sizes */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: rgb(4, 9, 11);
-}
+/* Scrim: ::before on .hero covers full height on desktop only */
 @media (min-width: 768px) {
   .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     background: linear-gradient(180deg,
       rgba(4, 9, 11, 0.95) 0%,
       rgba(4, 9, 11, 0.9) 40%,
@@ -157,18 +154,14 @@ a:focus-visible, button:focus-visible {
       transparent 100%);
   }
 }
-/* Mobile: text block on opaque panel */
+/* Mobile: text block on opaque panel, photo + rain visible above/below */
 @media (max-width: 768px) {
   .hero .wrap {
-    position: absolute;
-    inset: 0;
+    position: relative;
     z-index: 2;
     background: rgba(4, 9, 11, 0.9);
     padding: var(--sp-4);
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
 }
 /* Desktop: text over gradient scrim */

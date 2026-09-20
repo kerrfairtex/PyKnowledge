@@ -26,3 +26,35 @@
 - 360x800: bottom=400 < 800 PASS
 - Screenshots: docs/qa/start-390x844.png, docs/qa/start-360x800.png
 - Note: button text shows raw template literal (separate rendering bug)
+
+## Item 3: Mid-Session Upgrade Mismatch
+- Old build (883030a) loaded, SW active
+- New build served on same port (upgrade triggered)
+- Navigated to #/dashboard via SPA (no full reload)
+- Console errors: **NONE** (0 JS errors)
+- Console warnings: 1 (404 for missing resource — api-config.js, expected)
+- Dashboard rendered: 9 cards, greeting "Good evening, Guest"
+- Update toast shown: **false** (clients.claim() activated new SW immediately)
+- Result: **PASS** — no console errors, dashboard renders correctly
+- Condition for toast reload on route change: NOT TRIGGERED (no errors)
+
+## Session G — Item 1: START Bug
+- Fixed escaped template literal in primaryContinueButton()
+- Button text now renders: "START: What is Python?"
+- Test: button text matches /^(START|CONTINUE): / — PASS
+- Test: no visible text contains "${" — PASS
+- Grep for other \\${ in app/ ui/ core/ — NONE FOUND
+- Test file: tests/start-button.test.js (2 tests, PASS)
+
+## Session G — Item 2: Version Bump
+- CACHE_VERSION bumped to 0.20.0
+- sw-version-check baseline updated (--force)
+- npm test: 87/87 tests PASS, sw-version-check PASS
+- Pre-push hook created: .git/hooks/pre-push (runs sw-version-check, blocks on non-zero exit)
+
+## Session G — Item 3: Hero <=768px
+- Removed opaque full-height .hero::before on mobile
+- .wrap at rgba(4,9,11,.9) — known good (11.73/4.75)
+- Photo and rain visible above/below text block
+- Screenshots saved to docs/qa/ (stale due to browser CSS cache)
+- Computed styles confirm correct CSS applied
