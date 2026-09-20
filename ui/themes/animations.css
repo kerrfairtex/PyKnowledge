@@ -52,9 +52,7 @@
 
 /* Stagger children on view enter */
 .stagger-children > .animate-item {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 250ms ease-out, transform 250ms ease-out;
+  /* Visible by default — animation enhances, never hides */
 }
 
 .stagger-children > .animate-item.is-visible {

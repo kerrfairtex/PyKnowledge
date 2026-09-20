@@ -19,7 +19,7 @@
     "db:seed": "npm run db:seed -w pyknowledge-server",
     "db:generate": "npm run db:generate -w pyknowledge-server",
     "setup:fullstack": "npm run db:up && sleep 3 && npm run db:migrate:dev && npm run db:generate && npm run db:seed",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js && node tests/sw-version-check.cjs",
     "test:server": "npm run test -w pyknowledge-server",
     "test:all": "npm test && npm run test:server",
     "test:watch": "npm test -- --watch",

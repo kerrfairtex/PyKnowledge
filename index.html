@@ -593,9 +593,25 @@
   // Service Worker - registers early on window load
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(function (r) { console.log('SW registered:', r.scope); })
-        .catch(function (e) { console.warn('SW registration failed:', e); });
+      navigator.serviceWorker.register('/service-worker.js', { updateViaCache: 'none' })
+        .then(function (r) {
+          console.log('SW registered:', r.scope);
+          // Update-ready toast: when a new SW is waiting, prompt reload
+          r.addEventListener('updatefound', function () {
+            var installing = r.installing;
+            installing.addEventListener('statechange', function () {
+              if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                var btn = document.createElement('button');
+                btn.textContent = 'Update ready — reload';
+                btn.className = 'sw-update-toast';
+                btn.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:var(--ok);color:#000;border:none;border-radius:4px;font-family:var(--font-mono);cursor:pointer;';
+                btn.onclick = function () { window.location.reload(); };
+                document.body.appendChild(btn);
+              }
+            });
+          });
+        })
+        .catch(function (e) { console.warn('SW registration failed', e); });
     });
   }
 </script>
