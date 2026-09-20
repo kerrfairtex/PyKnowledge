@@ -41,9 +41,12 @@ html {
   }
 }
 
+html {
+  background: var(--bg); /* base sits on root; body stays clear so #rainCanvas (z-index:-1) shows */
+}
 body {
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.6;
@@ -138,7 +141,7 @@ a:focus-visible, button:focus-visible {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(180deg, rgba(8,24,43,0.78) 0%, rgba(8,24,43,0.95) 60%, var(--bg) 100%),
+  background-image: linear-gradient(180deg, rgba(8,24,43,0.55) 0%, rgba(8,24,43,0.82) 60%, var(--bg) 100%),
                      url('ui/assets/place/banner-flag-raising.jpg');
   background-size: cover;
   background-position: center 30%;
@@ -999,38 +1002,6 @@ section.band {
   75% { transform: translate(-1px, 0); }
 }
 
-/* Token rain: hero-only overlay, <=15fps (steps), paused offscreen/hidden */
-.os-rain {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.16;
-}
-.os-rain-col {
-  position: absolute;
-  top: -100%;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.9;
-  color: var(--ok);
-  white-space: pre;
-  animation: os-rain-fall 9s linear infinite;
-  animation-timing-function: steps(45); /* ~5 col-heights over 9s ≈ slow, choppy, <=15fps feel */
-}
-.os-rain.is-paused .os-rain-col {
-  animation-play-state: paused;
-}
-@keyframes os-rain-fall {
-  from { transform: translateY(0); }
-  to { transform: translateY(200%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .os-rain { display: none; }
-  .os-glitch, .os-glitch::before, .os-glitch::after { animation: none; }
-}
 /* OFF/LITE tiers: no glitch, no rain */
-html:not([data-fx="full"]) .os-rain { display: none; }
 html:not([data-fx="full"]) .os-glitch::before,
 html:not([data-fx="full"]) .os-glitch::after { content: none; }

@@ -61,6 +61,8 @@ const STATIC_ASSETS = [
   '/ui/themes/tokens.css',
   '/ui/themes/os-shell.css',
   '/ui/themes/os-auth.css',
+  '/ui/themes/rain.css',
+  '/ui/components/matrix-rain.js',
   '/ui/components/fx-detector.js',
   '/ui/components/command-registry.js',
   '/ui/components/os-shell.js',

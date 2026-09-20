@@ -43,9 +43,14 @@ function renderStatusBar() {
     bar.setAttribute('role', 'status');
     document.body.prepend(bar);
   }
+  const fxSaved = (() => { try { return localStorage.getItem('pyknowledge_fx'); } catch { return null; } })();
   bar.innerHTML = `
     <span class="os-user" id="osUser">${escapeHtml(userLabel())}@pyknowledge:~/${escapeHtml(routeLabel())}</span>
-    <span class="os-right">${netPill()}</span>`;
+    <span class="os-right">
+      <button type="button" class="os-fx-toggle" id="osFxToggle" aria-pressed="${fxSaved !== 'off'}"
+        aria-label="Toggle background rain effect">FX</button>
+      ${netPill()}
+    </span>`;
 }
 
 function renderTabBar() {
@@ -90,6 +95,7 @@ export function initOsShell() {
   window.addEventListener('online', renderStatusBar);
   window.addEventListener('offline', renderStatusBar);
   initPalette();
+  initFxToggle();
 }
 
 /* ---- Command palette (Ctrl+K / >_ button) ---- */
@@ -101,6 +107,9 @@ function paletteApi() {
       closePalette();
       // FULL-only effects (rain/glitch) re-init when switching to full
       import('./os-fx.js').then((m) => m.initOsFx()).catch(() => {});
+    },
+    setRainTier: (t) => {
+      import('./matrix-rain.js').then((m) => m.setRainTier(t)).catch(() => {});
     },
     setTheme: (name) => {
       try { localStorage.setItem(THEME_KEY, name); } catch { /* storage unavailable */ }
@@ -166,6 +175,19 @@ function openPalette() {
 
 function closePalette() {
   if (paletteEl) { paletteEl.remove(); paletteEl = null; paletteInput = null; paletteList = null; paletteActive = -1; }
+}
+
+function initFxToggle() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#osFxToggle');
+    if (!btn) return;
+    import('./matrix-rain.js').then((m) => {
+      const cur = (() => { try { return localStorage.getItem('pyknowledge_fx'); } catch { return null; } })();
+      const next = cur === 'off' ? 'full' : 'off';
+      m.setRainTier(next);
+      btn.setAttribute('aria-pressed', String(next !== 'off'));
+    }).catch(() => {});
+  });
 }
 
 function initPalette() {

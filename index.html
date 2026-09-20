@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="ui/themes/tokens.css" />
   <link rel="stylesheet" href="ui/themes/os-shell.css" />
   <link rel="stylesheet" href="ui/themes/os-auth.css" />
+  <link rel="stylesheet" href="ui/themes/rain.css" />
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="ui/themes/default.css">
   <link rel="stylesheet" href="ui/themes/animations.css">
@@ -29,6 +30,16 @@
     // Command palette works on landing too (Ctrl+K / >_ button)
     import { initOsShell } from './ui/components/os-shell.js';
     initOsShell();
+    // Matrix rain: lazy-load after load + idle; never blocks first paint
+    window.addEventListener('load', function () {
+      var kick = function () {
+        import('./ui/components/matrix-rain.js')
+          .then(function (m) { m.startRain(); })
+          .catch(function () { /* rain is decorative */ });
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(kick, { timeout: 600 });
+      else setTimeout(kick, 300);
+    });
     // Restore persisted theme before first paint of dynamic content
     (function () {
       try {

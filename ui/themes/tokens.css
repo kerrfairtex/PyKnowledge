@@ -17,6 +17,10 @@
   --info: #29d3ff;
   --err: #ff4d5e;
   --glitch: #ff2bd6;
+  /* matrix rain */
+  --rain-head: #d8ffea;
+  --rain-alpha: .22;
+  --rain-fade: .09;
   /* shape */
   --radius: 2px;
   --radius-lg: 4px;
