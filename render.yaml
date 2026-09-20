@@ -23,7 +23,10 @@ services:
       - key: API_URL
         value: "" # ← set to https://pyknowledge-api.onrender.com after deploy
     headers:
-      - path: /core/service-worker.js
+      - path: /service-worker.js
+        name: Cache-Control
+        value: "no-cache"
+      - path: /core/sw-version.js
         name: Cache-Control
         value: "no-cache"
       - path: /manifest.json
