@@ -26,7 +26,20 @@ export async function apiFetch(path, options = {}) {
     headers.Authorization = `Bearer ${options.token}`;
   }
 
-  const response = await fetch(url, { ...options, headers });
+  // Optional timeout so a dead API never stalls content loading.
+  const { timeoutMs, ...fetchOptions } = options;
+  let response;
+  if (timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      response = await fetch(url, { ...fetchOptions, headers, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+  } else {
+    response = await fetch(url, { ...fetchOptions, headers });
+  }
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
@@ -48,13 +61,22 @@ export async function fetchContentManifest() {
   return apiFetch('/api/content/manifest');
 }
 
+const HEALTH_TIMEOUT_MS = 2500;
+let healthCache = null; // null = unknown, true/false = probed
+
 export async function checkApiHealth() {
+  if (healthCache !== null) return healthCache; // dead API probed once — stay quiet
   try {
     const base = getApiBaseUrl();
-    if (!base || !navigator.onLine) return false;
-    const data = await apiFetch('/api/health');
-    return data.status === 'ok' && data.database === 'connected';
+    if (!base || !navigator.onLine) { healthCache = false; return false; }
+    const data = await apiFetch('/api/health', { timeoutMs: HEALTH_TIMEOUT_MS });
+    healthCache = data.status === 'ok' && data.database === 'connected';
+    return healthCache;
   } catch {
+    // API unreachable (not deployed / offline / CORS) — expected in
+    // offline-first mode. Cache the failure so we never re-probe this
+    // session; content loads from static JSON without console noise.
+    healthCache = false;
     return false;
   }
 }
