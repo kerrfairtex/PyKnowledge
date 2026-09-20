@@ -253,7 +253,7 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         </p>
       </section>
 
-      <ol class="dash-list stagger-children">${cardsHtml}</ol>
+      <ol class="dash-list">${cardsHtml}</ol>
     </div>
   `;
 

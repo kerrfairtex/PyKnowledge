@@ -11,8 +11,6 @@ import { getCurrentRoute } from '../../core/router.js';
 import { getActiveUser, logout, hasProfiles } from '../../storage/auth.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 
-let navbarDocHandlersBound = false;
-
 function isActive(route, path) {
   if (path === '/') return route === '/';
   return route === path || route.startsWith(`${path}/`);
@@ -33,18 +31,34 @@ export function renderNavbar(container) {
     ? `
       <li role="listitem" class="nav-user">
         <button type="button" class="nav-avatar-trigger" id="btn-user-menu"
-          aria-haspopup="true" aria-expanded="false"
+          aria-expanded="false"
           aria-label="Account menu for ${escapeHtml(user.displayName)}">
           <span class="nav-avatar" style="--avatar-color: ${escapeHtml(user.avatar)}" aria-hidden="true">
             ${escapeHtml(user.displayName.charAt(0).toUpperCase())}
           </span>
           <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </button>
-        <div class="nav-dropdown" id="user-menu-dropdown" role="menu" aria-label="Account" hidden>
-          <div class="nav-dropdown-header">
-            <p class="nav-dropdown-name">${escapeHtml(user.displayName)}</p>
-            <p class="nav-dropdown-meta">Local profile · saved on this device</p>
+        <dialog class="nav-dialog" id="user-menu-dialog" aria-label="Account menu">
+          <div class="nav-dialog-pane">
+            <div class="nav-dialog-header">
+              <p class="nav-dialog-name">${escapeHtml(user.displayName)}</p>
+              <p class="nav-dialog-meta">Local profile · saved on this device</p>
+            </div>
+            <a role="menuitem" href="#/progress" class="nav-dialog-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5V6.5"/></svg>
+              <span>My progress</span>
+            </a>
+            <a role="menuitem" href="#/about" class="nav-dialog-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+              <span>About this app</span>
+            </a>
+            <div class="nav-dialog-separator" role="separator"></div>
+            <button type="button" role="menuitem" class="nav-dialog-item nav-dialog-danger" id="btn-logout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>
+              <span>Sign out</span>
+            </button>
           </div>
+        </dialog>
           <a role="menuitem" href="#/progress" class="nav-dropdown-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5V6.5"/></svg>
             <span>My progress</span>
@@ -87,28 +101,27 @@ export function renderNavbar(container) {
       ${userMenu}
     </ul>`;
 
-  // Document-level dropdown handlers: bind ONCE per page load, not per
-  // render (renderNavbar re-runs on every route change via
-  // updateNavbarActiveState — rebinding would leak listeners).
-  if (!navbarDocHandlersBound) {
-    navbarDocHandlersBound = true;
-    document.addEventListener('click', (e) => {
-      const dd = document.getElementById('user-menu-dropdown');
-      const trig = document.getElementById('btn-user-menu');
-      if (dd && !dd.hidden && !dd.contains(e.target) && e.target !== trig) {
-        dd.hidden = true;
-        const t = document.getElementById('btn-user-menu');
-        if (t) t.setAttribute('aria-expanded', 'false');
+  // Dialog handlers: bound per-render on the elements. renderNavbar
+  // re-runs on every route change, so we (re)attach — cheap and idempotent.
+  const dlg = document.getElementById('user-menu-dialog');
+  const trig = document.getElementById('btn-user-menu');
+  if (dlg && trig && !trig.dataset.dialogWired) {
+    trig.dataset.dialogWired = '1';
+    trig.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (dlg.open) {
+        dlg.close();
+      } else {
+        dlg.showModal();
+        const first = dlg.querySelector('[role="menuitem"]');
+        if (first) first.focus();
       }
     });
-    document.addEventListener('keydown', (e) => {
-      const dd = document.getElementById('user-menu-dropdown');
-      if (e.key === 'Escape' && dd && !dd.hidden) {
-        dd.hidden = true;
-        const t = document.getElementById('btn-user-menu');
-        if (t) { t.setAttribute('aria-expanded', 'false'); t.focus(); }
-      }
+    dlg.addEventListener('close', () => {
+      trig.setAttribute('aria-expanded', 'false');
+      trig.focus();
     });
+    dlg.addEventListener('cancel', () => trig.focus());
   }
 
   const logoutBtn = document.getElementById('btn-logout');
@@ -120,19 +133,6 @@ export function renderNavbar(container) {
     });
   }
 
-  // Avatar dropdown (only when the real-user menu rendered)
-  const trigger = document.getElementById('btn-user-menu');
-  const dropdown = document.getElementById('user-menu-dropdown');
-  if (trigger && dropdown) {
-    const setOpen = (open) => {
-      dropdown.hidden = !open;
-      trigger.setAttribute('aria-expanded', String(open));
-    };
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setOpen(dropdown.hidden);
-    });
-  }
 }
 
 export function updateNavbarActiveState() {

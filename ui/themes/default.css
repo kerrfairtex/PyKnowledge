@@ -2130,3 +2130,53 @@ body {
   border: 1px dashed var(--ok);
   padding: var(--sp-2, 8px) var(--sp-3, 12px);
 }
+
+/* ---- User account dialog (top layer, no clipping) ---- */
+.nav-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+.nav-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+.nav-dialog-pane {
+  position: fixed;
+  top: 56px;
+  right: 16px;
+  min-width: 240px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  padding: var(--sp-2);
+}
+.nav-dialog-header { padding: var(--sp-2); border-bottom: 1px solid var(--line); }
+.nav-dialog-name { font-weight: 600; color: var(--text); margin: 0; }
+.nav-dialog-meta { font-size: 0.75rem; color: var(--dim); margin: 2px 0 0; }
+.nav-dialog-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-dialog-item:hover { background: var(--panel-2); }
+.nav-dialog-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-dialog-separator { height: 1px; background: var(--line); margin: var(--sp-1) 0; }
+.nav-dialog-danger { color: var(--err); }
