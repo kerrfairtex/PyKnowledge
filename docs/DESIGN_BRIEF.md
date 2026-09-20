@@ -68,7 +68,7 @@ Progress/Library/About: telemetry cards + sparklines from real progress data (co
  7. No yellow focus ring on touch.
  8. Landing and app share one token file and one shell look.
  9. Offline works after install (airplane-mode test); cache version bumped.
- 10. Load <=500ms on the device; FX JS <=15KB.
+ 10. Load <=500ms on the device; FX JS <=15KB. Matrix rain module <=6KB min / <=2.5KB gzip.
 
 8. OUTPUT FORMAT (every task)
  1) Real selectors/ids found (grep output)  2) Plan, <=5 bullets  3) Unified diff, one file/screen  4) Verification commands + raw output  5) NOT verified

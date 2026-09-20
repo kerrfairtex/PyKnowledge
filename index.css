@@ -138,6 +138,13 @@ a:focus-visible, button:focus-visible {
   overflow: hidden;
   border-bottom: 1px solid var(--panel-border);
 }
+/* Dark panel behind hero copy so text never sits on the photo + rain */
+.hero .wrap {
+  background: rgba(4, 9, 11, 0.9);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+}
 .hero-bg {
   position: absolute;
   inset: 0;

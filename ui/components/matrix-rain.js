@@ -115,14 +115,18 @@ function frame(t) {
     }
   }
 
-  // self-protect: avg draw > 6ms over 60 frames -> drop tier
-  drawTimes[drawIdx++ % 60] = performance.now() - dt0;
-  if (drawIdx >= 60 && drawIdx % 60 === 0) {
-    let sum = 0; for (let i = 0; i < 60; i++) sum += drawTimes[i];
-    if (sum / 60 > 6) {
-      if (tier === 'full') setRainTier('lite');
-      else if (tier === 'lite') setRainTier('off');
-      drawIdx = 0;
+  // self-protect: avg frame interval > 24ms over 60 frames (~42fps floor) -> drop tier.
+  // Measures wall-clock between rAF callbacks (browser scheduling + our draw, not just draw).
+  if (last > 0) {
+    const interval = t - last;
+    drawTimes[drawIdx++ % 60] = interval;
+    if (drawIdx >= 60 && drawIdx % 60 === 0) {
+      let sum = 0; for (let i = 0; i < 60; i++) sum += drawTimes[i];
+      if (sum / 60 > 24) {
+        if (tier === 'full') setRainTier('lite');
+        else if (tier === 'lite') setRainTier('off');
+        drawIdx = 0;
+      }
     }
   }
 }
