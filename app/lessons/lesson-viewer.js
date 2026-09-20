@@ -10,7 +10,7 @@ import { renderNotFound } from '../../core/errors.js';
 import { animatePageEnter } from '../../ui/components/animations.js';
 import { createCodeEditor } from '../../ui/components/code-editor.js';
 import { executePython } from '../../lib/python-executor.js';
-import { isAuthenticated } from '../../storage/auth.js';
+import { isAuthenticated, hasProfiles } from '../../storage/auth.js';
 
 export function renderLessonViewer(main, lessonId, lessonsData) {
   let lesson = null;
@@ -25,8 +25,9 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
     }
   }
 
-  // Authentication check - prevent unauthorized access
-  if (!isAuthenticated()) {
+  // Authentication check — profile holders must sign in; guests (no
+  // profiles on device) learn freely with progress under their guest id.
+  if (!isAuthenticated() && hasProfiles()) {
     main.innerHTML = `
       <div class="error-card" role="alert">
         <h2>Authentication Required</h2>

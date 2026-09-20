@@ -6,7 +6,7 @@ import { renderNotFound } from './errors.js';
 import { showSkeleton } from '../ui/components/loading.js';
 import { animatePageEnter } from '../ui/components/animations.js';
 import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
-import { isAuthenticated } from '../storage/auth.js';
+import { isAuthenticated, hasProfiles } from '../storage/auth.js';
 
 const routes = new Map();
 let currentRoute = '/';
@@ -38,12 +38,15 @@ export async function handleRoute() {
   const { route, parts, base } = getRouteParts();
   currentRoute = route;
 
-  // Check route protection for private routes
+  // Check route protection for private routes.
+  // Guest mode is a first-class flow: "Continue as Guest" bypasses the gate
+  // (guest progress is stored under the guest id and migrates into a profile
+  // on creation). We only bounce users who have profiles but no session.
   const requiresAuth = ['/dashboard', '/module', '/lesson', '/quiz', '/progress', '/library', '/about'];
   const requiresAccess = requiresAuth.includes(base);
-  
-  if (requiresAccess && !isAuthenticated()) {
-    // Redirect to login page if not authenticated
+
+  if (requiresAccess && !isAuthenticated() && hasProfiles()) {
+    // Profiles exist but no active session — send to the picker/PIN gate.
     window.location.hash = '#/login';
     return;
   }
