@@ -1902,3 +1902,228 @@ body {
   .app-header h1 { font-size: 0.9375rem; }
   .app-header .os-palette-trigger { padding: 2px var(--sp-1, 4px); }
 }
+
+/* ============================================================
+   T8 audit fixes — previously unstyled classes
+   ============================================================ */
+
+/* navbar dropdown separator */
+.nav-dropdown-separator {
+  height: 1px;
+  background: var(--line);
+  margin: var(--sp-1, 4px) 0;
+}
+
+/* navbar Home link */
+.nav-home-link { color: var(--dim); }
+.nav-home-link:hover { color: var(--ok); }
+
+/* Add Profile card (picker) */
+.profile-card-add {
+  border: 1px dashed var(--line);
+}
+.profile-card-add .profile-avatar-add {
+  background: var(--panel-2);
+  color: var(--ok);
+}
+
+/* quiz meta line */
+.quiz-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--dim);
+  margin: var(--sp-1, 4px) 0 var(--sp-3, 12px);
+}
+
+/* SPA footer */
+.pk-footer {
+  border-top: 1px solid var(--line);
+  padding: var(--sp-4, 16px);
+  font-size: 0.8125rem;
+  color: var(--dim);
+}
+
+/* sync status chip (app footer) */
+.sync-status {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ok);
+}
+
+/* dashboard loading / error states */
+.dash-loading, .dash-error {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--dim);
+  padding: var(--sp-4, 16px);
+  text-align: center;
+}
+.dash-error { color: var(--err); }
+
+/* ---- front-page (in-app home route /) — was fully unstyled ---- */
+.front-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--sp-4, 16px) var(--sp-8, 32px);
+  font-family: var(--font-sans);
+}
+.fp-hero {
+  position: relative;
+  padding: var(--sp-8, 32px) 0;
+  text-align: center;
+  overflow: hidden;
+}
+.fp-hero-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(61, 255, 154, 0.06), transparent 70%);
+  pointer-events: none;
+}
+.fp-hero-content { position: relative; }
+.fp-badges {
+  display: flex;
+  gap: var(--sp-2, 8px);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-3, 12px);
+}
+.fp-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ok);
+  border: 1px solid var(--ok);
+  padding: 1px var(--sp-2, 8px);
+  letter-spacing: 0.05em;
+}
+.fp-hero-title { font-size: 2rem; margin: 0 0 var(--sp-2, 8px); }
+.fp-hero-lead { color: var(--dim); margin: 0 0 var(--sp-2, 8px); }
+.fp-hero-desc { max-width: 560px; margin: 0 auto var(--sp-4, 16px); }
+.fp-hero-actions {
+  display: flex;
+  gap: var(--sp-2, 8px);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.fp-hero-progress { max-width: 420px; margin: var(--sp-4, 16px) auto 0; }
+
+.fp-section { padding: var(--sp-6, 24px) 0; border-top: 1px solid var(--line); }
+.fp-section-alt { background: var(--panel); }
+.fp-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ok);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fp-section-header { margin-bottom: var(--sp-4, 16px); }
+.fp-section-intro { color: var(--dim); max-width: 640px; }
+
+.fp-area-grid, .fp-feature-grid, .fp-design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-3, 12px);
+}
+.fp-area-card, .fp-feature, .fp-design-item {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: var(--sp-3, 12px);
+}
+.fp-area-icon, .fp-feature-icon { font-size: 1.25rem; }
+.fp-area-stats {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+
+.fp-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2, 8px);
+  flex-wrap: wrap;
+}
+.fp-flow-step {
+  border: 1px solid var(--line);
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.fp-flow-arrow { color: var(--dim); }
+
+.fp-stack { display: flex; flex-direction: column-reverse; gap: var(--sp-1, 4px); max-width: 420px; }
+.fp-stack-layer {
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.fp-code-window { border: 1px solid var(--line); background: var(--panel); overflow: hidden; }
+.fp-code-bar {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--dim);
+  padding: var(--sp-1, 4px) var(--sp-2, 8px);
+  border-bottom: 1px solid var(--line);
+}
+.fp-code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: var(--sp-3, 12px);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.fp-curriculum-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-2, 8px);
+}
+.fp-curr-card { border: 1px solid var(--line); padding: var(--sp-2, 8px); }
+.fp-curr-number { font-family: var(--font-mono); color: var(--ok); }
+.fp-curr-label { font-weight: 700; }
+.fp-curr-note { color: var(--dim); font-size: 0.8125rem; }
+
+.fp-stakeholders { display: flex; flex-wrap: wrap; gap: var(--sp-2, 8px); }
+.fp-stake { border: 1px dashed var(--line); padding: var(--sp-1, 4px) var(--sp-2, 8px); }
+
+.fp-stat { text-align: center; }
+.fp-stat-value { font-family: var(--font-mono); font-size: 1.5rem; color: var(--ok); }
+.fp-stat-label { color: var(--dim); font-size: 0.8125rem; }
+
+.fp-tags { display: flex; flex-wrap: wrap; gap: var(--sp-1, 4px); }
+.fp-tag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  border: 1px solid var(--line);
+  color: var(--dim);
+  padding: 1px var(--sp-1, 4px);
+}
+.fp-architecture { font-family: var(--font-mono); font-size: 0.8125rem; overflow-x: auto; white-space: pre; }
+.fp-version { color: var(--dim); font-family: var(--font-mono); font-size: 0.75rem; }
+
+/* ---- audit fix: container rhythm for previously bare wrappers ---- */
+.achievements { display: grid; gap: var(--sp-2, 8px); }
+.auth-welcome .auth-card { border: 1px solid var(--line); }
+.lesson-content { display: grid; gap: var(--sp-4, 16px); }
+.lesson-exercises {
+  margin-top: var(--sp-6, 24px);
+  padding-top: var(--sp-4, 16px);
+  border-top: 1px dashed var(--line);
+}
+.module-detail { max-width: 720px; }
+.module-detail .lesson-list { list-style: none; padding: 0; display: grid; gap: var(--sp-2, 8px); }
+.progress-dashboard { max-width: 720px; }
+.progress-modules { display: grid; gap: var(--sp-2, 8px); margin: var(--sp-2, 8px) 0 var(--sp-4, 16px); }
+.quiz-intro { text-align: center; max-width: 480px; margin: 0 auto; }
+.not-found { text-align: center; padding: var(--sp-8, 32px) 0; }
+.os-quiz { max-width: 640px; }
+.pin-input-group { display: grid; justify-items: center; }
+.fp-hero-visual { margin-top: var(--sp-4, 16px); }
+.achievement {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ok);
+  border: 1px dashed var(--ok);
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+}

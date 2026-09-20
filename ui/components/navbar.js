@@ -11,6 +11,8 @@ import { getCurrentRoute } from '../../core/router.js';
 import { getActiveUser, logout, hasProfiles } from '../../storage/auth.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 
+let navbarDocHandlersBound = false;
+
 function isActive(route, path) {
   if (path === '/') return route === '/';
   return route === path || route.startsWith(`${path}/`);
@@ -85,6 +87,30 @@ export function renderNavbar(container) {
       ${userMenu}
     </ul>`;
 
+  // Document-level dropdown handlers: bind ONCE per page load, not per
+  // render (renderNavbar re-runs on every route change via
+  // updateNavbarActiveState — rebinding would leak listeners).
+  if (!navbarDocHandlersBound) {
+    navbarDocHandlersBound = true;
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('user-menu-dropdown');
+      const trig = document.getElementById('btn-user-menu');
+      if (dd && !dd.hidden && !dd.contains(e.target) && e.target !== trig) {
+        dd.hidden = true;
+        const t = document.getElementById('btn-user-menu');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      const dd = document.getElementById('user-menu-dropdown');
+      if (e.key === 'Escape' && dd && !dd.hidden) {
+        dd.hidden = true;
+        const t = document.getElementById('btn-user-menu');
+        if (t) { t.setAttribute('aria-expanded', 'false'); t.focus(); }
+      }
+    });
+  }
+
   const logoutBtn = document.getElementById('btn-logout');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
@@ -105,12 +131,6 @@ export function renderNavbar(container) {
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
       setOpen(dropdown.hidden);
-    });
-    document.addEventListener('click', (e) => {
-      if (!dropdown.hidden && !dropdown.contains(e.target) && e.target !== trigger) setOpen(false);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !dropdown.hidden) { setOpen(false); trigger.focus(); }
     });
   }
 }
