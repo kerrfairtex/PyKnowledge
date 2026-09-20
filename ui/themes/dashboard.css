@@ -592,3 +592,27 @@
 @media (prefers-reduced-motion: reduce) {
   [data-fx="full"] .dash-memmap-cell.is-current { animation: none; }
 }
+
+/* ---- Primary Continue/Start button (spec step 7) ---- */
+.dash-primary {
+  margin: var(--sp-4, 16px) 0;
+  text-align: center;
+}
+.dash-primary .btn-lg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.dash-all-done {
+  display: inline-block;
+  padding: 12px 20px;
+  color: var(--ok);
+  font-weight: 600;
+  border: 1px dashed var(--ok);
+  border-radius: var(--radius);
+}

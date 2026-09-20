@@ -23,6 +23,7 @@ const css = { trail: '#3dff9a', head: '#d8ffea', bg: '#04090b', fade: 0.09, alph
 let resizeTimer = 0, themeObs = null, running = false;
 const drawTimes = new Float32Array(60); let drawIdx = 0;
 let burstUntil = 0;
+let startupGraceUntil = performance.now() + 2000;
 
 function readCss() {
   const s = getComputedStyle(document.documentElement);
@@ -83,9 +84,26 @@ function effective() {
 function frame(t) {
   rafId = requestAnimationFrame(frame);
   if (document.hidden) return;
+
+  // Self-protect: sample EVERY tick (before fps throttle) so we catch
+  // browser-scheduling jank too, not just our draw time. 2s startup grace
+  // lets the JIT + cache settle before we measure.
+  if (last > 0 && startupGraceUntil < performance.now()) {
+    const interval = t - last;
+    drawTimes[drawIdx++ % 60] = interval;
+    if (drawIdx >= 60 && drawIdx % 60 === 0) {
+      let sum = 0; for (let i = 0; i < 60; i++) sum += drawTimes[i];
+      if (sum / 60 > 24) {
+        // Session-only drop: never write to pyknowledge_fx (user choice wins).
+        if (tier === 'full') { tier = 'lite'; applyState(); }
+        else if (tier === 'lite') { tier = 'off'; applyState(); }
+        drawIdx = 0;
+      }
+    }
+  }
+
   const e = effective();
   if (t - last < 1000 / e.fps) return;
-  const dt0 = performance.now();
   last = t; frames++; if (frames % 300 === 0) console.debug('[rain] frames', frames);
 
   // trail fade (translucent bg) — no residue at fade .09
@@ -99,7 +117,6 @@ function frame(t) {
   ctx.fillStyle = css.head;
 
   // Head glyph in head color; the translucent bg fade above leaves the trail.
-  ctx.fillStyle = css.head;
   for (let c = 0; c < cols; c++) {
     const x = c * e.cell;
     const py = (y[c] | 0) * e.cell;
@@ -112,21 +129,6 @@ function frame(t) {
     y[c] += speed[c] * (burst ? 2 : 1);
     if (py > canvas.height && Math.random() > 0.975) {
       y[c] = 0; stream[c] = pickStream();
-    }
-  }
-
-  // self-protect: avg frame interval > 24ms over 60 frames (~42fps floor) -> drop tier.
-  // Measures wall-clock between rAF callbacks (browser scheduling + our draw, not just draw).
-  if (last > 0) {
-    const interval = t - last;
-    drawTimes[drawIdx++ % 60] = interval;
-    if (drawIdx >= 60 && drawIdx % 60 === 0) {
-      let sum = 0; for (let i = 0; i < 60; i++) sum += drawTimes[i];
-      if (sum / 60 > 24) {
-        if (tier === 'full') setRainTier('lite');
-        else if (tier === 'lite') setRainTier('off');
-        drawIdx = 0;
-      }
     }
   }
 }

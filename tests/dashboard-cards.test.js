@@ -25,3 +25,23 @@ describe('user menu dialog (regression)', () => {
     expect(template).not.toContain('user-menu-dropdown');
   });
 });
+
+describe('dashboard primary button (spec step 7)', () => {
+  it('renders a primary continue/start button after the greeting', () => {
+    // The button must come BEFORE the module list in the render order
+    const src = require('fs').readFileSync('app/dashboard/dashboard.js', 'utf8');
+    const renderFn = src.slice(src.indexOf('export async function renderDashboard'), src.indexOf('if (flash) {'));
+    const btnIdx = renderFn.indexOf('primaryContinueButton');
+    const listIdx = renderFn.indexOf('<ol class="dash-list">');
+    expect(btnIdx).toBeGreaterThan(-1);
+    expect(listIdx).toBeGreaterThan(-1);
+    expect(btnIdx).toBeLessThan(listIdx);
+  });
+
+  it('primary button shows START for new users and CONTINUE for returning', () => {
+    const src = require('fs').readFileSync('app/dashboard/dashboard.js', 'utf8');
+    const fn = src.slice(src.indexOf('function primaryContinueButton'), src.indexOf('// ---- Greeting'));
+    expect(fn).toContain("done > 0 ? 'CONTINUE' : 'START'");
+    expect(fn).toContain('Start module');
+  });
+});

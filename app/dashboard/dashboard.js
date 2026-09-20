@@ -160,6 +160,29 @@ function pickTrivia() {
   return PYTHON_TRIVIA[day % PYTHON_TRIVIA.length];
 }
 
+// ---- Primary Continue/Start button ---------------------------------------
+// Big, visible, new-user call-to-action per spec step 7.
+function primaryContinueButton(modules, progress) {
+  for (const m of modules) {
+    const { done, total } = moduleCompletion(m, progress);
+    if (done < total) {
+      const label = done > 0 ? 'Continue module' : 'Start module';
+      const nextLesson = m.lessons.find(l => !progress.completedLessons.includes(l.id));
+      const lessonLabel = nextLesson ? nextLesson.title : m.title;
+      return `
+        <div class="dash-primary">
+          <a class="btn btn-primary btn-lg" href="#/module/\${encodeURIComponent(m.id)}">
+            \${done > 0 ? 'CONTINUE' : 'START'}: \${escapeHtml(lessonLabel)}
+          </a>
+        </div>`;
+    }
+  }
+  return `
+    <div class="dash-primary">
+      <span class="dash-all-done">&#10003; All modules complete</span>
+    </div>`;
+}
+
 // ---- Greeting (time-aware, uses the signed-in user's name) ----------------
 
 function greetUser() {
@@ -215,6 +238,8 @@ export async function renderDashboard(main, _params, _route, lessonsData) {
         <h1 id="dash-greeting">${greetUser()}</h1>
         <p>Continue your Python learning journey.</p>
       </header>
+
+      ${primaryContinueButton(modules, progress)}
 
       <section class="dash-overall" aria-label="Overall progress">
         <div class="dash-overall-row">
