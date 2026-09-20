@@ -13,7 +13,7 @@ import { animatePageEnter } from '../../ui/components/animations.js';
 function quizScoresSparkline(lessonsData, progress) {
   const scores = lessonsData.modules
     .flatMap((m) => m.lessons)
-    .map((l) => (progress.quizScores && progress.quizScores[l.id] != null ? progress.quizScores[l.id] : null));
+    .map((l) => (progress.quizScores && progress.quizScores[l.id] !== null && progress.quizScores[l.id] !== undefined ? progress.quizScores[l.id] : null));
   const W = 240, H = 48, PAD = 4;
   const n = scores.length;
   const taken = scores.filter((s) => s !== null);

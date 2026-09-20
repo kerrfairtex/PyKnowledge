@@ -7,7 +7,7 @@ import {
   getProfiles, createProfile, loginWithPin, hasProfiles, isAuthenticated
 } from '../../storage/auth.js';
 import { showSuccess } from '../../ui/components/toast.js';
-import { animatePageEnter, staggerChildren } from '../../ui/components/animations.js';
+import { animatePageEnter } from '../../ui/components/animations.js';
 import { initInstallPrompt } from '../../ui/components/install-prompt.js';
 
 const DOWNLOAD_BTN = `

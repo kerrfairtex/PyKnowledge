@@ -19,6 +19,8 @@ export function initOsFx() {
 function glitchEl(el) {
   if (!el || el.dataset.osGlitching === '1') return;
   el.dataset.osGlitching = '1';
+  // pseudo-layers read this for the RGB-split text
+  el.setAttribute('data-os-label', (el.textContent || '').slice(0, 120));
   el.classList.add('os-glitch');
   setTimeout(() => {
     el.classList.remove('os-glitch');

@@ -3,11 +3,10 @@
  * Reads REAL state: user, route, online, cache counts. No fake values.
  */
 import { commands } from './command-registry.js';
-import { readFxOverride, writeFxOverride, getFxTier } from './fx-detector.js';
+import { writeFxOverride } from './fx-detector.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 
 const THEME_KEY = 'pk-theme';
-const THEMES = ['green', 'amber', 'ice'];
 let paletteEl = null;
 let paletteInput = null;
 let paletteList = null;
@@ -104,7 +103,7 @@ function paletteApi() {
       import('./os-fx.js').then((m) => m.initOsFx()).catch(() => {});
     },
     setTheme: (name) => {
-      try { localStorage.setItem(THEME_KEY, name); } catch { }
+      try { localStorage.setItem(THEME_KEY, name); } catch { /* storage unavailable */ }
       document.documentElement.setAttribute('data-theme', name === 'green' ? '' : name);
       closePalette();
     }

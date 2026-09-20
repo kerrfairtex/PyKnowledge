@@ -4,8 +4,6 @@
  * (CACHE_PROGRESS messages / caches API probe). First visit only,
  * <=2s total, tap or Enter to skip. No fake values.
  */
-import { initCacheProgress } from './cache-progress.js';
-
 const SEEN_KEY = 'pk-bootlog-seen';
 const MAX_MS = 2000;
 
@@ -22,7 +20,7 @@ function initBootlog() {
   if (!el || !lines || !skip) return;
 
   let seen = false;
-  try { seen = localStorage.getItem(SEEN_KEY) === '1'; } catch { }
+  try { seen = localStorage.getItem(SEEN_KEY) === '1'; } catch { /* storage unavailable */ }
   if (seen) return;
 
   el.hidden = false;
@@ -40,7 +38,7 @@ function initBootlog() {
   const finish = () => {
     if (done) return;
     done = true;
-    try { localStorage.setItem(SEEN_KEY, '1'); } catch { }
+    try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* storage unavailable */ }
     el.classList.add('is-done');
     setTimeout(() => { el.hidden = true; }, 300);
   };
@@ -53,7 +51,7 @@ function initBootlog() {
         try {
           const cache = await caches.open(key);
           count += (await cache.keys()).length;
-        } catch { }
+        } catch { /* cache probe failed */ }
       }
       log(`cache: ${count} assets verified`);
       finish();

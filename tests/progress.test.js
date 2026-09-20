@@ -1,10 +1,16 @@
 import { getProgress, saveProgress, resetProgress, markLessonComplete, isLessonComplete } from '../core/storage.js';
+import { getActiveUser, getProgressKey } from '../storage/auth.js';
 
 const store = {};
 global.localStorage = {
   getItem: (key) => store[key] ?? null,
   setItem: (key, val) => { store[key] = String(val); },
   removeItem: (key) => { delete store[key]; }
+};
+global.sessionStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {}
 };
 
 describe('progress', () => {
@@ -53,7 +59,10 @@ describe('progress', () => {
   });
 
   test('getProgress merges stored data with defaults', () => {
-    localStorage.setItem('pyknowledge_progress', JSON.stringify({
+    // Write under the REAL per-user key the app reads (guest id is random
+    // per run, so the key must be derived, not hardcoded).
+    const key = getProgressKey(getActiveUser().id);
+    localStorage.setItem(key, JSON.stringify({
       completedLessons: ['lesson-1-1'],
       version: 1
     }));

@@ -25,7 +25,6 @@ import { isAuthenticated, hasProfiles } from '../storage/auth.js';
 import { renderFrontPage, clearFrontPageLayout } from '../app/home/front-page.js';
 import { animatePageEnter } from '../ui/components/animations.js';
 import { initKeyboardShortcuts } from '../ui/components/keyboard-shortcuts.js';
-import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
 
 let lessonsData = null;
 let quizzesData = null;

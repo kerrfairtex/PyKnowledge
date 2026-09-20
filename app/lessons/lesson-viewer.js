@@ -10,8 +10,7 @@ import { renderNotFound } from '../../core/errors.js';
 import { animatePageEnter } from '../../ui/components/animations.js';
 import { createCodeEditor } from '../../ui/components/code-editor.js';
 import { executePython } from '../../lib/python-executor.js';
-import { isAuthenticated, getActiveUser } from '../../storage/auth.js';
-import { renderQuiz } from '../quizzes/quiz-engine.js';
+import { isAuthenticated } from '../../storage/auth.js';
 
 export function renderLessonViewer(main, lessonId, lessonsData) {
   let lesson = null;

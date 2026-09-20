@@ -3,7 +3,7 @@
  */
 
 import { validateQuizAnswers } from '../../utils/validator.js';
-import { markLessonComplete, getProgress } from '../../core/storage.js';
+import { markLessonComplete } from '../../core/storage.js';
 import { unlockNextModule } from '../../storage/progress.js';
 import { checkAchievements } from '../../storage/achievements.js';
 import { escapeHtml } from '../../utils/sanitize.js';
@@ -174,7 +174,7 @@ function showQuizQuestions(main, quiz, lessonsData) {
         current += 1;
         renderCurrent();
       } else {
-        handleQuizSubmit(quiz, lessonsData, answers);
+        handleQuizSubmit(main, quiz, lessonsData, answers);
       }
     });
   }
@@ -182,7 +182,7 @@ function showQuizQuestions(main, quiz, lessonsData) {
   renderCurrent();
 }
 
-function handleQuizSubmit(quiz, lessonsData, answers) {
+function handleQuizSubmit(main, quiz, lessonsData, answers) {
   const result = calculateScore(quiz.questions, answers);
   const resultsEl = document.getElementById('quiz-results');
   const form = document.getElementById('quiz-form');
