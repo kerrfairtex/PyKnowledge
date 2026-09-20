@@ -270,6 +270,12 @@ function moduleNumber(module) {
   return n || '?';
 }
 
+// The prerequisite module's number (what must be finished to unlock this one).
+function prereqNumber(module, lessonsData) {
+  const prereq = lessonsData.modules.find((m) => m.id === module.prerequisite);
+  return prereq ? moduleNumber(prereq) : '?';
+}
+
 async function moduleCardHtml(module, lessonsData, progress, icon) {
   const state = await moduleState(module, lessonsData, progress); // 'locked' | 'unlocked' | 'done'
   const { done, total } = moduleCompletion(module, progress);
@@ -290,7 +296,7 @@ async function moduleCardHtml(module, lessonsData, progress, icon) {
       <div class="dash-card-body">
         <div class="dash-card-title-row">
           <h3>${escapeHtml(module.title)}</h3>
-          ${state === 'locked' ? `<span class="dash-chip dash-chip--locked">${ICONS.lock} LOCKED: finish M${moduleNumber(module)}</span>` : ''}
+          ${state === 'locked' ? `<span class="dash-chip dash-chip--locked">${ICONS.lock} LOCKED: finish M${prereqNumber(module, lessonsData)}</span>` : ''}
           ${state === 'done' ? `<span class="dash-chip dash-chip--done">${ICONS.check} DONE</span>` : ''}
           ${state === 'unlocked' ? `<span class="dash-chip dash-chip--open">OPEN</span>` : ''}
         </div>
