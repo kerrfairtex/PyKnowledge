@@ -138,16 +138,22 @@ a:focus-visible, button:focus-visible {
   overflow: hidden;
   border-bottom: 1px solid var(--panel-border);
 }
-/* Left-to-right scrim: dark where the text sits (left), fading to
-   transparent so the photo + rain show through on the right. */
+/* Mobile: uniform scrim (text across full width). */
 .hero .wrap {
-  background: linear-gradient(90deg,
-    rgba(4, 9, 11, 0.92) 0%,
-    rgba(4, 9, 11, 0.85) 40%,
-    rgba(4, 9, 11, 0.55) 70%,
-    transparent 100%);
-  padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
+  background: rgba(4, 9, 11, 0.9);
+  padding: var(--sp-4);
   border-radius: 0;
+}
+/* Desktop: left-to-right scrim — text left, photo right. */
+@media (min-width: 768px) {
+  .hero .wrap {
+    background: linear-gradient(90deg,
+      rgba(4, 9, 11, 0.92) 0%,
+      rgba(4, 9, 11, 0.85) 40%,
+      rgba(4, 9, 11, 0.55) 70%,
+      transparent 100%);
+    padding: var(--sp-4) var(--sp-4) var(--sp-4) 0;
+  }
 }
 .hero-bg {
   position: absolute;

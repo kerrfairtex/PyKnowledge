@@ -185,6 +185,9 @@ function writeFx(v) {
 
 // ---- public API ----
 export function startRain() {
+  if (typeof performance !== 'undefined' && performance.mark) {
+    try { performance.mark('rain-init'); } catch {}
+  }
   applyState();
   if (!themeObs) {
     themeObs = new MutationObserver(() => { readCss(); });
@@ -210,14 +213,22 @@ export function setRainTier(t) {
 window.addEventListener('hashchange', () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const m = routeMode(window.location.hash);
-  if (m !== mode) setRainMode(m);
+  if (m !== mode) {
+    drawIdx = 0; // reset jank window on route change
+    startupGraceUntil = performance.now() + 500;
+    setRainMode(m);
+  }
 });
 window.addEventListener('pk:rain', (e) => {
   burstUntil = performance.now() + (e.detail?.burst || 600);
 });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopLoop();
-  else if (tier !== 'off' && mode !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) startLoop();
+  else if (tier !== 'off' && mode !== 'off' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    drawIdx = 0; // reset jank window on resume
+    startupGraceUntil = performance.now() + 500;
+    startLoop();
+  }
 });
 window.addEventListener('resize', () => {
   stopLoop();

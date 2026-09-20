@@ -44,11 +44,12 @@ function renderStatusBar() {
     document.body.prepend(bar);
   }
   const fxSaved = (() => { try { return localStorage.getItem('pyknowledge_fx'); } catch { return null; } })();
+  const fxTier = fxSaved ? fxSaved.toUpperCase() : 'OFF';
   bar.innerHTML = `
     <span class="os-user" id="osUser">${escapeHtml(userLabel())}@pyknowledge:~/${escapeHtml(routeLabel())}</span>
     <span class="os-right">
       <button type="button" class="os-fx-toggle" id="osFxToggle" aria-pressed="${fxSaved !== 'off'}"
-        aria-label="Toggle background rain effect">FX</button>
+        aria-label="Toggle rain, currently ${fxTier}">${fxTier}</button>
       ${netPill()}
     </span>`;
 }

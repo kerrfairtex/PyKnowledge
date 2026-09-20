@@ -2165,7 +2165,8 @@ body {
   align-items: center;
   gap: var(--sp-2);
   width: 100%;
-  padding: var(--sp-2);
+  min-height: 44px;
+  padding: var(--sp-2) var(--sp-3);
   background: transparent;
   border: none;
   border-radius: var(--radius);
@@ -2175,6 +2176,7 @@ body {
   text-align: left;
   cursor: pointer;
   text-decoration: none;
+  box-sizing: border-box;
 }
 .nav-dialog-item:hover { background: var(--panel-2); }
 .nav-dialog-item svg { width: 18px; height: 18px; flex-shrink: 0; }

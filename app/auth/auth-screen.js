@@ -93,7 +93,7 @@ export function renderProfilePicker(main, onAuthenticated) {
         <p class="os-boot-line" aria-hidden="true">$ pyknowledge --login</p>
         <h2 id="picker-title">Who's learning today?</h2>
         <p class="auth-subtitle">Select your profile to continue</p>
-        <div class="profile-grid stagger-children" role="list">
+        <div class="profile-grid" role="list">
           ${profiles.map((p, i) => `
             <button type="button" class="profile-card animate-item" data-user-id="${escapeHtml(p.id)}" role="listitem"
               style="--avatar-color: ${escapeHtml(p.avatar)}">
