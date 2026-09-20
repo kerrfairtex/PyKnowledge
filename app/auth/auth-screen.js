@@ -261,7 +261,7 @@ function renderRegister(main, onAuthenticated) {
   main.innerHTML = `
     <section class="auth-screen" aria-labelledby="register-title">
       <div class="auth-card animate-item">
-        ${hasProfiles() ? '<button type="button" class="auth-back" id="btn-back" aria-label="Back">&larr;</button>' : ''}
+        <button type="button" class="auth-back" id="btn-back" aria-label="Back">&larr;</button>
         <p class="os-boot-line" aria-hidden="true">$ pyknowledge --create-profile</p>
         <h2 id="register-title">Create Your Profile</h2>
         <p class="auth-subtitle">Set up your name and a 4-digit PIN</p>
@@ -296,7 +296,12 @@ function renderRegister(main, onAuthenticated) {
   const backBtn = document.getElementById('btn-back');
   if (backBtn) {
     backBtn.addEventListener('click', () => {
-      renderProfilePicker(main, onAuthenticated);
+      // No profiles yet -> welcome screen; otherwise the profile picker.
+      if (hasProfiles()) {
+        renderProfilePicker(main, onAuthenticated);
+      } else {
+        renderWelcome(main, onAuthenticated);
+      }
     });
   }
 
