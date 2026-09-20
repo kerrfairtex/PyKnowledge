@@ -157,11 +157,32 @@ a:focus-visible, button:focus-visible {
       transparent 100%);
   }
 }
-.hero .wrap {
-  position: relative;
-  z-index: 2;
-  padding: var(--sp-4);
-  box-sizing: border-box;
+/* Mobile: text block on opaque panel */
+@media (max-width: 768px) {
+  .hero .wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: rgba(4, 9, 11, 0.9);
+    padding: var(--sp-4);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+/* Desktop: text over gradient scrim */
+@media (min-width: 768px) {
+  .hero .wrap {
+    position: relative;
+    z-index: 2;
+    padding: var(--sp-4);
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+  }
 }
 .hero-bg {
   position: absolute;
@@ -172,13 +193,6 @@ a:focus-visible, button:focus-visible {
   background-size: cover;
   background-position: center 30%;
   filter: saturate(0.6);
-}
-.hero .wrap {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 48px;
-  align-items: center;
 }
 
 /* Hero copy */
@@ -1031,3 +1045,4 @@ section.band {
 /* OFF/LITE tiers: no glitch, no rain */
 html:not([data-fx="full"]) .os-glitch::before,
 html:not([data-fx="full"]) .os-glitch::after { content: none; }
+/* test-change */
