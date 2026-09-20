@@ -2,6 +2,8 @@
  * Loading state UI component.
  */
 
+import { escapeHtml } from '../../utils/sanitize.js';
+
 const SKELETONS = {
   dashboard: `
     <div class="skeleton-loader" aria-busy="true" aria-label="Loading dashboard">
@@ -60,7 +62,7 @@ export function showViewError(container, message, onRetry) {
   container.innerHTML = `
     <div class="error-card page-content" role="alert">
       <h2>Something went wrong</h2>
-      <p>${message}</p>
+      <p>${escapeHtml(String(message ?? ''))}</p>
       ${onRetry ? `<button class="btn btn-primary" id="retry-btn">Try again</button>` : ''}
     </div>`;
   

@@ -144,11 +144,16 @@ export function startSession(userId) {
 
 export function touchSession() {
   if (typeof sessionStorage === 'undefined') return;
-  const raw = sessionStorage.getItem(SESSION_KEY);
-  if (!raw) return;
-  const session = JSON.parse(raw);
-  session.lastActive = Date.now();
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return;
+    const session = JSON.parse(raw);
+    session.lastActive = Date.now();
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } catch {
+    // Corrupt session data — clear it so the next gate re-authenticates.
+    clearSession();
+  }
 }
 
 export function clearSession() {
