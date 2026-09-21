@@ -1558,6 +1558,93 @@ body {
   z-index: 100;
 }
 
+/* Mobile shell: header one row <=56px */
+@media (max-width: 768px) {
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    height: 56px;
+    min-height: 56px;
+    padding: var(--sp-2) var(--sp-3);
+    overflow: hidden;
+  }
+
+  .app-header .tagline {
+    display: none;
+  }
+
+  .app-header h1 {
+    font-size: 1rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-header .os-shell-status {
+    margin-left: auto;
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 2px;
+    background: var(--panel-2);
+    border: 1px solid var(--panel-border);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* Tab bar */
+  .os-tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--panel);
+    border-top: 1px solid var(--panel-border);
+    display: flex;
+    align-items: stretch;
+    z-index: 100;
+  }
+
+  .os-tab-bar .os-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px 0;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    min-height: 44px;
+  }
+
+  .os-tab-bar .os-tab[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .os-tab-bar .os-tab .os-tab-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .os-tab-bar .os-tab .os-tab-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Body padding for tab bar */
+  body {
+    padding-bottom: 56px;
+  }
+}
+
 /* ============================================================
    PyKnowledge OS — lesson viewer T5 additions (tokens only)
    ============================================================ */

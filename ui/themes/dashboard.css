@@ -519,6 +519,14 @@
   border: 1px solid var(--line);
   border-radius: 1px;
   background: transparent;
+  display: block;
+}
+a.dash-memmap-cell {
+  cursor: pointer;
+  text-decoration: none;
+}
+a.dash-memmap-cell:hover {
+  opacity: 0.8;
 }
 .dash-memmap-cell.is-done {
   background: var(--ok);
@@ -615,4 +623,18 @@
   font-weight: 600;
   border: 1px dashed var(--ok);
   border-radius: var(--radius);
+}
+
+/* ---- Module card connectors ---- */
+.dash-card-connector {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 2px;
+  height: 12px;
+  background: var(--panel-border);
+  transform: translateX(-50%);
+}
+.dash-card:first-child .dash-card-connector {
+  display: none;
 }

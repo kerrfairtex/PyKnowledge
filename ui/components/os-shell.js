@@ -5,6 +5,7 @@
 import { commands } from './command-registry.js';
 import { writeFxOverride } from './fx-detector.js';
 import { escapeHtml } from '../../utils/sanitize.js';
+import { initTabBar } from './navbar.js';
 
 const THEME_KEY = 'pk-theme';
 let paletteEl = null;
@@ -64,17 +65,26 @@ function renderTabBar() {
     bar.setAttribute('aria-label', 'App sections');
     document.body.appendChild(bar);
   }
+  // Initialize tab bar click handler
+  if (typeof initTabBar === 'function') initTabBar();
+
   const route = routeLabel();
   const tabs = [
     { id: 'dashboard', label: 'HOME', href: '#/dashboard' },
     { id: 'dashboard', label: 'MISSIONS', href: '#/dashboard' },
     { id: 'progress', label: 'PROGRESS', href: '#/progress' },
     { id: 'library', label: 'LIB', href: '#/library' },
-    { id: 'you', label: 'YOU', href: '#/about' }
+    { id: 'you', label: 'YOU', action: 'open-sheet' }
   ];
   bar.innerHTML = tabs.map((t) => {
     const active = route.startsWith(t.id);
-    return `<a href="${t.href}" class="os-tab ${active ? 'is-active' : ''}" ${active ? 'aria-current="page"' : ''}>${t.label}</a>`;
+    const attrs = t.action
+      ? `data-action="${t.action}"`
+      : `data-route="${t.href}"`;
+    return `<button type="button" class="os-tab ${active ? 'is-active' : ''}" ${attrs} ${active ? 'aria-current="page"' : ''}>
+      <span class="os-tab-icon" aria-hidden="true">${t.id === 'dashboard' ? '⌂' : t.id === 'progress' ? '◈' : t.id === 'library' ? '▤' : '◉'}</span>
+      <span class="os-tab-label">${t.label}</span>
+    </button>`;
   }).join('');
 }
 

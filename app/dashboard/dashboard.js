@@ -143,13 +143,15 @@ function memoryMapHtml(modules, progress) {
       if (completed.has(l.id)) {
         state = 'done';
       } else if (!currentFound && modDone !== null) {
-        // first incomplete lesson of the first module whose prereq chain is
-        // walkable — approximate "current" as first incomplete overall,
-        // which matches the sequential unlock model
         state = 'current';
         currentFound = true;
       }
-      cells.push(`<span class="dash-memmap-cell is-${state}" title="${escapeHtml(l.id)}"></span>`);
+      // Unlocked cells link to their lesson
+      if (state === 'done' || state === 'current') {
+        cells.push(`<a class="dash-memmap-cell is-${state}" href="#/lesson/${encodeURIComponent(l.id)}" title="${escapeHtml(l.id)}" aria-label="Lesson ${escapeHtml(l.id)}"></a>`);
+      } else {
+        cells.push(`<span class="dash-memmap-cell is-${state}" title="${escapeHtml(l.id)}" aria-disabled="true"></span>`);
+      }
     }
   }
   return cells.join('');
@@ -315,8 +317,11 @@ async function moduleCardHtml(module, lessonsData, progress, icon) {
     action = `<a class="dash-card-btn" href="#/module/${encodeURIComponent(module.id)}">${label}</a>`;
   }
 
+  const lockedAttr = state === 'locked' ? ' aria-disabled="true"' : '';
+  const connector = state === 'locked' ? '' : '<div class="dash-card-connector" aria-hidden="true"></div>';
   return `
-    <li class="dash-card dash-card--${state}">
+    <li class="dash-card dash-card--${state}"${lockedAttr}>
+      ${connector}
       <div class="dash-card-icon" aria-hidden="true">${icon}</div>
       <div class="dash-card-body">
         <div class="dash-card-title-row">

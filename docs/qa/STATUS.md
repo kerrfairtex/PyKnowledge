@@ -176,3 +176,41 @@ No work done on toast this session.
 - Attempts 1-6: 0.20.3
 - Attempts 7-10: **0.20.4** PASS
 - Commit: cb880d5
+
+## TASK 2b: Auth Follow-up (011e236)
+
+### Item 1: Keyboard-open layout — PASS
+- 390x450: NEXT bottom=337 < 450 PASS
+- 360x360: NEXT bottom=337 < 360 PASS
+
+### Item 2: Rendered text — PASS
+- Picker rows: "uid=1001 Test User", "uid=1002 Smoke Test"
+- Matches /^uid=\d{4}\b/ PASS
+- No "100n" or "${" on auth screens PASS
+- uid derived from stored id (not index) PASS
+
+### Item 3: Wrong PIN — PASS
+- Message: "ACCESS DENIED" (no attempt count)
+- storage/auth.js has NO attempt-limiting logic PASS
+
+### Item 4: pk:rain — PASS
+- Listener in matrix-rain.js:222 PASS
+- Burst 600ms, ignored when data-fx=off PASS
+
+### Item 5: Full test suite — PASS
+- Unit: 87/87 PASS
+- Playwright: 17/17 PASS
+- Wired as `npm run test:playwright` PASS
+
+### Item 6: Base state visible — PASS
+- .page-enter: opacity:0 removed PASS
+- .stagger-children > .animate-item: opacity:0 removed PASS
+- No opacity:0/visibility:hidden/display:none outside keyframes PASS
+
+### Item 7: Housekeeping — PASS
+- Opacity smoke: 28/28 PASS (9 routes x 2 profiles x reducedMotion)
+- Rain lite->off: >40ms threshold PASS
+- FCP rain on/off: 964/944ms (delta 20ms) PASS
+- loadEventEnd rain on/off: 1011/994ms (delta 17ms) PASS
+
+### Toast — NOT DONE

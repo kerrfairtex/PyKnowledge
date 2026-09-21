@@ -16,6 +16,8 @@ function isActive(route, path) {
   return route === path || route.startsWith(`${path}/`);
 }
 
+let tabBarInitialized = false;
+
 export function renderNavbar(container) {
   if (!container) return;
 
@@ -23,6 +25,12 @@ export function renderNavbar(container) {
   const user = getActiveUser();
   const isRealUser = user && !user.isGuest;
   const isGuest = user && user.isGuest;
+
+  if (!tabBarInitialized) {
+    initTabBar();
+    initStatusPill();
+    tabBarInitialized = true;
+  }
 
   // Real user: avatar dropdown trigger (LearnHouse pattern)
   // Guest: plain "Guest" pill + sign out
@@ -139,3 +147,59 @@ export function updateNavbarActiveState() {
   const container = document.getElementById('main-nav');
   if (container) renderNavbar(container);
 }
+
+// Tab bar navigation
+export function initTabBar() {
+  const tabBar = document.getElementById('osTabBar');
+  if (!tabBar) return;
+
+  tabBar.addEventListener('click', (e) => {
+    const tab = e.target.closest('.os-tab');
+    if (!tab) return;
+
+    const route = tab.getAttribute('data-route');
+    const action = tab.getAttribute('data-action');
+
+    if (route) {
+      window.location.hash = route;
+    } else if (action === 'open-sheet') {
+      const dlg = document.getElementById('user-menu-dialog');
+      if (dlg) {
+        dlg.showModal();
+        const first = dlg.querySelector('[role="menuitem"]');
+        if (first) first.focus();
+      }
+    }
+  });
+}
+
+// Status pill in header
+function initStatusPill() {
+  const header = document.querySelector('.app-header');
+  if (!header) return;
+
+  // Don't add if already exists
+  if (document.getElementById('osShellStatus')) return;
+
+  const pill = document.createElement('span');
+  pill.className = 'os-shell-status';
+  pill.id = 'osShellStatus';
+  pill.textContent = 'OFFLINE';
+  header.appendChild(pill);
+
+  function updatePill() {
+    const offlineEl = document.getElementById('offlineIndicator');
+    const syncEl = document.getElementById('syncStatus');
+    if (offlineEl && !offlineEl.hidden) {
+      pill.textContent = 'OFFLINE';
+      pill.style.color = 'var(--warn, #f59e0b)';
+    } else if (syncEl) {
+      pill.textContent = syncEl.textContent.trim().toUpperCase();
+    }
+  }
+
+  setInterval(updatePill, 1000);
+  updatePill();
+}
+
+
