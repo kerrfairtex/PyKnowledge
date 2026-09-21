@@ -248,9 +248,7 @@ function renderPinEntry(main, userId, onAuthenticated) {
       onAuthenticated();
     } catch (err) {
       attemptsLeft = Math.max(0, attemptsLeft - 1);
-      errorEl.textContent = attemptsLeft > 0
-        ? `ACCESS DENIED — ${err.message} (${attemptsLeft} left)`
-        : `ACCESS DENIED — ${err.message}`;
+      errorEl.textContent = `ACCESS DENIED — ${err.message}`;
       errorEl.hidden = false;
       pinInput.value = '';
       renderDots();

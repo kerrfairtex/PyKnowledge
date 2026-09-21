@@ -28,7 +28,8 @@
     "validate:content": "node scripts/validate-content.js",
     "check:version": "node scripts/check-version.js",
     "package": "node scripts/package.js",
-    "prepare": "git config core.hooksPath .githooks"
+    "prepare": "git config core.hooksPath .githooks",
+    "test:playwright": "node tests/auth-playwright.mjs"
   },
   "keywords": [
     "offline",

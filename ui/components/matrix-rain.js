@@ -93,7 +93,7 @@ function frame(t) {
     drawTimes[drawIdx++ % 60] = interval;
     if (drawIdx >= 60 && drawIdx % 60 === 0) {
       let sum = 0; for (let i = 0; i < 60; i++) sum += drawTimes[i];
-      if (sum / 60 > 24) {
+      if (sum / 60 > 40) {
         // Session-only drop: never write to pyknowledge_fx (user choice wins).
         if (tier === 'full') { tier = 'lite'; applyState(); }
         else if (tier === 'lite') { tier = 'off'; applyState(); }

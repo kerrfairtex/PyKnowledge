@@ -6,7 +6,7 @@
 }
 
 .page-enter {
-  opacity: 0;
+  /* visible by default - animation enhances, never hides */
   transform: translateY(12px);
 }
 
