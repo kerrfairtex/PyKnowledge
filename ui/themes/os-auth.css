@@ -77,6 +77,7 @@
 }
 .os-key {
   padding: var(--sp-3) 0;
+  min-height: 44px;
   font-family: var(--font-mono);
   font-size: 1.125rem;
   font-weight: 700;
@@ -86,6 +87,10 @@
   border-radius: var(--radius);
   cursor: pointer;
   transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.os-key:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 .os-key:hover {
   background: var(--panel);

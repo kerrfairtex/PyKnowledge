@@ -145,3 +145,34 @@
 - Hash: 7a4a217
 - Pushed: yes
 - CACHE_VERSION: 0.20.3
+
+## Session L (cb880d5)
+
+### Item 1: Hero Rain + Photo Visibility — PASS
+
+| Check | Status |
+|-------|--------|
+| (a) Mean abs diff A vs B at 360x800 | 7.79/255 PASS (>= 2) |
+| (a) Mean abs diff A vs B at 390x844 | 7.84/255 PASS (>= 2) |
+| (b) Std dev of luminance at 360x800 | 31.41 PASS (>= 5) |
+| (b) Std dev of luminance at 390x844 | 30.14 PASS (>= 5) |
+| Dim text contrast (worst case, alpha .9 over white) | 4.55:1 PASS (>= 4.5) |
+| Screenshots | docs/qa/hero-rain-360x800-A.png, docs/qa/hero-rain-360x800-B.png, docs/qa/hero-rain-360x800-diff.png, docs/qa/hero-rain-390x844-A.png, docs/qa/hero-rain-390x844-B.png, docs/qa/hero-rain-390x844-diff.png |
+
+Changes:
+- .hero-bg background: transparent
+- .hero-photo layer at opacity 0.3
+- Rain canvas z-index: 1 (above photo, below wrap)
+- --rain-alpha: 1.0
+- lite alphaMul: 0.9
+- MutationObserver for data-fx changes
+
+### Item 2: Toast — NOT DONE
+
+No work done on toast this session.
+
+### Live CACHE_VERSION
+- Polled 10 times over ~5 min
+- Attempts 1-6: 0.20.3
+- Attempts 7-10: **0.20.4** PASS
+- Commit: cb880d5
