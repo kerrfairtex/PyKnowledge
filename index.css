@@ -157,9 +157,10 @@ a:focus-visible, button:focus-visible {
 /* Mobile: text block on opaque panel, photo + rain visible above/below */
 @media (max-width: 768px) {
   .hero .wrap {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 2;
-    background: rgba(4, 9, 11, 0.9);
+    background: rgb(4, 9, 11);
     padding: var(--sp-4);
     box-sizing: border-box;
   }
@@ -186,6 +187,12 @@ a:focus-visible, button:focus-visible {
   background-size: cover;
   background-position: center 30%;
   filter: saturate(0.6);
+}
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgb(4, 9, 11);
 }
 
 /* Hero copy */

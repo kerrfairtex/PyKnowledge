@@ -1,8 +1,8 @@
 {
-  "version": "0.20.0",
+  "version": "0.20.1",
   "hashes": {
     "/": "__dir__",
-    "/index.html": "a3f8b89a034e",
+    "/index.html": "718b3e817192",
     "/privacy.html": "075e4fdbfacf",
     "/manifest.json": "a5c796258c49",
     "/core/engine.js": "a0b6540ad22c",
@@ -48,7 +48,7 @@
     "/lib/python-executor.js": "108f49b05105",
     "/lib/skulpt.min.js": "1a319d8eedf3",
     "/lib/skulpt-stdlib.js": "e3ecccbc17c6",
-    "/index.css": "28671ef4ee8d",
+    "/index.css": "62ea10cf8574",
     "/api-config.js": "5a24d2987bcd",
     "/progress-bar.js": "02a12ec1565e",
     "/ui/themes/tokens.css": "615411dc80b5",
@@ -66,7 +66,7 @@
     "/content/lessons.json": "02c152989971",
     "/content/quizzes.json": "73b21e2ad149",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "2e34645c66a4",
+    "/core/sw-version.js": "ab0f9b441d7d",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",
