@@ -1,8 +1,8 @@
 {
-  "version": "0.20.1",
+  "version": "0.20.2",
   "hashes": {
     "/": "__dir__",
-    "/index.html": "718b3e817192",
+    "/index.html": "663403a903ac",
     "/privacy.html": "075e4fdbfacf",
     "/manifest.json": "a5c796258c49",
     "/core/engine.js": "a0b6540ad22c",
@@ -29,7 +29,7 @@
     "/utils/sanitize.js": "75cbb3622174",
     "/utils/schema.js": "d10e10b9fedf",
     "/utils/crypto.js": "6a7b60efa2a9",
-    "/ui/themes/default.css": "b3178253f8c3",
+    "/ui/themes/default.css": "08bbd3867341",
     "/ui/themes/animations.css": "a1370f307717",
     "/ui/themes/dashboard.css": "6224d94ddd8a",
     "/ui/themes/library.css": "5db99f25db2f",
@@ -66,7 +66,7 @@
     "/content/lessons.json": "02c152989971",
     "/content/quizzes.json": "73b21e2ad149",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "ab0f9b441d7d",
+    "/core/sw-version.js": "80455e3754a9",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",

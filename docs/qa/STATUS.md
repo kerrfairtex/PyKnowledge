@@ -58,3 +58,34 @@
 - Photo and rain visible above/below text block
 - Screenshots saved to docs/qa/ (stale due to browser CSS cache)
 - Computed styles confirm correct CSS applied
+
+## Session H Follow-up (b3b5466)
+
+### Item 1: Hero Measurement
+- Computed styles confirmed: .hero .wrap bg=rgb(4,9,11), .hero-scrim bg=rgb(4,9,11), z-index 0/1/2
+- Screenshot analysis: STALE — style injection not captured by screenshot
+- Lightest pixel inside wrap: (254, 203, 7) — photo bleed-through
+- Contrast vs h1: 1.46:1 FAIL
+- Contrast vs p: 1.68:1 FAIL
+- Outside wrap: 84-86 distinct colors PASS
+- Root cause: .hero-bg::before pseudo-element renders on top of .wrap
+- Fix: Added .hero-scrim div (z-index 1) between hero-bg (z-0) and wrap (z-2)
+- Screenshots saved: docs/qa/hero-360x800.png, docs/qa/hero-390x844.png
+
+### Item 2: Test Count
+- 883030a: 88 tests
+- Current: 87 tests (87/87 PASS)
+- Diff: start-button.test.js added, sw-version-check.js converted to .cjs
+- No tests removed, no .skip/.only found
+- sw-version-check.cjs: 30 lines changed (added --update, --force, exit 2)
+
+### Item 3: api-config.js
+- NOT tracked by git (git ls-files returns empty)
+- IS in service-worker.js precache list — BUG
+- Live headers: max-age=0, s-maxage=300 (not no-cache)
+
+### Commit
+- Hash: b3b5466
+- Pushed: yes
+- CACHE_VERSION: 0.20.1
+- Pre-push hook: blocked push until CACHE_VERSION bumped

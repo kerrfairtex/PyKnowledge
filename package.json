@@ -27,7 +27,8 @@
     "lint": "eslint .",
     "validate:content": "node scripts/validate-content.js",
     "check:version": "node scripts/check-version.js",
-    "package": "node scripts/package.js"
+    "package": "node scripts/package.js",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "keywords": [
     "offline",

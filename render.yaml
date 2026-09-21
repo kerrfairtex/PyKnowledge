@@ -17,7 +17,7 @@ services:
     repo: https://github.com/kerrfairtex/PyKnowledge
     branch: main
     autoDeploy: true
-    buildCommand: node scripts/render-build.js
+    buildCommand: node scripts/render-build.js && node tests/sw-version-check.cjs
     publishPath: .
     envVars:
       - key: API_URL

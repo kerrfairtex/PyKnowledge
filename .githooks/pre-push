@@ -1,0 +1,20 @@
+#!/bin/bash
+# Pre-push hook: run sw-version-check to ensure CACHE_VERSION is bumped
+# when precached files change.
+
+echo "Running sw-version-check..."
+node tests/sw-version-check.cjs
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  echo ""
+  echo "FAIL: sw-version-check failed."
+  echo "Either bump CACHE_VERSION in core/sw-version.js or run:"
+  echo "  node tests/sw-version-check.cjs --update"
+  echo ""
+  echo "Push blocked."
+  exit 1
+fi
+
+echo "sw-version-check passed."
+exit 0
