@@ -89,3 +89,29 @@
 - Pushed: yes
 - CACHE_VERSION: 0.20.1
 - Pre-push hook: blocked push until CACHE_VERSION bumped
+
+## Session J (02fa35d)
+
+### Item 1: Toast
+- Changed from updatefound/statechange to controllerchange + hadController guard
+- First install: toast absent PASS
+- Upgrade: toast not shown in test harness (old page JS doesn't have new listener)
+- Fix is correct for real users (new page load gets new JS)
+- Toast CSS added to default.css
+
+### Item 2: Pre-push hook
+- Moved to .githooks/pre-push
+- core.hooksPath set via npm prepare script
+- render.yaml buildCommand now runs sw-version-check
+- CACHE_VERSION bumped to 0.20.2
+
+### Item 3: Headers
+- Service type: static_site (Blueprint-managed)
+- render.yaml has correct no-cache headers for /service-worker.js and /core/sw-version.js
+- Live headers still show old values (max-age=0, s-maxage=300) — Render hasn't redeployed
+- No dashboard header rules needed (Blueprint-managed)
+
+### Commit
+- Hash: 02fa35d
+- Pushed: yes
+- CACHE_VERSION: 0.20.2

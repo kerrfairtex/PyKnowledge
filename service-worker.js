@@ -56,7 +56,6 @@ const STATIC_ASSETS = [
   '/lib/skulpt.min.js',
   '/lib/skulpt-stdlib.js',
   '/index.css',
-  '/api-config.js',
   '/progress-bar.js',
   '/ui/themes/tokens.css',
   '/ui/themes/os-shell.css',
