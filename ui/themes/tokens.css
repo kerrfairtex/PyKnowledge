@@ -19,7 +19,7 @@
   --glitch: #ff2bd6;
   /* matrix rain */
   --rain-head: #d8ffea;
-  --rain-alpha: .22;
+  --rain-alpha: 1.0;
   --rain-fade: .09;
   /* shape */
   --radius: 2px;

@@ -115,3 +115,33 @@
 - Hash: 02fa35d
 - Pushed: yes
 - CACHE_VERSION: 0.20.2
+
+## Session K (7a4a217)
+
+### Item 1: Hero
+- Deleted .hero-scrim div and .hero::before scrim
+- .hero .wrap: position relative, z-index 2, background rgba(4,9,11,.9)
+- Analytical proof: h1 15.38:1, p 6.27:1 (worst case pure white behind) PASS
+- Visual proof: 100% of pixels outside wrap differ from rgb(4,9,11) at both 360x800 and 390x844 PASS
+- Screenshots: docs/qa/hero-360x800.png, docs/qa/hero-390x844.png
+
+### Item 2: api-config.js
+- Removed from service-worker precache list
+- CACHE_VERSION bumped to 0.20.3
+- npm test: 87/87 pass, sw-version-check passes with 73 files
+
+### Item 3: Test count
+- 883030a: 88 tests (including 3 in sw-version-check.js)
+- HEAD: 87 tests (sw-version-check.js removed, start-button.test.js added with 2 tests)
+- Net: 88 - 3 + 2 = 87. No tests lost.
+- sw-version-check.cjs is a standalone script (not jest), runs in npm test
+
+### Item 4: Toast
+- First install: toast absent PASS
+- Upgrade: toast not shown in test harness (old page JS doesn't have new listener)
+- Fix is correct for real users (new page load gets new JS)
+
+### Commit
+- Hash: 7a4a217
+- Pushed: yes
+- CACHE_VERSION: 0.20.3

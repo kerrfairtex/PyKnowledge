@@ -170,10 +170,16 @@ a:focus-visible, button:focus-visible {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: linear-gradient(180deg, rgba(8,24,43,0.55) 0%, rgba(8,24,43,0.82) 60%, var(--bg) 100%),
-                     url('ui/assets/place/banner-flag-raising.jpg');
+  background: transparent;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('ui/assets/place/banner-flag-raising.jpg');
   background-size: cover;
   background-position: center 30%;
+  opacity: 0.3;
   filter: saturate(0.6);
 }
 

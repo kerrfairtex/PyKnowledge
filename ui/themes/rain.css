@@ -4,10 +4,10 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 1;
   pointer-events: none;
   background: var(--bg);
-  opacity: var(--rain-alpha, 0.22);
+  opacity: var(--rain-alpha, 0.35);
   transition: opacity 480ms cubic-bezier(.2, .8, .2, 1);
 }
 

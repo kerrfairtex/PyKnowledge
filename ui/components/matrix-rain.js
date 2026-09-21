@@ -11,7 +11,7 @@ const PY_TOKENS = ['def','class','for','in','if','else','while','return','import
 // Route modes by hash prefix (spec section 8). Plain config object.
 const ROUTE_MODES = { '#/lesson': 'dim', '#/quiz': 'dim', '#/progress': 'dim', '#/library': 'dim', '#/about': 'dim' };
 const DEFAULT_MODE = 'full';
-const TIERS = { lite: { cell: 20, scale: 0.5, alphaMul: 0.6 }, full: { cell: 16, scale: 1, alphaMul: 1 } };
+const TIERS = { lite: { cell: 20, scale: 0.5, alphaMul: 0.9 }, full: { cell: 16, scale: 1, alphaMul: 1 } };
 const MODES = { full: { fps: 20, mul: 1 }, dim: { fps: 8, mul: 0.35 } };
 
 let canvas = null, ctx = null;
@@ -237,3 +237,12 @@ window.addEventListener('resize', () => {
     if (tier !== 'off' && mode !== 'off' && !document.hidden) { layout(); startLoop(); }
   }, 200);
 });
+
+// Watch for data-fx changes (palette toggle)
+const fxObs = new MutationObserver(() => {
+  const fx = document.documentElement.dataset.fx || 'full';
+  if (fx === 'off') setRainTier('off');
+  else if (fx === 'lite') setRainTier('lite');
+  else setRainTier('full');
+});
+fxObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-fx'] });
