@@ -1,5 +1,5 @@
 {
-  "version": "0.20.8",
+  "version": "0.20.9",
   "hashes": {
     "/": "__dir__",
     "/index.html": "cb1d1b708302",
@@ -53,7 +53,7 @@
     "/ui/themes/tokens.css": "8e055d29fda1",
     "/ui/themes/os-shell.css": "bfd21c5835a6",
     "/ui/themes/os-auth.css": "33b14f58249a",
-    "/ui/themes/rain.css": "3f2204798de4",
+    "/ui/themes/rain.css": "5355edd3644d",
     "/ui/components/matrix-rain.js": "ce329cc7f4a9",
     "/ui/components/fx-detector.js": "ad38b5b3ff24",
     "/ui/components/command-registry.js": "e3e52d3e4108",
@@ -65,7 +65,7 @@
     "/content/lessons.json": "02c152989971",
     "/content/quizzes.json": "73b21e2ad149",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "ff0b7efc9972",
+    "/core/sw-version.js": "2b195c76394e",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",

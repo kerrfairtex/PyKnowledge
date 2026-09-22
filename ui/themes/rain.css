@@ -1,24 +1,40 @@
 /* Matrix rain canvas — rules only. Colors/alpha come from tokens. */
+/* Rain is BACKGROUND-ONLY: canvas sits at z-index 0, transparent CSS bg,
+   and every content root is stacked above it. The canvas pixel buffer still
+   fills with --bg each frame (trail fade), so it must never be above content. */
 #rainCanvas {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
-  background: var(--bg);
+  background: transparent;
   opacity: var(--rain-alpha, 0.35);
   transition: opacity 480ms cubic-bezier(.2, .8, .2, 1);
+}
+
+/* Content roots must paint above the rain canvas (z-index 0).
+   z-index only applies to positioned elements. */
+#app,
+#landing-root,
+#spa-root,
+#osStatusBar {
+  position: relative;
+  z-index: 1;
+}
+
+/* Overlays stay above content */
+#offlineIndicator,
+#cacheProgress {
+  position: fixed;
+  z-index: 90;
 }
 
 /* Text surfaces sit on opaque panels — rain never behind prose directly */
 #main-content {
   background: var(--panel);
   opacity: 1;
-}
-@media (max-width: 720px) {
-  #main-content { background: transparent; }
-  #app { background: var(--panel); }
 }
 
 /* [FX] toggle in the status bar */

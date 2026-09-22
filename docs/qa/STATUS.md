@@ -214,3 +214,69 @@ No work done on toast this session.
 - loadEventEnd rain on/off: 1011/994ms (delta 17ms) PASS
 
 ### Toast — NOT DONE
+
+## TASK 3: Shell + Dashboard (cb15a1b)
+
+### Item 0: Reconcile
+
+**a. Load time:**
+- Previous harness (Session H): 153ms/170ms offline SW-controlled — measured only the document load without SW install overhead
+- Current: ~1000ms (FCP ~950ms) — includes SW activation + full app init
+- Biggest precached files: skulpt (966KB lazy), images (332KB), CSS (67KB), fonts (43KB)
+- Render-blocking CSS/JS: os-shell.css, index.css, app.css (all in <head>)
+
+**b. Smoke test:** 36/36 PASS (9 routes x 2 profiles x 2 reducedMotion)
+- Routes: landing, login, #/dashboard, #/module/module-1, #/lesson/lesson-1-1, #/quiz/quiz-1, #/progress, #/library, #/about
+
+**c. Entrance animations:** `fadeSlideIn` uses `animation-fill-mode: backwards` — no flash
+
+**d. pk:rain reduced motion:** MutationObserver on `html[data-fx]` pauses rain loop
+
+### Item 1: Discovery — PASS
+- dashboard.js: renderDashboard, moduleCardHtml, memoryMapHtml, primaryContinueButton, pickTrivia, prereqNumber, moduleNumber, moduleCompletion, moduleState
+- navbar.js: renderNavbar, updateNavbarActiveState, initTabBar, initStatusPill
+- index.html: #app-header, #syncStatus, #offlineIndicator, #main-content
+- Progress data: getOverallProgress, getModuleProgress, completedLessons, quizScores, unlockedModules
+
+### Item 2: Shell (<=768px) — PASS
+- Header: one row 56px, status pill (#osShellStatus), user@pyknowledge
+- Tab bar: HOME, MISSIONS, PROGRESS, LIB, YOU — each >=44px with aria-current
+- Body padding-bottom: 56px
+- YOU opens existing #user-menu-dialog sheet
+
+### Item 3: Memory Map — PASS
+- 28 cells with done (--ok fill), current (outline + glow pulse at data-fx=full), locked (hatched --warn)
+- role="img", aria-label="N of 28 lessons complete"
+- Unlocked cells link to lesson; locked cells have aria-disabled="true"
+
+### Item 4: Module Cards — PASS
+- Nodes with connectors between cards
+- Chips: [DONE] [OPEN] [LOCKED: finish M{n}]
+- Locked: aria-disabled with visible reason text
+- Stats: value+unit split (e.g. "9 MOD", "0 KB NET", "<500ms"), tabular-nums
+- Tip as "$ fortune"
+
+### Item 5: Tests — PASS
+- Playwright 360x640 + 390x844: header one row, tab bar reaches all destinations, YOU -> sheet -> Sign out, 28 cells, START above fold, 0 console errors
+- npm test: 87/87 unit tests
+- npm run test:playwright: 17/17 Playwright tests
+
+### Item 6: Housekeeping — NOT DONE
+- Toast stays NOT DONE
+
+### Screenshots
+- docs/qa/shell-dashboard-390.png
+- docs/qa/shell-progress-390.png
+- docs/qa/shell-library-390.png
+- docs/qa/shell-sheet-390.png
+
+### Files Changed
+- index.html: tab bar added, static tab bar removed
+- ui/components/navbar.js: initTabBar + initStatusPill
+- ui/components/os-shell.js: renderTabBar updated with buttons + data attributes
+- app/dashboard/dashboard.js: unlocked cells link to lessons, connectors + aria-disabled
+- ui/themes/default.css: mobile shell styles (header, tab bar, body padding)
+- ui/themes/dashboard.css: linked cell styles, connector styles
+- core/sw-version.js: 0.20.8
+- service-worker.js: precache updated
+- tests/sw-version-check.cjs: baseline updated
