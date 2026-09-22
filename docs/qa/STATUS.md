@@ -280,3 +280,27 @@ No work done on toast this session.
 - core/sw-version.js: 0.20.8
 - service-worker.js: precache updated
 - tests/sw-version-check.cjs: baseline updated
+
+## Rain Blocking Content — User-Reported Bug Fix (1c8693b)
+
+**Complaint:** "because of the rain hacker style I cant see the content of the dashboards and landing page but if I turn it off it will reveal the content"
+
+**Root cause (computed styles + elementFromPoint):**
+- #rainCanvas: position:fixed, z-index:1, background:rgb(8,24,43) OPAQUE, opacity 1.0
+- #app / #landing-root / #spa-root: position:static, z-index:auto → painted BELOW canvas
+- Canvas pixel buffer fills with --bg each frame (trail fade) → solid wall
+- applyState() 'off' → canvas opacity 0 → content revealed (matches complaint exactly)
+
+**Fix (ui/themes/rain.css):**
+- Canvas: z-index 0, background transparent
+- Content roots: position:relative, z-index 1
+- Overlays (#offlineIndicator, #cacheProgress): fixed z-index 90
+
+**Proof:**
+- Landing RAIN ON: elementFromPoint at h1 → SPAN.hl (text on top) PASS
+- Dashboard RAIN ON: 9 cards, elementAtCard → card element PASS
+- Pixel: 97.6% card-panel pixels with rain ON; 13.1% differ ON vs OFF (rain visible) PASS
+- Shell regression: all PASS, 0 console errors
+- Screenshots: docs/qa/rainfix-*.png
+
+**CACHE_VERSION:** 0.20.9 | npm test 87/87 PASS
