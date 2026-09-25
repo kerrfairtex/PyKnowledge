@@ -47,7 +47,7 @@
       "name": "pyknowledge-client",
       "repo": "https://github.com/kerrfairtex/PyKnowledge",
       "branch": "main",
-      "buildCommand": "npm run build",
+      "buildCommand": "node scripts/render-build.js && node scripts/build-user-guidelines.js && node tests/sw-version-check.cjs",
       "publishPath": ".",
       "envVars": [
         {

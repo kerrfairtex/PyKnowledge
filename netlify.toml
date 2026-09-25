@@ -3,6 +3,16 @@
   functions = "netlify/functions"
 
 [[redirects]]
+  from = "/user-guidelines"
+  to = "/user-guidelines/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/user-guidelines/*"
+  to = "/user-guidelines/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
@@ -16,3 +26,8 @@
   for = "/manifest.json"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/user-guidelines/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

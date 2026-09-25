@@ -29,7 +29,8 @@
     "check:version": "node scripts/check-version.js",
     "package": "node scripts/package.js",
     "prepare": "git config core.hooksPath .githooks",
-    "test:playwright": "node tests/auth-playwright.mjs"
+    "test:playwright": "node tests/auth-playwright.mjs",
+    "build:docs": "node scripts/build-user-guidelines.js"
   },
   "keywords": [
     "offline",
@@ -45,7 +46,8 @@
     "eslint": "^10.8.1",
     "globals": "^17.9.0",
     "jest": "^30.4.2",
-    "jest-environment-jsdom": "^29.7.0"
+    "jest-environment-jsdom": "^29.7.0",
+    "marked": "^18.0.14"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1"

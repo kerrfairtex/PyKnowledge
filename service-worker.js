@@ -80,7 +80,8 @@ const STATIC_ASSETS = [
   '/ui/assets/logo.png',
   '/ui/assets/place/academic-building.jpg',
   '/ui/assets/place/island-aerial-view.jpg',
-  '/ui/assets/place/street-festival-buntings.jpg'
+  '/ui/assets/place/street-festival-buntings.jpg',
+  '/user-guidelines/index.html'
 ];
 
 self.addEventListener('install', (event) => {

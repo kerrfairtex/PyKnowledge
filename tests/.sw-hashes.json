@@ -1,8 +1,8 @@
 {
-  "version": "0.20.9",
+  "version": "0.21.0",
   "hashes": {
     "/": "__dir__",
-    "/index.html": "cb1d1b708302",
+    "/index.html": "74458c221b75",
     "/privacy.html": "075e4fdbfacf",
     "/manifest.json": "a5c796258c49",
     "/core/engine.js": "a0b6540ad22c",
@@ -65,7 +65,7 @@
     "/content/lessons.json": "02c152989971",
     "/content/quizzes.json": "73b21e2ad149",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "2b195c76394e",
+    "/core/sw-version.js": "88cc53b6df8d",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",
@@ -73,6 +73,7 @@
     "/ui/assets/logo.png": "7e9188c53f87",
     "/ui/assets/place/academic-building.jpg": "e1818a58acd3",
     "/ui/assets/place/island-aerial-view.jpg": "effbd5eb9056",
-    "/ui/assets/place/street-festival-buntings.jpg": "0d579e1b3ea3"
+    "/ui/assets/place/street-festival-buntings.jpg": "0d579e1b3ea3",
+    "/user-guidelines/index.html": "2d57f782b592"
   }
 }
