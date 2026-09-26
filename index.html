@@ -690,8 +690,17 @@
       loadEngine().catch(function (err) {
         var loading = document.getElementById('loading');
         if (loading) {
-          loading.innerHTML = '<p style="color:#ff6b6b;padding:10px;">Failed to load the app: ' +
-            (err.message || err) + '</p>';
+          // Module script load failures are DOM Events, not Error objects.
+          // Extract the target URL for actionable diagnostics.
+          var detail = err.message || err;
+          if (err instanceof Event) {
+            var target = err.target;
+            var url = target && target.src ? target.src : 'unknown module URL';
+            var type = target && target.tagName ? target.tagName : 'script';
+            detail = type + ' load failed: ' + url;
+          }
+          loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">' +
+            'Failed to load the app:' + '<br/>' + detail + '</p>';
         }
       });
     }
