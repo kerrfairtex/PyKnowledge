@@ -84,7 +84,6 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
           ? `<span class="badge badge--done" aria-label="Lesson complete">Done</span>`
           : `<span class="badge badge--pending" aria-label="Lesson not yet complete">In progress</span>`
         }
-        <span class="lesson-complete-hint" aria-hidden="true">${lessonComplete ? 'Completed.' : 'Take the quiz above to mark this lesson complete.'}</span>
       </header>
       ${parsed.hasVideo ? `<div id="video-container"></div>` : ''}
       <div class="lesson-content">${sectionsHtml}</div>
@@ -92,14 +91,7 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
         <h3 id="exercises-title">Exercises</h3>
         ${exercisesHtml}
       </section>` : ''}
-      <footer class="lesson-actions">
-        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
-        <div class="lesson-actions-right">
-          ${prevLesson ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>` : ''}
-          <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>
-          ${nextLesson && lessonComplete ? `<a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>` : nextLesson ? `<button type="button" class="btn btn-primary btn-disabled" disabled>Complete this lesson first</button>` : ''}
-        </div>
-      </footer>
+      ${renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson)}
     </article>`;
 
   if (parsed.hasVideo) {
