@@ -4,7 +4,6 @@
 
 import { parseLessonContent } from '../../utils/parser.js';
 import { getProgress } from '../../core/storage.js';
-import quizzesData from '../../content/quizzes.json' with { type: 'json' };
 import { renderVideoPlayer } from '../../ui/components/video-player.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';
@@ -13,7 +12,7 @@ import { createCodeEditor } from '../../ui/components/code-editor.js';
 import { executePython } from '../../lib/python-executor.js';
 import { isAuthenticated, hasProfiles } from '../../storage/auth.js';
 
-export function renderLessonViewer(main, lessonId, lessonsData) {
+export function renderLessonViewer(main, lessonId, lessonsData, quizzesData) {
   let lesson = null;
   let moduleId = null;
 
@@ -45,8 +44,9 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
 
   (lesson.exercises || []).forEach((ex) => { ex.__lessonId = lesson.id; });
 
-  // Resolve the current lesson's quiz title from content/quizzes.json.
-  // Prefer the quiz whose id matches the lesson id (e.g. lesson-9-3 over capstone-final).
+  // Resolve the current lesson's quiz title from quizzesData passed in
+  // by the caller (loaded via core/loader.js). Prefer the quiz whose id
+  // matches the lesson id (e.g. lesson-9-3 over capstone-final).
   const currentQuiz = quizzesData.quizzes.find((q) => q.lessonId === lessonId && q.id === lessonId)
     || quizzesData.quizzes.find((q) => q.lessonId === lessonId);
   const currentQuizTitle = currentQuiz

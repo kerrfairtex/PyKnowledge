@@ -5,9 +5,14 @@
 //
 // Runs under testEnvironment: 'node'. jsdom globals are set up manually.
 import { renderLessonViewer } from '../app/lessons/lesson-viewer.js';
-import lessonsData from '../content/lessons.json' assert { type: 'json' };
-import quizzesData from '../content/quizzes.json' assert { type: 'json' };
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { JSDOM } from 'jsdom';
+
+const { fileURLToPath } = await import('url');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const lessonsData = JSON.parse(readFileSync(join(root, 'content', 'lessons.json'), 'utf8'));
+const quizzesData = JSON.parse(readFileSync(join(root, 'content', 'quizzes.json'), 'utf8'));
 
 // --- jsdom + globals -------------------------------------------------------
 const dom = new JSDOM('<!DOCTYPE html><html><body><div id="main-content"></div></body></html>', { url: 'http://localhost/' });
@@ -75,7 +80,7 @@ function render(lessonId) {
   // is unlocked and its footer is rendered (not a "Lesson Locked" card).
   seedProgress(prevLessonsOf(lessonId));
   const main = document.getElementById('main-content');
-  renderLessonViewer(main, lessonId, lessonsData);
+  renderLessonViewer(main, lessonId, lessonsData, quizzesData);
   return main;
 }
 
