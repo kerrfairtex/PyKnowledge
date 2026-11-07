@@ -156,7 +156,10 @@ async function signUp(page, name, pin) {
   if (!openApp) throw new Error('Open the app link not found on landing');
   await openApp.click();
   await waitForHash(page, '#/login');
-  const createBtn = await page.$('#btn-create-profile') || await page.$('#btn-add-profile');
+  // The SPA engine loads asynchronously (showApp() doesn't await loadEngine()).
+  // Wait for the auth screen's Create Profile button to actually render.
+  const createBtn = await waitEl(page, '#btn-create-profile', 10000)
+    || await waitEl(page, '#btn-add-profile', 10000);
   if (!createBtn) throw new Error('Create/Add Profile button not found');
   await createBtn.click();
   await page.waitForTimeout(500);
@@ -484,20 +487,24 @@ async function negativeCheckLockedLesson(page) {
   await page.evaluate(() => { window.location.hash = '#/dashboard'; });
   await page.waitForTimeout(300);
   await page.evaluate(() => { window.location.hash = '#/lesson/lesson-1-3'; });
-  await page.waitForTimeout(1000);
+  // Wait for the Lesson Locked page to render (router + renderLessonViewer are async).
+  // Wait specifically for the lock page's error card so we don't match stale
+  // dashboard h2s ("Nine modules, in order" / "This course, by the numbers").
+  const errorCard = await waitEl(page, '#main-content .error-card', 10000);
+  if (!errorCard) throw new Error('Lock page error card not found on direct lesson-1-3 navigation');
 
-  const lockedH2 = await page.$('h2');
-  if (!lockedH2) throw new Error('No heading found on direct lesson-1-3 navigation');
+  const lockedH2 = await errorCard.$('h2');
+  if (!lockedH2) throw new Error('No h2 found in lock page error card');
   const h2Text = await lockedH2.innerText();
   if (h2Text !== 'Lesson Locked') {
     throw new Error(`Expected "Lesson Locked", got "${h2Text}"`);
   }
 
-  const lockP = await page.$('.error-card p');
+  const lockP = await errorCard.$('p');
   if (!lockP) throw new Error('Lock page explanation paragraph not found');
   const lockText = await lockP.innerText();
 
-  const backLink = await page.$('a.btn-primary[href="#/module/module-1"]');
+  const backLink = await errorCard.$('a.btn-primary[href="#/module/module-1"]');
   if (!backLink) throw new Error('Back to Module link to #/module/module-1 not found on lock page');
 
   return { h2Text, lockText, backLinkHref: await backLink.getAttribute('href') };
@@ -765,7 +772,9 @@ async function main() {
       const greeting = await waitEl(page, '#dash-greeting', 5000);
       if (!greeting) throw new Error('Negative Student dashboard did not render');
       const greetText = await greeting.innerText();
-      if (!greetText.includes(NEG_NAME)) {
+      // The dashboard greeting shows only the first name ("Good afternoon, Negative")
+      const negFirstName = NEG_NAME.split(' ')[0];
+      if (!greetText.includes(negFirstName)) {
         throw new Error(`Not signed in as Negative Student: ${greetText}`);
       }
 
