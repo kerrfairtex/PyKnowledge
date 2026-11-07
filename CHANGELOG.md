@@ -5,7 +5,7 @@ All notable changes to PyKnowledge are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-11-07
+## [0.9.1] - 2026-11-07
 
 ### Fixed
 - **Next/Continue buttons after lessons and quizzes** — tapping a lesson's quiz now opens that lesson's quiz (not a generic one). Passing a quiz marks that lesson complete and opens the next lesson in the module. At module end, Continue opens the first lesson of the next module. After the capstone, students see "COURSE COMPLETE" and go to the dashboard.
