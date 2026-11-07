@@ -1,0 +1,44 @@
+<footer class="pk-footer">
+  <p>
+    PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi -
+    designed to run fully offline for areas with intermittent signal
+    and limited data. All lessons work without an internet connection
+    once loaded.
+  </p>
+
+  <p style="margin-top:10px;">
+    <span class="sync-status" id="syncStatus">Checking connection…</span>
+  </p>
+
+  <p style="margin-top:14px;">
+    <a href="/privacy.html">Privacy Policy</a>
+  </p>
+
+  <p style="margin-top:14px;">
+    Developed by:<br>
+    &bull; Yusrie Arsad<br>
+    &bull; Alfadzrie Alih<br>
+    &bull; Najib Ilahan<br>
+    &bull; Abukhail Jowak<br>
+    &bull; Ryan Taib
+  </p>
+
+  <p style="margin-top:14px; font-size:0.875em; opacity:0.7;">
+    &copy; 2024 PyKnowledge. Offline-first Python learning platform.
+  </p>
+</footer>
+
+<script>
+  function updateSyncChip() {
+    const el = document.getElementById('syncStatus');
+    if (!el) return;
+    const status = navigator.onLine ? 'is-synced' : 'is-offline';
+    el.classList.remove('is-synced', 'is-offline');
+    el.classList.add(status);
+    el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+  }
+
+  updateSyncChip();
+  window.addEventListener('online', updateSyncChip);
+  window.addEventListener('offline', updateSyncChip);
+</script>

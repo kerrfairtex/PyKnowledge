@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PyKnowledge - Offline Python Learning Platform for TRAC/BARMM/CHED curriculum">
+  <meta name="theme-color" content="#16213e">
+  <meta name="color-scheme" content="dark">
+  <title>PyKnowledge</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="ui/themes/default.css">
+  <link rel="stylesheet" href="ui/themes/animations.css">
+  <link rel="stylesheet" href="ui/themes/dashboard.css">
+  <link rel="stylesheet" href="ui/themes/library.css">
+  <link rel="stylesheet" href="ui/themes/about.css">
+  <script>
+    // Register the service worker as early as possible - independent of the
+    // module app boot - so install/offline detection tools and the browser
+    // see it immediately.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' })
+          .catch(function (err) { console.warn('SW registration failed:', err); });
+      });
+    }
+  </script>
+  <link rel="icon" href="ui/assets/icon-192.png" type="image/png">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="app">
+    <header class="app-header" role="banner">
+      <h1>PyKnowledge</h1>
+      <p class="tagline">Offline Python Learning Platform</p>
+      <nav id="main-nav" aria-label="Main navigation"></nav>
+    </header>
+    <main id="main-content" role="main" tabindex="-1">
+      <div id="loading" class="loading" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <p>Loading PyKnowledge...</p>
+      </div>
+    </main>
+    <footer class="app-footer" role="contentinfo">
+      <p>CHED-aligned curriculum &middot; Works offline after first install</p>
+    </footer>
+  </div>
+
+  <footer class="pk-footer">
+    <p>
+      PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi -
+      designed to run fully offline for areas with intermittent signal
+      and limited data. All lessons work without an internet connection
+      once loaded.
+    </p>
+
+    <p style="margin-top:10px;">
+      <span class="sync-status" id="syncStatus">Checking connection…</span>
+    </p>
+
+    <p style="margin-top:14px;">
+      <a href="/privacy.html">Privacy Policy</a>
+    </p>
+
+    <p style="margin-top:14px;">
+      Developed by:<br>
+      &bull; Yusrie Arsad<br>
+      &bull; Alfadzrie Alih<br>
+      &bull; Najib Ilahan<br>
+      &bull; Abukhail Jowak<br>
+      &bull; Ryan Taib
+    </p>
+
+    <p style="margin-top:14px; font-size:0.875em; opacity:0.7;">
+      &copy; 2024 PyKnowledge. Offline-first Python learning platform.
+    </p>
+  </footer>
+
+  <script>
+    function updateSyncChip() {
+      const el = document.getElementById('syncStatus');
+      if (!el) return;
+      const status = navigator.onLine ? 'is-synced' : 'is-offline';
+      el.classList.remove('is-synced', 'is-offline');
+      el.classList.add(status);
+      el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+    }
+
+    updateSyncChip();
+    window.addEventListener('online', updateSyncChip);
+    window.addEventListener('offline', updateSyncChip);
+  </script>
+
+  <noscript>
+    <div class="noscript-warning">
+      <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
+    </div>
+  </noscript>
+  <script src="api-config.js"></script>
+  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
+  <script>
+    window.addEventListener('error', (e) => {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">JS ERROR:\n' +
+          e.message + '\n' + (e.filename || '') + ':' + e.lineno + '</p>';
+      }
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">PROMISE ERROR:\n' +
+          (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</p>';
+      }
+    });
+  </script>
+  <script type="module" src="core/engine.js"></script>
+</body>
+</html>

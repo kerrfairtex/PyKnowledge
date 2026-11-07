@@ -5,6 +5,8 @@
 import { renderNotFound } from './errors.js';
 import { showSkeleton } from '../ui/components/loading.js';
 import { animatePageEnter } from '../ui/components/animations.js';
+import { observeScrollAnimations } from '../ui/components/scroll-animations.js';
+import { isAuthenticated, hasProfiles } from '../storage/auth.js';
 
 const routes = new Map();
 let currentRoute = '/';
@@ -36,11 +38,31 @@ export async function handleRoute() {
   const { route, parts, base } = getRouteParts();
   currentRoute = route;
 
+  // Check route protection for private routes.
+  // Guest mode is a first-class flow: "Continue as Guest" bypasses the gate
+  // (guest progress is stored under the guest id and migrates into a profile
+  // on creation). We only bounce users who have profiles but no session.
+  const requiresAuth = ['/dashboard', '/module', '/lesson', '/quiz', '/progress', '/library', '/about'];
+  const requiresAccess = requiresAuth.includes(base);
+
+  if (requiresAccess && !isAuthenticated() && hasProfiles()) {
+    // Profiles exist but no active session — send to the picker/PIN gate.
+    window.location.hash = '#/login';
+    return;
+  }
+
   const handler = routes.get(base);
   if (!handler) {
     renderNotFound(main);
     document.title = 'Not Found — PyKnowledge';
     return;
+  }
+
+  // Exit current content
+  const current = main.querySelector('.page-content');
+  if (current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    current.classList.add('view-exit');
+    await new Promise(r => setTimeout(r, 200));
   }
 
   showSkeleton(main);
@@ -52,7 +74,24 @@ export async function handleRoute() {
 
   const pageContent = main.querySelector('.page-content') || main.firstElementChild;
   if (pageContent && !pageContent.classList.contains('auth-screen')) {
-    animatePageEnter(pageContent);
+    // Enter new content
+    pageContent.classList.add('view-enter');
+    requestAnimationFrame(() => {
+      pageContent.classList.add('view-enter-active');
+      pageContent.addEventListener('transitionend', () => {
+        pageContent.classList.remove('view-enter', 'view-enter-active');
+      }, { once: true });
+    });
+    
+    // Stagger children
+    const items = pageContent.querySelectorAll('.animate-item');
+    items.forEach((item, i) => {
+      item.style.transitionDelay = `${i * 60}ms`;
+      requestAnimationFrame(() => item.classList.add('is-visible'));
+    });
+    
+    // Observe scroll animations
+    observeScrollAnimations(main);
   }
 }
 
@@ -70,13 +109,6 @@ function updatePageTitle(base, _params) {
   document.title = `${section} — PyKnowledge`;
 }
 
-function focusMainContent() {
-  const main = document.getElementById('main-content');
-  if (main) {
-    main.setAttribute('tabindex', '-1');
-    main.focus({ preventScroll: true });
-  }
-}
 
 export function initRouter() {
   window.addEventListener('hashchange', () => handleRoute().catch(console.error));
@@ -88,6 +120,14 @@ export function initRouter() {
   });
 
   return handleRoute();
+}
+
+function focusMainContent() {
+  const main = document.getElementById('main-content');
+  if (main) {
+    main.setAttribute('tabindex', '-1');
+    main.focus();
+  }
 }
 
 export { currentRoute };

@@ -1,6 +1,6 @@
 {
   "name": "pyknowledge",
-  "version": "0.4.0",
+  "version": "0.9.0",
   "description": "Offline Python Learning Platform for TRAC/BARMM/CHED curriculum",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "npm run start:client",
-    "start:client": "npx --yes serve -l 8080",
+    "start:client": "npx --yes serve -s . -l 8080",
     "start:server": "npm run start -w pyknowledge-server",
     "dev:server": "npm run dev -w pyknowledge-server",
     "db:up": "docker compose up -d",
@@ -18,8 +18,8 @@
     "db:migrate:dev": "npm run db:migrate:dev -w pyknowledge-server",
     "db:seed": "npm run db:seed -w pyknowledge-server",
     "db:generate": "npm run db:generate -w pyknowledge-server",
-    "setup:fullstack": "npm run db:up && sleep 3 && npm run db:generate && npm run db:migrate:dev && npm run db:seed",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "setup:fullstack": "npm run db:up && sleep 3 && npm run db:migrate:dev && npm run db:generate && npm run db:seed",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js && node tests/sw-version-check.cjs",
     "test:server": "npm run test -w pyknowledge-server",
     "test:all": "npm test && npm run test:server",
     "test:watch": "npm test -- --watch",
@@ -27,21 +27,32 @@
     "lint": "eslint .",
     "validate:content": "node scripts/validate-content.js",
     "check:version": "node scripts/check-version.js",
-    "package": "node scripts/package.js"
+    "package": "node scripts/package.js",
+    "prepare": "git config core.hooksPath .githooks",
+    "test:playwright": "node tests/auth-playwright.mjs",
+    "build:docs": "node scripts/build-user-guidelines.js"
   },
-  "keywords": ["offline", "pwa", "python", "education", "ched", "fullstack"],
+  "keywords": [
+    "offline",
+    "pwa",
+    "python",
+    "education",
+    "ched",
+    "fullstack"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.8.1",
+    "eslint": "^10.11.0",
     "globals": "^17.9.0",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^29.7.0"
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^29.7.0",
+    "marked": "^18.0.14"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.1"
+    "@supabase/supabase-js": "^2.117.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }

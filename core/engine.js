@@ -4,14 +4,17 @@
 
 import { loadAllContent } from './loader.js';
 import { registerRoute, initRouter, navigate } from './router.js';
-import { getProgress } from './storage.js';
+import { getProgress, initStorage } from './storage.js';
 import { checkPrerequisite } from '../storage/progress.js';
 import { calculateScore } from '../app/quizzes/quiz-engine.js';
 import { renderDashboard } from '../app/dashboard/dashboard.js';
 import { renderLessonViewer } from '../app/lessons/lesson-viewer.js';
 import { renderQuiz } from '../app/quizzes/quiz-engine.js';
 import { renderProgressDashboard } from '../app/progress/progress-dashboard.js';
+import { renderLibrary } from '../app/library/reference-library.js';
+import { renderAbout } from '../app/about/about-view.js';
 import { renderNavbar, updateNavbarActiveState } from '../ui/components/navbar.js';
+import { initOsShell } from '../ui/components/os-shell.js';
 import { initOfflineIndicator } from '../ui/components/offline-indicator.js';
 import { initUpdateNotifier, checkForUpdates } from '../ui/components/update-notifier.js';
 import { renderError, withErrorHandling } from './errors.js';
@@ -21,6 +24,7 @@ import { renderAuthGate, renderProfilePicker } from '../app/auth/auth-screen.js'
 import { isAuthenticated, hasProfiles } from '../storage/auth.js';
 import { renderFrontPage, clearFrontPageLayout } from '../app/home/front-page.js';
 import { animatePageEnter } from '../ui/components/animations.js';
+import { initKeyboardShortcuts } from '../ui/components/keyboard-shortcuts.js';
 
 let lessonsData = null;
 let quizzesData = null;
@@ -50,10 +54,18 @@ function startApp() {
   appReady = true;
   const header = document.querySelector('.app-header');
   const footer = document.querySelector('.app-footer');
-  if (header) header.hidden = false;
-  if (footer) footer.hidden = false;
+  if (header) {
+    header.hidden = false;
+    header.classList.add('view-enter');
+    requestAnimationFrame(() => header.classList.add('view-enter-active'));
+  }
+  if (footer) {
+    footer.hidden = false;
+  }
   renderNavbar(document.getElementById('main-nav'));
   initRouter();
+  initKeyboardShortcuts(navigate, () => window.location.hash.slice(1));
+  initOsShell();
 }
 
 function showAuthScreen() {
@@ -64,7 +76,20 @@ function showAuthScreen() {
   if (footer) footer.hidden = true;
 
   renderAuthGate(main, () => {
-    startApp();
+    // Fade out auth screen before transitioning
+    const authScreen = main.querySelector('.auth-screen');
+    if (authScreen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      authScreen.style.transition = 'opacity 200ms ease-out, transform 200ms ease-out';
+      authScreen.style.opacity = '0';
+      authScreen.style.transform = 'translateY(-8px)';
+      setTimeout(() => {
+        startApp();
+        navigate('/dashboard');
+      }, 200);
+    } else {
+      startApp();
+      navigate('/dashboard');
+    }
   });
 }
 
@@ -74,6 +99,7 @@ async function initApp() {
 
   try {
     await registerServiceWorker();
+    await initStorage();
     initOfflineIndicator();
     initUpdateNotifier();
 
@@ -133,6 +159,16 @@ async function initApp() {
       updateNavbarActiveState();
     });
 
+    registerRoute('/library', async (m, params) => {
+      await withErrorHandling(m, () => renderLibrary(m, params));
+      updateNavbarActiveState();
+    });
+
+    registerRoute('/about', async (m) => {
+      await withErrorHandling(m, () => renderAbout(m));
+      updateNavbarActiveState();
+    });
+
     registerRoute('/login', (m) => {
       if (isAuthenticated()) {
         navigate('/dashboard');
@@ -183,6 +219,29 @@ async function initApp() {
 
 function renderModuleLessons(main, module) {
   const progress = getProgress();
+
+  // Primary action: route to the first unlocked, incomplete lesson,
+  // respecting the sequential locking used for the list below.
+  const completedCount = module.lessons.filter((l) =>
+    progress.completedLessons.includes(l.id)
+  ).length;
+  const targetLesson =
+    module.lessons.find((l, i) => {
+      const prevUnlocked = i === 0 || progress.completedLessons.includes(module.lessons[i - 1].id);
+      return prevUnlocked && !progress.completedLessons.includes(l.id);
+    }) || null;
+  const reviewLesson = !targetLesson ? module.lessons[0] : null;
+
+  let actionLabel;
+  let actionHref;
+  if (targetLesson) {
+    actionLabel = completedCount > 0 ? 'Continue Lesson' : 'Start Lesson';
+    actionHref = `#/lesson/${escapeHtml(targetLesson.id)}`;
+  } else {
+    actionLabel = 'Review Lesson';
+    actionHref = `#/lesson/${escapeHtml(reviewLesson.id)}`;
+  }
+
   main.innerHTML = `
     <section class="module-detail page-content" aria-labelledby="module-title">
       <h2 id="module-title">${escapeHtml(module.title)}</h2>
@@ -201,7 +260,7 @@ function renderModuleLessons(main, module) {
             </li>`;
         }).join('')}
       </ul>
-      <a href="#/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+      <a href="${actionHref}" class="btn btn-primary">${actionLabel}</a>
     </section>`;
   animatePageEnter(main);
 }
@@ -209,7 +268,7 @@ function renderModuleLessons(main, module) {
 async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    await navigator.serviceWorker.register('/core/service-worker.js', { scope: '/' });
+    await navigator.serviceWorker.register('/service-worker.js');
   } catch (err) {
     console.warn('Service Worker registration failed:', err);
   }
@@ -217,4 +276,9 @@ async function registerServiceWorker() {
 
 export { calculateScore, checkPrerequisite, lessonsData, quizzesData, APP_VERSION, appReady };
 
-document.addEventListener('DOMContentLoaded', initApp);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  // DOM already ready — engine was loaded dynamically after page load
+  initApp();
+}

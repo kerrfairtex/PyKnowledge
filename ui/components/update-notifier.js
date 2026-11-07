@@ -40,8 +40,22 @@ function showUpdateBanner() {
 
   document.body.appendChild(banner);
 
-  document.getElementById('update-reload').addEventListener('click', () => {
-    window.location.reload();
+  document.getElementById('update-reload').addEventListener('click', async () => {
+    // Tell the waiting service worker to activate, THEN reload so the new
+    // version actually takes control. A bare reload can keep the old SW.
+    const registration = await navigator.serviceWorker.getRegistration();
+    const waiting = registration?.waiting;
+    if (waiting) {
+      waiting.postMessage({ type: 'SKIP_WAITING' });
+      // controllerchange fires after activation; reload then (with a timeout
+      // fallback in case the event never fires).
+      let reloaded = false;
+      const doReload = () => { if (!reloaded) { reloaded = true; window.location.reload(); } };
+      navigator.serviceWorker.addEventListener('controllerchange', doReload, { once: true });
+      setTimeout(doReload, 3000);
+    } else {
+      window.location.reload();
+    }
   });
 
   document.getElementById('update-dismiss').addEventListener('click', () => {

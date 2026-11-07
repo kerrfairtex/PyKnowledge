@@ -1,0 +1,174 @@
+/* ============================================================
+   PyKnowledge — Reference Library theme
+   Palette: #08182B base · #101F35 · #142640 cards
+   Text: #F8FAFC headings · #E2E8F0 body · #CBD5E1 secondary
+   ============================================================ */
+
+.library-head {
+  margin-bottom: 24px;
+}
+
+.library-head h1 {
+  color: #F8FAFC;
+  margin-bottom: 6px;
+}
+
+.library-head p {
+  color: #94A3B8;
+  font-size: 0.95rem;
+}
+
+/* --- Index grid ------------------------------------------------ */
+
+.ref-glossary-entry {
+  margin-bottom: 20px;
+}
+
+.ref-card--wide {
+  display: block;
+}
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.ref-card {
+  display: block;
+  background: #142640;
+  border: 1px solid rgba(248, 250, 252, 0.08);
+  border-radius: 12px;
+  padding: 18px;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.ref-card:hover,
+.ref-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(248, 250, 252, 0.22);
+}
+
+.ref-card h3 {
+  color: #F8FAFC;
+  margin-bottom: 8px;
+}
+
+.ref-card p {
+  color: #CBD5E1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.ref-card-meta {
+  color: #94A3B8;
+  font-size: 0.8rem;
+}
+
+/* --- Sheet detail ------------------------------------------------ */
+
+.ref-breadcrumb {
+  margin-bottom: 16px;
+}
+
+.ref-breadcrumb a {
+  color: #CBD5E1;
+  text-decoration: none;
+}
+
+.ref-breadcrumb a:hover,
+.ref-breadcrumb a:focus-visible {
+  color: #F8FAFC;
+}
+
+.reference-sheet header h1 {
+  color: #F8FAFC;
+}
+
+.ref-summary {
+  color: #94A3B8;
+  margin-bottom: 24px;
+}
+
+.reference-sheet .lesson-section {
+  background: #101F35;
+  border: 1px solid rgba(248, 250, 252, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.reference-sheet .lesson-section h2 {
+  color: #F8FAFC;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+
+.reference-sheet .lesson-body {
+  color: #E2E8F0;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.exercise-difficulty {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.16);
+  color: #7DD3FC;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  margin-bottom: 10px;
+}
+
+/* --- Glossary ------------------------------------------------ */
+
+.glossary-search input[type="search"] {
+  width: 100%;
+  max-width: 420px;
+  background: #142640;
+  border: 1px solid rgba(248, 250, 252, 0.14);
+  border-radius: 10px;
+  color: #F8FAFC;
+  padding: 12px 14px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.glossary-search input[type="search"]:focus {
+  outline: 2px solid rgba(125, 211, 252, 0.55);
+  outline-offset: 1px;
+}
+
+.glossary-list {
+  max-width: 720px;
+}
+
+.glossary-item {
+  padding: 12px 4px;
+  border-bottom: 1px solid rgba(248, 250, 252, 0.07);
+}
+
+.glossary-item dt {
+  color: #F8FAFC;
+  font-weight: 600;
+}
+
+.glossary-item dd {
+  color: #CBD5E1;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.ref-empty {
+  color: #94A3B8;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

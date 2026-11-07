@@ -27,10 +27,17 @@ export async function loadJSON(path) {
   return data;
 }
 
+let healthProbe = null; // shared in-flight probe (loadLessons + loadQuizzes race)
+
 async function shouldUseApi() {
   if (!isApiEnabled() || !navigator.onLine) return false;
   if (apiAvailable === null) {
-    apiAvailable = await checkApiHealth();
+    // Deduplicate: both content loaders probing at boot must share ONE
+    // health request, or a dead API fires twice (double CORS noise).
+    if (!healthProbe) {
+      healthProbe = checkApiHealth().finally(() => { healthProbe = null; });
+    }
+    apiAvailable = await healthProbe;
   }
   return apiAvailable;
 }

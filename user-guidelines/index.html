@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#04090b" />
+  <meta name="color-scheme" content="dark">
+  <title>User Guide — PyKnowledge</title>
+  <meta name="description" content="Complete user guide for PyKnowledge, the offline-first Python learning platform for TRAC/BARMM/CHED students." />
+  <link rel="icon" href="/ui/assets/icon-192.png" type="image/png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/ui/themes/tokens.css" />
+  <style>
+    * { box-sizing: border-box; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+    header.site-header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(4, 9, 11, 0.92);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    header.site-header .wrap { display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-family: var(--font-mono); font-size: 14px; }
+    .brand img { height: 24px; width: auto; }
+    nav a { color: var(--info); text-decoration: none; font-size: 14px; font-family: var(--font-mono); }
+    nav a:hover { text-decoration: underline; }
+
+    .page { padding: 32px 0; }
+    h1 { font-size: 28px; font-family: var(--font-mono); color: var(--text); margin: 0 0 8px; line-height: 1.2; }
+    h2 { font-size: 20px; font-family: var(--font-mono); color: var(--text); margin: 28px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+    h3 { font-size: 16px; font-family: var(--font-mono); color: var(--info); margin: 16px 0 8px; }
+    h4 { font-size: 14px; font-family: var(--font-mono); color: var(--dim); margin: 12px 0 6px; }
+    p { margin: 0 0 12px; }
+    ul { margin: 0 0 12px; padding-left: 20px; }
+    ol { margin: 0 0 12px; padding-left: 24px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--info); }
+    code { font-family: var(--font-mono); background: var(--panel); color: var(--ok); padding: 2px 6px; border-radius: 2px; font-size: 13px; }
+    pre { background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 12px; overflow-x: auto; font-size: 13px; }
+    pre code { background: none; padding: 0; color: var(--text); }
+    blockquote { border-left: 3px solid var(--info); margin: 12px 0; padding: 4px 16px; color: var(--dim); }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+    th { background: var(--panel); color: var(--text); }
+    strong { color: var(--text); }
+    hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
+    .tag { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); }
+    .tag-ok { background: var(--ok); color: var(--bg); }
+    .tag-warn { background: var(--warn); color: var(--bg); }
+    .callout { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--ok); padding: 12px 16px; margin: 12px 0; }
+    .callout-warn { border-left-color: var(--warn); }
+    .callout-err { border-left-color: var(--err); }
+    .toc { background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 16px; margin: 16px 0; }
+    .toc ol { margin: 0; }
+    .btn { display: inline-block; padding: 8px 16px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: var(--font-mono); font-size: 13px; text-decoration: none; cursor: pointer; border-radius: 2px; }
+    .btn-primary { background: var(--ok); color: var(--bg); border-color: var(--ok); }
+    .page { padding: 32px 0; }
+    footer.site-footer { padding: 24px 0; border-top: 1px solid var(--line); font-size: 12px; color: var(--dim); font-family: var(--font-mono); }
+    @media (max-width: 480px) {
+      .page { padding: 24px 0; }
+      h1 { font-size: 24px; }
+      h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="/" class="brand"><img src="/ui/assets/logo.png" alt="" /> PyKnowledge</a>
+      <nav><a href="/privacy.html">Privacy Policy</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page">
+      <article class="doc-content">
+<h1>PyKnowledge User Guide</h1>
+<h2>1. About PyKnowledge</h2>
+<p>PyKnowledge is an <strong>offline-first, installable Python learning application</strong> that runs entirely in a web browser. Once the app is loaded once, the entire course — all lessons, exercises, quizzes, and a Python code runner — works without any internet connection.</p>
+<p>The application teaches Python programming through nine progressive, CHED-aligned modules. It is designed for students in geographically isolated regions of the Philippines (TRAC/BARMM) where internet signal is unreliable, school computers are shared, and most online learning platforms fail because they require constant connectivity.</p>
+<h3>Key characteristics (verified in implementation):</h3>
+<ul>
+<li><strong>Offline after first install</strong>: All application code, lesson content, quizzes, exercises, and the Python interpreter (Skulpt) are cached by the browser&#39;s service worker. No internet is needed after caching.</li>
+<li><strong>Zero hosting cost after first load</strong>: Progress is saved in the browser&#39;s IndexedDB and localStorage, not on a server.</li>
+<li><strong>No account required</strong>: Users create a local profile with a PIN, or use the app as a guest. No email, no password, no server registration.</li>
+<li><strong>Shared computer support</strong>: Multiple profiles with PIN protection keep each student&#39;s progress separate on shared devices.</li>
+<li><strong>Low-spec hardware target</strong>: Built with vanilla JavaScript (no heavy frameworks). Targets dual-core CPUs with 2 GB RAM.</li>
+<li><strong>Current version</strong>: 0.9.0 (from <code>package.json</code> and <code>core/version.js</code>)</li>
+</ul>
+<h3>Current version</h3>
+<ul>
+<li><strong>Application version</strong>: 0.9.0 (<code>package.json</code>, <code>core/version.js</code>, <code>manifest.json</code>)</li>
+<li><strong>Service worker version</strong>: 0.20.9 (<code>core/sw-version.js</code>)</li>
+</ul>
+<h2>2. Who This Guide Is For</h2>
+<p>Based on repository evidence, PyKnowledge is intended for:</p>
+<ul>
+<li><strong>Students</strong>: Primary learners who complete lessons and quizzes. The app specifically mentions TRAC students in Bongao, Tawi-Tawi.</li>
+<li><strong>Beginning Python learners</strong>: The curriculum starts with &quot;What is Python?&quot; and progresses through basic syntax to object-oriented programming. No prior programming experience is assumed.</li>
+<li><strong>Teachers and instructors</strong>: The course structure, reference library, and progress tracking support classroom use. The About page explicitly invites teachers to help improve lessons.</li>
+<li><strong>Administrators</strong>: Multiple profiles with PIN protection are built for shared school computers where multiple students use the same device.</li>
+</ul>
+<p>The app does <strong>not</strong> currently support:</p>
+<ul>
+<li>Server-side user accounts or cloud-based progress (the optional server module exists but is not the primary mode of operation)</li>
+<li>Real-time collaboration or multiplayer features</li>
+<li>Administrative dashboards for teachers (the About page mentions this as a future possibility, but no admin UI exists in the codebase)</li>
+</ul>
+<h2>3. Getting Started</h2>
+<h3>Where to access PyKnowledge</h3>
+<p>PyKnowledge is a web application. You can access it by:</p>
+<ol>
+<li><strong>Online (first visit)</strong>: Open the app URL in a modern browser (Chrome, Edge, Firefox, Safari). The landing page loads first.</li>
+<li><strong>After installation (offline)</strong>: Once installed as a PWA, the app launches from your home screen or apps menu and works without internet.</li>
+</ol>
+<h3>What you need</h3>
+<ul>
+<li>A modern browser with JavaScript enabled (Chrome 90+, Edge, Firefox 88+, Safari 14+)</li>
+<li>Web Crypto API support (available in all modern browsers — required for PIN hashing)</li>
+<li>At least one visit while online to cache content for offline use</li>
+<li>Approximately 200-250 MB of device storage for full offline content</li>
+</ul>
+<h3>What happens on first launch</h3>
+<ol>
+<li>The <strong>landing page</strong> loads, showing the project description, target region, and technology stack.</li>
+<li>You see a <strong>&quot;Start learning&quot;</strong> button (links to <code>#/login</code>) and an <strong>&quot;Explore the Project&quot;</strong> button (scrolls down the landing page).</li>
+<li>Clicking &quot;Start learning&quot; enters the app shell and shows the <strong>authentication flow</strong>.</li>
+</ol>
+<h3>PWA installation</h3>
+<p>The app supports PWA installation on compatible browsers and devices:</p>
+<ul>
+<li><strong>Android Chrome</strong>: An install prompt appears after first visit. You can also tap the menu (⋮) → &quot;Add to Home screen&quot; → &quot;Install&quot;.</li>
+<li><strong>Desktop Chrome/Edge</strong>: Look for the install icon in the address bar, or use the browser menu → &quot;Install [App Name]&quot;.</li>
+<li><strong>iOS Safari</strong>: Tap the Share button → &quot;Add to Home Screen&quot; → &quot;Add&quot;.</li>
+</ul>
+<p>When installed, PyKnowledge launches in standalone mode (no browser address bar) and functions like a native app. All content downloads to the device during installation.</p>
+<h3>Guest access</h3>
+<p>If you do not want to create a profile, you can select <strong>&quot;Continue as Guest&quot;</strong> on the welcome screen. Guest progress is saved locally on the device but can be migrated to a named profile later if you create one.</p>
+<h2>4. Understanding the Home Page</h2>
+<p>The <strong>home page</strong> (landing page) is the first thing you see when you open PyKnowledge online or when you navigate to <code>#/login</code> without any profiles.</p>
+<h3>What you see</h3>
+<p>The home page contains several sections (scrollable):</p>
+<ol>
+<li><p><strong>Hero section</strong>: The PyKnowledge logo, badges (&quot;Offline-First&quot;, &quot;Zero Hosting Cost&quot;, &quot;CHED-Aligned&quot;), a description, and two buttons:</p>
+<ul>
+<li><strong>&quot;Start Learning&quot;</strong> — enters the authentication flow</li>
+<li><strong>&quot;Explore the Project&quot;</strong> — scrolls down to the &quot;The Area&quot; section</li>
+</ul>
+</li>
+<li><p><strong>The Area section</strong>: Describes the target region (TRAC, BARMM, CHED Curriculum) and shows performance statistics:</p>
+<ul>
+<li>Page load target: under 500 ms</li>
+<li>Minimum RAM: 2 GB</li>
+<li>Hosting cost: 0</li>
+<li>Offline after install: 100%</li>
+</ul>
+</li>
+<li><p><strong>The Platform section</strong>: Explains that PyKnowledge is a self-contained PWA with four modules:</p>
+<ul>
+<li>Content Module (lessons with code examples)</li>
+<li>Assessment Module (quizzes with 70% pass threshold)</li>
+<li>Progress Module (lesson unlocking, achievements, progress tracking)</li>
+<li>Local Profiles (PIN-protected student profiles)</li>
+</ul>
+</li>
+<li><p><strong>Design section</strong>: Describes visual language, accessibility, motion design, and responsive layout.</p>
+</li>
+<li><p><strong>Curriculum section</strong>: Shows counts of modules and lessons:</p>
+<ul>
+<li>9 modules</li>
+<li>28 lessons</li>
+<li>28 quizzes</li>
+</ul>
+</li>
+<li><p><strong>Stakeholders section</strong>: Lists project stakeholders (Students, CHED, BARMM, TRAC Admin, ICS Faculty, Project Team).</p>
+</li>
+<li><p><strong>Footer</strong>: &quot;Ready to Learn Python?&quot; with a link to &quot;Enter Learning Dashboard&quot; and version info.</p>
+</li>
+</ol>
+<h3>Navigation</h3>
+<p>The landing page uses smooth-scrolling anchors. Links like <code>#the-area</code>, <code>#platform</code>, <code>#design</code>, <code>#curriculum</code>, <code>#stakeholders</code> scroll to the respective sections. The &quot;Start Learning&quot; button uses <code>#/login</code> which transitions to the app shell.</p>
+<h2>5. Profiles and Authentication</h2>
+<p>PyKnowledge uses <strong>local, offline authentication</strong> with no server involvement in its primary mode.</p>
+<h3>When you first enter the app</h3>
+<ul>
+<li><p>If <strong>no profiles exist</strong> on the device, you see the <strong>Welcome screen</strong> with:</p>
+<ul>
+<li>&quot;Create Profile&quot; button</li>
+<li>&quot;Continue as Guest&quot; button</li>
+<li>An installation guide (how to add to home screen on Android and iOS)</li>
+</ul>
+</li>
+<li><p>If <strong>profiles already exist</strong> on the device, you see the <strong>Profile Picker</strong> with:</p>
+<ul>
+<li>A card for each saved profile (showing avatar color and first letter of name)</li>
+<li>An &quot;Add Profile&quot; card</li>
+<li>&quot;Continue as Guest&quot; option</li>
+<li>A &quot;Download App&quot; button (visible when the browser supports PWA installation)</li>
+</ul>
+</li>
+</ul>
+<h3>Creating a profile</h3>
+<ol>
+<li>Click <strong>&quot;Create Profile&quot;</strong> on the welcome screen.</li>
+<li>Enter your <strong>name</strong> (at least 2 characters).</li>
+<li>Set a <strong>4-8 digit numeric PIN</strong> (only numbers allowed).</li>
+<li>Confirm the PIN.</li>
+<li>The profile is stored locally with a hashed PIN (PBKDF2 with salt — never stored in plaintext).</li>
+</ol>
+<p>After creation, you are automatically signed in and taken to the dashboard. If you had guest progress, it is migrated into the new profile automatically.</p>
+<h3>Signing in with a profile</h3>
+<ol>
+<li>On the profile picker, click your profile card.</li>
+<li>Enter your <strong>PIN</strong> using the on-screen keypad or your physical keyboard.</li>
+<li>The PIN is verified against the stored hash.</li>
+<li>On success, you are taken to the dashboard. You have <strong>5 attempts</strong> before being blocked (though the app does not currently implement a hard lockout — it decrements the attempt counter in the UI).</li>
+</ol>
+<h3>Guest mode</h3>
+<ul>
+<li>Click <strong>&quot;Continue as Guest&quot;</strong> on either the welcome or profile picker screen.</li>
+<li>No PIN or profile creation is required.</li>
+<li>Guest progress is saved under a persistent guest ID.</li>
+<li>Guest progress can be migrated to a named profile later by creating a profile (migration happens automatically on profile creation).</li>
+<li>In guest mode, the navbar shows &quot;Guest&quot; as a label with a &quot;Sign out&quot; button.</li>
+</ul>
+<h3>Authentication requirements</h3>
+<ul>
+<li>Profiles use <strong>PIN-based authentication</strong> (4-8 digits, numbers only).</li>
+<li>PINs are hashed using <strong>PBKDF2</strong> (100,000 iterations, SHA-256) with a random salt.</li>
+<li>Authentication happens entirely in the browser using the <strong>Web Crypto API</strong>.</li>
+<li>No server, no email, no cloud storage of credentials.</li>
+<li>Web Crypto must be available — if not, profile creation is blocked with an error message.</li>
+</ul>
+<h3>Signing out</h3>
+<ul>
+<li>Click your avatar in the top-right of the navbar (real user) or the &quot;Sign out&quot; button (guest).</li>
+<li>A dropdown menu appears for real users with options: &quot;My progress&quot;, &quot;About this app&quot;, and &quot;Sign out&quot;.</li>
+<li>Signing out clears the session. On next access, you return to the profile picker or welcome screen.</li>
+<li>After signing out, the app reloads and returns to the login flow.</li>
+</ul>
+<h3>Session timeout</h3>
+<p>Sessions have a <strong>30-minute idle timeout</strong>. If the app is not used for 30 minutes, the session expires and you must re-enter your PIN. Each interaction (page change, quiz interaction) &quot;touches&quot; the session to extend the timeout.</p>
+<h2>6. Dashboard</h2>
+<p>The <strong>dashboard</strong> is the main hub after signing in. It is accessible at the route <code>#/dashboard</code>.</p>
+<h3>What you see</h3>
+<ol>
+<li><p><strong>Greeting</strong>: A time-aware greeting (&quot;Good morning/afternoon/evening, [name]&quot;) showing your profile name. Below it: &quot;Continue your Python learning journey.&quot;</p>
+</li>
+<li><p><strong>Primary action button</strong>: A prominent button that either says:</p>
+<ul>
+<li>&quot;START: [Next lesson title]&quot; (if no lessons completed)</li>
+<li>&quot;CONTINUE: [Next lesson title]&quot; (if some lessons completed)</li>
+<li>This button links directly to the next locked module (via <code>#/module/module-1</code>).</li>
+</ul>
+</li>
+<li><p><strong>Overall progress section</strong>: Shows your total progress as:</p>
+<ul>
+<li>&quot;Overall progress&quot;</li>
+<li>Completion count: e.g., &quot;3/28 lessons · 11%&quot;</li>
+<li>A visual &quot;memory map&quot; of all 28 lessons (cells showing done/locked/current state)</li>
+<li>A progress bar</li>
+</ul>
+</li>
+<li><p><strong>Course statistics</strong>: &quot;This course, by the numbers&quot; — shows:</p>
+<ul>
+<li>9 modules</li>
+<li>Total hands-on exercises (counted from content)</li>
+<li>Total challenge exercises (counted from content)</li>
+<li>&quot;0 KB NET&quot; — indicating no data needed after install</li>
+</ul>
+</li>
+<li><p><strong>Daily trivia</strong>: A rotating Python fact (&quot;$ fortune&quot; style).</p>
+</li>
+<li><p><strong>Module cards</strong>: A list of all nine modules as cards, each showing:</p>
+<ul>
+<li>Module icon (inline SVG)</li>
+<li>Module title and description</li>
+<li>Progress bar with percentage</li>
+<li>Completion count: e.g., &quot;1/2 lessons&quot;</li>
+<li>Status chip: &quot;OPEN&quot;, &quot;DONE&quot;, or &quot;LOCKED: finish M1&quot;</li>
+<li>Action button: &quot;Start module&quot;, &quot;Continue module&quot;, or &quot;Review module&quot;</li>
+<li>Locked modules show: &quot;Complete all lessons in [previous module title] first&quot;</li>
+</ul>
+</li>
+</ol>
+<h3>Module locking rules</h3>
+<ul>
+<li><strong>Module 1</strong> (Introduction to Python) is unlocked by default for all users.</li>
+<li><strong>Modules 2-9</strong> require completing <strong>all lessons in the preceding module</strong>. For example, Module 2 unlocks after completing all 3 lessons in Module 1.</li>
+<li>Locked modules cannot be opened. The dashboard shows the locking reason.</li>
+</ul>
+<h3>Flash messages</h3>
+<p>After signing in, the dashboard may show a temporary toast message (e.g., &quot;Signed in — pick up where you left off.&quot;) if the URL contains a <code>?flash=</code> parameter.</p>
+<h2>7. Learning Modules</h2>
+<p>PyKnowledge contains <strong>9 modules</strong> organized in a sequential path. Each module must be fully completed (all lessons) to unlock the next.</p>
+<h3>Module list</h3>
+<table>
+<thead>
+<tr>
+<th>Module ID</th>
+<th>Title</th>
+<th>Prerequisite</th>
+<th>Lessons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>module-1</td>
+<td>Introduction to Python</td>
+<td>None (start here)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>module-2</td>
+<td>Control Structures</td>
+<td>module-1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>module-3</td>
+<td>Loops</td>
+<td>module-2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>module-4</td>
+<td>Functions</td>
+<td>module-3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>module-5</td>
+<td>Data Structures</td>
+<td>module-4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>module-6</td>
+<td>Modules and Imports</td>
+<td>module-5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>module-7</td>
+<td>Input and Output</td>
+<td>module-6</td>
+<td>3</td>
+</tr>
+<tr>
+<td>module-8</td>
+<td>Errors and Exceptions</td>
+<td>module-7</td>
+<td>3</td>
+</tr>
+<tr>
+<td>module-9</td>
+<td>Classes and Object-Oriented Programming</td>
+<td>module-8</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<h3>Module detail view</h3>
+<p>When you click &quot;Start module&quot; or &quot;Continue module&quot; on a module card, you go to <code>#/module/module-X</code>. This view shows:</p>
+<ul>
+<li><strong>Module title and description</strong></li>
+<li><strong>Lesson list</strong>: A numbered list of all lessons in the module<ul>
+<li>Lessons you have completed show a &quot;Done&quot; badge</li>
+<li>Lessons that are locked (because the previous lesson is not yet complete) show &quot;(locked)&quot;</li>
+<li>Lessons you can access are clickable links</li>
+<li>The current/next lesson is suggested by the primary action button</li>
+</ul>
+</li>
+<li><strong>Primary action button</strong>: Either &quot;Start Lesson&quot;, &quot;Continue Lesson&quot;, or &quot;Review Lesson&quot;</li>
+</ul>
+<h3>Lesson sequencing within a module</h3>
+<ul>
+<li>Lessons in each module are <strong>sequentially locked</strong>: lesson N+1 is only available after lesson N is completed.</li>
+<li>The first lesson in each module is always available (unlocked) once the module itself is unlocked.</li>
+<li>Completing the last lesson in a module unlocks a quiz for that lesson.</li>
+</ul>
+<h3>Completion requirements</h3>
+<p>A lesson is marked complete when you finish it and navigate away (the lesson does not have an explicit &quot;mark complete&quot; button — completion is handled by the quiz engine when you pass a quiz, or by the progress system).</p>
+<p>Actually, reviewing the code more carefully: lessons are marked complete through the quiz flow. The quiz&#39;s <code>markLessonComplete</code> function is called when a quiz is passed, which marks the associated lesson (quiz ID matches lesson ID) as complete.</p>
+<h2>8. Lessons</h2>
+<p>Lessons are where you read content and work through exercises. Access them via <code>#/lesson/lesson-X-Y</code>.</p>
+<h3>What you see in a lesson</h3>
+<ol>
+<li><p><strong>Header</strong>: Lesson title and estimated duration (e.g., &quot;20 min&quot;).</p>
+</li>
+<li><p><strong>Content sections</strong>: Each lesson contains one or more sections, each with:</p>
+<ul>
+<li>A <strong>heading</strong> (e.g., &quot;Variables&quot;, &quot;Worked Example&quot;)</li>
+<li>A <strong>body</strong> (explanation text, may include numbered lists and line breaks)</li>
+<li>Optional <strong>code block</strong> (shown with line numbers and a <code>&gt;&gt;&gt;</code> prompt on the first line)</li>
+</ul>
+</li>
+<li><p><strong>Exercises</strong> (if the lesson has them): Each exercise is rendered as a card with:</p>
+<ul>
+<li>Exercise number (e.g., &quot;EX 01&quot;)</li>
+<li>Exercise type badge (e.g., &quot;predict output&quot;, &quot;fix the code&quot;, &quot;parsons&quot;, &quot;write code&quot;, &quot;challenge&quot;)</li>
+<li>Difficulty level (easy, medium, hard)</li>
+<li>The exercise prompt</li>
+<li>Interactive elements (see Exercise types below)</li>
+</ul>
+</li>
+<li><p><strong>Navigation footer</strong>:</p>
+<ul>
+<li>&quot;Back to Module&quot; button</li>
+<li>&quot;Previous&quot; button (if not the first lesson in the module)</li>
+<li>&quot;Next Lesson&quot; button (if not the last lesson in the module) or &quot;Take Quiz&quot; button (for the last lesson)</li>
+</ul>
+</li>
+</ol>
+<h3>Exercise types</h3>
+<p>PyKnowledge lessons contain five types of interactive exercises:</p>
+<ol>
+<li><p><strong>Predict output</strong>: Code is displayed. You select what you think it will print from multiple-choice options. Click &quot;Check Answer&quot; to verify. Correct answers show an explanation.</p>
+</li>
+<li><p><strong>Fix the code</strong>: Buggy code is shown alongside a hidden correct solution. You can reveal the solution via a &quot;reveal fix&quot; details element. Hints are provided with progressive disclosure.</p>
+</li>
+<li><p><strong>Parsons problems</strong>: Code blocks are provided in a jumbled order. You drag and drop them into the correct order. A &quot;Check Order&quot; button verifies your arrangement. Distractor blocks (incorrect options) may be included. Also supports tap-to-move on touch devices.</p>
+</li>
+<li><p><strong>Write code</strong>: You write Python code in an embedded code editor. The code runs in the browser using <strong>Skulpt</strong> (a browser-based Python interpreter — no server needed). Test cases are provided, and your output is compared against expected output.</p>
+</li>
+<li><p><strong>Challenge</strong>: More complex write-code exercises that go beyond the basics. Same editor and execution model as write-code exercises.</p>
+</li>
+</ol>
+<h3>Progressive hints</h3>
+<p>Exercises with hints support a <strong>progressive hint system</strong>: hints are revealed one level at a time via a &quot;hint --level 1&quot; button. After viewing a hint, the button advances to reveal the next level if available.</p>
+<h3>Misconception detection</h3>
+<p>Some exercises include <strong>misconception data</strong> — common student errors with detection rules. If your answer triggers a known misconception, the feedback includes a traceback-style explanation and a link to a remediation exercise.</p>
+<h3>Navigation between lessons</h3>
+<ul>
+<li>Use the &quot;Next Lesson&quot; button at the bottom of a lesson to advance.</li>
+<li>Use the &quot;Previous&quot; button to go back.</li>
+<li>You can also navigate via the module view or the dashboard.</li>
+<li>Press <strong>Escape</strong> to return to the home page from any route.</li>
+</ul>
+<h3>Lesson locking</h3>
+<p>Lessons are locked sequentially within a module. If you try to access a lesson whose predecessor is not yet completed, you see a &quot;Lesson Locked&quot; message: &quot;Complete [previous lesson title] first.&quot;</p>
+<h2>9. Quizzes</h2>
+<p>After completing the last lesson in a module, you can take that module&#39;s quiz. The quiz route is <code>#/quiz/lesson-X-Y</code> (the quiz ID matches the lesson ID).</p>
+<h3>There is also a Capstone Quiz</h3>
+<p>The <strong>Final Capstone</strong> quiz (<code>capstone-final</code>) covers all nine modules. It contains 10 questions of mixed types. It is accessible at <code>#/quiz/capstone-final</code> and is linked from the last lesson of Module 9 (<code>lesson-9-3</code>).</p>
+<h3>Starting a quiz</h3>
+<p>When you navigate to a quiz, you see:</p>
+<ul>
+<li>Quiz title</li>
+<li>Number of questions (e.g., &quot;5 questions&quot;)</li>
+<li>Pass threshold: <strong>&quot;Need 70% to pass&quot;</strong></li>
+<li>A note: &quot;Take your time — you can retry if you don&#39;t pass on the first attempt.&quot;</li>
+<li><strong>&quot;Start Quiz&quot;</strong> button</li>
+<li>&quot;Back to Lesson&quot; link</li>
+</ul>
+<p>Click &quot;Start Quiz&quot; to begin answering questions.</p>
+<h3>Answering questions</h3>
+<p>Quizzes support three question types:</p>
+<ol>
+<li><strong>Multiple choice</strong>: Select one option from a list of radio buttons.</li>
+<li><strong>True/False</strong>: Select &quot;True&quot; or &quot;False&quot; via radio buttons.</li>
+<li><strong>Fill in the blank</strong>: Type your answer in a text input. Multiple correct answers may be accepted (case-insensitive, whitespace-trimmed).</li>
+</ol>
+<h3>Navigation during a quiz</h3>
+<ul>
+<li>Use the <strong>&quot;Prev&quot;</strong> and <strong>&quot;Next&quot;</strong> buttons to move between questions.</li>
+<li>Your answers are saved as you go — you can navigate back and change them.</li>
+<li>A segmented progress bar shows your position (e.g., Q1/5 with filled dots).</li>
+</ul>
+<h3>Submitting a quiz</h3>
+<p>On the last question, the &quot;Next&quot; button changes to <strong>&quot;Submit Quiz&quot;</strong>.</p>
+<h3>Scoring</h3>
+<ul>
+<li>Your score is calculated as a percentage: (correct answers / total questions) × 100.</li>
+<li>The <strong>passing threshold is 70%</strong>. Scores at exactly 70% or above pass.</li>
+<li>Scores are rounded to the nearest whole number.</li>
+</ul>
+<h3>If you pass (70% or higher)</h3>
+<ol>
+<li>The lesson associated with the quiz is marked as <strong>complete</strong> in your progress.</li>
+<li>The <strong>next module is unlocked</strong> (if there is one).</li>
+<li><strong>Achievements</strong> are checked and any newly earned ones are displayed with a celebration animation.</li>
+<li>If there is a next module, you see: <strong>&quot;MODULE X UNLOCKED&quot;</strong></li>
+<li>If this was the last module, you see: <strong>&quot;COURSE COMPLETE&quot;</strong></li>
+<li>You get a <strong>&quot;Continue&quot;</strong> button (goes to the module view) and a <strong>&quot;Dashboard&quot;</strong> button.</li>
+</ol>
+<h3>If you fail (below 70%)</h3>
+<ol>
+<li>You see your score and the number of correct answers.</li>
+<li><strong>Weak spots</strong> are identified — concepts from questions you answered incorrectly are listed as review tags.</li>
+<li>You can click <strong>&quot;Retry Quiz&quot;</strong> to try again from the beginning.</li>
+<li>You can click <strong>&quot;Review Lesson&quot;</strong> to go back to the lesson content.</li>
+<li>You can click <strong>&quot;Dashboard&quot;</strong> to return to the dashboard.</li>
+</ol>
+<p>There is <strong>no limit</strong> on retry attempts. Each retry starts the quiz fresh.</p>
+<h3>Quiz score storage</h3>
+<ul>
+<li>Quiz scores are stored per-lesson in your progress data.</li>
+<li>Each retry <strong>replaces</strong> the previous score (the most recent attempt&#39;s score is kept).</li>
+</ul>
+<h3>Verified scoring behavior (from tests)</h3>
+<ul>
+<li>10 questions, 7 correct = 70% = pass</li>
+<li>10 questions, 6 correct = 60% = fail</li>
+<li>All correct = 100% = pass</li>
+<li>All wrong = 0% = fail</li>
+<li>Unanswered/null answers count as wrong</li>
+</ul>
+<h2>10. Progress Tracking</h2>
+<p>PyKnowledge tracks your learning progress locally on your device. No data is sent to any server.</p>
+<h3>What is tracked</h3>
+<ul>
+<li><strong>Completed lessons</strong>: A list of lesson IDs you have finished (each marked complete when you pass its quiz).</li>
+<li><strong>Quiz scores</strong>: A record of your score for each quiz (replaced on retry).</li>
+<li><strong>Achievements</strong>: IDs of achievements you have earned.</li>
+<li><strong>Unlocked modules</strong>: Which modules are available to you (starts with module-1, grows as you complete modules).</li>
+<li><strong>Last accessed</strong>: A timestamp updated each time your progress is saved.</li>
+</ul>
+<h3>Where to view progress</h3>
+<ol>
+<li><strong>Dashboard</strong> (<code>#/dashboard</code>): Shows overall completion percentage, a memory map of all lessons, and per-module completion counts.</li>
+<li><strong>Progress page</strong> (<code>#/progress</code>): A detailed breakdown showing:<ul>
+<li>Overall completion percentage</li>
+<li>Quiz statistics (quizzes taken, average score)</li>
+<li>Number of unlocked modules</li>
+<li>A sparkline chart of quiz scores over time</li>
+<li>Per-module progress bars</li>
+<li>All achievements (unlocked and locked)</li>
+</ul>
+</li>
+</ol>
+<h3>How completion works</h3>
+<ul>
+<li>A lesson is marked complete when you pass its associated quiz (70% or higher).</li>
+<li>Passing a quiz also unlocks the next module automatically.</li>
+<li>The dashboard shows a visual &quot;memory map&quot; — one cell per lesson, color-coded:<ul>
+<li>Filled (ok): completed</li>
+<li>Current/glowing: in-progress or next available</li>
+<li>Locked (hatched): not yet available</li>
+</ul>
+</li>
+</ul>
+<h3>Offline persistence</h3>
+<ul>
+<li>Progress is saved in <strong>IndexedDB</strong> (primary storage) with a <strong>localStorage</strong> fallback.</li>
+<li>Progress persists across app restarts and browser sessions.</li>
+<li>On shared computers, each profile has its own separate progress (keyed by user ID).</li>
+<li>Guest progress is stored separately and can be migrated to a profile.</li>
+</ul>
+<h3>Progress integrity</h3>
+<p>The app includes a <strong>progress integrity check</strong> that validates your progress against the lesson sequence. If someone manually edits local storage to mark a later lesson as complete without completing its predecessor, the integrity check will prune the impossible entries and restore the longest consistent prefix.</p>
+<h2>11. Achievements</h2>
+<p>PyKnowledge has four achievements that you can earn:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>first-lesson</td>
+<td>First Steps</td>
+<td>Complete your first lesson</td>
+</tr>
+<tr>
+<td>first-quiz</td>
+<td>Quiz Taker</td>
+<td>Pass your first quiz with 70% or higher</td>
+</tr>
+<tr>
+<td>module-complete</td>
+<td>Module Master</td>
+<td>Complete all lessons in a module</td>
+</tr>
+<tr>
+<td>perfect-score</td>
+<td>Perfect Score</td>
+<td>Score 100% on any quiz</td>
+</tr>
+</tbody></table>
+<h3>How achievements work</h3>
+<ul>
+<li>Achievements are <strong>checked automatically</strong> when you pass a quiz.</li>
+<li>Any newly earned achievements are displayed immediately with a celebration animation.</li>
+<li>Achievement progress is <strong>persistent</strong> — it is saved in your local progress data and survives app restarts.</li>
+<li>Achievements are <strong>profile-specific</strong> — each user&#39;s achievements are stored separately.</li>
+<li>If you are using guest mode, achievements are saved under your guest ID and migrate to a profile if you create one later.</li>
+</ul>
+<h3>Viewing achievements</h3>
+<ul>
+<li><strong>Progress page</strong> (<code>#/progress</code>): All achievements are listed with their status (unlocked or locked).</li>
+<li><strong>Quiz result screen</strong>: When you pass a quiz and earn a new achievement, it is displayed with a badge.</li>
+</ul>
+<h2>12. Reference Library</h2>
+<p>The <strong>Reference Library</strong> (<code>#/library</code>) is a free-reading area with no locks or quizzes. It is designed for quick lookups and review.</p>
+<h3>What it contains</h3>
+<p>The library has two main sections:</p>
+<ol>
+<li><p><strong>Nine reference cheat sheets</strong> — one per module:</p>
+<ul>
+<li><code>ref-basics</code>: Python Basics</li>
+<li><code>ref-conditionals</code>: If-Else Statements</li>
+<li><code>ref-loops</code>: Loops</li>
+<li><code>ref-functions</code>: Functions</li>
+<li><code>ref-datastructures</code>: Lists, Tuples, Sets &amp; Dictionaries</li>
+<li><code>ref-modules</code>: Modules &amp; Imports</li>
+<li><code>ref-io-formatting</code>: Output Formatting, Files &amp; JSON</li>
+<li><code>ref-errors</code>: Errors &amp; Exceptions</li>
+<li><code>ref-oop</code>: Classes &amp; OOP (+ Generators)</li>
+</ul>
+<p>Each sheet contains sections with headings, explanatory text, and code examples.</p>
+</li>
+<li><p><strong>Searchable glossary</strong>: 24 Python terms from &quot;Argument&quot; to &quot;Yield&quot;, each with a one-line definition.</p>
+</li>
+</ol>
+<h3>Navigating the library</h3>
+<ol>
+<li>The <strong>library index</strong> (<code>#/library</code>) shows a file-tree-style listing of all cheat sheets and the glossary.</li>
+<li>Clicking a cheat sheet opens it at <code>#/library/sheet-id</code>.</li>
+<li>Each sheet has <strong>Previous</strong> and <strong>Next</strong> buttons to navigate between sheets.</li>
+<li>Clicking the glossary link opens <code>#/library/glossary</code>.</li>
+</ol>
+<h3>Searching the glossary</h3>
+<p>The glossary supports <strong>live search</strong>: type in the search box at the top, and terms are filtered in real time based on whether the term or definition contains your search text.</p>
+<h3>Offline availability</h3>
+<p>The entire library (all sheets and glossary terms) is cached by the service worker. No internet connection is required to browse, read, or search the library.</p>
+<h2>13. Offline Mode</h2>
+<p>PyKnowledge is built around an <strong>offline-first architecture</strong>. Here is exactly what works without a network connection:</p>
+<h3>What works offline</h3>
+<ul>
+<li><strong>All lessons</strong>: Content, code examples, and all exercise types (predict output, fix the code, Parsons, write code, challenge)</li>
+<li><strong>All quizzes</strong>: All 29 quizzes including the 10-question capstone</li>
+<li><strong>The Python code runner</strong>: The Skulpt interpreter runs entirely in the browser — no server needed for code execution</li>
+<li><strong>Progress tracking</strong>: All progress, scores, and achievements are saved locally via IndexedDB and localStorage</li>
+<li><strong>Achievements</strong>: Earned and displayed entirely client-side</li>
+<li><strong>Reference Library</strong>: All cheat sheets and glossary searches work offline</li>
+<li><strong>Authentication</strong>: Profile creation, PIN login, and guest mode all work offline (uses Web Crypto API)</li>
+<li><strong>PWA installation</strong>: Installing the app caches all content for offline use</li>
+<li><strong>Navigation</strong>: All routing (hash-based) works without a server</li>
+</ul>
+<h3>What does NOT work offline</h3>
+<ul>
+<li><strong>Server/API mode</strong>: If <code>window.PYKNOWLEDGE_API_URL</code> is configured, the app can fetch lessons and quizzes from a server. This is optional and disabled by default. Without a server configured, the app uses static JSON files (which are cached).</li>
+<li><strong>New content downloads</strong>: If new lessons or quizzes are added to the server while you are offline, they will not appear until you reconnect and the service worker updates the cache.</li>
+<li><strong>PWA installation prompt</strong>: The &quot;Install&quot; button only appears when the browser&#39;s <code>beforeinstallprompt</code> event fires, which requires an initial online visit.</li>
+</ul>
+<h3>Service worker caching</h3>
+<p>The service worker caches <strong>55+ static assets</strong> including:</p>
+<ul>
+<li>All application code (HTML, CSS, JavaScript)</li>
+<li>All content files (lessons.json, quizzes.json, reference.json)</li>
+<li>The Python interpreter (Skulpt) and supporting libraries</li>
+<li>Fonts and images</li>
+<li>The manifest file and icons</li>
+</ul>
+<p>The cache uses a <strong>cache-first strategy</strong>: requests are served from the cache immediately, and only go to the network if no cached copy exists. If the network is unavailable, cached content is served. If something is not cached, an offline error page is returned.</p>
+<h3>Cache progress</h3>
+<p>During the first install, the service worker reports caching progress to the app (counting cached files out of the total). This is used by the update notifier and offline indicator components.</p>
+<h3>When the network disappears</h3>
+<p>If you are using the app and lose connectivity:</p>
+<ol>
+<li>An <strong>offline indicator</strong> appears: &quot;You are offline — cached content is available&quot;</li>
+<li>The status pill in the header changes to &quot;OFFLINE&quot;</li>
+<li>All existing functionality continues to work (lessons, quizzes, progress)</li>
+<li>A toast notification shows: &quot;You are now offline. Cached lessons remain available.&quot;</li>
+</ol>
+<h3>When the connection returns</h3>
+<ol>
+<li>The offline indicator disappears</li>
+<li>The status pill updates</li>
+<li>A toast notification shows: &quot;Back online.&quot;</li>
+<li>The app checks for service worker updates (if online)</li>
+</ol>
+<h3>Guest vs. profile offline behavior</h3>
+<p>Both guest and profile modes work identically offline. All data (profiles, PINs, progress) is stored in browser storage. The only difference is that creating a profile requires Web Crypto API support, which virtually all modern browsers provide.</p>
+<h2>14. Installing PyKnowledge as a PWA</h2>
+<h3>When installation is available</h3>
+<p>The PWA install prompt appears automatically on supported devices when:</p>
+<ul>
+<li>The app has been visited at least once online</li>
+<li>A service worker is registered</li>
+<li>The <code>beforeinstallprompt</code> event fires</li>
+</ul>
+<p>You can also trigger the install prompt via the &quot;Download App&quot; button on the authentication screens.</p>
+<h3>Android (Chrome)</h3>
+<ol>
+<li>After loading PyKnowledge once, Chrome may show a banner: &quot;Add to Home screen&quot;</li>
+<li>Alternatively, tap the <strong>⋮ menu</strong> → <strong>Add to Home screen</strong> → <strong>Install</strong></li>
+<li>Or use the <strong>&quot;Download App&quot;</strong> button on the welcome/profile screens</li>
+<li>Once installed, launch PyKnowledge from your home screen. It opens in fullscreen mode with no browser UI.</li>
+</ol>
+<h3>Desktop (Chrome/Edge)</h3>
+<ol>
+<li>Visit PyKnowledge in Chrome or Edge</li>
+<li>Click the <strong>install icon</strong> in the address bar (or find &quot;Install&quot; in the browser menu)</li>
+<li>Confirm the installation prompt</li>
+<li>Launch from your desktop or app launcher</li>
+</ol>
+<h3>iOS (Safari)</h3>
+<ol>
+<li>Visit PyKnowledge in Safari</li>
+<li>Tap the <strong>Share</strong> button</li>
+<li>Tap <strong>Add to Home Screen</strong></li>
+<li>Confirm and launch from your home screen</li>
+</ol>
+<h3>After installation</h3>
+<ul>
+<li>The app launches in standalone mode (no browser address bar or navigation)</li>
+<li>All content is cached locally</li>
+<li>The app works without any internet connection</li>
+<li>Updates are applied automatically when you reconnect (a notification prompts you to refresh)</li>
+</ul>
+<h2>15. Mobile and Low-End Device Usage</h2>
+<h3>Mobile navigation</h3>
+<ul>
+<li>All interactive elements (buttons, quiz options, exercise interactions) are sized for touch</li>
+<li>The PIN entry screen uses a large on-screen keypad</li>
+<li>Parsons problems support both drag-and-drop and tap-to-move</li>
+<li>The code editor supports touch-based text selection and editing</li>
+</ul>
+<h3>Responsive design</h3>
+<ul>
+<li>The layout adapts from desktop to mobile using a mobile-first CSS approach</li>
+<li>Module cards, lesson content, and quiz questions reflow based on screen width</li>
+<li>Text remains readable on small screens</li>
+</ul>
+<h3>Performance considerations</h3>
+<p>The About page explicitly states the app is designed for:</p>
+<ul>
+<li><strong>Dual-core CPU, 2 GB RAM</strong> minimum</li>
+<li><strong>Under 500 ms</strong> page load target</li>
+<li><strong>200-250 MB</strong> storage (including all content and the Python interpreter)</li>
+</ul>
+<h3>Reduced motion</h3>
+<p>The app respects the <code>prefers-reduced-motion</code> CSS media query:</p>
+<ul>
+<li>Page transitions are disabled for users who prefer reduced motion</li>
+<li>Animations (staggered card entrances, progress fills) are skipped</li>
+<li>The scroll-based reveal animations are not applied</li>
+</ul>
+<h3>Accessibility</h3>
+<p>Verified accessibility features include:</p>
+<ul>
+<li><strong>Skip-to-content</strong>: Keyboard navigation support via the navbar and Escape key to return home</li>
+<li><strong>ARIA labels and roles</strong>: All interactive elements have appropriate ARIA attributes (e.g., <code>aria-label</code>, <code>aria-current</code>, <code>role</code>)</li>
+<li><strong>Keyboard navigation</strong>: Full keyboard support including Escape to return home, Tab for focus movement, and Enter/Space for activation</li>
+<li><strong>Screen reader support</strong>: Semantic HTML5 structure with proper headings, landmarks (<code>role=&quot;banner&quot;</code>, <code>role=&quot;main&quot;</code>, <code>role=&quot;navigation&quot;</code>, <code>role=&quot;contentinfo&quot;</code>)</li>
+<li><strong>Focus management</strong>: Focus is moved to the main content area after navigation</li>
+<li><strong>Offline indicator visibility</strong>: Uses <code>aria-live=&quot;polite&quot;</code> for dynamic status updates</li>
+<li><strong>Quiz progress</strong>: Uses <code>role=&quot;progressbar&quot;</code> with <code>aria-valuemin</code>, <code>aria-valuemax</code>, and <code>aria-valuenow</code></li>
+<li><strong>Visual indicators</strong>: Color is not the only indicator — text labels and icons supplement visual state (e.g., &quot;LOCKED&quot;, &quot;DONE&quot;, &quot;OPEN&quot; chips)</li>
+</ul>
+<h2>16. Common Problems and Solutions</h2>
+<h3>The app does not load</h3>
+<p><strong>Possible causes and solutions:</strong></p>
+<ul>
+<li><strong>JavaScript is disabled</strong>: PyKnowledge requires JavaScript. Enable JavaScript in your browser. The app shows a noscript warning if JavaScript is disabled.</li>
+<li><strong>Browser is too old</strong>: The app uses ES6+ modules and the Web Crypto API. Use a modern browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+).</li>
+<li><strong>Service worker is blocked</strong>: Some browser extensions or corporate policies block service workers. Try disabling ad blockers or content blockers.</li>
+<li><strong>File corrupted</strong>: If the app fails to load after an update, try refreshing the page. If the problem persists, clear your browser&#39;s cache and service workers for the site.</li>
+</ul>
+<h3>I cannot log in / I forgot my PIN</h3>
+<ul>
+<li><strong>No PIN recovery exists</strong>: PINs are stored as hashes and cannot be recovered. If you forget your PIN, you must create a new profile.</li>
+<li><strong>To start over</strong>: Sign out, then on the profile picker, create a new profile with a new name. The old profile remains but you will need to use the new one.</li>
+<li><strong>5 attempts allowed</strong>: You have 5 PIN attempts before the UI shows &quot;ACCESS DENIED&quot; and resets the input. There is no permanent lockout.</li>
+</ul>
+<h3>A lesson or module is locked</h3>
+<ul>
+<li><strong>Module locked</strong>: You must complete <strong>all lessons</strong> in the prerequisite module. For example, to unlock Module 2, complete all 3 lessons in Module 1.</li>
+<li><strong>Lesson locked</strong>: You must complete the <strong>previous lesson</strong> in the same module. Lessons unlock sequentially.</li>
+<li><strong>Solution</strong>: Check your dashboard to see which lessons are marked &quot;Done&quot;. Complete any missing lessons by working through earlier content.</li>
+</ul>
+<h3>My quiz score is low / I failed a quiz</h3>
+<ul>
+<li><strong>You can retake quizzes</strong>: Click &quot;Retry Quiz&quot; on the failure screen. There is no limit on attempts.</li>
+<li><strong>Review weak spots</strong>: The failure screen highlights concepts you missed. Use the &quot;Review Lesson&quot; link to study those topics.</li>
+<li><strong>Passing score</strong>: You need 70% or higher to pass. Scores are rounded to the nearest whole number.</li>
+</ul>
+<h3>My progress disappeared</h3>
+<ul>
+<li><strong>Profile-specific</strong>: Progress is stored per-profile. If you signed in as a different profile or as a guest, your progress from another profile will not appear.</li>
+<li><strong>Cleared browser data</strong>: If you or your browser cleared storage (cache, site data), progress is lost. This is stored only on the device.</li>
+<li><strong>Guest progress</strong>: Guest progress uses a persistent ID. If you cleared site data, the guest ID is lost and progress is gone.</li>
+<li><strong>Solution</strong>: Ensure you are signed into the correct profile. If progress was truly cleared, starting over is the only option (there is no cloud backup).</li>
+</ul>
+<h3>The application is offline</h3>
+<p>When offline:</p>
+<ul>
+<li>The offline indicator appears at the top of the screen</li>
+<li>All cached lessons, quizzes, and exercises remain available</li>
+<li>Your progress continues to save locally</li>
+<li>No data is lost</li>
+<li>Simply continue working — the app is designed for this scenario</li>
+</ul>
+<h3>PWA installation is not working</h3>
+<ul>
+<li><strong>Not supported</strong>: PWA installation requires a supporting browser (Chrome, Edge, or Safari on iOS). Some browsers (mobile Firefox, etc.) do not support the install prompt.</li>
+<li><strong>Already installed</strong>: If the app is already running in standalone mode, the install button is hidden.</li>
+<li><strong>Incognito/private browsing</strong>: Installation is not available in private browsing modes.</li>
+<li><strong>Corporate policies</strong>: Some managed devices block PWA installation.</li>
+</ul>
+<h3>Code exercises do not run</h3>
+<ul>
+<li>The Python code runner uses <strong>Skulpt</strong>, which is cached by the service worker. If the interpreter fails to load, refresh the page.</li>
+<li>Skulpt supports a subset of Python 3 syntax. Some advanced language features may not be available in the browser interpreter.</li>
+</ul>
+<h2>17. Data and Privacy</h2>
+<h3>What data is stored locally</h3>
+<p>All your data never leaves your device. PyKnowledge stores:</p>
+<ol>
+<li><strong>Profiles</strong>: Your display name, avatar color, PIN hash, PIN salt, and user ID — stored in <code>localStorage</code> under the key <code>pyknowledge_profiles</code>.</li>
+<li><strong>Sessions</strong>: Active user ID and last-active timestamp — stored in <code>sessionStorage</code> under the key <code>pyknowledge_session</code>.</li>
+<li><strong>Progress</strong>: Completed lessons, quiz scores, achievements, unlocked modules, and last-accessed timestamp — stored in <strong>IndexedDB</strong> (primary) with a <code>localStorage</code> fallback.</li>
+<li><strong>Guest ID</strong>: A persistent identifier for guest users — stored in <code>localStorage</code> under the key <code>pyknowledge_guest_id</code>.</li>
+<li><strong>Theme preference</strong>: <code>pk-theme</code> in <code>localStorage</code>.</li>
+</ol>
+<h3>Data isolation</h3>
+<ul>
+<li>Each profile has a <strong>separate progress record</strong> keyed by user ID (e.g., <code>pyknowledge_progress_user_123_abc</code>).</li>
+<li>Guest progress is stored under the guest ID and does not mix with profile data.</li>
+<li>When a guest creates a profile, their guest progress is <strong>migrated</strong> to the new profile and the guest data is cleaned up.</li>
+</ul>
+<h3>What is NOT stored</h3>
+<ul>
+<li><strong>No plaintext PINs</strong>: PINs are hashed with PBKDF2 (100,000 iterations, SHA-256) with a random salt. The hash and salt are stored, never the raw PIN.</li>
+<li><strong>No server data</strong>: In the default offline mode, no data is sent to any server.</li>
+<li><strong>No analytics or tracking</strong>: The app does not include analytics scripts or tracking pixels.</li>
+<li><strong>No personal information beyond the profile name</strong>: No email, address, or other PII is collected.</li>
+</ul>
+<h3>Server mode (optional, not default)</h3>
+<p>The app includes optional server integration (Node.js/Express/PostgreSQL) that can be enabled by setting <code>window.PYKNOWLEDGE_API_URL</code>. In this mode:</p>
+<ul>
+<li>Lessons and quizzes can be fetched from a server API</li>
+<li>Authentication can use email/password with JWT tokens</li>
+<li>Server data is fetched network-first (falls back to cache when offline)</li>
+</ul>
+<p>But in the standard offline-first mode, none of this is active. The app works entirely from local JSON files and browser storage.</p>
+<h2>18. Frequently Asked Questions</h2>
+<h3>Can I use PyKnowledge without internet?</h3>
+<p>Yes. After the first visit (which loads and caches all content), PyKnowledge works entirely offline. All lessons, quizzes, exercises, the Python interpreter, and your progress are stored locally.</p>
+<h3>Do I need an account?</h3>
+<p>No. PyKnowledge does not require an account. You can either create a local profile with a PIN, or use the app as a guest. No email, no password, no server registration.</p>
+<h3>Can I learn Python offline?</h3>
+<p>Yes. The entire Python curriculum — 9 modules, 28 lessons, 116 exercises, 29 quizzes, and a Python code runner (Skulpt) — works without internet after the first load.</p>
+<h3>How is my progress saved?</h3>
+<p>Progress is saved in your browser&#39;s IndexedDB (with localStorage fallback) when you complete a lesson or pass a quiz. It persists across app restarts and works offline. Progress is per-profile — each student on a shared computer has their own.</p>
+<h3>What happens if I fail a quiz?</h3>
+<p>You can retake quizzes unlimited times. The quiz engine shows your weak spots (concepts you missed) and lets you review the lesson. You need 70% or higher to pass. The most recent score replaces any previous attempt.</p>
+<h3>Can I repeat a lesson?</h3>
+<p>Yes. You can navigate back to any completed lesson at any time. The lesson will show your previous exercises, and you can work through them again. Quizzes can also be retaken.</p>
+<h3>Can I install PyKnowledge on Android?</h3>
+<p>Yes, as a PWA. On Android Chrome, use the menu (⋮) → &quot;Add to Home screen&quot; → &quot;Install&quot;. You can also use the &quot;Download App&quot; button on the welcome/profile screens. Once installed, it launches like a native app and works offline.</p>
+<h3>Can I use it on a computer?</h3>
+<p>Yes. PyKnowledge works in any modern browser on Windows, macOS, or Linux. You can also install it as a PWA on desktop (Chrome/Edge: click the install icon in the address bar).</p>
+<h3>What happens when the connection returns?</h3>
+<p>When you come back online, the app detects the change, shows &quot;Back online&quot;, and checks for service worker updates. Your offline progress is preserved and continues to be stored locally. No data is uploaded or synced.</p>
+<h3>What are the nine modules?</h3>
+<ol>
+<li>Introduction to Python</li>
+<li>Control Structures</li>
+<li>Loops</li>
+<li>Functions</li>
+<li>Data Structures</li>
+<li>Modules and Imports</li>
+<li>Input and Output</li>
+<li>Errors and Exceptions</li>
+<li>Classes &amp; OOP</li>
+</ol>
+<h3>What is the passing score for quizzes?</h3>
+<p>70%. Scores at or above 70% pass. Scores below 70% fail but can be retried.</p>
+<h3>What are the five exercise types?</h3>
+<ol>
+<li>Predict output (guess what code prints)</li>
+<li>Fix the code (correct buggy code)</li>
+<li>Parsons problems (arrange code blocks in order)</li>
+<li>Write code (write and run Python in the browser)</li>
+<li>Challenge (complex coding problems)</li>
+</ol>
+<h3>Is there a final exam?</h3>
+<p>Yes. After completing Module 9, you can take the <strong>Final Capstone</strong> quiz (<code>capstone-final</code>) — a 10-question mixed review covering all nine modules. It is accessible at <code>#/quiz/capstone-final</code>.</p>
+<h2>19. Quick Start</h2>
+<ol>
+<li><strong>Open PyKnowledge</strong> in your browser (Chrome, Edge, Firefox, or Safari).</li>
+<li>Read the landing page, then click <strong>&quot;Start Learning&quot;</strong>.</li>
+<li>On the welcome screen, click <strong>&quot;Create Profile&quot;</strong>.</li>
+<li>Enter your name and set a 4-digit PIN. Confirm the PIN.</li>
+<li>You are taken to the <strong>dashboard</strong>. It shows Module 1, which is unlocked.</li>
+<li>Click <strong>&quot;Start module&quot;</strong> on the Module 1 card.</li>
+<li>Click <strong>&quot;Start Lesson&quot;</strong> to open the first lesson (&quot;What is Python?&quot;).</li>
+<li>Read the lesson and work through the exercises. Each exercise provides hints and immediate feedback.</li>
+<li>When you reach the last lesson of a module, click <strong>&quot;Take Quiz&quot;</strong>.</li>
+<li>Complete the quiz. If you score 70% or higher, the lesson is marked complete and the next module unlocks.</li>
+<li>Return to the <strong>dashboard</strong> and continue with the next module.</li>
+<li>After completing all 9 modules, take the <strong>Final Capstone</strong> quiz via <code>#/quiz/capstone-final</code>.</li>
+<li>Check your <strong>progress</strong> anytime at the Progress page (<code>#/progress</code>) to see completion percentages, quiz scores, and achievements.</li>
+<li>If you are offline, the app continues to work. Progress saves locally just the same.</li>
+</ol>
+<h2>20. Documentation Verification Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Evidence</th>
+<th>User Guide Coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Landing page</td>
+<td>Verified UI</td>
+<td>index.html landing-root section</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>App shell</td>
+<td>Verified UI</td>
+<td>index.html spa-root, engine.js loaded dynamically</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PWA installation</td>
+<td>Verified UI</td>
+<td>manifest.json, install-prompt.js, install guide in auth-screen.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PWA manifest</td>
+<td>Verified</td>
+<td>manifest.json (display=standalone, icons, theme)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Service worker</td>
+<td>Verified Code</td>
+<td>service-worker.js (cache-first, 55+ assets, SW version 0.20.9)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Offline indicator</td>
+<td>Verified UI</td>
+<td>offline-indicator.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Update notifier</td>
+<td>Verified UI</td>
+<td>update-notifier.js (refresh banner)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Authentication (profiles)</td>
+<td>Verified UI + Tests</td>
+<td>storage/auth.js, auth-screen.js, auth.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PIN creation (name validation)</td>
+<td>Verified UI</td>
+<td>auth-screen.js renderRegister (min 2 chars)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PIN creation (PIN validation)</td>
+<td>Verified UI</td>
+<td>auth-screen.js (4-8 digits, numeric only)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PIN hashing (PBKDF2)</td>
+<td>Verified Code + Tests</td>
+<td>utils/crypto.js, auth.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Session timeout (30 min)</td>
+<td>Verified Code</td>
+<td>storage/auth.js SESSION_TIMEOUT_MS</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Guest mode</td>
+<td>Verified UI</td>
+<td>auth-screen.js &quot;Continue as Guest&quot;</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Guest progress migration</td>
+<td>Verified Code</td>
+<td>core/storage.js migrateGuestProgress()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Profile isolation</td>
+<td>Verified UI + Tests</td>
+<td>storage/auth.js per-user keys, auth.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Logout</td>
+<td>Verified UI</td>
+<td>navbar.js btn-logout handler</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Verified UI</td>
+<td>app/dashboard/dashboard.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dashboard greeting (time-aware)</td>
+<td>Verified UI</td>
+<td>dashboard.js greetUser()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dashboard primary button</td>
+<td>Verified UI + Tests</td>
+<td>dashboard-cards.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dashboard memory map</td>
+<td>Verified UI</td>
+<td>dashboard.js memoryMapHtml()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Module locking</td>
+<td>Verified UI + Tests</td>
+<td>storage/progress.js checkPrerequisite, prerequisites.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Lesson viewer</td>
+<td>Verified UI</td>
+<td>app/lessons/lesson-viewer.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Lesson sequential locking</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js locked check</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Lesson navigation (prev/next)</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js footer buttons</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exercise: predict_output</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js renderExercises</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exercise: fix_the_code</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js (buggy + reveal solution)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exercise: parsons</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js (drag-and-drop + tap-to-move)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exercise: write_code</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js (Skulpt executor)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exercise: challenge</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Progressive hints</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js renderHintLevels()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Misconception detection</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js findRemediation()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz engine</td>
+<td>Verified UI + Tests</td>
+<td>app/quizzes/quiz-engine.js, quiz-scoring.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz types (MC, TF, fill-blank)</td>
+<td>Verified UI</td>
+<td>quiz-engine.js questionHtml()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz 70% pass threshold</td>
+<td>Verified UI + Tests</td>
+<td>quiz-engine.js (passingThreshold=70), quiz-scoring.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz retry</td>
+<td>Verified UI</td>
+<td>quiz-engine.js &quot;Retry Quiz&quot; button</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz score storage</td>
+<td>Verified UI + Tests</td>
+<td>core/storage.js markLessonComplete, progress.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Quiz weak spot review</td>
+<td>Verified UI</td>
+<td>quiz-engine.js weakSpots</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Achievement system</td>
+<td>Verified UI</td>
+<td>storage/achievements.js, progress-dashboard.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>4 achievements (first-lesson, first-quiz, module-complete, perfect-score)</td>
+<td>Verified Code</td>
+<td>achievements.js ACHIEVEMENTS array</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Progress tracking</td>
+<td>Verified UI + Tests</td>
+<td>core/storage.js, progress.js, progress.test.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Progress: IndexedDB + localStorage</td>
+<td>Verified Code</td>
+<td>core/idb.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Progress integrity check</td>
+<td>Verified Code</td>
+<td>storage/progress.js validateProgressIntegrity()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Progress dashboard (sparkline)</td>
+<td>Verified UI</td>
+<td>progress-dashboard.js quizScoresSparkline()</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Reference library (9 sheets)</td>
+<td>Verified UI</td>
+<td>app/library/reference-library.js, reference.json</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Reference library glossary (24 terms)</td>
+<td>Verified UI</td>
+<td>reference-library.js renderGlossary(), live search</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Reference library offline</td>
+<td>Verified Code</td>
+<td>service-worker.js caches reference.json</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Capstone quiz (10 questions)</td>
+<td>Verified Content</td>
+<td>quizzes.json capstone-final</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Curriculum (9 modules, 28 lessons)</td>
+<td>Verified Content</td>
+<td>content/lessons.json</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>116 exercises</td>
+<td>Verified Content</td>
+<td>Parsed from lessons.json</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>5 exercise types</td>
+<td>Verified UI</td>
+<td>lesson-viewer.js renderExercises switch</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>29 quizzes</td>
+<td>Verified Content</td>
+<td>content/quizzes.json</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>No videos embedded in lessons</td>
+<td>Verified Content</td>
+<td>all lesson.video fields are null</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Error handling</td>
+<td>Verified UI</td>
+<td>core/errors.js renderError, renderNotFound</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>5-part output (PASS/FAIL/NOT DONE)</td>
+<td>N/A</td>
+<td>Not user-facing — developer task tracking</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Accessibility (ARIA, keyboard)</td>
+<td>Verified UI</td>
+<td>navbar.js, router.js, various components</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Reduced motion support</td>
+<td>Verified Code</td>
+<td>router.js matchMedia(&#39;prefers-reduced-motion&#39;)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Skulpt Python interpreter</td>
+<td>Verified UI</td>
+<td>lib/skulpt.min.js, python-executor.js</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Routing (hash-based)</td>
+<td>Verified Code</td>
+<td>core/router.js, engine.js routes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Routes verified (8 routes)</td>
+<td>Verified Code</td>
+<td>engine.js registerRoute calls</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Theme preference (dark)</td>
+<td>Verified UI</td>
+<td>index.html color-scheme, theme restore</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h2>21. Routes Reference</h2>
+<p>The following table lists all user-facing routes registered in the application:</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Purpose</th>
+<th>Authentication Required</th>
+<th>Works Offline</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/</code></td>
+<td>Landing/home page (front-page)</td>
+<td>No</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/login</code></td>
+<td>Profile picker, PIN entry, profile creation, guest access</td>
+<td>No (but required to progress)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/dashboard</code></td>
+<td>Module overview, primary action button, memory map</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/module/:id</code></td>
+<td>Module detail — lesson list with sequential locking</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/lesson/:id</code></td>
+<td>Lesson content with exercises, code editor, Skulpt runner</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/quiz/:id</code></td>
+<td>Quiz with multiple-choice, true/false, fill-blank questions</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/progress</code></td>
+<td>Progress dashboard with achievements, sparkline, stats</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/library</code></td>
+<td>Reference library index (9 sheets + glossary)</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/library/:sheetId</code></td>
+<td>Reference sheet detail with prev/next navigation</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/library/glossary</code></td>
+<td>Searchable glossary (24 terms, live search)</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><code>/about</code></td>
+<td>About page with curriculum overview, credits, build info</td>
+<td>Yes (if profiles exist)</td>
+<td>Yes</td>
+<td>Verified</td>
+</tr>
+</tbody></table>
+<p><strong>Note</strong>: When no profiles exist, guest mode allows access to all routes without authentication. When profiles exist, the protected routes require a PIN login. The landing page (<code>/</code>) is always accessible regardless of authentication state.</p>
+<h3>Authentication gating logic</h3>
+<p>From <code>core/router.js</code>:</p>
+<ul>
+<li>Routes requiring auth: <code>/dashboard</code>, <code>/module</code>, <code>/lesson</code>, <code>/quiz</code>, <code>/progress</code>, <code>/library</code>, <code>/about</code></li>
+<li>If profiles exist and no session is active → redirect to <code>/login</code></li>
+<li>If no profiles exist → guest mode is automatically allowed</li>
+</ul>
+<h3>Escape key navigation</h3>
+<p>Pressing the <strong>Escape</strong> key from any route (except <code>/</code>) returns you to the home page (<code>/</code>).</p>
+<h2>22. Exercise Type Reference</h2>
+<h3>Predict Output</h3>
+<ul>
+<li>You see a code snippet and are asked what it will print</li>
+<li>Select from multiple-choice options</li>
+<li>Click &quot;Check Answer&quot; to verify</li>
+<li>Correct answers show an explanation</li>
+<li>Incorrect answers may show a misconception-based traceback-style error</li>
+</ul>
+<h3>Fix the Code</h3>
+<ul>
+<li>You see buggy code and the prompt to fix it</li>
+<li>The correct solution is hidden behind a &quot;reveal fix&quot; toggle</li>
+<li>Hints are available with progressive disclosure</li>
+<li>No interactive execution — you fix code mentally/in your head</li>
+</ul>
+<h3>Parsons Problems</h3>
+<ul>
+<li>Code blocks are provided in a jumbled order</li>
+<li>Drag and drop blocks into the correct order</li>
+<li>Distractor blocks (incorrect options) may be included</li>
+<li>Tap-to-move is supported on touch devices (click to move blocks between source and target)</li>
+<li>Click &quot;Check Order&quot; to verify your arrangement</li>
+<li>Click &quot;Reset&quot; to start over</li>
+</ul>
+<h3>Write Code</h3>
+<ul>
+<li>Write Python code in an embedded editor</li>
+<li>Code runs in the browser using Skulpt (no server)</li>
+<li>Test cases show expected input/output</li>
+<li>Hints are available with progressive disclosure</li>
+<li>Output is compared against expected output</li>
+<li>Correct code shows a success message; incorrect output shows expected vs. actual</li>
+</ul>
+<h3>Challenge</h3>
+<ul>
+<li>More complex multi-step coding problems</li>
+<li>Same editor and execution model as write_code</li>
+<li>Often involve multiple concepts</li>
+<li>May have misconception detection with remediation links</li>
+</ul>
+<h2>23. Achievements Reference</h2>
+<h3>First Steps</h3>
+<ul>
+<li><strong>ID</strong>: first-lesson</li>
+<li><strong>Unlocked when</strong>: You complete your first lesson (pass the first quiz with 70%+)</li>
+<li><strong>Description</strong>: &quot;Complete your first lesson&quot;</li>
+</ul>
+<h3>Quiz Taker</h3>
+<ul>
+<li><strong>ID</strong>: first-quiz</li>
+<li><strong>Unlocked when</strong>: You pass your first quiz with 70% or higher</li>
+<li><strong>Description</strong>: &quot;Pass your first quiz with 70% or higher&quot;</li>
+</ul>
+<h3>Module Master</h3>
+<ul>
+<li><strong>ID</strong>: module-complete</li>
+<li><strong>Unlocked when</strong>: You complete all lessons in any module</li>
+<li><strong>Description</strong>: &quot;Complete all lessons in a module&quot;</li>
+</ul>
+<h3>Perfect Score</h3>
+<ul>
+<li><strong>ID</strong>: perfect-score</li>
+<li><strong>Unlocked when</strong>: You score 100% on any quiz</li>
+<li><strong>Description</strong>: &quot;Score 100% on any quiz&quot;</li>
+</ul>
+<p>All achievements are checked automatically after each quiz attempt. New achievements trigger a celebration animation and display on the quiz results screen.</p>
+<h2>24. Curriculum Overview</h2>
+<h3>Module 1: Introduction to Python</h3>
+<p>No prerequisite. Start here.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>What is Python? — 15 min</li>
+<li>Variables and Data Types — 20 min</li>
+<li>Input and Output — 15 min</li>
+</ol>
+<h3>Module 2: Control Structures</h3>
+<p>Prerequisites: Module 1 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>If-Else Statements — 20 min</li>
+<li>Loops — 25 min</li>
+</ol>
+<h3>Module 3: Loops</h3>
+<p>Prerequisites: Module 2 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>For Loops — 20 min</li>
+<li>While Loops — 20 min</li>
+<li>Break, Continue, and Nested Loops — 20 min</li>
+</ol>
+<h3>Module 4: Functions</h3>
+<p>Prerequisites: Module 3 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>Defining and Calling Functions — 20 min</li>
+<li>Parameters and Arguments — 20 min</li>
+<li>Return Values — 20 min</li>
+<li>Scope, Docstrings, and Best Practices — 20 min</li>
+</ol>
+<h3>Module 5: Data Structures</h3>
+<p>Prerequisites: Module 4 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>List Methods — 20 min</li>
+<li>List Comprehensions — 20 min</li>
+<li>Tuples, Sets, and Dictionaries — 20 min</li>
+<li>Looping Techniques — 20 min</li>
+</ol>
+<h3>Module 6: Modules and Imports</h3>
+<p>Prerequisites: Module 5 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>Creating and Importing Modules — 20 min</li>
+<li>Packages and Module Organization — 15 min</li>
+<li>Exploring the Standard Library — 20 min</li>
+</ol>
+<h3>Module 7: Input and Output</h3>
+<p>Prerequisites: Module 6 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>Fancier Output Formatting — 20 min</li>
+<li>Reading and Writing Files — 25 min</li>
+<li>Saving Structured Data with JSON — 20 min</li>
+</ol>
+<h3>Module 8: Errors and Exceptions</h3>
+<p>Prerequisites: Module 7 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>Syntax Errors and Exceptions — 20 min</li>
+<li>Handling Exceptions with try/except — 20 min</li>
+<li>Raising Exceptions and Clean-up — 20 min</li>
+</ol>
+<h3>Module 9: Classes and Object-Oriented Programming</h3>
+<p>Prerequisites: Module 8 complete.</p>
+<p><strong>Lessons:</strong></p>
+<ol>
+<li>Class and Instance Basics — 20 min</li>
+<li>Inheritance — 20 min</li>
+<li>Iterators and Generators — 20 min</li>
+</ol>
+<h3>Final Capstone</h3>
+<p>After completing all 9 modules, take the <strong>Final Capstone</strong> quiz (10 questions) at <code>#/quiz/capstone-final</code>. The capstone quiz description recommends aiming for 80% or higher.</p>
+<h2>25. Limitations</h2>
+<p>The following limitations are based on inspection of the current implementation:</p>
+<ol>
+<li><strong>No video lessons</strong>: All lesson <code>video</code> fields are <code>null</code>. No videos are used in the curriculum.</li>
+<li><strong>No PIN recovery</strong>: Forgotten PINs require creating a new profile.</li>
+<li><strong>No cloud sync</strong>: Progress is stored only on the current device/browser.</li>
+<li><strong>No admin/teacher dashboard</strong>: No tools for instructors to view student progress remotely.</li>
+<li><strong>No exercise auto-grading for code</strong>: Write-code exercises compare output against test cases via Skulpt, but there is no server-side code execution.</li>
+<li><strong>Skulpt limitations</strong>: The Skulpt Python interpreter supports a subset of Python 3. Some advanced features may not work.</li>
+<li><strong>Single device per profile</strong>: Profiles are stored per-browser. You cannot access your profile from another device.</li>
+<li><strong>No email-based accounts</strong>: Authentication is purely local (PIN-based profiles or guest mode).</li>
+<li><strong>Session timeout is fixed</strong>: 30-minute idle timeout cannot be changed.</li>
+<li><strong>No quiz history</strong>: Only the most recent quiz score is retained; previous attempts are overwritten.</li>
+</ol>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>PyKnowledge &middot; MIT licensed &middot; Built for TRAC students in Bongao, Tawi-Tawi</p>
+    <p>Curriculum aligned with CHED standards. All content stored locally on your device.</p>
+  </footer>
+</body>
+</html>

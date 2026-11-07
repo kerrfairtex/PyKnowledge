@@ -1,26 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PyKnowledge - Offline Python Learning Platform for TRAC/BARMM/CHED curriculum">
-  <meta name="theme-color" content="#16213e">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <meta name="theme-color" content="#08182B" />
+  <title>PyKnowledge — Learn Python offline</title>
+  <meta name="description" content="A free, offline-first Python course built for TRAC, BARMM, and CHED students. Install once, learn anywhere, signal or not." />
   <meta name="color-scheme" content="dark">
-  <title>PyKnowledge</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="ui/assets/icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="ui/themes/tokens.css" />
+  <link rel="stylesheet" href="ui/themes/os-shell.css" />
+  <link rel="stylesheet" href="ui/themes/os-auth.css" />
+  <link rel="stylesheet" href="ui/themes/rain.css" />
+  <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="ui/themes/default.css">
   <link rel="stylesheet" href="ui/themes/animations.css">
-  <link rel="stylesheet" href="ui/themes/landing.css">
-  <link rel="icon" href="ui/assets/icon-192.png" type="image/png">
-</head>
+  <link rel="stylesheet" href="ui/themes/dashboard.css">
+  <link rel="stylesheet" href="ui/themes/library.css">
+  <link rel="stylesheet" href="ui/themes/about.css">
+
+  <script type="module">
+    // FX tier detection runs first so no flash of unstyled effects
+    import { initFxTier } from './ui/components/fx-detector.js';
+    initFxTier().then(() => {
+      // FULL-tier effects (glitch + landing rain) — no-op at other tiers
+      import('./ui/components/os-fx.js').then((m) => m.initOsFx()).catch(() => {});
+    });
+    // Command palette works on landing too (Ctrl+K / >_ button)
+    import { initOsShell } from './ui/components/os-shell.js';
+    initOsShell();
+    // Matrix rain: lazy-load after load + idle; never blocks first paint
+    window.addEventListener('load', function () {
+      var kick = function () {
+        import('./ui/components/matrix-rain.js')
+          .then(function (m) { m.startRain(); })
+          .catch(function () { /* rain is decorative */ });
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(kick, { timeout: 600 });
+      else setTimeout(kick, 300);
+    });
+    // Restore persisted theme before first paint of dynamic content
+    (function () {
+      try {
+        var t = localStorage.getItem('pk-theme');
+        if (t && t !== 'green') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="ui/components/enhanced-navigation.js" defer></script></head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ================================================================
+     LANDING PAGE (visible by default - hidden when user enters the app)
+     ================================================================ -->
+<div id="landing-root">
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <img src="ui/assets/logo.png" alt="" />
+        <span>PyKnowledge<small>Offline Python · CHED curriculum</small></span>
+      </a>
+      <nav>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#offline">How it works</a>
+        <a href="#about">About</a>
+        <button type="button" class="os-palette-trigger" data-os-palette aria-label="Open command palette (Ctrl+K)">&gt;_</button>
+        <a class="btn-cta-small" href="#/login">Open the app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="os-bootlog" id="osBootlog" role="status" aria-live="polite" hidden>
+      <div class="os-bootlog-inner">
+        <pre class="os-bootlog-lines" id="osBootlogLines"></pre>
+        <button type="button" class="os-bootlog-skip" id="osBootlogSkip">skip [enter/tap]</button>
+      </div>
+    </div>
+    <!-- HERO: split layout -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-photo" aria-hidden="true"></div>
+      <div class="wrap">
+        <!-- Left: copy -->
+        <span class="eyebrow">Works with zero signal, once installed</span>
+        <h1 id="heroHeadline"><span class="hl">Learn Python without needing the internet.</span></h1>
+        <p class="lede">
+          PyKnowledge is a free course built for TRAC, BARMM, and CHED students. Install it
+          once on a shared computer or your own phone, and every lesson, exercise, and quiz
+          keeps working — connection or not.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#/login">Start learning</a>
+          <a class="btn btn-ghost" href="nova-chatbox.html">Try the AI Chatbox Demo</a>
+        </div>
+        <div class="hero-stats os-telemetry">
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">9</span><span class="os-stat-unit">MOD</span></strong><span class="os-stat-label">28 lessons in set path</span></div>
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">0</span><span class="os-stat-unit">KB NET</span></strong><span class="os-stat-label">needed after install</span></div>
+          <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">&lt;500</span><span class="os-stat-unit">MS</span></strong><span class="os-stat-label">page load, even offline</span></div>
+        </div>
+      </div>
+      <!-- Right: Code Preview + AI Chatbot -->
+      <div class="hero-visual">
+        <div class="hero-window" id="heroWindow">
+          <div class="hero-window-tabs">
+            <button class="hero-tab active" id="tabCode" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+              Code
+            </button>
+            <button class="hero-tab" id="tabOutput" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              Output
+            </button>
+          </div>
+
+          <!-- Code View -->
+          <div class="hero-view hero-view-code active" id="viewCode">
+            <div class="hero-window-body">
+              <div class="code-body">
+                <span class="code-line"><span class="code-comment">#############################################</span></span>
+                <span class="code-line"><span class="code-comment">#                                           #</span></span>
+                <span class="code-line"><span class="code-comment">#   NOVA AI CHATBOX - Full Python Code       #</span></span>
+                <span class="code-line"><span class="code-comment">#   Interactive conversational AI that       #</span></span>
+                <span class="code-line"><span class="code-comment">#   learns from your responses!              #</span></span>
+                <span class="code-line"><span class="code-comment">#                                           #</span></span>
+                <span class="code-line"><span class="code-comment">#############################################</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line"><span class="code-comment"># --- Knowledge Base ---</span></span>
+                <span class="code-line"><span class="code-keyword">def</span> <span class="code-func">get_response</span>(<span class="code-plain">message</span>):</span>
+                <span class="code-line">    <span class="code-plain">msg</span> = <span class="code-plain">message</span>.<span class="code-func">lower</span>()</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Greetings</span></span>
+                <span class="code-line">    <span class="code-keyword">if</span> <span class="code-keyword">any</span>(<span class="code-plain">word</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span> <span class="code-keyword">for</span> <span class="code-plain">word</span> <span class="code-keyword">in</span> [<span class="code-string">"hi"</span>, <span class="code-string">"hello"</span>, <span class="code-string">"hey"</span>]):</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-string">"Hello there! What can I help you with today?"</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># How are you</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"how are you"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-string">"I'm running great on Python! How about you?"</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Name question</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"your name"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-string">"I'm Nova, your AI learning assistant!"</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Python questions</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"python"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"Python is awesome! It's used at Google, NASA, and Instagram. "</span></span>
+                <span class="code-line">                <span class="code-string">"Want to learn it? Check out the 9 modules in PyKnowledge!"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Help topics</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"modules"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"PyKnowledge has 9 CHED-aligned modules:\n"</span></span>
+                <span class="code-line">                <span class="code-string">"1. Introduction to Python\n"</span></span>
+                <span class="code-line">                <span class="code-string">"2. Control Structures\n"</span></span>
+                <span class="code-line">                <span class="code-string">"3. Loops\n"</span></span>
+                <span class="code-line">                <span class="code-string">"4. Functions\n"</span></span>
+                <span class="code-line">                <span class="code-string">"5. Data Structures\n"</span></span>
+                <span class="code-line">                <span class="code-string">"6. Modules and Imports\n"</span></span>
+                <span class="code-line">                <span class="code-string">"7. Input and Output\n"</span></span>
+                <span class="code-line">                <span class="code-string">"8. Errors and Exceptions\n"</span></span>
+                <span class="code-line">                <span class="code-string">"9. Classes and OOP"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Offline question</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"offline"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"PyKnowledge works fully offline!\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• All lessons cached on device\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• No internet needed for exercises\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• Perfect for patchy signal areas"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Installation help</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"install"</span> <span class="code-keyword">in</span> <span class="code-plain">msg:</span></span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"To install PyKnowledge:\n"</span></span>
+                <span class="code-line">                <span class="code-string">"1. Tap 'Download App' on the landing page\n"</span></span>
+                <span class="code-line">                <span class="code-string">"2. Chrome: ⋮ menu → Add to Home Screen\n"</span></span>
+                <span class="code-line">                <span class="code-string">"3. iPhone: Share → Add to Home Screen"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Quiz info</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"quiz"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"Quizzes appear at each module's end.\n"</span></span>
+                <span class="code-line">                <span class="code-string">"You need 70% to pass. Don't worry — "</span></span>
+                <span class="code-line">                <span class="code-string">"you can retry as many times as needed!"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Jokes for fun</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"joke"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">import</span> <span class="code-plain">random</span></span>
+                <span class="code-line">        <span class="code-plain">jokes</span> = [</span>
+                <span class="code-line">            <span class="code-string">"Why do Python programmers wear glasses? Because they can't C!"</span>,</span>
+                <span class="code-line">            <span class="code-string">"What's a snake's favorite programming language? Python!"</span>,</span>
+                <span class="code-line">            <span class="code-string">"Why was the function sad? It didn't get any calls back."</span></span>
+                <span class="code-line">        ]</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-plain">random</span>.<span class="code-func">choice</span>(<span class="code-plain">jokes</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Math calculations</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-string">"calculate"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span> <span class="code-keyword">or</span> <span class="code-string">"math"</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-string">"I can help with math! Try: calculate 2 + 2"</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Farewell</span></span>
+                <span class="code-line">    <span class="code-keyword">elif</span> <span class="code-keyword">any</span>(<span class="code-plain">word</span> <span class="code-keyword">in</span> <span class="code-plain">msg</span> <span class="code-keyword">for</span> <span class="code-plain">word</span> <span class="code-keyword">in</span> [<span class="code-string">"bye"</span>, <span class="code-string">"goodbye"</span>, <span class="code-string">"quit"</span>]):</span>
+                <span class="code-line">        <span class="code-keyword">return</span> <span class="code-string">"Goodbye! Happy coding! 🐍"</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Default response</span></span>
+                <span class="code-line">    <span class="code-keyword">else</span>:</span>
+                <span class="code-line">        <span class="code-keyword">return</span> (<span class="code-string">"I can help with:\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• Modules & curriculum\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• Python basics\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• Offline features\n"</span></span>
+                <span class="code-line">                <span class="code-string">"• Installation guide\n"</span></span>
+                <span class="code-string">"• Quiz info\n"</span>
+                <span class="code-line">                <span class="code-string">"• Jokes! Just ask 'tell me a joke'"</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line"><span class="code-comment"># --- Main Chat Loop ---</span></span>
+                <span class="code-line"><span class="code-keyword">def</span> <span class="code-func">main</span>():</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"="</span> * <span class="code-plain">45</span>)</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"  NOVA AI CHATBOX - Your Python Learning Buddy"</span>)</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"="</span> * <span class="code-plain">45</span>)</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"Type 'quit', 'bye', or 'exit' to end the chat."</span>)</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"Try: hello, modules, python, offline, joke, quiz"</span>)</span>
+                <span class="code-line">    <span class="code-keyword">print</span>(<span class="code-string">"-"</span> * <span class="code-plain">45</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-comment"># Conversation history</span></span>
+                <span class="code-line">    <span class="code-plain">history</span> = []</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-keyword">while</span> <span class="code-keyword">True</span>:</span>
+                <span class="code-line">        <span class="code-comment"># Get user input</span></span>
+                <span class="code-line">        <span class="code-keyword">try</span>:</span>
+                <span class="code-line">            <span class="code-plain">user_input</span> = <span class="code-func">input</span>(<span class="code-string">"\nYou: "</span>).<span class="code-func">strip</span>()</span>
+                <span class="code-line">        <span class="code-keyword">except</span> <span class="code-func">EOFError</span>:</span>
+                <span class="code-line">            <span class="code-keyword">break</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">        <span class="code-comment"># Check for empty input</span></span>
+                <span class="code-line">        <span class="code-keyword">if not</span> <span class="code-plain">user_input</span>:</span>
+                <span class="code-line">            <span class="code-keyword">print</span>(<span class="code-string">"Nova: Please type something!"</span>)</span>
+                <span class="code-line">            <span class="code-keyword">continue</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">        <span class="code-comment"># Check for exit commands</span></span>
+                <span class="code-line">        <span class="code-keyword">if</span> <span class="code-plain">user_input</span>.<span class="code-func">lower</span>() <span class="code-keyword">in</span> [<span class="code-string">"quit"</span>, <span class="code-string">"bye"</span>, <span class="code-string">"exit"</span>]:</span>
+                <span class="code-line">            <span class="code-keyword">print</span>(<span class="code-string">f"Nova: {get_response('bye')}"</span>)</span>
+                <span class="code-line">            <span class="code-keyword">print</span>(<span class="code-string">f"\nChat ended. You had {len(history)} exchanges."</span>)</span>
+                <span class="code-line">            <span class="code-keyword">break</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">        <span class="code-comment"># Get bot response</span></span>
+                <span class="code-line">        <span class="code-plain">response</span> = <span class="code-func">get_response</span>(<span class="code-plain">user_input</span>)</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">        <span class="code-comment"># Display and store</span></span>
+                <span class="code-line">        <span class="code-keyword">print</span>(<span class="code-string">f"Nova: {response}"</span>)</span>
+                <span class="code-line">        <span class="code-plain">history</span>.<span class="code-func">append</span>({<span class="code-string">"user"</span>: <span class="code-plain">user_input</span>, <span class="code-string">"bot"</span>: <span class="code-plain">response</span>})</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">    <span class="code-keyword">return</span> <span class="code-plain">history</span></span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line"><span class="code-comment"># --- Run the program ---</span></span>
+                <span class="code-line"><span class="code-keyword">if</span> <span class="code-plain">__name__</span> == <span class="code-string">"__main__"</span>:</span>
+                <span class="code-line">    <span class="code-plain">conversation</span> = <span class="code-func">main</span>()</span>
+                <span class="code-line">&nbsp;</span>
+                <span class="code-line"><span class="code-comment"># Output preview:</span></span>
+                <span class="code-line"><span class="code-comment"># ===========================================</span></span>
+                <span class="code-line"><span class="code-comment">#   NOVA AI CHATBOX - Your Python Learning Buddy</span></span>
+                <span class="code-line"><span class="code-comment"># ===========================================</span></span>
+                <span class="code-line"><span class="code-comment"># You: hello</span></span>
+                <span class="code-line"><span class="code-comment"># Nova: Hello there! What can I help you with today?</span></span>
+                <span class="code-line"><span class="code-comment"># You: modules</span></span>
+                <span class="code-line"><span class="code-comment"># Nova: PyKnowledge has 9 CHED-aligned modules...</span></span>
+                <span class="code-line"><span class="code-comment"># You: joke</span></span>
+                <span class="code-line"><span class="code-comment"># Nova: Why do Python programmers wear glasses? ...</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output View (Nova Chat) -->
+          <div class="hero-view hero-view-output" id="viewOutput">
+            <div class="nova-chat" id="novaChat" data-simulated="true">
+              <p class="os-sim-note" aria-hidden="false">SIMULATED DEMO — Nova is a scripted keyword bot, not live AI</p>
+              <div class="nova-messages" id="novaMessages">
+                <div class="nova-msg nova-assistant">
+                  <div class="nova-bubble">Hey there! I'm Nova, your Python learning guide. Ask me anything about the curriculum, Python basics, or how to get started.</div>
+                </div>
+              </div>
+              <form class="nova-composer" id="novaForm">
+                <textarea id="novaInput" rows="1" placeholder="Ask Nova…" aria-label="Ask Nova"></textarea>
+                <button class="nova-send" id="novaSend" type="submit" aria-label="Send">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="curriculum">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">The path</span>
+          <h2>Nine modules, in order</h2>
+          <p>Each module unlocks once you've finished the one before it — so you always know
+             exactly what's next, with no wrong turns.</p>
+        </div>
+        <div class="os-nodegraph" aria-hidden="true">
+          <span class="os-node is-active">01</span><span class="os-link"></span>
+          <span class="os-node">02</span><span class="os-link"></span>
+          <span class="os-node">03</span><span class="os-link"></span>
+          <span class="os-node">04</span><span class="os-link"></span>
+          <span class="os-node">05</span><span class="os-link"></span>
+          <span class="os-node">06</span><span class="os-link"></span>
+          <span class="os-node">07</span><span class="os-link"></span>
+          <span class="os-node">08</span><span class="os-link"></span>
+          <span class="os-node">09</span>
+        </div>
+        <ol class="path" style="list-style:none; padding:0; margin:0;">
+          <li class="path-item is-unlocked">
+            <span class="path-num">1</span>
+            <div class="path-body">
+              <h3>Introduction to Python</h3>
+              <p>Learn the fundamentals of Python programming including syntax, variables, and basic data types.</p>
+            </div>
+            <a class="path-start" href="#/login">Start here →</a>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">2</span>
+            <div class="path-body">
+              <h3>Control Structures</h3>
+              <p>Master conditional statements and loops to control program flow.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 1 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">3</span>
+            <div class="path-body">
+              <h3>Loops</h3>
+              <p>Repeat work with for and while loops, without repeating code.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 2 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">4</span>
+            <div class="path-body">
+              <h3>Functions</h3>
+              <p>Write reusable code with functions, pass data with parameters, get results with return values, and understand how variable scope works.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 3 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">5</span>
+            <div class="path-body">
+              <h3>Data Structures</h3>
+              <p>Master Python's built-in data structures — lists, tuples, sets, and dictionaries — and learn powerful techniques like comprehensions and looping patterns.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 4 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">6</span>
+            <div class="path-body">
+              <h3>Modules and Imports</h3>
+              <p>Learn how to organize code across multiple files using modules, import code from the standard library, and create your own reusable packages.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 5 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">7</span>
+            <div class="path-body">
+              <h3>Input and Output</h3>
+              <p>Go beyond basic print() — master f-strings, file I/O, and JSON serialization for real-world data handling.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 6 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">8</span>
+            <div class="path-body">
+              <h3>Errors and Exceptions</h3>
+              <p>Learn how to handle errors gracefully with try/except blocks, raise your own exceptions, and write cleanup code that always runs.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 7 to unlock</span>
+            </div>
+          </li>
+          <li class="path-item is-locked">
+            <span class="path-num">9</span>
+            <div class="path-body">
+              <h3>Classes and Object-Oriented Programming</h3>
+              <p>Learn how to create your own types with classes, bundle data and behavior together, and design programs using object-oriented principles.</p>
+            </div>
+            <div class="path-status-row">
+              <span class="path-status">Complete Module 8 to unlock</span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="offline">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Built for real conditions</span>
+          <h2>Made for shared computers and patchy signal</h2>
+          <p>Every design choice here starts from the same constraint: this has to work on modest
+             hardware, without a steady connection.</p>
+        </div>
+        <div class="bento">
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z"/><path d="M8.5 14.5a5 5 0 0 1 7 0"/><path d="M5 11a10 10 0 0 1 14 0"/><path d="M2 7.5C6.5 3.5 17.5 3.5 22 7.5"/></svg>
+            <h3>Install once, use anywhere</h3>
+            <p>Add PyKnowledge to your home screen. After that first load, lessons, exercises,
+               and quizzes all run with no connection. Your progress lives on the device —
+               not in someone else's cloud.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22c5.5-3 8-7 8-12V6l-8-3-8 3v4c0 5 2.5 9 8 12Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <h3>Progress that's yours</h3>
+            <p>Set a PIN on a shared computer. Your scores, unlocked modules, and lesson
+               history stay separate from the next student.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M4 19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+            <h3>Write real Python</h3>
+            <p>Code in the browser with Skulpt. Get instant feedback — no grader, no upload,
+               no waiting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="about" style="border-bottom:none;">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">About</span>
+          <h2>A free Python course that works where the signal doesn't</h2>
+          <p>PyKnowledge is built for students in Tawi-Tawi and across BARMM — designed
+             around real classroom constraints, not ideal conditions.</p>
+        </div>
+        <div class="bento">
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5V6.5"/></svg>
+            <h3>What it is</h3>
+            <p>Nine CHED-aligned modules with lessons, exercises, and quizzes — from your
+               first print() to classes and object-oriented programming. Free, no ads.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z"/><path d="M8.5 14.5a5 5 0 0 1 7 0"/><path d="M5 11a10 10 0 0 1 14 0"/><path d="M2 7.5C6.5 3.5 17.5 3.5 22 7.5"/></svg>
+            <h3>Built in Tawi-Tawi</h3>
+            <p>The curriculum, pacing, and offline-first design all come from teaching TRAC
+               and BARMM students on shared computers with patchy island signal.</p>
+          </div>
+          <div class="feature-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m5 13 4 4 10-10"/></svg>
+            <h3>How to use it</h3>
+            <p>Open the app, create a local profile (no email needed), and follow the path.
+               Install it to your home screen once and everything works offline after that.</p>
+          </div>
+        </div>
+        <div class="place-strip" style="margin-top:32px;">
+          <div class="place-copy">
+            <h2>Where this curriculum is taught</h2>
+            <p>Lesson content follows the CHED calendar and BARMM education standards
+               used by schools across the Tawi-Tawi islands.</p>
+          </div>
+          <div class="place-photos">
+            <img class="tall" src="ui/assets/place/academic-building.jpg" alt="School academic building" loading="lazy" />
+            <img src="ui/assets/place/island-aerial-view.jpg" alt="Aerial view of an island in the region" loading="lazy" />
+            <img src="ui/assets/place/street-festival-buntings.jpg" alt="Municipality street decorated for a local festival" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="ui/assets/logo.png" alt="" />
+        <span>PyKnowledge · MIT licensed · <a href="/privacy.html">Privacy Policy</a></span>
+      </div>
+      <div class="footer-cta">
+        <a class="btn btn-primary" href="#/login">Start learning</a>
+        <a class="footer-secondary" href="/privacy.html">Privacy</a>
+        <a class="footer-secondary" href="/user-guidelines">User Guide</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /landing-root -->
+
+<!-- ================================================================
+     SPA APP SHELL (hidden by default - shown when user enters the app)
+     All content exactly matches the old app-shell.html body.
+     NO scripts that auto-execute - engine.js is loaded dynamically.
+     ================================================================ -->
+<div id="spa-root" style="display:none">
   <div id="app">
     <header class="app-header" role="banner">
       <h1>PyKnowledge</h1>
       <p class="tagline">Offline Python Learning Platform</p>
       <nav id="main-nav" aria-label="Main navigation"></nav>
+      <button type="button" class="os-palette-trigger" data-os-palette aria-label="Open command palette (Ctrl+K)">&gt;_</button>
     </header>
+
     <main id="main-content" role="main" tabindex="-1">
       <div id="loading" class="loading" aria-live="polite">
         <div class="loading-spinner" aria-hidden="true"></div>
@@ -28,15 +515,347 @@
       </div>
     </main>
     <footer class="app-footer" role="contentinfo">
-      <p>CHED-aligned curriculum &middot; Works offline after first install</p>
+      <p>
+        <a href="#top" class="app-footer-home">&larr; Back to home</a>
+        &middot; CHED-aligned curriculum &middot; Works offline after first install
+      </p>
     </footer>
   </div>
-  <noscript>
-    <div class="noscript-warning">
-      <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
-    </div>
-  </noscript>
-  <script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
-  <script type="module" src="core/engine.js"></script>
+
+  <footer class="pk-footer">
+    <p>
+      PyKnowledge is built for TRAC students in Bongao, Tawi-Tawi -
+      designed to run fully offline for areas with intermittent signal
+      and limited data. All lessons work without an internet connection
+      once loaded.
+    </p>
+
+    <p style="margin-top:10px;">
+      <span class="sync-status" id="syncStatus">Checking connection…</span>
+    </p>
+
+    <p style="margin-top:14px;">
+      <a href="/privacy.html">Privacy Policy</a>
+    </p>
+
+    <p style="margin-top:14px;">
+      <a href="/user-guidelines">User Guide</a>
+    </p>
+
+    <p style="margin-top:14px;">
+      Developed by:<br>
+      &bull; Yusrie Arsad<br>
+      &bull; Alfadzrie Alih<br>
+      &bull; Najib Ilahan<br>
+      &bull; Abukhail Jowak<br>
+      &bull; Ryan Taib
+    </p>
+
+    <p style="margin-top:14px; font-size:0.875em; opacity:0.7;">
+      &copy; 2024 PyKnowledge. Offline-first Python learning platform.
+    </p>
+  </footer>
+</div><!-- /spa-root -->
+
+<!-- ================================================================
+     SHARED SCRIPTS - run once, outside both containers
+     ================================================================ -->
+
+<div id="offlineIndicator" class="offline-indicator" hidden>Offline mode</div>
+
+<noscript>
+  <div class="noscript-warning">
+    <p>PyKnowledge requires JavaScript to run. Please enable JavaScript in your browser.</p>
+  </div>
+</noscript>
+
+<script>
+  // Offline indicator - works in both landing and app mode
+  function updateNetworkStatus() {
+    var indicator = document.getElementById('offlineIndicator');
+    if (!indicator) return;
+    indicator.hidden = navigator.onLine;
+  }
+  window.addEventListener('online', updateNetworkStatus);
+  window.addEventListener('offline', updateNetworkStatus);
+  updateNetworkStatus();
+</script>
+
+<script>
+  // Sync chip in the app footer - only runs when #syncStatus exists
+  function updateSyncChip() {
+    var el = document.getElementById('syncStatus');
+    if (!el) return;
+    var status = navigator.onLine ? 'is-synced' : 'is-offline';
+    el.classList.remove('is-synced', 'is-offline');
+    el.classList.add(status);
+    el.textContent = status === 'is-synced' ? 'Online' : 'Offline mode';
+  }
+  updateSyncChip();
+  window.addEventListener('online', updateSyncChip);
+  window.addEventListener('offline', updateSyncChip);
+</script>
+
+<script>
+  // Service Worker - registers early on window load
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/service-worker.js', { updateViaCache: 'none' })
+        .then(function (r) {
+          console.log('SW registered:', r.scope);
+          // Update-ready toast: show on controllerchange ONLY when a controller existed at page load
+          var hadController = !!navigator.serviceWorker.controller;
+          navigator.serviceWorker.addEventListener('controllerchange', function () {
+            if (hadController) {
+              var btn = document.createElement('button');
+              btn.textContent = 'Update ready — reload';
+              btn.className = 'sw-update-toast';
+              btn.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;background:var(--ok);color:#000;border:none;border-radius:4px;font-family:var(--font-mono);cursor:pointer;';
+              btn.onclick = function () { window.location.reload(); };
+              document.body.appendChild(btn);
+            }
+          });
+        })
+        .catch(function (e) { console.warn('SW registration failed', e); });
+    });
+  }
+</script>
+
+<script type="module">
+  // Offline download progress indicator (real cache counts, verified 100%)
+  import { initCacheProgress } from './ui/components/cache-progress.js';
+  initCacheProgress();
+  // OS landing: boot log (real cache counts) + typed headline
+  import { initLandingFx } from './ui/components/os-landing.js';
+  initLandingFx();
+</script>
+
+<script src="api-config.js"></script>
+<script>window.PYKNOWLEDGE_API_URL = window.PYKNOWLEDGE_API_URL || '';</script>
+
+<script>
+  // Global error display in the app loading area
+  window.addEventListener('error', function (e) {
+    var loading = document.getElementById('loading');
+    if (loading) {
+      loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">JS ERROR:\n' +
+        e.message + '\n' + (e.filename || '') + ':' + e.lineno + '</p>';
+    }
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var loading = document.getElementById('loading');
+    if (loading) {
+      loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">PROMISE ERROR:\n' +
+        (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</p>';
+    }
+  });
+</script>
+
+<script type="module">
+  // Install prompt - multi-button registry (landing footer + auth screens)
+  import { initInstallPrompt } from './ui/components/install-prompt.js';
+  initInstallPrompt();
+</script>
+
+<!-- ================================================================
+     PAGE CONTROLLER - swaps between landing and SPA, loads engine once
+     ================================================================ -->
+<script>
+  (function () {
+    var landingRoot = document.getElementById('landing-root');
+    var spaRoot = document.getElementById('spa-root');
+
+    if (!landingRoot || !spaRoot) return;
+
+    var engineLoaded = false;
+    var enginePromise = null;
+
+    function loadEngine() {
+      if (engineLoaded) return Promise.resolve();
+      if (enginePromise) return enginePromise;
+      enginePromise = new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'core/engine.js';
+        s.onload = function () { engineLoaded = true; resolve(); };
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+      return enginePromise;
+    }
+
+    function showApp() {
+      landingRoot.style.display = 'none';
+      spaRoot.style.display = '';
+      loadEngine().catch(function (err) {
+        var loading = document.getElementById('loading');
+        if (loading) {
+          // Module script load failures are DOM Events, not Error objects.
+          // Extract the target URL for actionable diagnostics.
+          var detail = err.message || err;
+          if (err instanceof Event) {
+            var target = err.target;
+            var url = target && target.src ? target.src : 'unknown module URL';
+            var type = target && target.tagName ? target.tagName : 'script';
+            detail = type + ' load failed: ' + url;
+          }
+          loading.innerHTML = '<p style="color:#ff6b6b;text-align:left;white-space:pre-wrap;padding:10px;">' +
+            'Failed to load the app:' + '<br/>' + detail + '</p>';
+        }
+      });
+    }
+
+    function showLanding() {
+      landingRoot.style.display = '';
+      spaRoot.style.display = 'none';
+    }
+
+    function onHashChange() {
+      var h = window.location.hash;
+      // Landing anchors: no hash, #top, #curriculum, #offline, #about
+      // (hashchange also fires the initial load below)
+      if (!h || h === '#top' || h.startsWith('#curriculum') ||
+          h.startsWith('#offline') || h === '#about') {
+        showLanding();
+      } else {
+        showApp();
+      }
+    }
+
+    // Landing page is ALWAYS shown first (online or offline). The user
+    // reaches the app explicitly via "Open the app" / "Start learning"
+    // links (#/login), and can return anytime via the header logo or
+    // footer link (#top). No auto-launch hijack.
+    // Initial state
+    onHashChange();
+    window.addEventListener('hashchange', onHashChange);
+  })();
+</script>
+
+<script>
+  // Nova Chatbot
+  (function () {
+    const messagesEl = document.getElementById('novaMessages');
+    const input = document.getElementById('novaInput');
+    const form = document.getElementById('novaForm');
+    const sendBtn = document.getElementById('novaSend');
+    
+    if (!messagesEl || !input || !form || !sendBtn) return;
+
+    // Auto-resize textarea
+    input.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+    });
+
+    // Knowledge base for the chatbot
+    const knowledge = {
+      'hello': "Hey there! I'm Nova, your Python learning guide. Ask me anything about the curriculum, Python basics, or how to get started.",
+      'hi': "Hi! Ready to learn Python? Ask me about modules, exercises, or how PyKnowledge works.",
+      'modules': "PyKnowledge has 9 CHED-aligned modules:\n1. Introduction to Python\n2. Control Structures\n3. Loops\n4. Functions\n5. Data Structures\n6. Modules and Imports\n7. Input and Output\n8. Errors and Exceptions\n9. Classes and Object-Oriented Programming\nEach module unlocks once you finish the one before it!",
+      'start': "To get started:\n1. Create a student profile (no email needed)\n2. Start with Module 1\n3. Complete lessons and exercises\n4. Pass quizzes (70% threshold)\n5. Unlock the next module!\nEverything works fully offline after install.",
+      'python': "Python is one of the world's most popular programming languages. It's used at Google, NASA, Instagram, and Dropbox. Our curriculum follows CHED standards for college-level Python education.",
+      'offline': "PyKnowledge works completely offline! Once installed:\n• All lessons are cached on your device\n• No internet needed for exercises or quizzes\n• Your progress is saved locally\n• Perfect for areas with patchy signal",
+      'install': "To install PyKnowledge:\n1. Tap 'Download App' on the landing page\n2. Chrome shows 'Install app' — tap it\n3. On Android: ⋮ menu → Add to Home Screen → Install\n4. On iPhone: Share → Add to Home Screen\nAfter install, everything works offline!",
+      'quiz': "Quizzes appear at the end of each module. You need 70% to pass. If you don't pass, you can retry as many times as you need. Passing unlocks the next module!",
+      'exercise': "Exercises include:\n• Predict the Output\n• Fix the Code\n• Parsons Problems (drag-and-drop code blocks)\n• Write Code (with live Python execution!)\n• Challenges (advanced problems)",
+      'default': "I'm here to help with:\n• Module curriculum info\n• How to use PyKnowledge\n• Python basics\n• Installation help\n• Quiz and exercise info\n\nTry asking about 'modules', 'python', 'offline', 'install', 'quiz', or 'exercise'!"
+    };
+
+    function getResponse(message) {
+      const lower = message.toLowerCase();
+      for (const [key, value] of Object.entries(knowledge)) {
+        if (lower.includes(key)) return value;
+      }
+      return knowledge.default;
+    }
+
+    function addMessage(text, isUser) {
+      const msg = document.createElement('div');
+      msg.className = 'nova-msg ' + (isUser ? 'nova-user' : 'nova-assistant');
+      const bubble = document.createElement('div');
+      bubble.className = 'nova-bubble';
+      // Simple text formatting
+      let html = escapeHtml(text);
+      html = html.replace(/\n/g, '<br>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      bubble.innerHTML = html;
+      msg.appendChild(bubble);
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addThinking() {
+      const msg = document.createElement('div');
+      msg.className = 'nova-msg nova-assistant';
+      const bubble = document.createElement('div');
+      bubble.className = 'nova-bubble';
+      bubble.innerHTML = '<span class="nova-thinking"><span></span><span></span><span></span></span>';
+      msg.appendChild(bubble);
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return msg;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Add user message
+      addMessage(text, true);
+      input.value = '';
+      input.style.height = 'auto';
+
+      // Show thinking indicator
+      const thinking = addThinking();
+      sendBtn.disabled = true;
+
+      // Simulate response delay
+      setTimeout(function () {
+        thinking.remove();
+        const response = getResponse(text);
+        addMessage(response, false);
+        sendBtn.disabled = false;
+      }, 600);
+    });
+
+    // Enter to send, Shift+Enter for newline
+    input.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' && !ev.shiftKey) {
+        ev.preventDefault();
+        form.dispatchEvent(new Event('submit'));
+      }
+    });
+  })();
+
+  // Tab switching
+  (function () {
+    const tabCode = document.getElementById('tabCode');
+    const tabOutput = document.getElementById('tabOutput');
+    const viewCode = document.getElementById('viewCode');
+    const viewOutput = document.getElementById('viewOutput');
+    if (!tabCode || !tabOutput || !viewCode || !viewOutput) return;
+
+    tabCode.addEventListener('click', function () {
+      tabCode.classList.add('active');
+      tabOutput.classList.remove('active');
+      viewCode.classList.add('active');
+      viewOutput.classList.remove('active');
+    });
+
+    tabOutput.addEventListener('click', function () {
+      tabOutput.classList.add('active');
+      tabCode.classList.remove('active');
+      viewOutput.classList.add('active');
+      viewCode.classList.remove('active');
+    });
+  })();
+</script>
+
 </body>
 </html>

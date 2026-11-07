@@ -114,7 +114,10 @@ export function validateContentIntegrity(lessonsData, quizzesData) {
 
   const errors = [];
   quizzesData.quizzes.forEach((quiz) => {
-    if (!lessonIds.has(quiz.id)) {
+    // A quiz normally shares its lesson's id (one quiz per lesson), but
+    // special assessments like the capstone may use their own id and point
+    // at an anchor lesson via lessonId instead.
+    if (!lessonIds.has(quiz.id) && !lessonIds.has(quiz.lessonId)) {
       errors.push(`Quiz "${quiz.id}" has no matching lesson`);
     }
   });
