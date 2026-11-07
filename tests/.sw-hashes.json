@@ -14,7 +14,7 @@
     "/core/errors.js": "247e427ce49f",
     "/core/version.js": "ec872092d37a",
     "/app/dashboard/dashboard.js": "1e8936937ac6",
-    "/app/lessons/lesson-viewer.js": "3cc9022a1c56",
+    "/app/lessons/lesson-viewer.js": "1c3ce6caba64",
     "/app/quizzes/quiz-engine.js": "6f5394e1aeb9",
     "/app/progress/progress-dashboard.js": "eba0e42d12b2",
     "/app/auth/auth-screen.js": "33cc20e3ffcd",

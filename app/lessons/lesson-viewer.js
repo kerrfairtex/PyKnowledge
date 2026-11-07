@@ -96,15 +96,8 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
         <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
         <div class="lesson-actions-right">
           ${prevLesson ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>` : ''}
-          ${!lessonComplete
-            ? `<div class="os-next-group" role="group" aria-label="Next actions">
-                <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>
-                <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="Pass the quiz for ${nextLesson ? escapeHtml(nextLesson.title) : ''} to continue">Next Lesson →</button>
-                ${nextLesson ? `<span class="os-hint" aria-hidden="true">Pass the quiz for ${escapeHtml(nextLesson.title)} to continue</span>` : ''}
-              </div>`
-            : nextLesson
-              ? `<a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>`
-              : `<span class="os-hint" aria-hidden="true">Module complete</span>`}
+          <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>
+          ${nextLesson && lessonComplete ? `<a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>` : nextLesson ? `<button type="button" class="btn btn-primary btn-disabled" disabled>Complete this lesson first</button>` : ''}
         </div>
       </footer>
     </article>`;
@@ -281,6 +274,134 @@ function renderHintLevels(exercise) {
     </div>`;
 }
 
+
+
+/**
+ * Grade a write_code/challenge exercise against all test cases.
+ *
+ * Pure function: takes code, test cases, and an async execute function;
+ * returns results without touching the DOM. Sketch runner behavior is
+ * unchanged — each test case is executed through the provided executeFn.
+ *
+ * Returns { allPassed, results, passCount, failingCaseIndex, message,
+ * lastActualOutput } where results[i] corresponds to testCases[i].
+ */
+export async function gradeExercise(code, testCases, executeFn) {
+  const results = [];
+  let allPassed = true;
+
+  for (const testCase of testCases) {
+    const stdin = testCase?.expected_stdin || '';
+    const expectedStdout = testCase?.expected_stdout || '';
+
+    const result = await executeFn(code, stdin);
+
+    if (result.error) {
+      allPassed = false;
+      results.push({
+        passed: false,
+        stdin,
+        expectedStdout,
+        actualOutput: '',
+        error: result.error
+      });
+      continue;
+    }
+
+    const actualOutput = result.output;
+    const normalizedActual = actualOutput.replace(/\r\n/g, '\n').trim();
+    const normalizedExpected = expectedStdout.replace(/\r\n/g, '\n').trim();
+
+    const passed = normalizedActual === normalizedExpected;
+    if (!passed) allPassed = false;
+
+    results.push({ passed, stdin, expectedStdout, actualOutput, error: null });
+  }
+
+  const passCount = results.filter((r) => r.passed).length;
+  const failingCaseIndex = results.findIndex((r) => !r.passed) + 1;
+  const lastActualOutput = results.length > 0
+    ? results[results.length - 1].actualOutput
+    : '';
+
+  let message;
+  if (allPassed) {
+    message = testCases.length > 1
+      ? `[OK] All ${testCases.length} test cases passed.`
+      : '[OK] Test passed.';
+  } else {
+    message = testCases.length > 1
+      ? `[FAIL] Test case ${failingCaseIndex} of ${testCases.length} failed (${passCount}/${testCases.length} passed).`
+      : '[FAIL] Test failed.';
+  }
+
+  return { allPassed, results, passCount, failingCaseIndex, message, lastActualOutput };
+}
+
+
+
+/**
+ * Render the lesson footer action buttons based on completion state.
+ * Pure function: returns HTML string, no DOM access.
+ *
+ * States:
+ *   Incomplete: Take Quiz link + disabled Next Lesson + hint naming the quiz
+ *   Complete + next lesson: enabled Next Lesson link
+ *   Complete + last in module: "Module complete" hint
+ *
+ * @param {boolean} lessonComplete - whether the lesson is marked complete
+ * @param {string} lessonId - current lesson id
+ * @param {string} moduleId - current module id
+ * @param {object|null} nextLesson - next lesson object { id, title } or null
+ * @param {object|null} prevLesson - previous lesson object { id } or null
+ * @returns {string} footer HTML
+ */
+export function renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson) {
+  const quizLink = `<a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>`;
+  const backLink = prevLesson
+    ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>`
+    : '';
+
+  if (!lessonComplete) {
+    const quizTitle = nextLesson ? escapeHtml(nextLesson.title) : '';
+    const hint = nextLesson
+      ? `<span class="os-hint" aria-hidden="true">Pass the quiz for ${quizTitle} to continue</span>`
+      : '';
+    return `
+      <footer class="lesson-actions">
+        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
+        <div class="lesson-actions-right">
+          ${backLink}
+          <div class="os-next-group" role="group" aria-label="Next actions">
+            ${quizLink}
+            <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="Pass the quiz for ${quizTitle} to continue">Next Lesson →</button>
+            ${hint}
+          </div>
+        </div>
+      </footer>`;
+  }
+
+  if (nextLesson) {
+    return `
+      <footer class="lesson-actions">
+        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
+        <div class="lesson-actions-right">
+          ${backLink}
+          <a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>
+        </div>
+      </footer>`;
+  }
+
+  return `
+    <footer class="lesson-actions">
+      <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
+      <div class="lesson-actions-right">
+        ${backLink}
+        <span class="os-hint" aria-hidden="true">Module complete</span>
+      </div>
+    </footer>`;
+}
+
 function initializeCodeEditors(exercises) {
   if (!exercises) return;
 
@@ -296,65 +417,26 @@ function initializeCodeEditors(exercises) {
     createCodeEditor(container, {
       starterCode,
       onRun: async (code, callback) => {
-        // Run the student's code against ALL test cases, not just the first.
+        // Run the student's code against ALL test cases via gradeExercise.
         // A pass is only reported when every supplied case passes.
-        const results = [];
-        let allPassed = true;
-
+        let result;
         try {
-          for (const testCase of testCases) {
-            const stdin = testCase?.expected_stdin || '';
-            const expectedStdout = testCase?.expected_stdout || '';
-
-            const result = await executePython(code, stdin);
-
-            if (result.error) {
-              allPassed = false;
-              results.push({
-                passed: false,
-                stdin,
-                expectedStdout,
-                actualOutput: '',
-                error: result.error
-              });
-              continue;
-            }
-
-            const actualOutput = result.output;
-            const normalizedActual = actualOutput.replace(/\r\n/g, '\n').trim();
-            const normalizedExpected = expectedStdout.replace(/\r\n/g, '\n').trim();
-
-            const passed = normalizedActual === normalizedExpected;
-            if (!passed) allPassed = false;
-
-            results.push({ passed, stdin, expectedStdout, actualOutput, error: null });
-          }
-
-          if (allPassed) {
-            callback(results[results.length - 1].actualOutput, null);
-            const passedMsg = testCases.length > 1
-              ? `[OK] All ${testCases.length} test cases passed.`
-              : '[OK] Test passed.';
-            showExerciseFeedback(exercise.id, 'success', passedMsg);
-          } else {
-            // Report the first failing case to the output panel; details
-            // summarized in the feedback message.
-            const failing = results.find((r) => !r.passed);
-            callback(failing?.actualOutput || '', null);
-
-            const passCount = results.filter((r) => r.passed).length;
-            const failingCaseIndex = results.findIndex((r) => !r.passed) + 1;
-            const msg = testCases.length > 1
-              ? `[FAIL] Test case ${failingCaseIndex} of ${testCases.length} failed (${passCount}/${testCases.length} passed).`
-              : '[FAIL] Test failed.';
-
-            const remediation = findRemediation(exercise, failing?.actualOutput || '');
-            showExerciseFeedback(exercise.id, 'error', remediation
-              ? `[FAIL] Output mismatch.\n${remediation.traceback}\n\nPATCH AVAILABLE: ${remediation.patchHref}`
-              : msg);
-          }
+          result = await gradeExercise(code, testCases, executePython);
         } catch (err) {
           callback('', err.message);
+          return;
+        }
+
+        if (result.allPassed) {
+          callback(result.lastActualOutput, null);
+          showExerciseFeedback(exercise.id, 'success', result.message);
+        } else {
+          callback(result.lastActualOutput, null);
+
+          const remediation = findRemediation(exercise, result.lastActualOutput || '');
+          showExerciseFeedback(exercise.id, 'error', remediation
+            ? `[FAIL] Output mismatch.\n${remediation.traceback}\n\nPATCH AVAILABLE: ${remediation.patchHref}`
+            : result.message);
         }
       }
     });
