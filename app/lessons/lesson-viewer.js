@@ -4,6 +4,7 @@
 
 import { parseLessonContent } from '../../utils/parser.js';
 import { getProgress } from '../../core/storage.js';
+import quizzesData from '../../content/quizzes.json' assert { type: 'json' };
 import { renderVideoPlayer } from '../../ui/components/video-player.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';
@@ -43,6 +44,14 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
   }
 
   (lesson.exercises || []).forEach((ex) => { ex.__lessonId = lesson.id; });
+
+  // Resolve the current lesson's quiz title from content/quizzes.json.
+  // Prefer the quiz whose id matches the lesson id (e.g. lesson-9-3 over capstone-final).
+  const currentQuiz = quizzesData.quizzes.find((q) => q.lessonId === lessonId && q.id === lessonId)
+    || quizzesData.quizzes.find((q) => q.lessonId === lessonId);
+  const currentQuizTitle = currentQuiz
+    ? currentQuiz.title.replace(/^Quiz: /, '')
+    : lesson.title;
   const parsed = parseLessonContent(lesson);
   const progress = getProgress();
   const mod = lessonsData.modules.find((m) => m.id === moduleId);
@@ -91,7 +100,7 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
         <h3 id="exercises-title">Exercises</h3>
         ${exercisesHtml}
       </section>` : ''}
-      ${renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson)}
+      ${renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson, currentQuizTitle)}
     </article>`;
 
   if (parsed.hasVideo) {
@@ -348,17 +357,20 @@ export async function gradeExercise(code, testCases, executeFn) {
  * @param {object|null} prevLesson - previous lesson object { id } or null
  * @returns {string} footer HTML
  */
-export function renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson) {
+export function renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesson, prevLesson, currentQuizTitle) {
   const quizLink = `<a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>`;
   const backLink = prevLesson
     ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>`
     : '';
 
   if (!lessonComplete) {
-    const quizTitle = nextLesson ? escapeHtml(nextLesson.title) : '';
-    const hint = nextLesson
-      ? `<span class="os-hint" aria-hidden="true">Pass the quiz for ${quizTitle} to continue</span>`
-      : '';
+    const quizName = escapeHtml(currentQuizTitle);
+    const nextTitle = nextLesson ? escapeHtml(nextLesson.title) : '';
+    const body = nextLesson
+      ? `Pass the quiz for ${quizName} to continue to ${nextTitle}.`
+      : `Pass the quiz for ${quizName} to finish this module.`;
+    const hint = `<span class="os-hint" aria-hidden="true">${body}</span>`;
+    const ariaLabel = body;
     return `
       <footer class="lesson-actions">
         <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
@@ -366,7 +378,7 @@ export function renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesso
           ${backLink}
           <div class="os-next-group" role="group" aria-label="Next actions">
             ${quizLink}
-            <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="Pass the quiz for ${quizTitle} to continue">Next Lesson →</button>
+            <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="${ariaLabel}">Next Lesson →</button>
             ${hint}
           </div>
         </div>
