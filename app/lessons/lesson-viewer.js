@@ -47,8 +47,10 @@ export function renderLessonViewer(main, lessonId, lessonsData, quizzesData) {
   // Resolve the current lesson's quiz title from quizzesData passed in
   // by the caller (loaded via core/loader.js). Prefer the quiz whose id
   // matches the lesson id (e.g. lesson-9-3 over capstone-final).
-  const currentQuiz = quizzesData.quizzes.find((q) => q.lessonId === lessonId && q.id === lessonId)
-    || quizzesData.quizzes.find((q) => q.lessonId === lessonId);
+  // If quizzesData is missing or empty, fall back to the lesson title.
+  const quizzes = quizzesData && quizzesData.quizzes ? quizzesData.quizzes : [];
+  const currentQuiz = quizzes.find((q) => q.lessonId === lessonId && q.id === lessonId)
+    || quizzes.find((q) => q.lessonId === lessonId);
   const currentQuizTitle = currentQuiz
     ? currentQuiz.title.replace(/^Quiz: /, '')
     : lesson.title;
@@ -62,11 +64,22 @@ export function renderLessonViewer(main, lessonId, lessonsData, quizzesData) {
   const nextLesson = lessonIndex < mod.lessons.length - 1 ? mod.lessons[lessonIndex + 1] : null;
 
   if (locked) {
+    // Find the first incomplete lesson in this module (the lesson that
+    // must be completed to unlock this one).
+    const firstIncomplete = mod.lessons.find((l) => !progress.completedLessons.includes(l.id));
+    const firstQuiz = quizzes.find((q) => q.lessonId === firstIncomplete.id && q.id === firstIncomplete.id)
+      || quizzes.find((q) => q.lessonId === firstIncomplete.id);
+    const firstQuizTitle = firstQuiz
+      ? firstQuiz.title.replace(/^Quiz: /, '')
+      : firstIncomplete.title;
+
     main.innerHTML = `
       <div class="error-card" role="alert">
         <h2>Lesson Locked</h2>
-        <p>Complete "${escapeHtml(prevLesson.title)}" first.</p>
-        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-primary">Back to Module</a>
+        <p>Pass the quiz for "${escapeHtml(firstQuizTitle)}" to unlock this lesson.</p>
+        <a href="#/quiz/${escapeHtml(firstIncomplete.id)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(firstIncomplete.id)}">Take Quiz</a>
+        <a href="#/lesson/${escapeHtml(firstIncomplete.id)}" class="btn btn-ghost" style="margin-left:8px">Go to Lesson</a>
+        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
       </div>`;
     return;
   }

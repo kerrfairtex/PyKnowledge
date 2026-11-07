@@ -22,8 +22,7 @@
  * negative check fresh profile -> lesson-1-3 locked page.
  *
  * Usage:
- *   cd /data/data/com.termux/files/home/PyKnowledge
- *   node scripts/e2e-journey.mjs
+    });
  */
 
 import { createRequire } from 'module';
@@ -504,10 +503,24 @@ async function negativeCheckLockedLesson(page) {
   if (!lockP) throw new Error('Lock page explanation paragraph not found');
   const lockText = await lockP.innerText();
 
-  const backLink = await errorCard.$('a.btn-primary[href="#/module/module-1"]');
+  const backLink = await errorCard.$('a.btn-secondary[href="#/module/module-1"]');
   if (!backLink) throw new Error('Back to Module link to #/module/module-1 not found on lock page');
 
-  return { h2Text, lockText, backLinkHref: await backLink.getAttribute('href') };
+  const quizLink = await errorCard.$('a.btn-primary[data-take-quiz]');
+  if (!quizLink) throw new Error('Quiz link not found on lock page');
+  const quizHref = await quizLink.getAttribute('href');
+
+  const lessonLink = await errorCard.$('a.btn-ghost[href^="#/lesson/"]');
+  if (!lessonLink) throw new Error('Lesson link not found on lock page');
+  const lessonHref = await lessonLink.getAttribute('href');
+
+  return {
+    h2Text,
+    lockText,
+    backLinkHref: await backLink.getAttribute('href'),
+    quizHref,
+    lessonHref,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -626,6 +639,7 @@ async function main() {
       'greeting shows the name',
       'signed in as the created profile',
       'lesson-1-1: run write-code exercise alone does NOT complete lesson',
+      'lesson-1-1: hint names current lesson quiz (not next lesson)',
       'quiz 1-1: fail with 4 of 6 (expect 67%)',
       'quiz 1-1: pass with 5 of 6 (expect 83%) -> Continue to lesson 1-2 opens',
       'quiz 1-2: fail with 3 of 5 (expect 60%)',
@@ -668,6 +682,25 @@ async function main() {
 
     await step('lesson-1-1: run write-code exercise alone does NOT complete lesson', async () => {
       await runExerciseAndConfirmNotComplete(page, 'lesson-1-1');
+    });
+
+    await step('lesson-1-1: hint names current lesson quiz (not next lesson)', async () => {
+      const fs = require('fs');
+      const quizzes = JSON.parse(fs.readFileSync('/data/data/com.termux/files/home/PyKnowledge/content/quizzes.json', 'utf8'));
+      const lessons = JSON.parse(fs.readFileSync('/data/data/com.termux/files/home/PyKnowledge/content/lessons.json', 'utf8'));
+      const quiz = quizzes.quizzes.find((q) => q.lessonId === 'lesson-1-1' && q.id === 'lesson-1-1')
+        || quizzes.quizzes.find((q) => q.lessonId === 'lesson-1-1');
+      const quizTitle = quiz ? quiz.title.replace(/^Quiz: /, '') : 'lesson-1-1';
+      const lesson2 = lessons.modules.flatMap((m) => m.lessons).find((l) => l.id === 'lesson-1-2');
+      const expected = `Pass the quiz for ${quizTitle} to continue to ${lesson2 ? lesson2.title : ''}.`;
+      const hint = await waitEl(page, '.os-hint', 10000);
+      if (!hint) throw new Error('.os-hint not found on lesson-1-1');
+      const hintText = await hint.innerText();
+      if (hintText !== expected) {
+        throw new Error(`Hint mismatch:
+  expected: ${expected}
+  actual:   ${hintText}`);
+      }
     });
 
     await step('quiz 1-1: fail with 4 of 6 (expect 67%)', async () => {
@@ -786,11 +819,22 @@ async function main() {
       if (lockInfo.h2Text !== 'Lesson Locked') {
         throw new Error(`Lock page heading: ${lockInfo.h2Text}`);
       }
-      console.log(`  Lock page says: "${lockInfo.h2Text}" — "${lockInfo.lockText}"`);
-      console.log(`  Lock page links to: ${lockInfo.backLinkHref}`);
+      // Expected first incomplete lesson is lesson-1-1 for module-1
+      const expectedSentence = 'Pass the quiz for "What is Python?" to unlock this lesson.';
+      if (lockInfo.lockText !== expectedSentence) {
+        throw new Error(`Lock page sentence: ${lockInfo.lockText}, expected: ${expectedSentence}`);
+      }
+      if (lockInfo.quizHref !== '#/quiz/lesson-1-1') {
+        throw new Error(`Quiz link is ${lockInfo.quizHref}, expected #/quiz/lesson-1-1`);
+      }
+      if (lockInfo.lessonHref !== '#/lesson/lesson-1-1') {
+        throw new Error(`Lesson link is ${lockInfo.lessonHref}, expected #/lesson/lesson-1-1`);
+      }
       if (lockInfo.backLinkHref !== '#/module/module-1') {
         throw new Error(`Lock page links to ${lockInfo.backLinkHref}, expected #/module/module-1`);
       }
+      console.log(`  Lock page says: "${lockInfo.h2Text}" — "${lockInfo.lockText}"`);
+      console.log(`  Quiz link: ${lockInfo.quizHref}, Lesson link: ${lockInfo.lessonHref}, Back: ${lockInfo.backLinkHref}`);
     });
 
   } catch (e) {

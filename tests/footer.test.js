@@ -126,6 +126,37 @@ describe('renderLessonFooter — pure function with current-lesson quiz', () => 
   });
 });
 
+describe('renderLessonViewer with missing/empty quizzesData', () => {
+  test('undefined quizzesData does not throw and falls back to lesson title', () => {
+    const main = document.getElementById('main-content');
+    let threw = null;
+    try {
+      renderLessonViewer(main, 'lesson-1-1', lessonsData, undefined);
+    } catch (e) {
+      threw = e;
+    }
+    expect(threw).toBeNull();
+    const hint = main.querySelector('.os-hint');
+    expect(hint).not.toBeNull();
+    expect(hint.textContent).toContain('Pass the quiz for What is Python?');
+  });
+
+  test('empty quizzesData object does not throw and falls back to lesson title', () => {
+    // lesson-1-1 has no prerequisite so it is not locked
+    const main = document.getElementById('main-content');
+    let threw = null;
+    try {
+      renderLessonViewer(main, 'lesson-1-1', lessonsData, { quizzes: [] });
+    } catch (e) {
+      threw = e;
+    }
+    expect(threw).toBeNull();
+    const hint = main.querySelector('.os-hint');
+    expect(hint).not.toBeNull();
+    expect(hint.textContent).toContain('Pass the quiz for What is Python?');
+  });
+});
+
 // --- Real-path tests: every lesson names its OWN quiz ----------------------
 describe('renderLessonViewer footer — every lesson names its own quiz', () => {
   test.each(allLessons.map((l) => [l.id, l.title]))('%s hint names its own quiz', (lessonId, lessonTitle) => {
@@ -164,5 +195,47 @@ describe('renderLessonViewer footer — every lesson names its own quiz', () => 
     const main = render('lesson-1-1');
     const hint = main.querySelector('.os-hint');
     expect(hint.textContent).toBe('Pass the quiz for What is Python? to continue to Variables and Data Types.');
+  });
+});
+
+// --- Lock page tests -------------------------------------------------------
+describe('locked lesson screen', () => {
+  test('locked lesson shows quiz + lesson links for first incomplete lesson', () => {
+    // Fresh profile: nothing completed. Navigate directly to lesson-1-3.
+    // lesson-1-1 is the first incomplete lesson in module-1.
+    const main = document.getElementById('main-content');
+    store[`pyknowledge_progress_guest-fixed`] = JSON.stringify({
+      version: 1,
+      completedLessons: [],
+      quizScores: {},
+      achievements: [],
+      lastAccessed: null,
+      unlockedModules: ['module-1'],
+    });
+
+    renderLessonViewer(main, 'lesson-1-3', lessonsData, quizzesData);
+
+    const card = main.querySelector('.error-card');
+    expect(card).not.toBeNull();
+
+    const h2 = card.querySelector('h2');
+    expect(h2).not.toBeNull();
+    expect(h2.textContent).toBe('Lesson Locked');
+
+    const p = card.querySelector('p');
+    expect(p).not.toBeNull();
+    expect(p.textContent).toContain('Pass the quiz for "What is Python?" to unlock this lesson.');
+
+    const quizLink = card.querySelector('a[href="#/quiz/lesson-1-1"]');
+    expect(quizLink).not.toBeNull();
+    expect(quizLink.textContent.trim()).toBe('Take Quiz');
+
+    const lessonLink = card.querySelector('a[href="#/lesson/lesson-1-1"]');
+    expect(lessonLink).not.toBeNull();
+    expect(lessonLink.textContent.trim()).toBe('Go to Lesson');
+
+    const backLink = card.querySelector('a[href="#/module/module-1"]');
+    expect(backLink).not.toBeNull();
+    expect(backLink.textContent.trim()).toBe('Back to Module');
   });
 });

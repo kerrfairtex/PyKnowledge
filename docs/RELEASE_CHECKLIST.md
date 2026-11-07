@@ -1,114 +1,117 @@
-# PyKnowledge Release Checklist — v1.0.0
+# PyKnowledge Release Checklist — v0.22.0
 
 Manual verification steps to confirm students keep their progress and
 receive the fix when they reconnect after a service-worker update.
 
-## What changed
+## Versions (verify before testing)
 
-- App version: `0.9.0` → `1.0.0`
-- Service worker cache version: `v0.21.1` → `v1.0.0`
-- Fix: Next/Continue buttons after lessons and quizzes now work correctly.
-- Progress lives in IndexedDB (preferred) with a localStorage mirror. Both
-  survive a service-worker update because the activate handler only deletes
-  old caches, never IndexedDB or localStorage.
+- Currently deployed (origin/main @ 0194a57): version unknown from local repo —
+  read live `core/sw-version.js` to confirm its `SW_VERSION`. Live build is
+  at `0.21.1`; this release is `0.22.0` (higher than live).
+- New version to deploy (local fix/wire-footer @ HEAD):
+  - App version: `0.22.0` (`core/version.js`)
+  - Service worker cache version: `0.22.0` → cache name `pyknowledge-v0.22.0`
+    (`core/sw-version.js`)
 
----
+Progress lives in IndexedDB (preferred) with a localStorage mirror. Both
+survive a service-worker update because the activate handler only deletes
+old caches, never IndexedDB or localStorage.
 
-## Test A — Low-end Android phone (Chrome)
-
-Prerequisites: phone online for install and update, then airplane mode for
-offline verification.
-
-1. Install the old version.
-   - Open Chrome, navigate to the deployed PyKnowledge URL (old build,
-     0.9.0 / cache v0.21.1).
-   - Tap Install / Add to Home screen when prompted.
-   - Open the installed PWA from the home screen.
-2. Complete lesson 1 and its quiz.
-   - Sign in or use guest mode (progress is per-profile; guest key works).
-   - Open lesson lesson-1-1, read it, tap Take the quiz above.
-   - Pass the quiz. Confirm the footer/badge now shows Done for lesson 1.
-   - Confirm lesson lesson-1-2 (next lesson) is unlocked and opens.
-   - Note the lesson title and your score (you will check it later).
-3. Deploy the new version.
-   - Deploy 1.0.0 to the server (cache v1.0.0). Do NOT uninstall the old PWA.
-4. Reconnect.
-   - On the phone, turn airplane mode OFF so the phone is online.
-   - Open the installed PWA (it may still be controlled by the old service worker).
-5. Accept the update.
-   - Wait for the A new version is available. refresh banner to appear.
-   - Tap Update Now.
-   - Confirm the page reloads and the banner disappears.
-   - Confirm core/version.js reports 1.0.0 (open DevTools Console and run import('./core/version.js').then(m => console.log(m.APP_VERSION))).
-6. Switch to airplane mode.
-   - Turn airplane mode ON. Confirm the offline indicator shows.
-7. Confirm progress is intact.
-   - Reopen the dashboard. Confirm lesson lesson-1-1 still shows Done.
-   - Confirm your quiz score for lesson 1 is still shown.
-   - Confirm lesson lesson-1-2 still opens (it was unlocked before the update).
-8. Confirm the next lesson opens.
-   - Open lesson lesson-1-2. Confirm it loads and its quiz is reachable.
-   - If you already completed it, confirm it still shows Done.
-
-Pass criteria: progress (completed lessons, quiz scores, unlocked modules)
-survives the update; offline mode works; the next lesson opens; no data loss.
+A backup/restore feature for progress is NOT built yet. Clearing site data
+will delete progress permanently.
 
 ---
 
-## Test B — Shared PC (Chrome or Edge)
+## Test 1 — Install the deployed version as a PWA and complete lesson 1-1 and its quiz
 
-Prerequisites: PC online, then offline verification. Use a fresh or guest
-profile so you start from zero.
+Do this on each device (Android phone + PC).
 
-1. Install the old version.
-   - Open Chrome/Edge, navigate to the deployed PyKnowledge URL (old build,
-     0.9.0 / cache v0.21.1).
-   - Install the PWA (install button in the address bar or menu).
-   - Open the installed PWA.
-2. Complete lesson 1 and its quiz.
-   - Use guest mode (no sign-in needed on a shared PC).
-   - Open lesson lesson-1-1, take and pass the quiz.
-   - Confirm lesson lesson-1-1 shows Done and lesson-1-2 is unlocked.
-   - Note your quiz score.
-3. Deploy the new version.
-   - Deploy 1.0.0 to the server. Do NOT uninstall the PWA.
-4. Reconnect.
-   - Make sure the PC is online.
-   - Open the installed PWA.
-5. Accept the update.
-   - Wait for the A new version is available. refresh banner.
-   - Tap Update Now. Confirm reload and that APP_VERSION is 1.0.0.
-6. Go offline.
-   - Disable network (airplane mode, unplug Ethernet, or DevTools →
-     Network → Offline).
-7. Confirm progress is intact.
-   - Dashboard shows lesson lesson-1-1 as Done; quiz score preserved.
-   - Lesson lesson-1-2 still opens.
-8. Confirm the next lesson opens.
-   - Open lesson-1-2; confirm it loads offline and its quiz is reachable.
+| # | Step | PASS / FAIL |
+|---|------|-------------|
+| 1.1 | Open Chrome/Edge, navigate to the deployed PyKnowledge URL. | [ ] |
+| 1.2 | Install as PWA (tap "Install" / "Add to Home screen"). | [ ] |
+| 1.3 | Open the installed PWA. Confirm it loads without errors. | [ ] |
+| 1.4 | Sign in with a profile + PIN (or use guest mode). Record which. | [ ] |
+| 1.5 | Open lesson `lesson-1-1`. Confirm it loads. | [ ] |
+| 1.6 | Tap "Take Quiz", answer the questions, submit. | [ ] |
+| 1.7 | Confirm pass screen shows 70% or higher. | [ ] |
+| 1.8 | Confirm lesson `lesson-1-1` shows "Done" badge and `lesson-1-2` is unlocked. | [ ] |
+| 1.9 | Note the deployed `SW_VERSION` from live `core/sw-version.js`: __________ | [ ] |
 
-Pass criteria: progress survives, offline works, next lesson opens.
+Expected cache version at this stage: the deployed version's cache (read from live `core/sw-version.js`, NOT `0.9.1` unless the new build is already deployed).
 
 ---
 
-## What the update notifier does
+## Test 2 — Deploy the new version; reopen online, tap Update Now, confirm progress persists
 
-- ui/components/update-notifier.js listens for updatefound on the service
-  worker registration. When the new worker reaches installed state while an
-  older controller is active, it shows a refresh banner:
-  A new version is available. with Update Now and Dismiss buttons.
-- Tapping Update Now posts SKIP_WAITING to the waiting worker, then
-  reloads the page on controllerchange (with a 3s timeout fallback). The new
-  service worker takes control via self.clients.claim() in its activate
-  handler.
-- Dismissing the banner only removes the banner; the update is still applied
-  on the next navigation/reload.
+Prerequisite: Test 1 complete on the same device; new build (0.22.0 / cache `pyknowledge-v0.22.0`) deployed to the server.
 
-## Why progress is not lost
+| # | Step | PASS / FAIL |
+|---|------|-------------|
+| 2.1 | Make sure the device is online. Open the installed PWA (still controlled by the old service worker). | [ ] |
+| 2.2 | Wait for the "A new version is available" refresh banner to appear. | [ ] |
+| 2.3 | Tap "Update Now". | [ ] |
+| 2.4 | Confirm the page reloads and the banner disappears. | [ ] |
+| 2.5 | Confirm `core/version.js` reports `0.22.0` (DevTools Console: `import('./core/version.js').then(m => console.log(m.APP_VERSION))`). | [ ] |
+| 2.6 | Confirm live `core/sw-version.js` reports `SW_VERSION = '0.22.0'` → cache `pyknowledge-v0.22.0`. | [ ] |
+| 2.7 | Reopen the dashboard. Confirm lesson `lesson-1-1` still shows "Done". | [ ] |
+| 2.8 | Confirm the quiz score for `lesson-1-1` is still shown. | [ ] |
+| 2.9 | Confirm `lesson-1-2` still opens. | [ ] |
 
-- core/storage.js writes progress to IndexedDB (core/idb.js) with a
-  localStorage mirror. The service worker activate handler deletes only
-  caches whose name differs from CACHE_NAME (pyknowledge-v1.0.0). It never
-  touches IndexedDB or localStorage.
-- Completed lessons, quiz scores, achievements, and unlocked modules are all
-  stored in IndexedDB/localStorage and survive a cache change.
+Expected cache version after this stage: `pyknowledge-v0.22.0`.
+
+---
+
+## Test 3 — Airplane mode: close and reopen; confirm login, lesson, exercise, quiz, next lesson all work offline
+
+Prerequisite: Test 2 complete; device on the same installed PWA (0.22.0).
+
+| # | Step | PASS / FAIL |
+|---|------|-------------|
+| 3.1 | Switch to airplane mode (confirm offline indicator shows). | [ ] |
+| 3.2 | Close the app completely (swipe away / quit browser). | [ ] |
+| 3.3 | Reopen the installed PWA. | [ ] |
+| 3.4 | Confirm login works offline (profile + PIN accepted, or guest mode loads). | [ ] |
+| 3.5 | Open a lesson (e.g. `lesson-1-1` or `lesson-1-2`). Confirm it loads offline. | [ ] |
+| 3.6 | Open a write-code exercise. Confirm the code editor loads and the Run button works. | [ ] |
+| 3.7 | Open a quiz. Confirm questions load and you can submit. | [ ] |
+| 3.8 | Open the next lesson (e.g. `lesson-1-2`). Confirm it loads offline. | [ ] |
+
+Expected cache version: `pyknowledge-v0.22.0` (no change; offline uses the cache).
+
+---
+
+## Test 4 — Clear site data; confirm progress is lost; record backup feature status
+
+Prerequisite: Test 3 complete.
+
+| # | Step | PASS / FAIL |
+|---|------|-------------|
+| 4.1 | In browser settings, clear site data / storage for the PyKnowledge origin (or uninstall and reinstall the PWA). | [ ] |
+| 4.2 | Reopen the app. Confirm no profile is present (must sign in or use guest fresh). | [ ] |
+| 4.3 | Confirm `lesson-1-1` no longer shows "Done" — progress is gone. | [ ] |
+| 4.4 | Record: backup/restore feature is NOT built yet. Progress cleared here cannot be recovered. | [ ] |
+
+Expected result: progress is permanently deleted. No backup exists.
+
+---
+
+## Test 5 — Reconnect; confirm the app updates again without errors
+
+Prerequisite: Test 4 complete; device online again; new build (0.22.0) deployed.
+
+| # | Step | PASS / FAIL |
+|---|------|-------------|
+| 5.1 | Reconnect to the internet (airplane mode OFF / network restored). | [ ] |
+| 5.2 | Open the app. Confirm it loads without console errors. | [ ] |
+| 5.3 | If an update banner appears, tap "Update Now". Confirm reload succeeds with no errors. | [ ] |
+| 5.4 | Confirm `core/version.js` reports `0.22.0` and `core/sw-version.js` reports `SW_VERSION = '0.22.0'`. | [ ] |
+| 5.5 | Confirm the app is usable (dashboard loads, lessons list appears). | [ ] |
+
+Expected cache version: `pyknowledge-v0.22.0`.
+
+---
+
+## Pass criteria
+
+All steps marked PASS. If any step fails, note the device, OS version, and exact error, then stop and investigate before deploying further.
