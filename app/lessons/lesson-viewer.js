@@ -4,7 +4,7 @@
 
 import { parseLessonContent } from '../../utils/parser.js';
 import { getProgress } from '../../core/storage.js';
-import quizzesData from '../../content/quizzes.json' assert { type: 'json' };
+import quizzesData from '../../content/quizzes.json' with { type: 'json' };
 import { renderVideoPlayer } from '../../ui/components/video-player.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { renderNotFound } from '../../core/errors.js';
