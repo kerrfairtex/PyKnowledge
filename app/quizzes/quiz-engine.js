@@ -237,10 +237,37 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
     // completion, not a module unlock.
     const isCapstone = quiz.id !== lessonId;
 
-    let unlockLine, continueHref;
+    // Determine the true next lesson: the next lesson in this module, or the
+    // first lesson of the next module, or course complete if this was the last.
+    let continueHref = "#/dashboard";
+    if (!isCapstone) {
+      let currentModule = null;
+      let lessonIndex = -1;
+      for (const mod of lessonsData.modules || []) {
+        const idx = mod.lessons.findIndex((l) => l.id === lessonId);
+        if (idx > -1) { currentModule = mod; lessonIndex = idx; break; }
+      }
+      if (currentModule && lessonIndex > -1) {
+        const nextLesson = currentModule.lessons[lessonIndex + 1];
+        if (nextLesson) {
+          continueHref = `#/lesson/${escapeHtml(nextLesson.id)}`;
+        } else {
+          // Last lesson of this module — go to first lesson of next module.
+          const modNum = parseInt(String(currentModule.id).split('-')[1], 10) || 0;
+          const nextModId = `module-${modNum + 1}`;
+          const nextMod = lessonsData.modules.find((m) => m.id === nextModId);
+          if (nextMod && nextMod.lessons.length > 0) {
+            continueHref = `#/lesson/${escapeHtml(nextMod.lessons[0].id)}`;
+          } else {
+            continueHref = "#/dashboard";
+          }
+        }
+      }
+    }
+
+    let unlockLine;
     if (isCapstone) {
       unlockLine = `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
-      continueHref = "#/dashboard";
     } else {
       const moduleId = findModuleForLesson(lessonId, lessonsData);
       const moduleNum = parseInt(String(moduleId).split('-')[1], 10) || 0;
@@ -249,7 +276,6 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
       unlockLine = hasNext
         ? `<p class="os-quiz-unlock" role="status">[OK] MODULE ${nextModuleNum} UNLOCKED</p>`
         : `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
-      continueHref = `#/module/${escapeHtml(findModuleForLesson(lessonId, lessonsData))}`;
     }
 
     resultsEl.innerHTML = `

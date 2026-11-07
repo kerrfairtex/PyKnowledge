@@ -173,7 +173,7 @@ function primaryContinueButton(modules, progress) {
       const lessonLabel = nextLesson ? nextLesson.title : m.title;
       return `
         <div class="dash-primary">
-          <a class="btn btn-primary btn-lg" href="#/module/${encodeURIComponent(m.id)}">
+          <a class="btn btn-primary btn-lg" href="#/lesson/${encodeURIComponent(nextLesson.id)}">
             ${done > 0 ? 'CONTINUE' : 'START'}: ${escapeHtml(lessonLabel)}
           </a>
         </div>`;

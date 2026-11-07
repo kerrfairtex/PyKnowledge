@@ -96,8 +96,15 @@ export function renderLessonViewer(main, lessonId, lessonsData) {
         <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-secondary">Back to Module</a>
         <div class="lesson-actions-right">
           ${prevLesson ? `<a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-ghost" data-prev-lesson="#/lesson/${escapeHtml(prevLesson.id)}">← Previous</a>` : ''}
-          <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>
-          ${nextLesson && lessonComplete ? `<a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>` : nextLesson ? `<button type="button" class="btn btn-primary btn-disabled" disabled>Complete this lesson first</button>` : ''}
+          ${!lessonComplete
+            ? `<div class="os-next-group" role="group" aria-label="Next actions">
+                <a href="#/quiz/${escapeHtml(lessonId)}" class="btn btn-primary" data-take-quiz="#/quiz/${escapeHtml(lessonId)}">Take Quiz</a>
+                <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="Pass the quiz for ${nextLesson ? escapeHtml(nextLesson.title) : ''} to continue">Next Lesson →</button>
+                ${nextLesson ? `<span class="os-hint" aria-hidden="true">Pass the quiz for ${escapeHtml(nextLesson.title)} to continue</span>` : ''}
+              </div>`
+            : nextLesson
+              ? `<a href="#/lesson/${escapeHtml(nextLesson.id)}" class="btn btn-primary" data-next-lesson="#/lesson/${escapeHtml(nextLesson.id)}">Next Lesson →</a>`
+              : `<span class="os-hint" aria-hidden="true">Module complete</span>`}
         </div>
       </footer>
     </article>`;
