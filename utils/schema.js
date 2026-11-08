@@ -81,7 +81,22 @@ export function validateQuizzesSchema(data) {
       if (!Array.isArray(quiz.questions) || quiz.questions.length === 0) {
         errors.push(`quizzes[${i}].questions must be a non-empty array`);
       } else {
+        const seenIds = new Set();
+        const seenText = new Set();
+        let scorable = 0;
         quiz.questions.forEach((q, j) => {
+          // A question must appear only once per quiz (same id or same wording),
+          // otherwise a student is asked the identical question twice.
+          if (q.id !== undefined) {
+            if (seenIds.has(q.id)) errors.push(`quizzes[${i}].questions[${j}] repeats id "${q.id}"`);
+            seenIds.add(q.id);
+          }
+          const key = String(q.question || '').trim().toLowerCase();
+          if (key) {
+            if (seenText.has(key)) errors.push(`quizzes[${i}].questions[${j}] repeats an earlier question's wording`);
+            seenText.add(key);
+          }
+          if (q.reviewPrompt !== true) scorable += 1;
           if (!validTypes.includes(q.type)) {
             errors.push(`quizzes[${i}].questions[${j}].type must be one of: ${validTypes.join(', ')}`);
           }
@@ -95,6 +110,11 @@ export function validateQuizzesSchema(data) {
             errors.push(`quizzes[${i}].questions[${j}].correctAnswer is required for fill-blank`);
           }
         });
+        // Self-check (reviewPrompt) questions are not scored; a quiz with too
+        // few scored questions cannot reach the pass mark.
+        if (scorable === 0) {
+          errors.push(`quizzes[${i}] has no scored questions`);
+        }
       }
     });
   }

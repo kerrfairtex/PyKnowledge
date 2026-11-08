@@ -4,7 +4,7 @@
 
 import { getOverallProgress, getModuleProgress } from '../../storage/progress.js';
 import { getAchievements } from '../../storage/achievements.js';
-import { getProgress } from '../../core/storage.js';
+import { getProgress, getQuizRecord } from '../../core/storage.js';
 import { renderProgressBar } from '../../ui/components/progress-bar.js';
 import { escapeHtml } from '../../utils/sanitize.js';
 import { animatePageEnter } from '../../ui/components/animations.js';
@@ -36,11 +36,60 @@ function quizScoresSparkline(lessonsData, progress) {
     </svg>`;
 }
 
-export function renderProgressDashboard(main, lessonsData) {
+// One row per quiz, in course order — the student's evidence of what is done.
+function quizRecordRows(lessonsData, quizzesData) {
+  const rows = [];
+  const seen = new Set();
+  for (const mod of lessonsData.modules) {
+    for (const lesson of mod.lessons) {
+      seen.add(lesson.id);
+      rows.push({ id: lesson.id, module: mod.title, title: lesson.title || lesson.id });
+    }
+  }
+  // Special assessments (e.g. the capstone) have their own id, not a lesson id.
+  for (const quiz of (quizzesData && quizzesData.quizzes) || []) {
+    if (!seen.has(quiz.id)) rows.push({ id: quiz.id, module: 'Final assessment', title: quiz.title || quiz.id });
+  }
+  return rows.map((row) => ({ ...row, record: getQuizRecord(row.id) }));
+}
+
+function formatDay(iso) {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10);
+}
+
+function quizRecordTable(rows) {
+  const body = rows.map(({ id, module, title, record }) => {
+    const status = record.passed ? 'PASSED' : record.attemptCount > 0 ? 'NOT PASSED' : 'NOT TAKEN';
+    const cls = record.passed ? 'is-passed' : record.attemptCount > 0 ? 'is-failed' : 'is-pending';
+    const last = record.lastAttempt ? formatDay(record.lastAttempt.at) : '—';
+    return `
+      <tr>
+        <td>${escapeHtml(module)}</td>
+        <td><a href="#/quiz/${escapeHtml(id)}">${escapeHtml(title)}</a></td>
+        <td class="quiz-record-status ${cls}">${status}</td>
+        <td>${record.bestScore === null ? '—' : `${record.bestScore}%`}</td>
+        <td>${record.attemptCount}</td>
+        <td>${escapeHtml(last)}</td>
+      </tr>`;
+  }).join('');
+  return `
+    <div class="quiz-record-table-wrap">
+      <table class="quiz-record-table">
+        <caption class="visually-hidden">Quiz results, one row per quiz</caption>
+        <thead><tr><th scope="col">Module</th><th scope="col">Quiz</th><th scope="col">Status</th><th scope="col">Best</th><th scope="col">Attempts</th><th scope="col">Last attempt</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
+}
+
+export function renderProgressDashboard(main, lessonsData, quizzesData = null) {
   const overall = getOverallProgress(lessonsData);
   const achievements = getAchievements(lessonsData);
   const progress = getProgress();
-  const quizTaken = Object.keys(progress.quizScores || {}).length;
+  const recordRows = quizRecordRows(lessonsData, quizzesData);
+  const quizTaken = recordRows.filter((r) => r.record.attemptCount > 0 || r.record.passed).length;
+  const quizPassed = recordRows.filter((r) => r.record.passed).length;
   const quizScoresArr = Object.values(progress.quizScores || {});
   const avgScore = quizScoresArr.length
     ? Math.round(quizScoresArr.reduce((a, b) => a + b, 0) / quizScoresArr.length)
@@ -72,7 +121,7 @@ export function renderProgressDashboard(main, lessonsData) {
       <h2 id="progress-heading">Your Progress</h2>
       <div class="os-telemetry-grid">
         <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">${overall.percent}</span><span class="os-stat-unit">% DONE</span></strong><span class="os-stat-label">${overall.completedLessons}/${overall.totalLessons} lessons</span></div>
-        <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">${quizTaken}</span><span class="os-stat-unit">QUIZ</span></strong><span class="os-stat-label">quizzes taken</span></div>
+        <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">${quizTaken}</span><span class="os-stat-unit">QUIZ</span></strong><span class="os-stat-label">quizzes attempted (${quizPassed} passed)</span></div>
         <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">${avgScore}</span><span class="os-stat-unit">AVG %</span></strong><span class="os-stat-label">average quiz score</span></div>
         <div class="os-stat"><strong class="os-stat-value"><span class="os-stat-num">${unlockedCount}</span><span class="os-stat-unit">UNLOCK</span></strong><span class="os-stat-label">modules unlocked</span></div>
       </div>
@@ -82,6 +131,9 @@ export function renderProgressDashboard(main, lessonsData) {
       <div class="overall-progress">
         ${renderProgressBar(overall.percent, `${overall.completedLessons} of ${overall.totalLessons} lessons`)}
       </div>
+      <h3>Quiz record</h3>
+      <p class="quiz-meta">${quizPassed} of ${recordRows.length} quizzes passed. Every attempt is saved with its score and date.</p>
+      ${quizRecordTable(recordRows)}
       <h3>Modules</h3>
       <div class="progress-modules">${modulesHtml}</div>
       <h3>Achievements</h3>

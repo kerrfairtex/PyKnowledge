@@ -155,7 +155,7 @@ async function initApp() {
     });
 
     registerRoute('/progress', (m) => {
-      renderProgressDashboard(m, lessonsData);
+      renderProgressDashboard(m, lessonsData, quizzesData);
       updateNavbarActiveState();
     });
 
