@@ -78,6 +78,14 @@ export function validateQuizzesSchema(data) {
     data.quizzes.forEach((quiz, i) => {
       if (!isNonEmptyString(quiz.id)) errors.push(`quizzes[${i}].id is required`);
       if (!isNonEmptyString(quiz.title)) errors.push(`quizzes[${i}].title is required`);
+      // Optional: draw this many questions per attempt from a larger bank.
+      if (quiz.questionsPerAttempt !== undefined) {
+        const n = quiz.questionsPerAttempt;
+        const bank = Array.isArray(quiz.questions) ? quiz.questions.length : 0;
+        if (!Number.isInteger(n) || n < 1 || n > bank) {
+          errors.push(`quizzes[${i}].questionsPerAttempt must be a whole number from 1 to ${bank}`);
+        }
+      }
       if (!Array.isArray(quiz.questions) || quiz.questions.length === 0) {
         errors.push(`quizzes[${i}].questions must be a non-empty array`);
       } else {
@@ -102,6 +110,10 @@ export function validateQuizzesSchema(data) {
           }
           if (!isNonEmptyString(q.question)) {
             errors.push(`quizzes[${i}].questions[${j}].question is required`);
+          }
+          // Optional text shown after the quiz is submitted: why the answer is right.
+          if (q.explanation !== undefined && !isNonEmptyString(q.explanation)) {
+            errors.push(`quizzes[${i}].questions[${j}].explanation must be a non-empty string when present`);
           }
           if (q.type === 'multiple-choice' && !Array.isArray(q.options)) {
             errors.push(`quizzes[${i}].questions[${j}].options is required for multiple-choice`);

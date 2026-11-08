@@ -108,6 +108,15 @@ This guide explains how to create and maintain learning content for PyKnowledge.
 | `true-false` | `true` or `false` |
 | `fill-blank` | String or array of accepted answers (case-insensitive) |
 
+### Optional fields
+
+| Field | Where | Effect |
+|-------|-------|--------|
+| `explanation` | question | One or two sentences shown after the quiz is submitted, under the learner's answer and the correct answer. Write it for right answers too — it is shown for every scored question. |
+| `questionsPerAttempt` | quiz | Draw this many questions per attempt from a larger bank (1 to the bank size). Unseen questions come first, then ones the learner missed. Needs a bank bigger than this number to have any effect. |
+
+`fill-blank` answers ignore case and all spaces, so `print( )` matches `print()`.
+
 ### Rules
 
 - Every quiz `id` must match a lesson `id`
