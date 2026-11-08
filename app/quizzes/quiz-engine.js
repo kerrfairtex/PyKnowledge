@@ -3,7 +3,7 @@
  */
 
 import { validateQuizAnswers } from '../../utils/validator.js';
-import { markLessonComplete } from '../../core/storage.js';
+import { getProgress, markLessonComplete } from '../../core/storage.js';
 import { unlockNextModule } from '../../storage/progress.js';
 import { checkAchievements } from '../../storage/achievements.js';
 import { escapeHtml } from '../../utils/sanitize.js';
@@ -45,6 +45,29 @@ export function renderQuiz(main, quizId, quizzesData, lessonsData) {
   if (!quiz) {
     renderNotFound(main, 'Quiz');
     return;
+  }
+
+  // Direct-URL gating: a quiz should only be reachable after its preceding
+  // lesson is complete, matching the sequential lock in the lesson viewer.
+  const progress = getProgress();
+  const lessonId = quiz.lessonId || quiz.id;
+  let lessonModule = null;
+  let lessonIndex = -1;
+  for (const mod of lessonsData.modules || []) {
+    const idx = mod.lessons.findIndex((l) => l.id === lessonId);
+    if (idx > -1) { lessonModule = mod; lessonIndex = idx; break; }
+  }
+  if (lessonModule && lessonIndex > 0) {
+    const prevLesson = lessonModule.lessons[lessonIndex - 1];
+    if (!progress.completedLessons.includes(prevLesson.id)) {
+      main.innerHTML = `
+        <div class="error-card" role="alert">
+          <h2>Quiz Locked</h2>
+          <p>Complete "${escapeHtml(prevLesson.title)}" first.</p>
+          <a href="#/lesson/${escapeHtml(prevLesson.id)}" class="btn btn-primary">Go to Lesson</a>
+        </div>`;
+      return;
+    }
   }
 
   // Show a Start splash before revealing questions
@@ -191,8 +214,12 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
   resultsEl.hidden = false;
 
   if (result.passed) {
-    markLessonComplete(quiz.id, result.score);
-    unlockNextModule(quiz.id, lessonsData);
+    // Use the quiz's associated lesson ID, not quiz.id. quiz.id may differ from
+    // quiz.lessonId (e.g. capstone-final -> lesson-9-3); recording the quiz ID
+    // as a lesson ID corrupts progress and breaks module lookup.
+    const lessonId = quiz.lessonId || quiz.id;
+    markLessonComplete(lessonId, result.score);
+    unlockNextModule(lessonId, lessonsData);
     const newAchievements = checkAchievements(lessonsData);
 
     if (newAchievements.length > 0) {
@@ -206,13 +233,50 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
       ? `<div class="achievements stagger-children">${newAchievements.map((a) => `<p class="achievement animate-item">🏆 ${escapeHtml(a.title)}: ${escapeHtml(a.description)}</p>`).join('')}</div>`
       : '';
 
-    const moduleId = findModuleForLesson(quiz.id, lessonsData);
-    const moduleNum = parseInt(String(moduleId).split('-')[1], 10) || 0;
-    const nextModuleNum = moduleNum + 1;
-    const hasNext = lessonsData.modules.some((m) => m.id === `module-${nextModuleNum}`);
-    const unlockLine = hasNext
-      ? `<p class="os-quiz-unlock" role="status">[OK] MODULE ${nextModuleNum} UNLOCKED</p>`
-      : `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
+    // Capstone: quiz ID differs from its associated lesson ID => course-level
+    // completion, not a module unlock.
+    const isCapstone = quiz.id !== lessonId;
+
+    // Determine the true next lesson: the next lesson in this module, or the
+    // first lesson of the next module, or course complete if this was the last.
+    let continueHref = "#/dashboard";
+    if (!isCapstone) {
+      let currentModule = null;
+      let lessonIndex = -1;
+      for (const mod of lessonsData.modules || []) {
+        const idx = mod.lessons.findIndex((l) => l.id === lessonId);
+        if (idx > -1) { currentModule = mod; lessonIndex = idx; break; }
+      }
+      if (currentModule && lessonIndex > -1) {
+        const nextLesson = currentModule.lessons[lessonIndex + 1];
+        if (nextLesson) {
+          continueHref = `#/lesson/${escapeHtml(nextLesson.id)}`;
+        } else {
+          // Last lesson of this module — go to first lesson of next module.
+          const modNum = parseInt(String(currentModule.id).split('-')[1], 10) || 0;
+          const nextModId = `module-${modNum + 1}`;
+          const nextMod = lessonsData.modules.find((m) => m.id === nextModId);
+          if (nextMod && nextMod.lessons.length > 0) {
+            continueHref = `#/lesson/${escapeHtml(nextMod.lessons[0].id)}`;
+          } else {
+            continueHref = "#/dashboard";
+          }
+        }
+      }
+    }
+
+    let unlockLine;
+    if (isCapstone) {
+      unlockLine = `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
+    } else {
+      const moduleId = findModuleForLesson(lessonId, lessonsData);
+      const moduleNum = parseInt(String(moduleId).split('-')[1], 10) || 0;
+      const nextModuleNum = moduleNum + 1;
+      const hasNext = lessonsData.modules.some((m) => m.id === `module-${nextModuleNum}`);
+      unlockLine = hasNext
+        ? `<p class="os-quiz-unlock" role="status">[OK] MODULE ${nextModuleNum} UNLOCKED</p>`
+        : `<p class="os-quiz-unlock" role="status">[OK] COURSE COMPLETE</p>`;
+    }
 
     resultsEl.innerHTML = `
       <div class="quiz-result passed animate-item" role="status">
@@ -220,7 +284,7 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
         <p>Score: ${result.score}% (${result.correct}/${result.total}) &middot; needed 70%</p>
         ${unlockLine}
         ${achievementHtml}
-        <a href="#/module/${escapeHtml(moduleId)}" class="btn btn-primary">Continue</a>
+        <a href="${continueHref}" class="btn btn-primary">Continue</a>
         <a href="#/dashboard" class="btn btn-secondary">Dashboard</a>
       </div>`;
   } else {
@@ -238,7 +302,7 @@ function handleQuizSubmit(main, quiz, lessonsData, answers) {
         <p>${result.correct}/${result.total} correct. You can retry as many times as you need.</p>
         ${weakSpots ? `<div class="os-quiz-review"><span class="os-quiz-review-label">review:</span> ${weakSpots}</div>` : ''}
         <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
-        <a href="#/lesson/${escapeHtml(quiz.id)}" class="btn btn-secondary">Review Lesson</a>
+        <a href="#/lesson/${escapeHtml(quiz.lessonId || quiz.id)}" class="btn btn-secondary">Review Lesson</a>
         <a href="#/dashboard" class="btn btn-ghost">Dashboard</a>
       </div>`;
 

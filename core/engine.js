@@ -143,7 +143,7 @@ async function initApp() {
     registerRoute('/lesson', async (m, params) => {
       const lessonId = params[0];
       if (!lessonId) { navigate('/dashboard'); return; }
-      renderLessonViewer(m, lessonId, lessonsData);
+      renderLessonViewer(m, lessonId, lessonsData, quizzesData);
       updateNavbarActiveState();
     });
 

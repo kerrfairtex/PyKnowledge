@@ -5,6 +5,21 @@ All notable changes to PyKnowledge are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-11-07
+
+### Fixed
+- **Next/Continue buttons after lessons and quizzes** — tapping a lesson's quiz now opens that lesson's quiz (not a generic one). Passing a quiz marks that lesson complete and opens the next lesson in the module. At module end, Continue opens the first lesson of the next module. After the capstone, students see "COURSE COMPLETE" and go to the dashboard.
+- Capstone quiz mapped to lesson `lesson-9-3` instead of using its own quiz ID as a lesson ID.
+- Quiz grading now validates every test case in each lesson, reports which case failed, and shows a pass count.
+- Footer shows "Take the quiz above to mark this lesson complete" when unfinished, with a disabled "Next Lesson →" button.
+
+### Added
+- Service worker cache version bumped to v1.0.0 so installed students receive the update on next online reconnect.
+- Version sync check (`check:version`) confirms package.json, core/version.js, and core/sw-version.js all match.
+
+### Removed
+- None.
+
 ## [0.4.0] - 2026-08-04
 
 ### Added
