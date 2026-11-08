@@ -123,10 +123,16 @@ export function validateProgressIntegrity(lessonsData) {
     }
   }
 
-  // Quiz scores / achievements referencing dropped lessons go too.
+  // Quiz scores referencing dropped lessons go too. Only keys that ARE lesson
+  // ids are pruned: special assessments (e.g. "capstone-final") are not lessons
+  // and are never in completedLessons, so their records must be left alone.
   if (tampered) {
+    const lessonIds = new Set();
+    for (const mod of lessonsData.modules || []) {
+      for (const lesson of mod.lessons || []) lessonIds.add(lesson.id);
+    }
     for (const key of Object.keys(progress.quizScores || {})) {
-      if (!completed.has(key)) delete progress.quizScores[key];
+      if (lessonIds.has(key) && !completed.has(key)) delete progress.quizScores[key];
     }
     progress.completedLessons = [...completed];
     saveProgress(progress);

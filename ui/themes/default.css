@@ -672,6 +672,58 @@ body {
   margin: 0.5rem;
 }
 
+/* Quiz record — saved evidence of attempts and results */
+.quiz-record {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--dim);
+  border-radius: var(--radius);
+  text-align: left;
+}
+
+.quiz-record-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.quiz-record-status.is-passed { color: var(--ok); }
+.quiz-record-status.is-failed { color: var(--err); }
+.quiz-record-status.is-pending { color: var(--dim); }
+
+.quiz-saved {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.quiz-selfcheck-review {
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.quiz-selfcheck-review ul {
+  padding-left: 1.25rem;
+}
+
+.quiz-record-table-wrap {
+  overflow-x: auto;
+  margin: 0.5rem 0 2rem;
+}
+
+.quiz-record-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.quiz-record-table th,
+.quiz-record-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--dim);
+  text-align: left;
+  white-space: nowrap;
+}
+
 /* Progress dashboard */
 .achievements-grid {
   display: grid;

@@ -1012,17 +1012,17 @@
           "concept": "modules"
         },
         {
-          "id": "lesson-6-1-q5",
+          "id": "lesson-6-1-q4",
           "type": "multiple-choice",
-          "question": "You wrote utils.py in the same folder as main.py. How do you use its double() function in main.py?",
+          "question": "Which line imports only the sqrt function from the math module?",
           "options": [
-            "from utils import double",
-            "include utils.py",
-            "require(\"utils\")",
-            "Python finds it automatically"
+            "import sqrt from math",
+            "include math.sqrt",
+            "from math import sqrt",
+            "using math.sqrt"
           ],
-          "correctAnswer": 0,
-          "concept": "modules"
+          "correctAnswer": 2,
+          "concept": "imports"
         }
       ]
     },
@@ -1549,11 +1549,11 @@
           "concept": "oop"
         },
         {
-          "id": "lesson-9-1-q5",
+          "id": "lesson-9-1-q4",
           "type": "true-false",
-          "question": "Each instance of a class keeps its own separate attribute values.",
+          "question": "The __init__ method runs automatically when a new instance of the class is created.",
           "correctAnswer": true,
-          "concept": "oop"
+          "concept": "init"
         }
       ]
     },
