@@ -43,14 +43,14 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.8.1",
+    "eslint": "^10.11.0",
     "globals": "^17.9.0",
-    "jest": "^30.4.2",
+    "jest": "^30.5.2",
     "jest-environment-jsdom": "^29.7.0",
     "marked": "^18.0.14"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.1"
+    "@supabase/supabase-js": "^2.117.0"
   },
   "engines": {
     "node": ">=20"
