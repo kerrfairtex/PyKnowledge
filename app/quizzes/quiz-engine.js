@@ -58,6 +58,75 @@ export function calculateScore(questions, answers) {
   };
 }
 
+/**
+ * Has the learner given a usable answer? Self-checks are optional, so they
+ * always count as answered. Used to stop a scored question being skipped.
+ */
+export function isAnswered(question, answer) {
+  if (isSelfCheck(question)) return true;
+  if (question.type === 'multiple-choice') return Number.isInteger(answer);
+  if (question.type === 'true-false') return typeof answer === 'boolean';
+  if (question.type === 'fill-blank') return typeof answer === 'string' && answer.trim() !== '';
+  return answer !== null && answer !== undefined;
+}
+
+// ---- Answer review: what you answered, what was right, and why -------------
+
+function answerText(q, value) {
+  if (value === null || value === undefined || value === '') return '';
+  if (q.type === 'multiple-choice') return String((q.options || [])[value] ?? '');
+  if (q.type === 'true-false') return value ? 'True' : 'False';
+  return String(value);
+}
+
+function correctText(q) {
+  if (q.type === 'multiple-choice') return String((q.options || [])[Number(q.correctAnswer)] ?? '');
+  if (q.type === 'true-false') return q.correctAnswer ? 'True' : 'False';
+  return (Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer])
+    .map((a) => String(a).trim())
+    .join(' or ');
+}
+
+/**
+ * One entry per SCORED question, in the order the learner saw them. `questions`
+ * must be the attempt's own list (options already shuffled), so the chosen and
+ * correct option text match what was on screen. `explanation` is optional
+ * authoring text on the question.
+ */
+export function buildAnswerReview(questions, answers, result) {
+  const review = [];
+  (questions || []).forEach((q, i) => {
+    if (isSelfCheck(q)) return;
+    review.push({
+      number: i + 1,
+      id: q.id,
+      question: q.question,
+      correct: Boolean(result && result.results && result.results[q.id]),
+      yourAnswer: answerText(q, answers[i]),
+      correctAnswer: correctText(q),
+      explanation: typeof q.explanation === 'string' ? q.explanation.trim() : ''
+    });
+  });
+  return review;
+}
+
+export function answerReviewHtml(review) {
+  if (!review || review.length === 0) return '';
+  const missed = review.filter((r) => !r.correct).length;
+  const items = review.map((r) => `
+      <li class="quiz-review-item ${r.correct ? 'is-correct' : 'is-wrong'}">
+        <p class="quiz-review-q"><span aria-hidden="true">${r.correct ? '[OK]' : '[X]'}</span> <span class="visually-hidden">${r.correct ? 'Correct.' : 'Incorrect.'}</span> Q${r.number}. ${escapeHtml(r.question)}</p>
+        <p>Your answer: ${r.yourAnswer ? escapeHtml(r.yourAnswer) : '<em>(none)</em>'}</p>
+        ${r.correct ? '' : `<p>Correct answer: <strong>${escapeHtml(r.correctAnswer)}</strong></p>`}
+        ${r.explanation ? `<p class="quiz-review-why">${escapeHtml(r.explanation)}</p>` : ''}
+      </li>`).join('');
+  return `
+    <details class="quiz-review"${missed ? ' open' : ''}>
+      <summary>Review your answers (${missed} missed)</summary>
+      <ol class="quiz-review-list">${items}</ol>
+    </details>`;
+}
+
 // ---- Attempt preparation: vary what the student sees on each try ----------
 
 function shuffled(list, rng) {
@@ -306,6 +375,7 @@ function showQuizQuestions(main, quiz, lessonsData) {
         </div>
         <form id="quiz-form" novalidate>
           ${questionHtml(q, current)}
+          <p id="quiz-unanswered" class="quiz-unanswered" role="alert" hidden>Choose or type an answer to continue.</p>
           <div class="os-quiz-nav">
             ${current > 0 ? '<button type="button" id="quiz-prev" class="btn btn-ghost">&larr; Prev</button>' : ''}
             <button type="submit" id="quiz-next" class="btn btn-primary">${isLast ? 'Submit Quiz' : 'Next →'}</button>
@@ -328,6 +398,13 @@ function showQuizQuestions(main, quiz, lessonsData) {
     document.getElementById('quiz-form').addEventListener('submit', (e) => {
       e.preventDefault();
       recordAnswer(current);
+      // The form is novalidate, so enforce "answer required" here: a skipped
+      // scored question must not move on (or be submitted).
+      if (!isAnswered(questions[current], answers[current])) {
+        const msg = document.getElementById('quiz-unanswered');
+        if (msg) msg.hidden = false;
+        return;
+      }
       if (current < total - 1) {
         current += 1;
         renderCurrent();
@@ -375,6 +452,9 @@ function handleQuizSubmit(main, quiz, lessonsData, questions, answers) {
   });
   const savedLine = `<p class="quiz-saved" role="status">Saved to your record: attempt #${saved.number} &middot; ${escapeHtml(formatWhen(saved.at))}</p>`;
   const selfChecks = selfCheckReviewHtml(questions, answers);
+  // Show every scored question with the learner's answer, the right answer and
+  // (when authored) the explanation — pass or fail.
+  const reviewHtml = answerReviewHtml(buildAnswerReview(questions, answers, result));
 
   if (result.passed) {
     // Complete the quiz's associated lesson, not quiz.id: quiz.id may differ from
@@ -445,6 +525,7 @@ function handleQuizSubmit(main, quiz, lessonsData, questions, answers) {
         ${savedLine}
         ${unlockLine}
         ${achievementHtml}
+        ${reviewHtml}
         ${selfChecks}
         <a href="${continueHref}" class="btn btn-primary">Continue</a>
         <a href="#/progress" class="btn btn-secondary">View my record</a>
@@ -465,6 +546,7 @@ function handleQuizSubmit(main, quiz, lessonsData, questions, answers) {
         <p>${result.correct}/${result.total} correct. You can retry as many times as you need — each try mixes up the questions.</p>
         ${savedLine}
         ${weakSpots ? `<div class="os-quiz-review"><span class="os-quiz-review-label">review:</span> ${weakSpots}</div>` : ''}
+        ${reviewHtml}
         ${selfChecks}
         <button type="button" id="quiz-retry" class="btn btn-primary">Retry Quiz</button>
         <a href="#/lesson/${escapeHtml(quiz.lessonId || quiz.id)}" class="btn btn-secondary">Review Lesson</a>

@@ -701,6 +701,39 @@ body {
   text-align: left;
 }
 
+/* Answer review — your answer, the right answer, and why */
+.quiz-unanswered {
+  margin: 0.5rem 0;
+  color: var(--err);
+}
+
+.quiz-review {
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.quiz-review summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.quiz-review-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.5rem;
+}
+
+.quiz-review-item {
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--dim);
+}
+
+.quiz-review-item.is-correct { border-left-color: var(--ok); }
+.quiz-review-item.is-wrong { border-left-color: var(--err); }
+
+.quiz-review-item p { margin: 0.2rem 0; }
+.quiz-review-why { font-style: italic; opacity: 0.9; }
+
 .quiz-selfcheck-review ul {
   padding-left: 1.25rem;
 }
