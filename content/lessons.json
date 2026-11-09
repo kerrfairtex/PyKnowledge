@@ -60,20 +60,17 @@
             {
               "id": "ex-1-1-b",
               "type": "write_code",
-              "prompt": "Write code that prints your name on the screen.",
+              "prompt": "Write code that prints the name Maria on the screen.",
               "starter_code": "# your code here",
               "test_cases": [
                 {
                   "expected_stdout": "Maria\n"
-                },
-                {
-                  "expected_stdout": "Juan\n"
                 }
               ],
               "hints": [
                 "Use the print() function to display text.",
-                "Put your name inside quotes so Python treats it as a string.",
-                "Try: print('Your Name')"
+                "Put the name inside quotes so Python treats it as text (a string).",
+                "Try: print('Maria')"
               ],
               "difficulty": "easy",
               "concept": "output",
@@ -2428,10 +2425,10 @@
               "id": "ex-6-1-d",
               "type": "challenge",
               "prompt": "Import the random module. Use random.randint() to generate a random integer between 1 and 10 (inclusive). Print it. Then import randint directly and print another random number.",
-              "starter_code": "import random\nprint(random.randint(1, 10))\nfrom random import randint\nprint(randint(1, 10))",
+              "starter_code": "# your code here",
               "test_cases": [
                 {
-                  "expected_stdout": ""
+                  "expected_pattern": "^(10|[1-9])\\n(10|[1-9])$"
                 }
               ],
               "hints": [
@@ -2619,10 +2616,10 @@
               "id": "ex-6-3-c",
               "type": "write_code",
               "prompt": "Use the random module to randomly choose a winner from the list ['Ali', 'Beth', 'Carlos', 'Dina'] and print the winner's name.",
-              "starter_code": "import random\nwinners = ['Ali', 'Beth', 'Carlos', 'Dina']\nprint(random.choice(winners))",
+              "starter_code": "# your code here",
               "test_cases": [
                 {
-                  "expected_stdout": ""
+                  "expected_pattern": "^(Ali|Beth|Carlos|Dina)$"
                 }
               ],
               "hints": [
@@ -2635,10 +2632,10 @@
               "id": "ex-6-3-d",
               "type": "challenge",
               "prompt": "Write code that generates 5 random integers between 1 and 100, stores them in a list, then prints the mean (average) using the statistics module.",
-              "starter_code": "import random\nimport statistics\n\nnums = [random.randint(1, 100) for _ in range(5)]\nprint(statistics.mean(nums))",
+              "starter_code": "# your code here",
               "test_cases": [
                 {
-                  "expected_stdout": ""
+                  "expected_pattern": "^\\d{1,3}(\\.\\d+)?$"
                 }
               ],
               "hints": [
