@@ -307,6 +307,9 @@ export async function gradeExercise(code, testCases, executeFn) {
   for (const testCase of testCases) {
     const stdin = testCase?.expected_stdin || '';
     const expectedStdout = testCase?.expected_stdout || '';
+    // Optional: for random output that can't be matched exactly. The trimmed
+    // output must match this regular expression (write it with ^ and $).
+    const expectedPattern = typeof testCase?.expected_pattern === 'string' ? testCase.expected_pattern : '';
 
     const result = await executeFn(code, stdin);
 
@@ -326,7 +329,16 @@ export async function gradeExercise(code, testCases, executeFn) {
     const normalizedActual = actualOutput.replace(/\r\n/g, '\n').trim();
     const normalizedExpected = expectedStdout.replace(/\r\n/g, '\n').trim();
 
-    const passed = normalizedActual === normalizedExpected;
+    let passed;
+    if (expectedPattern) {
+      try {
+        passed = new RegExp(expectedPattern).test(normalizedActual);
+      } catch {
+        passed = false; // a broken pattern never passes by accident
+      }
+    } else {
+      passed = normalizedActual === normalizedExpected;
+    }
     if (!passed) allPassed = false;
 
     results.push({ passed, stdin, expectedStdout, actualOutput, error: null });
