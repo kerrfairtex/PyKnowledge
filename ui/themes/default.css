@@ -2372,3 +2372,16 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,.3);
 }
+
+
+/* Locked Next Lesson reminder */
+.btn-disabled { opacity: .5; cursor: not-allowed; }
+.guard-toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+  max-width: 90vw; padding: 12px 16px; border-radius: 8px;
+  background: #b45309; color: #fff; font-size: 14px;
+  opacity: 0; pointer-events: none; transition: .25s; z-index: 9999;
+}
+.guard-toast.show { opacity: 1; transform: translate(-50%, 0); }
+.guard-pulse { outline: 2px solid #fbbf24; outline-offset: 4px; animation: guard-pulse 1s 2; }
+@keyframes guard-pulse { 50% { outline-color: transparent; } }

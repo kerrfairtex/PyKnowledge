@@ -403,7 +403,7 @@ export function renderLessonFooter(lessonComplete, lessonId, moduleId, nextLesso
           ${backLink}
           <div class="os-next-group" role="group" aria-label="Next actions">
             ${quizLink}
-            <button type="button" class="btn btn-primary btn-disabled" disabled aria-label="${ariaLabel}">Next Lesson →</button>
+            <button type="button" class="btn btn-primary btn-disabled" aria-disabled="true" data-locked-next data-quiz-name="${quizName}" aria-label="${ariaLabel}">Next Lesson →</button>
             ${hint}
           </div>
         </div>
@@ -693,3 +693,40 @@ function showExerciseFeedback(exerciseId, type, message) {
   void feedback.offsetWidth; // force reflow
   feedback.classList.add('animate-item');
 }
+
+
+// ---- Locked "Next Lesson" reminder ----------------------------------
+let lockedNextBound = false;
+
+function showReminder(msg) {
+  let el = document.querySelector('.guard-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'guard-toast';
+    el.setAttribute('role', 'alert');
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function bindLockedNext() {
+  if (lockedNextBound) return;
+  lockedNextBound = true;
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-locked-next]');
+    if (!btn) return;
+    e.preventDefault();
+    showReminder('Pass the quiz for "' + btn.dataset.quizName + '" to unlock the next lesson.');
+    const take = document.querySelector('[data-take-quiz]');
+    if (take) {
+      take.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      take.classList.add('guard-pulse');
+      setTimeout(() => take.classList.remove('guard-pulse'), 2000);
+    }
+  });
+}
+
+if (typeof document !== 'undefined') bindLockedNext();
