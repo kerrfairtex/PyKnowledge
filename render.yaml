@@ -37,7 +37,7 @@ services:
         value: "public, max-age=31536000, immutable"
       - path: /ui/themes/*
         name: Cache-Control
-        value: "public, max-age=31536000, immutable"
+        value: "public, max-age=0, must-revalidate"
 
   # ── API server ──────────────────────────────────────────────────
   # Express + Prisma backend for auth, content sync, and progress
