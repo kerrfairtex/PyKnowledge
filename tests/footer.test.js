@@ -101,7 +101,7 @@ describe('renderLessonFooter — pure function with current-lesson quiz', () => 
     expect(hint).not.toBeNull();
     expect(hint.textContent).toBe('Pass the quiz for What is Python? to continue to Variables and Data Types.');
 
-    const btn = doc.querySelector('button[disabled]');
+    const btn = doc.querySelector('button[aria-disabled="true"]');
     expect(btn).not.toBeNull();
     expect(btn.getAttribute('aria-label')).toBe('Pass the quiz for What is Python? to continue to Variables and Data Types.');
   });
@@ -112,7 +112,7 @@ describe('renderLessonFooter — pure function with current-lesson quiz', () => 
     const hint = doc.querySelector('.os-hint');
     expect(hint).not.toBeNull();
     expect(hint.textContent).toBe('Pass the quiz for Input and Output to finish this module.');
-    expect(doc.querySelector('button[disabled]')?.getAttribute('aria-label'))
+    expect(doc.querySelector('button[aria-disabled="true"]')?.getAttribute('aria-label'))
       .toBe('Pass the quiz for Input and Output to finish this module.');
   });
 
@@ -178,7 +178,7 @@ describe('renderLessonViewer footer — every lesson names its own quiz', () => 
     }
     expect(hint.textContent).toBe(expected);
 
-    const btn = main.querySelector('button[disabled]');
+    const btn = main.querySelector('button[aria-disabled="true"]');
     if (nextTitle) {
       expect(btn).not.toBeNull();
       expect(btn.getAttribute('aria-label')).toBe(expected);

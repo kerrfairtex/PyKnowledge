@@ -1,6 +1,6 @@
 {
   "name": "pyknowledge",
-  "version": "0.22.4",
+  "version": "0.22.7",
   "description": "Offline Python Learning Platform for TRAC/BARMM/CHED curriculum",
   "private": true,
   "type": "module",
