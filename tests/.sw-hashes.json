@@ -1,5 +1,5 @@
 {
-  "version": "0.22.6",
+  "version": "0.22.7",
   "hashes": {
     "/": "__dir__",
     "/index.html": "9df34e9b3dda",
@@ -12,7 +12,7 @@
     "/core/storage.js": "f7e5c642575c",
     "/core/idb.js": "5855c95b63ea",
     "/core/errors.js": "247e427ce49f",
-    "/core/version.js": "c1a00e120054",
+    "/core/version.js": "7a642e5ab30f",
     "/app/dashboard/dashboard.js": "1e8936937ac6",
     "/app/lessons/lesson-viewer.js": "338fe4b275c2",
     "/app/quizzes/quiz-engine.js": "feaa64c56502",
@@ -68,7 +68,7 @@
     "/content/lessons.json": "9ff0322f2fd1",
     "/content/quizzes.json": "cfd807cc80c0",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "59cc88d819eb",
+    "/core/sw-version.js": "59d5d8adb06e",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",
