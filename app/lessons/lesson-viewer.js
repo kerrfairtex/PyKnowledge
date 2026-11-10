@@ -185,6 +185,8 @@ function renderExercises(exercises) {
             </div>
           </div>
           ${renderHintLevels(exercise)}
+          <div id="code-editor-${exercise.id}"></div>
+          <div class="exercise-feedback" hidden></div>
         `;
         break;
 
@@ -435,12 +437,12 @@ function initializeCodeEditors(exercises) {
   if (!exercises) return;
 
     exercises.forEach((exercise) => {
-      if (exercise.type !== 'write_code' && exercise.type !== 'challenge') return;
+      if (!['write_code', 'challenge', 'fix_the_code'].includes(exercise.type)) return;
 
     const container = document.getElementById(`code-editor-${exercise.id}`);
     if (!container) return;
 
-    const starterCode = exercise.starter_code || '# your code here';
+    const starterCode = exercise.type === 'fix_the_code' ? (exercise.buggy_code || '') : (exercise.starter_code || '# your code here');
     const testCases = exercise.test_cases || [];
 
     createCodeEditor(container, {
@@ -450,7 +452,18 @@ function initializeCodeEditors(exercises) {
         // A pass is only reported when every supplied case passes.
         let result;
         try {
-          result = await gradeExercise(code, testCases, executePython);
+          let cases = testCases;
+          if (exercise.type === 'fix_the_code') {
+            if (code.trim() === String(exercise.buggy_code || '').trim()) {
+              callback('', null);
+              showExerciseFeedback(exercise.id, 'error', '[FAIL] The code is unchanged. Fix the bug first.');
+              return;
+            }
+            const ref = await executePython(exercise.solution_code, '');
+            if (ref.error) throw new Error('Reference solution failed to run: ' + ref.error);
+            cases = [{ expected_stdout: ref.output }];
+          }
+          result = await gradeExercise(code, cases, executePython);
         } catch (err) {
           callback('', err.message);
           return;
@@ -636,7 +649,7 @@ function initializeParsons(exercises) {
           return;
         }
 
-        const isCorrect = userOrder.every((val, i) => val === correctOrder[i]);
+        const isCorrect = [correctOrder, ...(exercise.alt_orders || [])].some(order => order.length === userOrder.length && userOrder.every((val, i) => val === order[i]));
 
         if (isCorrect) {
           showExerciseFeedback(exercise.id, 'success', '[OK] Correct order.');

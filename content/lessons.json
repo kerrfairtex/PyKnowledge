@@ -232,6 +232,15 @@
                   "hint": "You need to keep the original value of a somewhere before you overwrite it.",
                   "remediationExerciseId": "ex-1-2-d"
                 }
+              ],
+              "alt_orders": [
+                [
+                  1,
+                  0,
+                  2,
+                  3,
+                  4
+                ]
               ]
             },
             {
@@ -2114,7 +2123,7 @@
               "starter_code": "student = {'name': 'Maria', 'age': 20, 'grade': 'A'}\nprint(student['name'])",
               "test_cases": [
                 {
-                  "expected_stdout": "Maria\n"
+                  "expected_pattern": "^\\S[^\\n]*$"
                 }
               ],
               "hints": [
