@@ -1403,7 +1403,7 @@
             {
               "id": "ex-4-2-d",
               "type": "write_code",
-              "prompt": "Define a function called repeat_message that takes a message and a count parameter (default 3). It should print the message that many times, each on its own line.",
+              "prompt": "Define a function called repeat_message that takes a message and a count parameter (default 3). It should print the message that many times, each on its own line. Then call repeat_message('Go!') using the default count.",
               "starter_code": "# your code here",
               "test_cases": [
                 {
@@ -2860,8 +2860,8 @@
             {
               "id": "ex-7-2-c",
               "type": "write_code",
-              "prompt": "Append the line 'Another line\\n' to a file named 'mydata.txt', then read and print the entire file. Assume 'mydata.txt' does not exist yet.",
-              "starter_code": "with open('mydata.txt', 'w') as f:\n    f.write('First line\\n')\n\nwith open('mydata.txt', 'a') as f:\n    f.write('Another line\\n')\n\nwith open('mydata.txt', 'r') as f:\n    print(f.read())",
+              "prompt": "Create a file named 'mydata.txt' containing the line 'First line\\n'. Then append the line 'Another line\\n' to it, and finally read and print the entire file.",
+              "starter_code": "# your code here",
               "test_cases": [
                 {
                   "expected_stdout": "First line\nAnother line\n\n"
@@ -2872,7 +2872,8 @@
                 "The with statement handles closing."
               ],
               "difficulty": "medium",
-              "concept": "file-io"
+              "concept": "file-io",
+              "solution_code": "with open('mydata.txt', 'w') as f:\n    f.write('First line\\n')\n\nwith open('mydata.txt', 'a') as f:\n    f.write('Another line\\n')\n\nwith open('mydata.txt', 'r') as f:\n    print(f.read())"
             },
             {
               "id": "ex-7-2-d",
@@ -3251,7 +3252,7 @@
               "id": "ex-8-2-d",
               "type": "challenge",
               "prompt": "Write a function divide_list that takes a list of numbers and a divisor. Return a new list where each element is divided by the divisor. If the divisor is 0, return an empty list. If any element can't be divided (not a number), skip it. Use try/except.",
-              "starter_code": "def divide_list(nums, divisor):\n    if divisor == 0:\n        return []\n    result = []\n    for n in nums:\n        try:\n            result.append(n / divisor)\n        except TypeError:\n            pass\n    return result\n\nprint(divide_list([10, 20, 30], 10))\nprint(divide_list([10, 'a', 30], 10))",
+              "starter_code": "# Write divide_list here\n\n\nprint(divide_list([10, 20, 30], 10))\nprint(divide_list([10, 'a', 30], 10))",
               "test_cases": [
                 {
                   "expected_stdout": "[1.0, 2.0, 3.0]\n[1.0, 3.0]\n"
@@ -3262,7 +3263,8 @@
                 "Use try/except TypeError to skip non-numeric values."
               ],
               "difficulty": "hard",
-              "concept": "try-except"
+              "concept": "try-except",
+              "solution_code": "def divide_list(nums, divisor):\n    if divisor == 0:\n        return []\n    result = []\n    for n in nums:\n        try:\n            result.append(n / divisor)\n        except TypeError:\n            pass\n    return result\n\nprint(divide_list([10, 20, 30], 10))\nprint(divide_list([10, 'a', 30], 10))"
             },
             {
               "id": "ex-8-2-p",
@@ -3373,8 +3375,8 @@
             {
               "id": "ex-8-3-c",
               "type": "write_code",
-              "prompt": "Define a custom exception class called TooYoungError. Write a function verify_age(age) that raises TooYoungError if age < 18, otherwise returns 'Access granted'.",
-              "starter_code": "class TooYoungError(Exception):\n    pass\n\ndef verify_age(age):\n    if age < 18:\n        raise TooYoungError('Must be 18 or older')\n    return 'Access granted'\n\ntry:\n    print(verify_age(20))\n    print(verify_age(15))\nexcept TooYoungError as e:\n    print(e)",
+              "prompt": "Define a custom exception class called TooYoungError. Write a function verify_age(age) that raises TooYoungError('Must be 18 or older') if age < 18, otherwise returns 'Access granted'. The code below the blank area calls it for you.",
+              "starter_code": "# Write TooYoungError and verify_age here\n\n\ntry:\n    print(verify_age(20))\n    print(verify_age(15))\nexcept TooYoungError as e:\n    print(e)",
               "test_cases": [
                 {
                   "expected_stdout": "Access granted\nMust be 18 or older\n"
@@ -3394,7 +3396,8 @@
                   "hint": "Use 'raise TooYoungError(...)' inside the function.",
                   "remediationExerciseId": "ex-8-3-b"
                 }
-              ]
+              ],
+              "solution_code": "class TooYoungError(Exception):\n    pass\n\ndef verify_age(age):\n    if age < 18:\n        raise TooYoungError('Must be 18 or older')\n    return 'Access granted'\n\ntry:\n    print(verify_age(20))\n    print(verify_age(15))\nexcept TooYoungError as e:\n    print(e)"
             }
           ]
         }
@@ -3487,7 +3490,7 @@
               "id": "ex-9-1-c",
               "type": "write_code",
               "prompt": "Add a method called birthday to your Person class that increases age by 1 and returns the new age.",
-              "starter_code": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        return f'Hello, my name is {self.name}'\n    \n    def birthday(self):\n        self.age += 1\n        return self.age\n\np = Person('Beth', 30)\nprint(p.birthday())\nprint(p.birthday())",
+              "starter_code": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    def greet(self):\n        return f'Hello, my name is {self.name}'\n\n    # Add your birthday method here\n\n\np = Person('Beth', 30)\nprint(p.birthday())\nprint(p.birthday())",
               "test_cases": [
                 {
                   "expected_stdout": "31\n32\n"
@@ -3498,7 +3501,8 @@
                 "Return the new value."
               ],
               "difficulty": "medium",
-              "concept": "methods"
+              "concept": "methods",
+              "solution_code": "class Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        return f'Hello, my name is {self.name}'\n    \n    def birthday(self):\n        self.age += 1\n        return self.age\n\np = Person('Beth', 30)\nprint(p.birthday())\nprint(p.birthday())"
             },
             {
               "id": "ex-9-1-d",

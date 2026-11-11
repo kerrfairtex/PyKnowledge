@@ -1,5 +1,5 @@
 {
-  "version": "0.22.5",
+  "version": "0.22.6",
   "hashes": {
     "/": "__dir__",
     "/index.html": "9df34e9b3dda",
@@ -12,7 +12,7 @@
     "/core/storage.js": "f7e5c642575c",
     "/core/idb.js": "5855c95b63ea",
     "/core/errors.js": "247e427ce49f",
-    "/core/version.js": "aa1cbbf620f1",
+    "/core/version.js": "c1a00e120054",
     "/app/dashboard/dashboard.js": "1e8936937ac6",
     "/app/lessons/lesson-viewer.js": "d8e2e6126a8b",
     "/app/quizzes/quiz-engine.js": "feaa64c56502",
@@ -65,10 +65,10 @@
     "/ui/components/os-fx.js": "23a534be9704",
     "/ui/assets/fonts/jetbrains-mono-400.woff2": "14425ba9c695",
     "/ui/assets/fonts/jetbrains-mono-700.woff2": "d0d4e818808f",
-    "/content/lessons.json": "13ad4205ad06",
+    "/content/lessons.json": "1e9064c83971",
     "/content/quizzes.json": "cfd807cc80c0",
     "/content/reference.json": "2b7a4f080921",
-    "/core/sw-version.js": "a27bb9147590",
+    "/core/sw-version.js": "59cc88d819eb",
     "/ui/assets/icon-192.png": "21529772fec6",
     "/ui/assets/icon-512.png": "be4f9dc207b7",
     "/ui/assets/maskable-icon-192.png": "91c53693f257",
